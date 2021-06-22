@@ -281,7 +281,7 @@ func (p *size) message(message *protogen.Message) {
 
 	p.once = true
 
-	sizeName := "SizeVT"
+	sizeName := "Size"
 	ccTypeName := message.GoIdent
 
 	p.P(`func (m *`, ccTypeName, `) `, sizeName, `() (n int) {`)
@@ -299,7 +299,7 @@ func (p *size) message(message *protogen.Message) {
 			fieldname := field.Oneof.GoName
 			if _, ok := oneofs[fieldname]; !ok {
 				oneofs[fieldname] = struct{}{}
-				p.P(`if vtmsg, ok := m.`, fieldname, `.(interface{ SizeVT() int }); ok {`)
+				p.P(`if vtmsg, ok := m.`, fieldname, `.(interface{ Size() int }); ok {`)
 				p.P(`n+=vtmsg.`, sizeName, `()`)
 				p.P(`}`)
 			}

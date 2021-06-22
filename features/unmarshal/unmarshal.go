@@ -129,14 +129,14 @@ func (p *unmarshal) decodeMessage(varName, buf string, message *protogen.Message
 	local := p.IsLocalMessage(message)
 
 	if local {
-		p.P(`if err := `, varName, `.UnmarshalVT(`, buf, `); err != nil {`)
+		p.P(`if err := `, varName, `.Unmarshal(`, buf, `); err != nil {`)
 		p.P(`return err`)
 		p.P(`}`)
 	} else {
 		p.P(`if unmarshal, ok := interface{}(`, varName, `).(interface{`)
-		p.P(`UnmarshalVT([]byte) error`)
+		p.P(`Unmarshal([]byte) error`)
 		p.P(`}); ok{`)
-		p.P(`if err := unmarshal.UnmarshalVT(`, buf, `); err != nil {`)
+		p.P(`if err := unmarshal.Unmarshal(`, buf, `); err != nil {`)
 		p.P(`return err`)
 		p.P(`}`)
 		p.P(`} else {`)
@@ -802,7 +802,7 @@ func (p *unmarshal) message(message *protogen.Message) {
 	ccTypeName := message.GoIdent
 	required := message.Desc.RequiredNumbers()
 
-	p.P(`func (m *`, ccTypeName, `) UnmarshalVT(dAtA []byte) error {`)
+	p.P(`func (m *`, ccTypeName, `) Unmarshal(dAtA []byte) error {`)
 	if required.Len() > 0 {
 		p.P(`var hasFields [`, strconv.Itoa(1+(required.Len()-1)/64), `]uint64`)
 	}

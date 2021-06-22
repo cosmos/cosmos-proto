@@ -192,11 +192,11 @@ var file_based_proto_goTypes = []interface{}{
 	(*Hello)(nil),  // 2: cosmos.proto.Hello
 }
 
-func (m *Tender) MarshalVT() (dAtA []byte, err error) {
+func (m *Tender) Marshal() (dAtA []byte, err error) {
 	if m == nil {
 		return nil, nil
 	}
-	size := m.SizeVT()
+	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBufferVT(dAtA[:size])
 	if err != nil {
@@ -206,7 +206,7 @@ func (m *Tender) MarshalVT() (dAtA []byte, err error) {
 }
 
 func (m *Tender) MarshalToVT(dAtA []byte) (int, error) {
-	size := m.SizeVT()
+	size := m.Size()
 	return m.MarshalToSizedBufferVT(dAtA[:size])
 }
 
@@ -237,11 +237,11 @@ func (m *Tender) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *Cosmos) MarshalVT() (dAtA []byte, err error) {
+func (m *Cosmos) Marshal() (dAtA []byte, err error) {
 	if m == nil {
 		return nil, nil
 	}
-	size := m.SizeVT()
+	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBufferVT(dAtA[:size])
 	if err != nil {
@@ -251,7 +251,7 @@ func (m *Cosmos) MarshalVT() (dAtA []byte, err error) {
 }
 
 func (m *Cosmos) MarshalToVT(dAtA []byte) (int, error) {
-	size := m.SizeVT()
+	size := m.Size()
 	return m.MarshalToSizedBufferVT(dAtA[:size])
 }
 
@@ -269,10 +269,10 @@ func (m *Cosmos) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 	}
 	if vtmsg, ok := m.Test.(interface {
 		MarshalToVT([]byte) (int, error)
-		SizeVT() int
+		Size() int
 	}); ok {
 		{
-			size := vtmsg.SizeVT()
+			size := vtmsg.Size()
 			i -= size
 			if _, err := vtmsg.MarshalToVT(dAtA[i:]); err != nil {
 				return 0, err
@@ -300,7 +300,7 @@ func (m *Cosmos) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 }
 
 func (m *Cosmos_This) MarshalToVT(dAtA []byte) (int, error) {
-	size := m.SizeVT()
+	size := m.Size()
 	return m.MarshalToSizedBufferVT(dAtA[:size])
 }
 
@@ -314,7 +314,7 @@ func (m *Cosmos_This) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 func (m *Cosmos_That) MarshalToVT(dAtA []byte) (int, error) {
-	size := m.SizeVT()
+	size := m.Size()
 	return m.MarshalToSizedBufferVT(dAtA[:size])
 }
 
@@ -327,11 +327,11 @@ func (m *Cosmos_That) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 	dAtA[i] = 0x22
 	return len(dAtA) - i, nil
 }
-func (m *Hello) MarshalVT() (dAtA []byte, err error) {
+func (m *Hello) Marshal() (dAtA []byte, err error) {
 	if m == nil {
 		return nil, nil
 	}
-	size := m.SizeVT()
+	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBufferVT(dAtA[:size])
 	if err != nil {
@@ -341,7 +341,7 @@ func (m *Hello) MarshalVT() (dAtA []byte, err error) {
 }
 
 func (m *Hello) MarshalToVT(dAtA []byte) (int, error) {
-	size := m.SizeVT()
+	size := m.Size()
 	return m.MarshalToSizedBufferVT(dAtA[:size])
 }
 
@@ -378,7 +378,7 @@ func encodeVarint(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *Tender) SizeVT() (n int) {
+func (m *Tender) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -397,7 +397,7 @@ func (m *Tender) SizeVT() (n int) {
 	return n
 }
 
-func (m *Cosmos) SizeVT() (n int) {
+func (m *Cosmos) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -410,8 +410,8 @@ func (m *Cosmos) SizeVT() (n int) {
 	if m.V043 {
 		n += 2
 	}
-	if vtmsg, ok := m.Test.(interface{ SizeVT() int }); ok {
-		n += vtmsg.SizeVT()
+	if vtmsg, ok := m.Test.(interface{ Size() int }); ok {
+		n += vtmsg.Size()
 	}
 	if m.unknownFields != nil {
 		n += len(m.unknownFields)
@@ -419,7 +419,7 @@ func (m *Cosmos) SizeVT() (n int) {
 	return n
 }
 
-func (m *Cosmos_This) SizeVT() (n int) {
+func (m *Cosmos_This) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -429,7 +429,7 @@ func (m *Cosmos_This) SizeVT() (n int) {
 	n += 1 + l + sov(uint64(l))
 	return n
 }
-func (m *Cosmos_That) SizeVT() (n int) {
+func (m *Cosmos_That) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -439,7 +439,7 @@ func (m *Cosmos_That) SizeVT() (n int) {
 	n += 1 + l + sov(uint64(l))
 	return n
 }
-func (m *Hello) SizeVT() (n int) {
+func (m *Hello) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -461,7 +461,7 @@ func sov(x uint64) (n int) {
 func soz(x uint64) (n int) {
 	return sov(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *Tender) UnmarshalVT(dAtA []byte) error {
+func (m *Tender) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -563,7 +563,7 @@ func (m *Tender) UnmarshalVT(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *Cosmos) UnmarshalVT(dAtA []byte) error {
+func (m *Cosmos) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -730,7 +730,7 @@ func (m *Cosmos) UnmarshalVT(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *Hello) UnmarshalVT(dAtA []byte) error {
+func (m *Hello) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
