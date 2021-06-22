@@ -6,16 +6,16 @@ import (
 )
 
 type vtprotoMessage interface {
-	MarshalVT() ([]byte, error)
-	UnmarshalVT([]byte) error
+	Marshal() ([]byte, error)
+	Unmarshal([]byte) error
 }
 
 func Marshal(msg interface{}) ([]byte, error) {
-	return msg.(vtprotoMessage).MarshalVT()
+	return msg.(vtprotoMessage).Marshal()
 }
 
 func Unmarshal(buf []byte, msg interface{}) error {
-	return msg.(vtprotoMessage).UnmarshalVT(buf)
+	return msg.(vtprotoMessage).Unmarshal(buf)
 }
 
 func JSONMarshal(msg interface{}) ([]byte, error) {

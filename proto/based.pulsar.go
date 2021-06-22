@@ -198,19 +198,19 @@ func (m *Tender) Marshal() (dAtA []byte, err error) {
 	}
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBufferVT(dAtA[:size])
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
 	return dAtA[:n], nil
 }
 
-func (m *Tender) MarshalToVT(dAtA []byte) (int, error) {
+func (m *Tender) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
-	return m.MarshalToSizedBufferVT(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *Tender) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
+func (m *Tender) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m == nil {
 		return 0, nil
 	}
@@ -243,19 +243,19 @@ func (m *Cosmos) Marshal() (dAtA []byte, err error) {
 	}
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBufferVT(dAtA[:size])
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
 	return dAtA[:n], nil
 }
 
-func (m *Cosmos) MarshalToVT(dAtA []byte) (int, error) {
+func (m *Cosmos) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
-	return m.MarshalToSizedBufferVT(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *Cosmos) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
+func (m *Cosmos) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m == nil {
 		return 0, nil
 	}
@@ -268,13 +268,13 @@ func (m *Cosmos) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		copy(dAtA[i:], m.unknownFields)
 	}
 	if vtmsg, ok := m.Test.(interface {
-		MarshalToVT([]byte) (int, error)
+		MarshalTo([]byte) (int, error)
 		Size() int
 	}); ok {
 		{
 			size := vtmsg.Size()
 			i -= size
-			if _, err := vtmsg.MarshalToVT(dAtA[i:]); err != nil {
+			if _, err := vtmsg.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -299,12 +299,12 @@ func (m *Cosmos) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *Cosmos_This) MarshalToVT(dAtA []byte) (int, error) {
+func (m *Cosmos_This) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
-	return m.MarshalToSizedBufferVT(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *Cosmos_This) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
+func (m *Cosmos_This) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	i -= len(m.This)
 	copy(dAtA[i:], m.This)
@@ -313,12 +313,12 @@ func (m *Cosmos_This) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 	dAtA[i] = 0x1a
 	return len(dAtA) - i, nil
 }
-func (m *Cosmos_That) MarshalToVT(dAtA []byte) (int, error) {
+func (m *Cosmos_That) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
-	return m.MarshalToSizedBufferVT(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *Cosmos_That) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
+func (m *Cosmos_That) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	i -= len(m.That)
 	copy(dAtA[i:], m.That)
@@ -333,19 +333,19 @@ func (m *Hello) Marshal() (dAtA []byte, err error) {
 	}
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBufferVT(dAtA[:size])
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
 	return dAtA[:n], nil
 }
 
-func (m *Hello) MarshalToVT(dAtA []byte) (int, error) {
+func (m *Hello) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
-	return m.MarshalToSizedBufferVT(dAtA[:size])
+	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *Hello) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
+func (m *Hello) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m == nil {
 		return 0, nil
 	}

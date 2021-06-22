@@ -548,19 +548,19 @@ func (p *marshal) message(message *protogen.Message) {
 	p.P(`}`)
 	p.P(`size := m.Size()`)
 	p.P(`dAtA = make([]byte, size)`)
-	p.P(`n, err := m.MarshalToSizedBufferVT(dAtA[:size])`)
+	p.P(`n, err := m.MarshalToSizedBuffer(dAtA[:size])`)
 	p.P(`if err != nil {`)
 	p.P(`return nil, err`)
 	p.P(`}`)
 	p.P(`return dAtA[:n], nil`)
 	p.P(`}`)
 	p.P(``)
-	p.P(`func (m *`, ccTypeName, `) MarshalToVT(dAtA []byte) (int, error) {`)
+	p.P(`func (m *`, ccTypeName, `) MarshalTo(dAtA []byte) (int, error) {`)
 	p.P(`size := m.Size()`)
-	p.P(`return m.MarshalToSizedBufferVT(dAtA[:size])`)
+	p.P(`return m.MarshalToSizedBuffer(dAtA[:size])`)
 	p.P(`}`)
 	p.P(``)
-	p.P(`func (m *`, ccTypeName, `) MarshalToSizedBufferVT(dAtA []byte) (int, error) {`)
+	p.P(`func (m *`, ccTypeName, `) MarshalToSizedBuffer(dAtA []byte) (int, error) {`)
 	p.P(`if m == nil {`)
 	p.P(`return 0, nil`)
 	p.P(`}`)
@@ -588,7 +588,7 @@ func (p *marshal) message(message *protogen.Message) {
 			if _, ok := oneofs[fieldname]; !ok {
 				oneofs[fieldname] = struct{}{}
 				p.P(`if vtmsg, ok := m.`, fieldname, `.(interface{`)
-				p.P(`MarshalToVT([]byte) (int, error)`)
+				p.P(`MarshalTo([]byte) (int, error)`)
 				p.P(`Size() int`)
 				p.P(`}); ok {`)
 				p.marshalForward("vtmsg", false)
@@ -600,18 +600,18 @@ func (p *marshal) message(message *protogen.Message) {
 	p.P(`}`)
 	p.P()
 
-	//Generate MarshalToVT methods for oneof fields
+	//Generate MarshalTo methods for oneof fields
 	for _, field := range message.Fields {
 		if field.Oneof == nil || field.Oneof.Desc.IsSynthetic() {
 			continue
 		}
 		ccTypeName := field.GoIdent
-		p.P(`func (m *`, ccTypeName, `) MarshalToVT(dAtA []byte) (int, error) {`)
+		p.P(`func (m *`, ccTypeName, `) MarshalTo(dAtA []byte) (int, error) {`)
 		p.P(`size := m.Size()`)
-		p.P(`return m.MarshalToSizedBufferVT(dAtA[:size])`)
+		p.P(`return m.MarshalToSizedBuffer(dAtA[:size])`)
 		p.P(`}`)
 		p.P(``)
-		p.P(`func (m *`, ccTypeName, `) MarshalToSizedBufferVT(dAtA []byte) (int, error) {`)
+		p.P(`func (m *`, ccTypeName, `) MarshalToSizedBuffer(dAtA []byte) (int, error) {`)
 		p.P(`i := len(dAtA)`)
 		p.field(false, &numGen, field)
 		p.P(`return len(dAtA) - i, nil`)
@@ -629,12 +629,12 @@ func (p *marshal) marshalBackward(varName string, varInt bool, message *protogen
 	local := p.IsLocalMessage(message)
 
 	if local {
-		p.P(`size, err := `, varName, `.MarshalToSizedBufferVT(dAtA[:i])`)
+		p.P(`size, err := `, varName, `.MarshalToSizedBuffer(dAtA[:i])`)
 	} else {
 		p.P(`if marshalto, ok := interface{}(`, varName, `).(interface{`)
-		p.P(`MarshalToSizedBufferVT([]byte) (int, error)`)
+		p.P(`MarshalToSizedBuffer([]byte) (int, error)`)
 		p.P(`}); ok{`)
-		p.P(`size, err := marshalto.MarshalToSizedBufferVT(dAtA[:i])`)
+		p.P(`size, err := marshalto.MarshalToSizedBuffer(dAtA[:i])`)
 	}
 
 	p.P(`if err != nil {`)
@@ -664,7 +664,7 @@ func (p *marshal) marshalForward(varName string, varInt bool) {
 	p.P(`{`)
 	p.P(`size := `, varName, `.Size()`)
 	p.P(`i -= size`)
-	p.P(`if _, err := `, varName, `.MarshalToVT(dAtA[i:]); err != nil {`)
+	p.P(`if _, err := `, varName, `.MarshalTo(dAtA[i:]); err != nil {`)
 	p.P(`return 0, err`)
 	p.P(`}`)
 	if varInt {

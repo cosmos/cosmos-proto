@@ -8,8 +8,8 @@ const Name = "proto"
 type Codec struct{}
 
 type vtprotoMessage interface {
-	MarshalVT() ([]byte, error)
-	UnmarshalVT([]byte) error
+	Marshal() ([]byte, error)
+	Unmarshal([]byte) error
 }
 
 func (Codec) Marshal(v interface{}) ([]byte, error) {
@@ -17,7 +17,7 @@ func (Codec) Marshal(v interface{}) ([]byte, error) {
 	if !ok {
 		return nil, fmt.Errorf("failed to marshal, message is %T (missing vtprotobuf helpers)", v)
 	}
-	return vt.MarshalVT()
+	return vt.Marshal()
 }
 
 func (Codec) Unmarshal(data []byte, v interface{}) error {
@@ -25,7 +25,7 @@ func (Codec) Unmarshal(data []byte, v interface{}) error {
 	if !ok {
 		return fmt.Errorf("failed to unmarshal, message is %T (missing vtprotobuf helpers)", v)
 	}
-	return vt.UnmarshalVT(data)
+	return vt.Unmarshal(data)
 }
 
 func (Codec) Name() string {
