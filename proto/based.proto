@@ -1,5 +1,6 @@
 syntax = "proto3";
 package cosmos.proto;
+import "google/protobuf/any.proto";
 
 option go_package = "github.com/cosmos/cosmos-proto/examples";
 
@@ -35,4 +36,14 @@ message Cosmos {
 // classic hello world message
 message Hello {
   string world = 1;
+}
+
+message AnyTest {
+  google.protobuf.Any AnyField = 1;
+}
+
+message AnyWho {
+  google.protobuf.Any heyAny = 1;
+  string yolo = 2;
+  bool isCool = 3;
 }
