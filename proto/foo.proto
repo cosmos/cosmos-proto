@@ -1,0 +1,8 @@
+syntax = "proto3";
+package cosmos.proto;
+
+option go_package = "github.com/cosmos/cosmos-proto/examples";
+
+message Bar {
+  string baz = 1;
+}
