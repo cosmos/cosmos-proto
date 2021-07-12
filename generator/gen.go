@@ -128,14 +128,31 @@ func genMsgStruct(g *GeneratedFile, msg *protogen.Message, index int) {
 		genField(g, field)
 	}
 	g.P("}")
-	//genReset(g, msg) // not sure wtf this is for
+	genReset(g, msg, index) // not sure wtf this is for
+	g.P()
 	genString(g, msg)
 	g.P()
-	//genProtoMessage(g, msg)
+	genProtoMessage(g, msg)
+	g.P()
 	genProtoReflect(g, msg, index)
 	g.P()
 	genGetters(g, msg)
 	g.P()
+}
+
+func genProtoMessage(g *GeneratedFile, msg *protogen.Message) {
+	g.P("func (x *", msg.GoIdent.GoName, ") ProtoMessage() {}")
+}
+
+func genReset(g *GeneratedFile, msg *protogen.Message, index int) {
+	g.P("func (x *", msg.GoIdent.GoName, ") Reset() {")
+	g.P("*x = ", msg.GoIdent.GoName,"{}")
+	g.P("if ", protoimplPackage.Ident("UnsafeEnabled")," {" )
+	g.P("mi := &file_", FILENAME,"_proto_msgTypes[", index, "]")
+	g.P("ms := ", protoimplPackage.Ident("X.MessageStateOf"), "(", protoimplPackage.Ident("Pointer"),"(x))")
+	g.P("ms.StoreMessageInfo(mi)")
+	g.P("}")
+	g.P("}")
 }
 
 func genStdFields(g *GeneratedFile, msg *protogen.Message) {
@@ -167,7 +184,7 @@ func genField(g *GeneratedFile, field *protogen.Field) {
 			ss = append(ss, "\t*"+field.GoIdent.GoName+"\n")
 		}
 		leadingComments += protogen.Comments(strings.Join(ss, ""))
-		g.P(oneof.GoName, " ", oneOfInterfaceName(oneof), tags)
+		g.P(leadingComments, oneof.GoName, " ", oneOfInterfaceName(oneof), tags)
 		return
 	}
 
@@ -178,7 +195,7 @@ func genField(g *GeneratedFile, field *protogen.Field) {
 	tags := structTags{
 		{"protobuf", fieldProtobufTagValue(field)},
 		{"json", fieldJSONTagValue(field)},
-		// {"yaml", fieldYAMLTagValue(field)}, do we need this still?
+		{"yaml", fieldYAMLTagValue(field)}, // TODO: do we need this still?
 	}
 	g.P(field.Comments.Leading, field.GoName, " ", goType, tags)
 }
@@ -238,6 +255,10 @@ func fieldProtobufTagValue(field *protogen.Field) string {
 
 func fieldJSONTagValue(field *protogen.Field) string {
 	return string(field.Desc.Name()) + ",omitempty"
+}
+
+func fieldYAMLTagValue(field *protogen.Field) string {
+	return string(field.Desc.Name())
 }
 
 //func fieldYAMLTagValue(field *protogen.Field) string {
