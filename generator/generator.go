@@ -47,7 +47,7 @@ func NewGenerator(allFiles []*protogen.File, featureNames []string, ext *Extensi
 	}, nil
 }
 
-func (gen *Generator) GenerateFile(gf *protogen.GeneratedFile, file *protogen.File) bool {
+func (gen *Generator) GenerateFile(plugin *protogen.Plugin, gf *protogen.GeneratedFile, file *protogen.File) bool {
 	if file.Desc.Syntax() != protoreflect.Proto3 {
 		return false
 	}
@@ -58,7 +58,7 @@ func (gen *Generator) GenerateFile(gf *protogen.GeneratedFile, file *protogen.Fi
 		LocalPackages: gen.local,
 	}
 
-	GenerateProtocGenGo(p, file)
+	GenerateProtocGenGo(plugin, p, file)
 
 	var generated bool
 	for fidx, feat := range gen.features {

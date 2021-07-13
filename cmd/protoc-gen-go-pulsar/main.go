@@ -64,7 +64,7 @@ func generateAllFiles(plugin *protogen.Plugin, featureNames []string, poolable O
 		}
 
 		gf := plugin.NewGeneratedFile(file.GeneratedFilenamePrefix+".pulsar.go", file.GoImportPath)
-		if !gen.GenerateFile(gf, file) {
+		if !gen.GenerateFile(plugin, gf, file) {
 			gf.Skip()
 		}
 	}
