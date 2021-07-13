@@ -2,6 +2,9 @@
 //// Pulsar version: (devel)
 //// source: foo.proto
 //
+
+// WIP FOR protoreflect.Message impl
+
 package examples
 //
 //import (
