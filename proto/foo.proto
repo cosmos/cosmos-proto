@@ -6,3 +6,8 @@ option go_package = "github.com/cosmos/cosmos-proto/examples";
 message Bar {
   string baz = 1;
 }
+
+message Hello {
+  string world = 1;
+  bool universe = 2;
+}

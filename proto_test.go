@@ -109,7 +109,14 @@ func TestReflectMethodGet(t *testing.T) {
 func TestProtoReflectMethod(t *testing.T) {
 	foo := examples.Bar{Baz: "hi"}
 	msg := foo.ProtoReflect()
-	prettyPrintStruct(msg)
-	methods := msg.ProtoMethods()
-	prettyPrintStruct(methods)
+	require.NotNil(t, msg.ProtoMethods())
+}
+
+func TestSizeMethod(t *testing.T) {
+	foo := examples.Bar{Baz: "hi"}
+	size := func(msg protoreflect.Message) int {
+		methods := msg.ProtoMethods()
+		return methods.Size(protoiface.SizeInput{}).Size
+	}
+	require.Equal(t, 4, size(foo))
 }

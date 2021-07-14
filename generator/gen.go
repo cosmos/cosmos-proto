@@ -152,6 +152,7 @@ func genMsgStruct(g *GeneratedFile, msg *protogen.Message, index int) {
 	g.P()
 	genGetters(g, msg)
 	g.P()
+	genProtoMessageFunctions(g, msg)
 }
 
 func genProtoMessage(g *GeneratedFile, msg *protogen.Message) {
