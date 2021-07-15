@@ -2,6 +2,7 @@ package generator
 
 import (
 	"google.golang.org/protobuf/compiler/protogen"
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 func genProtoMessageFunctions(g *GeneratedFile, msg *protogen.Message) {
@@ -54,7 +55,7 @@ func genGetMethods(g *GeneratedFile, msg *protogen.Message) {
 	g.P("}")
 	g.P("},")
 	g.P("Marshal: func(input ", protoifacePackage.Ident("MarshalInput"), ") (", protoifacePackage.Ident("MarshalOutput"), ", error) {")
-	g.P("v, ok := input.Message.(", msg.GoIdent.GoName,")")
+	g.P("v, ok := input.Message.(", msg.GoIdent.GoName, ")")
 	g.P("if !ok {")
 	g.P("return ", protoifacePackage.Ident("MarshalOutput"), "{}, errors.New(\"", msg.GoIdent.GoName, " does not implement the protoreflect.Message interface\")")
 	g.P("}")
@@ -95,7 +96,7 @@ func genGetMethods(g *GeneratedFile, msg *protogen.Message) {
 func genDescriptorProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("// Descriptor returns message descriptor, which contains only the protobuf")
 	g.P("// type information for the message.")
-	g.P("func (x ", msg.GoIdent.GoName,") Descriptor() ", protoreflectPackage.Ident("MessageDescriptor"), " {")
+	g.P("func (x ", msg.GoIdent.GoName, ") Descriptor() ", protoreflectPackage.Ident("MessageDescriptor"), " {")
 	g.P("return x.ProtoReflect().Descriptor()")
 	g.P("}")
 }
@@ -104,7 +105,7 @@ func genTypeProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("// Type returns the message type, which encapsulates both Go and protobuf")
 	g.P("// type information. If the Go type information is not needed,")
 	g.P("// it is recommended that the message descriptor be used instead.")
-	g.P("func (x ", msg.GoIdent.GoName,") Type() ", protoreflectPackage.Ident("MessageType"), " {")
+	g.P("func (x ", msg.GoIdent.GoName, ") Type() ", protoreflectPackage.Ident("MessageType"), " {")
 	g.P("return x.ProtoReflect().Type()")
 	g.P("}")
 }
@@ -159,7 +160,7 @@ func genClearProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("// associated with the given field number.")
 	g.P("//")
 	g.P("// Clear is a mutating operation and unsafe for concurrent use.")
-	g.P("func (x ", msg.GoIdent.GoName,") Clear(descriptor ", protoreflectPackage.Ident("FieldDescriptor"), ") {")
+	g.P("func (x ", msg.GoIdent.GoName, ") Clear(descriptor ", protoreflectPackage.Ident("FieldDescriptor"), ") {")
 	g.P("x.ProtoReflect().Clear(descriptor)")
 	g.P("}")
 }
@@ -171,9 +172,48 @@ func genGetProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("// the default value of a bytes scalar is guaranteed to be a copy.")
 	g.P("// For unpopulated composite types, it returns an empty, read-only view")
 	g.P("// of the value; to obtain a mutable reference, use Mutable.")
-	g.P("func (x ", msg.GoIdent.GoName, ") Get(descriptor ", protoreflectPackage.Ident("FieldDescriptor"), ") ", protoreflectPackage.Ident("Value"), " {")
-	g.P("return x.ProtoReflect().Get(descriptor)")
+	g.P("func (x *", msg.GoIdent.GoName, ") Get(descriptor ", protoreflectPackage.Ident("FieldDescriptor"), ") ", protoreflectPackage.Ident("Value"), " {")
+	g.P("switch descriptor.Name() {")
+	// iterate every field
+	for _, genFd := range msg.Fields {
+		fd := genFd.Desc
+		g.P("case \"", fd.Name(), "\":")
+		valueForKind(g, fd.Kind(), genFd.GoName)
+	}
+	// insert default case which panics
+	g.P("default:")
+	g.P("panic(fmt.Errorf(\"message ", msg.Desc.FullName(), " does not contain field %s\", descriptor.Name()))")
 	g.P("}")
+	g.P("}")
+}
+
+func valueForKind(g *GeneratedFile, kind protoreflect.Kind, fieldName string) {
+	pkg := protoreflectPackage
+	fieldRef := "x." + fieldName
+	switch kind {
+	case protoreflect.BoolKind:
+		g.P("return ", pkg.Ident("ValueOfBool"), "(", fieldRef, ")")
+	case protoreflect.EnumKind:
+		g.P("return ", pkg.Ident("ValueOfEnum"), "((", pkg.Ident("EnumNumber"), ")", "(", fieldRef, ")", ")")
+	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
+		g.P("return ", pkg.Ident("ValueOfInt32"), "(", fieldRef, ")")
+	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
+		g.P("return ", pkg.Ident("ValueOfUint32"), "(", fieldRef, ")")
+	case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind:
+		g.P("return ", pkg.Ident("ValueOfInt64"), "(", fieldRef, ")")
+	case protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
+		g.P("return ", pkg.Ident("ValueOfUint64"), "(", fieldRef, ")")
+	case protoreflect.FloatKind:
+		g.P("return ", pkg.Ident("ValueOfFloat32"), "(", fieldRef, ")")
+	case protoreflect.DoubleKind:
+		g.P("return ", pkg.Ident("ValueOfFloat64"), "(", fieldRef, ")")
+	case protoreflect.StringKind:
+		g.P("return ", pkg.Ident("ValueOfString"), "(", fieldRef, ")")
+	case protoreflect.BytesKind:
+		g.P("return ", pkg.Ident("ValueOfBytes"), "(", fieldRef, ")")
+	case protoreflect.MessageKind, protoreflect.GroupKind:
+		g.P("return ", pkg.Ident("ValueOfMessage"), "(", fieldRef, ")")
+	}
 }
 
 func genSetProto(g *GeneratedFile, msg *protogen.Message) {
@@ -212,7 +252,7 @@ func genNewFieldProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("// NewField returns a new value that is assignable to the field")
 	g.P("// for the given descriptor. For scalars, this returns the default value.")
 	g.P("// For lists, maps, and messages, this returns a new, empty, mutable value.")
-	g.P("func (x ", msg.GoIdent.GoName, ") NewField(descriptor ", protoreflectPackage.Ident("FieldDescriptor"), ") ",protoreflectPackage.Ident("Value"), " {")
+	g.P("func (x ", msg.GoIdent.GoName, ") NewField(descriptor ", protoreflectPackage.Ident("FieldDescriptor"), ") ", protoreflectPackage.Ident("Value"), " {")
 	g.P("return x.ProtoReflect().NewField(descriptor)")
 	g.P("}")
 }
@@ -221,7 +261,7 @@ func genWhichOneOfProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("// WhichOneof reports which field within the oneof is populated,")
 	g.P("// returning nil if none are populated.")
 	g.P("// It panics if the oneof descriptor does not belong to this message.")
-	g.P("func (x ", msg.GoIdent.GoName,") WhichOneof(descriptor ", protoreflectPackage.Ident("OneofDescriptor"), ") ", protoreflectPackage.Ident("FieldDescriptor"), " {")
+	g.P("func (x ", msg.GoIdent.GoName, ") WhichOneof(descriptor ", protoreflectPackage.Ident("OneofDescriptor"), ") ", protoreflectPackage.Ident("FieldDescriptor"), " {")
 	g.P("return x.ProtoReflect().WhichOneof(descriptor)")
 	g.P("}")
 }
