@@ -25,6 +25,12 @@ message A {
   string STRING = 15;
   bytes BYTES = 16;
   B MESSAGE = 17;
+  map<string, B> MAP = 18;
+  repeated B LIST = 19;
+  oneof ONEOF {
+    B ONEOF_B = 20;
+    string ONEOF_STRING = 21;
+  };
 }
 
 message B {
