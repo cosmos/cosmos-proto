@@ -6,8 +6,11 @@ option go_package = "github.com/cosmos/cosmos-proto/examples";
 message Bar {
   repeated string qux = 1;
   string baz = 2;
+  oneof ONEOF {
+    B ONEOF_B = 20;
+    string ONEOF_STRING = 21;
+  };
 }
-
 
 message Hello {
   enum n {
@@ -16,4 +19,8 @@ message Hello {
   }
   string world = 2;
   bool universe = 3;
+}
+
+message B {
+  string x = 1;
 }

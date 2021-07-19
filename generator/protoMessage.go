@@ -1,10 +1,6 @@
 package generator
 
-import (
-	"google.golang.org/protobuf/compiler/protogen"
-)
-
-func genProtoMessageFunctions(g *GeneratedFile, msg *protogen.Message) {
+func genProtoMessageFunctions(g *GeneratedFile, msg *messageInfo) {
 	genGetMethods(g, msg)
 	g.P()
 	genDescriptorProto(g, msg)
@@ -41,7 +37,7 @@ func genProtoMessageFunctions(g *GeneratedFile, msg *protogen.Message) {
 	g.P()
 }
 
-func genGetMethods(g *GeneratedFile, msg *protogen.Message) {
+func genGetMethods(g *GeneratedFile, msg *messageInfo) {
 	g.P("// returns the fast methods for the message")
 	g.P("func (x ", msg.GoIdent.GoName, ") GetMethods() *", protoifacePackage.Ident("Methods"), " {")
 	g.P("return &", protoifacePackage.Ident("Methods{"))
@@ -92,7 +88,7 @@ func genGetMethods(g *GeneratedFile, msg *protogen.Message) {
 	g.P("}")
 }
 
-func genDescriptorProto(g *GeneratedFile, msg *protogen.Message) {
+func genDescriptorProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("// Descriptor returns message descriptor, which contains only the protobuf")
 	g.P("// type information for the message.")
 	g.P("func (x ", msg.GoIdent.GoName, ") Descriptor() ", protoreflectPackage.Ident("MessageDescriptor"), " {")
@@ -100,7 +96,7 @@ func genDescriptorProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("}")
 }
 
-func genTypeProto(g *GeneratedFile, msg *protogen.Message) {
+func genTypeProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("// Type returns the message type, which encapsulates both Go and protobuf")
 	g.P("// type information. If the Go type information is not needed,")
 	g.P("// it is recommended that the message descriptor be used instead.")
@@ -109,14 +105,14 @@ func genTypeProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("}")
 }
 
-func genNewProto(g *GeneratedFile, msg *protogen.Message) {
+func genNewProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("// New returns a newly allocated and mutable empty message.")
 	g.P("func (x ", msg.GoIdent.GoName, ") New() ", protoreflectPackage.Ident("Message"), " {")
 	g.P("return x.ProtoReflect().New()")
 	g.P("}")
 }
 
-func genInterfaceProto(g *GeneratedFile, msg *protogen.Message) {
+func genInterfaceProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("// Interface unwraps the message reflection interface and")
 	g.P("// returns the underlying ProtoMessage interface.")
 	g.P("func (x ", msg.GoIdent.GoName, ") Interface() ", protoreflectPackage.Ident("ProtoMessage"), " {")
@@ -124,7 +120,7 @@ func genInterfaceProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("}")
 }
 
-func genRangeProto(g *GeneratedFile, msg *protogen.Message) {
+func genRangeProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("// Range iterates over every populated field in an undefined order,")
 	g.P("// calling f for each field descriptor and value encountered.")
 	g.P("// Range returns immediately if f returns false.")
@@ -135,7 +131,7 @@ func genRangeProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("}")
 }
 
-func genHasProto(g *GeneratedFile, msg *protogen.Message) {
+func genHasProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("// Has reports whether a field is populated.")
 	g.P("//")
 	g.P("// Some fields have the property of nullability where it is possible to")
@@ -152,7 +148,7 @@ func genHasProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("}")
 }
 
-func genClearProto(g *GeneratedFile, msg *protogen.Message) {
+func genClearProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("// Clear clears the field such that a subsequent Has call reports false.")
 	g.P("//")
 	g.P("// Clearing an extension field clears both the extension type and value")
@@ -164,7 +160,7 @@ func genClearProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("}")
 }
 
-func genGetProto(g *GeneratedFile, msg *protogen.Message) {
+func genGetProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("// Get retrieves the value for a field.")
 	g.P("//")
 	g.P("// For unpopulated scalars, it returns the default value, where")
@@ -176,7 +172,7 @@ func genGetProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("}")
 }
 
-func genSetProto(g *GeneratedFile, msg *protogen.Message) {
+func genSetProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("// Set stores the value for a field.")
 	g.P("//")
 	g.P("// For a field belonging to a oneof, it implicitly clears any other field")
@@ -192,7 +188,7 @@ func genSetProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("}")
 }
 
-func genMutableProto(g *GeneratedFile, msg *protogen.Message) {
+func genMutableProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("// Mutable returns a mutable reference to a composite type.")
 	g.P("//")
 	g.P("// If the field is unpopulated, it may allocate a composite value.")
@@ -208,7 +204,7 @@ func genMutableProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("}")
 }
 
-func genNewFieldProto(g *GeneratedFile, msg *protogen.Message) {
+func genNewFieldProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("// NewField returns a new value that is assignable to the field")
 	g.P("// for the given descriptor. For scalars, this returns the default value.")
 	g.P("// For lists, maps, and messages, this returns a new, empty, mutable value.")
@@ -217,7 +213,7 @@ func genNewFieldProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("}")
 }
 
-func genWhichOneOfProto(g *GeneratedFile, msg *protogen.Message) {
+func genWhichOneOfProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("// WhichOneof reports which field within the oneof is populated,")
 	g.P("// returning nil if none are populated.")
 	g.P("// It panics if the oneof descriptor does not belong to this message.")
@@ -226,7 +222,7 @@ func genWhichOneOfProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("}")
 }
 
-func genGetUnkownProto(g *GeneratedFile, msg *protogen.Message) {
+func genGetUnkownProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("// GetUnknown retrieves the entire list of unknown fields.")
 	g.P("// The caller may only mutate the contents of the RawFields")
 	g.P("// if the mutated bytes are stored back into the message with SetUnknown.")
@@ -235,7 +231,7 @@ func genGetUnkownProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("}")
 }
 
-func genSetUnkownProto(g *GeneratedFile, msg *protogen.Message) {
+func genSetUnkownProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("// SetUnknown stores an entire list of unknown fields.")
 	g.P("// The raw fields must be syntactically valid according to the wire format.")
 	g.P("// An implementation may panic if this is not the case.")
@@ -248,7 +244,7 @@ func genSetUnkownProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("}")
 }
 
-func genIsValidProto(g *GeneratedFile, msg *protogen.Message) {
+func genIsValidProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("// IsValid reports whether the message is valid.")
 	g.P("//")
 	g.P("// An invalid message is an empty, read-only value.")
@@ -262,7 +258,7 @@ func genIsValidProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("}")
 }
 
-func genProtoMethodsProto(g *GeneratedFile, msg *protogen.Message) {
+func genProtoMethodsProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("// ProtoMethods returns optional fast-path implementations of various operations.")
 	g.P("// This method may return nil.")
 	g.P("//")
