@@ -405,7 +405,34 @@ func (x *_A_19_list) Get(i int) protoreflect.Value {
 }
 
 func (x *_A_19_list) Set(i int, value protoreflect.Value) {
-	concrete := value.Message()
+	unwrapped := value.Message()
+	concreteValue := unwrapped.Interface().(*B)
+	x.list[i] = concreteValue
+}
+
+func (x *_A_19_list) Append(value protoreflect.Value) {
+	unwrapped := value.Message()
+	concreteValue := unwrapped.Interface().(*B)
+	x.list = append(x.list, concreteValue)
+}
+
+func (x *_A_19_list) AppendMutable() protoreflect.Value {
+	v := new(B)
+	x.list = append(x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_A_19_list) Truncate(n int) {
+	for i := n; i < len(x.list); i++ {
+		x.list[i] = nil
+	}
+	x.list = x.list[:n]
+}
+
+func (x *_A_19_list) NewElement() protoreflect.Value {
+	v := new(B)
+	x.list = append(x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
 func (x *_A_19_list) IsValid() bool {
@@ -427,7 +454,28 @@ func (x *_A_22_list) Get(i int) protoreflect.Value {
 }
 
 func (x *_A_22_list) Set(i int, value protoreflect.Value) {
-	concrete := value.Enum()
+	unwrapped := value.Enum()
+	concreteValue := (Enumeration)(unwrapped)
+	x.list[i] = concreteValue
+}
+
+func (x *_A_22_list) Append(value protoreflect.Value) {
+	unwrapped := value.Enum()
+	concreteValue := (Enumeration)(unwrapped)
+	x.list = append(x.list, concreteValue)
+}
+
+func (x *_A_22_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message A at list field LIST_ENUM as it is not of Message kind"))
+}
+
+func (x *_A_22_list) Truncate(n int) {
+	x.list = x.list[:n]
+}
+
+func (x *_A_22_list) NewElement() protoreflect.Value {
+	v := 0
+	return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(v))
 }
 
 func (x *_A_22_list) IsValid() bool {

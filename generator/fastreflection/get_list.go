@@ -10,6 +10,7 @@ import (
 // GenGetList generates the reflection fast paths over repeated fields
 func GenGetList(g *protogen.GeneratedFile, field *protogen.Field) {
 	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
+	const fmtPkg = protogen.GoImportPath("fmt")
 	typeName := listTypeName(field)
 	g.P("type ", typeName, " struct {")
 	g.P("list []", getType(g, field))
@@ -42,17 +43,62 @@ func GenGetList(g *protogen.GeneratedFile, field *protogen.Field) {
 
 	// Set
 	g.P("func (x *", typeName, ") Set(i int, value ", pref.Ident("Value"), ") {")
-	toConcrete := valueToConcrete(field.Desc.Kind())
-	g.P("concrete := value.", toConcrete, "()")
-	switch field.Desc.Kind() {
-	default:
+	concreteValueName := genPrefValueToGoValue(g, field)
+	g.P("x.list[i] = ", concreteValueName)
+	g.P("}")
+	g.P()
 
+	// Append
+	g.P("func (x *", typeName, ") Append(value ", pref.Ident("Value"), ") {")
+	concreteValueName = genPrefValueToGoValue(g, field)
+	g.P("x.list = append(x.list, ", concreteValueName, ")")
+	g.P("}")
+	g.P()
+
+	// AppendMutable
+	g.P("func (x *", typeName, ") AppendMutable() ", pref.Ident("Value"), " {")
+	switch field.Desc.Kind() {
+	case protoreflect.MessageKind:
+		g.P("v := new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
+		g.P("x.list = append(x.list, v)")
+		g.P("return ", pref.Ident("ValueOfMessage"), "(v.ProtoReflect())")
+	default:
+		panicMsg := fmt.Sprintf("AppendMutable can not be called on message %s at list field %s as it is not of Message kind", field.Parent.GoIdent.GoName, field.GoName)
+		g.P("panic(", fmtPkg.Ident("Errorf"), "(\"", panicMsg, "\"))")
+	}
+	g.P("}")
+	g.P()
+
+	// Truncate
+	g.P("func (x *", typeName, ") Truncate(n int)", "{")
+
+	switch field.Desc.Kind() {
+	case protoreflect.MessageKind: // zero message kinds to avoid keeping data alive
+		g.P("for i := n; i < len(x.list); i++ {")
+		g.P("x.list[i] = nil")
+		g.P("}")
+	}
+	g.P("x.list = x.list[:n]") // truncate
+	g.P("}")
+	g.P()
+
+	// NewElement
+	g.P("func (x *", typeName, ") NewElement() ", pref.Ident("Value"), "{")
+	zeroValue := zeroValueForField(g, field)
+	g.P("v := ", zeroValue)
+	switch field.Desc.Kind() {
+	case protoreflect.MessageKind: // it can be mutable
+		g.P("x.list = append(x.list, v)")
+		g.P("return ", kindToValueConstructor(field.Desc.Kind()), "(v.ProtoReflect())")
+	case protoreflect.EnumKind:
+		g.P("return ", kindToValueConstructor(field.Desc.Kind()), "((", pref.Ident("EnumNumber"), ")(v))")
+	default:
+		g.P("return ", kindToValueConstructor(field.Desc.Kind()), "(v)")
 	}
 	g.P("}")
 	g.P()
 
 	// IsValid
-	g.P()
 	g.P("func (x *", typeName, ") IsValid() bool {")
 	g.P("return x.list == nil || len(x.list) == 0") // TODO(fdymylja) len(list) validity??
 	g.P("}")
@@ -125,9 +171,9 @@ func kindToValueConstructor(kind protoreflect.Kind) protogen.GoIdent {
 	}
 }
 
-// valueToConcrete provides the function to call on value
+// valueUnwrapper provides the function to call on value
 // in order to get the concrete underlying type
-func valueToConcrete(kind protoreflect.Kind) string {
+func valueUnwrapper(kind protoreflect.Kind) string {
 	switch kind {
 	case protoreflect.BoolKind:
 		return "Bool"
@@ -153,5 +199,57 @@ func valueToConcrete(kind protoreflect.Kind) string {
 		return "Message"
 	default:
 		panic("should not reach here")
+	}
+}
+
+func genPrefValueToGoValue(g *protogen.GeneratedFile, field *protogen.Field) string {
+	const concreteValueName = "concreteValue"
+
+	unwrapperFunc := valueUnwrapper(field.Desc.Kind())
+	g.P("unwrapped := value.", unwrapperFunc, "()")
+	switch field.Desc.Kind() {
+	case protoreflect.MessageKind:
+		g.P(concreteValueName, " := unwrapped.Interface().(*", g.QualifiedGoIdent(field.Message.GoIdent), ")")
+	case protoreflect.EnumKind:
+		g.P(concreteValueName, " := (", g.QualifiedGoIdent(field.Enum.GoIdent), ")(unwrapped)")
+	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
+		g.P(concreteValueName, " := (int32)(unwrapped)")
+	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
+		g.P(concreteValueName, " := (uint32)(unwrapped)")
+	case protoreflect.FloatKind:
+		g.P(concreteValueName, " := (float32)(unwrapped)")
+	default:
+		g.P(concreteValueName, " := unwrapped")
+	}
+
+	return concreteValueName
+}
+
+func zeroValueForField(g *protogen.GeneratedFile, field *protogen.Field) string {
+	switch field.Desc.Kind() {
+	case protoreflect.BoolKind:
+		return "false"
+	case protoreflect.EnumKind:
+		return fmt.Sprintf("%d", field.Enum.Desc.Values().Get(0).Number())
+	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
+		return "int32(0)"
+	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
+		return "uint32(0)"
+	case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind:
+		return "int64(0)"
+	case protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
+		return "uint64(0)"
+	case protoreflect.FloatKind:
+		return "float32(0)"
+	case protoreflect.DoubleKind:
+		return "float64(0)"
+	case protoreflect.StringKind:
+		return "\"\""
+	case protoreflect.BytesKind:
+		return "nil"
+	case protoreflect.MessageKind, protoreflect.GroupKind:
+		return fmt.Sprintf("new(%s)", g.QualifiedGoIdent(field.Message.GoIdent))
+	default:
+		panic("should not reach")
 	}
 }
