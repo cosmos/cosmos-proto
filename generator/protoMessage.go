@@ -172,7 +172,7 @@ func genGetProto(g *GeneratedFile, msg *protogen.Message) {
 	for _, genFd := range msg.Fields {
 		switch {
 		case genFd.Desc.IsList():
-			fastreflection.GenGetList(g.GeneratedFile, genFd)
+			fastreflection.GenList(g.GeneratedFile, genFd)
 		}
 	}
 	g.P("// Get retrieves the value for a field.")

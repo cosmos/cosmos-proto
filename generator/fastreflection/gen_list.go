@@ -7,8 +7,8 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-// GenGetList generates the reflection fast paths over repeated fields
-func GenGetList(g *protogen.GeneratedFile, field *protogen.Field) {
+// GenList generates the reflection fast paths over repeated fields
+func GenList(g *protogen.GeneratedFile, field *protogen.Field) {
 	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 	const fmtPkg = protogen.GoImportPath("fmt")
 	typeName := listTypeName(field)
