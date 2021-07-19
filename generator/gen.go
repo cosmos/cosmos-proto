@@ -358,11 +358,10 @@ func getType(g *GeneratedFile, field *protogen.Field) (goType string, pointer bo
 	switch {
 	case field.Desc.IsList():
 		return "[]" + goType, false
-		// we dont use maps
-		//case field.Desc.IsMap():
-		//	keyType, _ := fieldGoType(g, f, field.Message.Fields[0])
-		//	valType, _ := fieldGoType(g, f, field.Message.Fields[1])
-		//	return fmt.Sprintf("map[%v]%v", keyType, valType), false
+	case field.Desc.IsMap():
+		keyType, _ := getType(g, field.Message.Fields[0])
+		valType, _ := getType(g, field.Message.Fields[1])
+		return fmt.Sprintf("map[%v]%v", keyType, valType), false
 	}
 	return goType, pointer
 }
