@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"github.com/cosmos/cosmos-proto/generator/fastreflection"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
@@ -166,6 +167,14 @@ func genClearProto(g *GeneratedFile, msg *protogen.Message) {
 }
 
 func genGetProto(g *GeneratedFile, msg *protogen.Message) {
+	// we check if there are map or list fields
+	// so that we can generate fast reflection wrapper types.
+	for _, genFd := range msg.Fields {
+		switch {
+		case genFd.Desc.IsList():
+			fastreflection.GenGetList(g.GeneratedFile, genFd)
+		}
+	}
 	g.P("// Get retrieves the value for a field.")
 	g.P("//")
 	g.P("// For unpopulated scalars, it returns the default value, where")
@@ -174,11 +183,11 @@ func genGetProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("// of the value; to obtain a mutable reference, use Mutable.")
 	g.P("func (x *", msg.GoIdent.GoName, ") Get(descriptor ", protoreflectPackage.Ident("FieldDescriptor"), ") ", protoreflectPackage.Ident("Value"), " {")
 	g.P("switch descriptor.Name() {")
-	// iterate every field
+	// implement the fast Get function
 	for _, genFd := range msg.Fields {
 		fd := genFd.Desc
 		g.P("case \"", fd.Name(), "\":")
-		valueForKind(g, fd.Kind(), genFd.GoName)
+		getfuncForField(g, fd.Kind(), genFd.GoName, genFd)
 	}
 	// insert default case which panics
 	g.P("default:")
@@ -187,9 +196,17 @@ func genGetProto(g *GeneratedFile, msg *protogen.Message) {
 	g.P("}")
 }
 
-func valueForKind(g *GeneratedFile, kind protoreflect.Kind, fieldName string) {
+func getfuncForField(g *GeneratedFile, kind protoreflect.Kind, fieldName string, genFd *protogen.Field) {
 	pkg := protoreflectPackage
 	fieldRef := "x." + fieldName
+
+	switch {
+	case genFd.Desc.IsMap():
+		return
+	case genFd.Desc.IsList():
+		return
+	}
+
 	switch kind {
 	case protoreflect.BoolKind:
 		g.P("return ", pkg.Ident("ValueOfBool"), "(", fieldRef, ")")

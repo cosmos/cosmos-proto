@@ -43,3 +43,38 @@ func (_ _A_1_map_string_B) NewValue() protoreflect.Value {
 func (_ _A_1_map_string_B) IsValid() bool {
 	panic("implement me")
 }
+
+type xd struct {
+}
+
+func (x xd) Len() int {
+	panic("implement me")
+}
+
+func (x xd) Get(i int) protoreflect.Value {
+	panic("implement me")
+}
+
+func (x xd) Set(i int, value protoreflect.Value) {
+	panic("implement me")
+}
+
+func (x xd) Append(value protoreflect.Value) {
+	panic("implement me")
+}
+
+func (x xd) AppendMutable() protoreflect.Value {
+	panic("implement me")
+}
+
+func (x xd) Truncate(i int) {
+	panic("implement me")
+}
+
+func (x xd) NewElement() protoreflect.Value {
+	panic("implement me")
+}
+
+func (x xd) IsValid() bool {
+	panic("implement me")
+}

@@ -31,6 +31,7 @@ message A {
     B ONEOF_B = 20;
     string ONEOF_STRING = 21;
   };
+  repeated Enumeration LIST_ENUM = 22;
 }
 
 message B {
