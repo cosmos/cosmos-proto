@@ -1,5 +1,11 @@
 package generator
 
+import (
+	"github.com/cosmos/cosmos-proto/generator/fastreflection"
+	"google.golang.org/protobuf/compiler/protogen"
+	"google.golang.org/protobuf/reflect/protoreflect"
+)
+
 func genProtoMessageFunctions(g *GeneratedFile, msg *messageInfo) {
 	genGetMethods(g, msg)
 	g.P()
@@ -161,14 +167,32 @@ func genClearProto(g *GeneratedFile, msg *messageInfo) {
 }
 
 func genGetProto(g *GeneratedFile, msg *messageInfo) {
+	// we check if there are map or list fields
+	// so that we can generate fast reflection wrapper types.
+	for _, genFd := range msg.Fields {
+		switch {
+		case genFd.Desc.IsList():
+			fastreflection.GenList(g.GeneratedFile, genFd)
+		}
+	}
 	g.P("// Get retrieves the value for a field.")
 	g.P("//")
 	g.P("// For unpopulated scalars, it returns the default value, where")
 	g.P("// the default value of a bytes scalar is guaranteed to be a copy.")
 	g.P("// For unpopulated composite types, it returns an empty, read-only view")
 	g.P("// of the value; to obtain a mutable reference, use Mutable.")
-	g.P("func (x ", msg.GoIdent.GoName, ") Get(descriptor ", protoreflectPackage.Ident("FieldDescriptor"), ") ", protoreflectPackage.Ident("Value"), " {")
-	g.P("return x.ProtoReflect().Get(descriptor)")
+	g.P("func (x *", msg.GoIdent.GoName, ") Get(descriptor ", protoreflectPackage.Ident("FieldDescriptor"), ") ", protoreflectPackage.Ident("Value"), " {")
+	g.P("switch descriptor.Number() {")
+	// implement the fast Get function
+	for i, genFd := range msg.Fields {
+		fd := genFd.Desc
+		g.P("case ", i, ":")
+		getfuncForField(g, fd.Kind(), genFd.GoName, genFd)
+	}
+	// insert default case which panics
+	g.P("default:")
+	g.P("panic(fmt.Errorf(\"message ", msg.Desc.FullName(), " does not contain field %s\", descriptor.Name()))")
+	g.P("}")
 	g.P("}")
 }
 
@@ -268,4 +292,41 @@ func genProtoMethodsProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("func (x ", msg.GoIdent.GoName, ") ProtoMethods() *", protoifacePackage.Ident("Methods"), " {")
 	g.P("return x.GetMethods()")
 	g.P("}")
+}
+
+func getfuncForField(g *GeneratedFile, kind protoreflect.Kind, fieldName string, genFd *protogen.Field) {
+	pkg := protoreflectPackage
+	fieldRef := "x." + fieldName
+
+	switch {
+	case genFd.Desc.IsMap():
+		return
+	case genFd.Desc.IsList():
+		return
+	}
+
+	switch kind {
+	case protoreflect.BoolKind:
+		g.P("return ", pkg.Ident("ValueOfBool"), "(", fieldRef, ")")
+	case protoreflect.EnumKind:
+		g.P("return ", pkg.Ident("ValueOfEnum"), "((", pkg.Ident("EnumNumber"), ")", "(", fieldRef, ")", ")")
+	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
+		g.P("return ", pkg.Ident("ValueOfInt32"), "(", fieldRef, ")")
+	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
+		g.P("return ", pkg.Ident("ValueOfUint32"), "(", fieldRef, ")")
+	case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind:
+		g.P("return ", pkg.Ident("ValueOfInt64"), "(", fieldRef, ")")
+	case protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
+		g.P("return ", pkg.Ident("ValueOfUint64"), "(", fieldRef, ")")
+	case protoreflect.FloatKind:
+		g.P("return ", pkg.Ident("ValueOfFloat32"), "(", fieldRef, ")")
+	case protoreflect.DoubleKind:
+		g.P("return ", pkg.Ident("ValueOfFloat64"), "(", fieldRef, ")")
+	case protoreflect.StringKind:
+		g.P("return ", pkg.Ident("ValueOfString"), "(", fieldRef, ")")
+	case protoreflect.BytesKind:
+		g.P("return ", pkg.Ident("ValueOfBytes"), "(", fieldRef, ")")
+	case protoreflect.MessageKind, protoreflect.GroupKind:
+		g.P("return ", pkg.Ident("ValueOfMessage"), "(", fieldRef, ")")
+	}
 }

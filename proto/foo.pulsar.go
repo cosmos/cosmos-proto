@@ -274,14 +274,67 @@ func (x Bar) Clear(descriptor protoreflect.FieldDescriptor) {
 	x.ProtoReflect().Clear(descriptor)
 }
 
+type _Bar_1_list struct {
+	list []string
+}
+
+var _ protoreflect.List = (*_Bar_1_list)(nil)
+
+func (x *_Bar_1_list) Len() int {
+	return len(x.list)
+}
+
+func (x *_Bar_1_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfString(x.list[i])
+}
+
+func (x *_Bar_1_list) Set(i int, value protoreflect.Value) {
+	unwrapped := value.String()
+	concreteValue := unwrapped
+	x.list[i] = concreteValue
+}
+
+func (x *_Bar_1_list) Append(value protoreflect.Value) {
+	unwrapped := value.String()
+	concreteValue := unwrapped
+	x.list = append(x.list, concreteValue)
+}
+
+func (x *_Bar_1_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message Bar at list field Qux as it is not of Message kind"))
+}
+
+func (x *_Bar_1_list) Truncate(n int) {
+	x.list = x.list[:n]
+}
+
+func (x *_Bar_1_list) NewElement() protoreflect.Value {
+	v := ""
+	return protoreflect.ValueOfString(v)
+}
+
+func (x *_Bar_1_list) IsValid() bool {
+	return x.list == nil || len(x.list) == 0
+}
+
 // Get retrieves the value for a field.
 //
 // For unpopulated scalars, it returns the default value, where
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x Bar) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	return x.ProtoReflect().Get(descriptor)
+func (x *Bar) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.Number() {
+	case 0:
+	case 1:
+		return protoreflect.ValueOfString(x.Baz)
+	case 2:
+		return protoreflect.ValueOfMessage(x.ONEOF_B)
+	case 3:
+		return protoreflect.ValueOfString(x.ONEOF_STRING)
+	default:
+		panic(fmt.Errorf("message cosmos.proto.Bar does not contain field %s", descriptor.Name()))
+	}
 }
 
 // Set stores the value for a field.
@@ -529,8 +582,15 @@ func (x Hello) Clear(descriptor protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x Hello) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	return x.ProtoReflect().Get(descriptor)
+func (x *Hello) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.Number() {
+	case 0:
+		return protoreflect.ValueOfString(x.World)
+	case 1:
+		return protoreflect.ValueOfBool(x.Universe)
+	default:
+		panic(fmt.Errorf("message cosmos.proto.Hello does not contain field %s", descriptor.Name()))
+	}
 }
 
 // Set stores the value for a field.
@@ -770,8 +830,13 @@ func (x B) Clear(descriptor protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x B) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	return x.ProtoReflect().Get(descriptor)
+func (x *B) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.Number() {
+	case 0:
+		return protoreflect.ValueOfString(x.X)
+	default:
+		panic(fmt.Errorf("message cosmos.proto.B does not contain field %s", descriptor.Name()))
+	}
 }
 
 // Set stores the value for a field.
