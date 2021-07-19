@@ -39,7 +39,7 @@ func NewGenerator(allFiles []*protogen.File, featureNames []string, ext *Extensi
 		}
 	}
 
-	return &Generator {
+	return &Generator{
 		seen:     make(map[featureHelpers]bool),
 		ext:      ext,
 		features: features,
