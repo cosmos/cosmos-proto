@@ -2,11 +2,10 @@ package proto_test
 
 import (
 	"fmt"
-	examples "github.com/cosmos/cosmos-proto/proto"
-	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/reflect/protoreflect"
-	"google.golang.org/protobuf/runtime/protoiface"
 	"testing"
+
+	p "github.com/cosmos/cosmos-proto/proto"
 )
 
 //func TestUnmarshal(t *testing.T) {
@@ -67,56 +66,69 @@ func prettyPrintStruct(i interface{}) {
 	fmt.Printf("%+v\n", i)
 }
 
-func TestUnmarshalProtoMethod(t *testing.T) {
-	foo := examples.Bar{Baz: "test"}
-	bz, err := foo.Marshal()
-	require.NoError(t, err)
-	require.NotEmpty(t, bz)
-
-	methods := foo.ProtoMethods()
-
-	var qux examples.Bar
-	out, err := methods.Unmarshal(protoiface.UnmarshalInput{
-		NoUnkeyedLiterals: struct{}{},
-		Message:           &qux,
-		Buf:               bz,
-		Flags:             0,
-		Resolver:          nil,
+func TestThing(t *testing.T) {
+	f := p.Bar{Baz: "hi"}
+	fr := f.ProtoReflect()
+	var fd protoreflect.FieldDescriptor
+	fr.Range(func(f protoreflect.FieldDescriptor, v protoreflect.Value) bool {
+		fd = f
+		return true
 	})
-	require.NoError(t, err)
-	prettyPrintStruct(out)
-	prettyPrintStruct(qux)
-	prettyPrintStruct(foo)
+
+	desc := f.Get(fd)
+	prettyPrintStruct(desc)
 }
 
-func TestReflectMethodGet(t *testing.T) {
-	foo := examples.Bar{Baz: "Qux"}
-	bz,err := foo.Marshal()
-	require.NoError(t, err)
-	var m protoreflect.Message = foo
-	methods := m.ProtoMethods()
-	out, err := methods.Marshal(protoiface.MarshalInput{
-		NoUnkeyedLiterals: struct{}{},
-		Message:           foo,
-		Buf:               nil,
-		Flags:             0,
-	})
-	require.NoError(t, err)
-	require.NotEmpty(t, out.Buf)
-	require.Equal(t, bz, out.Buf)
-}
-
-func TestProtoReflectMethod(t *testing.T) {
-	foo := examples.Bar{Baz: "hi"}
-	msg := foo.ProtoReflect()
-	require.NotNil(t, msg.ProtoMethods())
-}
-
-func TestSizeMethod(t *testing.T) {
-	foo := examples.Bar{Baz: "hi"}
-	size := func(msg protoreflect.Message) int {
-		methods := msg.ProtoMethods()
-		return methods.Size(protoiface.SizeInput{}).Size
-	}
-	require.Equal(t, 4, size(foo))
-}
+//func TestUnmarshalProtoMethod(t *testing.T) {
+//	foo := examples.Bar{Baz: "test"}
+//	bz, err := foo.Marshal()
+//	require.NoError(t, err)
+//	require.NotEmpty(t, bz)
+//
+//	methods := foo.ProtoMethods()
+//
+//	var qux examples.Bar
+//	out, err := methods.Unmarshal(protoiface.UnmarshalInput{
+//		NoUnkeyedLiterals: struct{}{},
+//		Message:           &qux,
+//		Buf:               bz,
+//		Flags:             0,
+//		Resolver:          nil,
+//	})
+//	require.NoError(t, err)
+//	prettyPrintStruct(out)
+//	prettyPrintStruct(qux)
+//	prettyPrintStruct(foo)
+//}
+//
+//func TestReflectMethodGet(t *testing.T) {
+//	foo := examples.Bar{Baz: "Qux"}
+//	bz,err := foo.Marshal()
+//	require.NoError(t, err)
+//	var m protoreflect.Message = foo
+//	methods := m.ProtoMethods()
+//	out, err := methods.Marshal(protoiface.MarshalInput{
+//		NoUnkeyedLiterals: struct{}{},
+//		Message:           foo,
+//		Buf:               nil,
+//		Flags:             0,
+//	})
+//	require.NoError(t, err)
+//	require.NotEmpty(t, out.Buf)
+//	require.Equal(t, bz, out.Buf)
+//}
+//
+//func TestProtoReflectMethod(t *testing.T) {
+//	foo := examples.Bar{Baz: "hi"}
+//	msg := foo.ProtoReflect()
+//	require.NotNil(t, msg.ProtoMethods())
+//}
+//
+//func TestSizeMethod(t *testing.T) {
+//	foo := examples.Bar{Baz: "hi"}
+//	size := func(msg protoreflect.Message) int {
+//		methods := msg.ProtoMethods()
+//		return methods.Size(protoiface.SizeInput{}).Size
+//	}
+//	require.Equal(t, 4, size(foo))
+//}

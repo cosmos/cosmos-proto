@@ -49,16 +49,20 @@ func genGetMethods(g *GeneratedFile, msg *protogen.Message) {
 	g.P("return &", protoifacePackage.Ident("Methods{"))
 	g.P("NoUnkeyedLiterals: struct{}{},")
 	g.P("Flags: 0,")
+
+	// Size
 	g.P("Size: func(input ", protoifacePackage.Ident("SizeInput"), ") ", protoifacePackage.Ident("SizeOutput"), " {")
 	g.P("return ", protoifacePackage.Ident("SizeOutput"), "{")
 	g.P("NoUnkeyedLiterals: struct{}{},")
 	g.P("Size: x.Size(),")
 	g.P("}")
 	g.P("},")
+
+	// Marshal
 	g.P("Marshal: func(input ", protoifacePackage.Ident("MarshalInput"), ") (", protoifacePackage.Ident("MarshalOutput"), ", error) {")
-	g.P("v, ok := input.Message.(", msg.GoIdent.GoName, ")")
+	g.P("v, ok := input.Message.(*", msg.GoIdent.GoName, ")")
 	g.P("if !ok {")
-	g.P("return ", protoifacePackage.Ident("MarshalOutput"), "{}, errors.New(\"", msg.GoIdent.GoName, " does not implement the protoreflect.Message interface\")")
+	g.P("return ", protoifacePackage.Ident("MarshalOutput"), "{}, ", errorsPackage.Ident("New"), "(\"size error: ", msg.GoIdent.GoName, " does not implement the protoreflect.Message interface\")")
 	g.P("}")
 	g.P()
 	g.P("bz, err := v.Marshal()")
@@ -70,14 +74,16 @@ func genGetMethods(g *GeneratedFile, msg *protogen.Message) {
 	g.P("Buf: bz,")
 	g.P("}, nil")
 	g.P("},")
+
+	// Unmarshal
 	g.P("Unmarshal: func(input ", protoifacePackage.Ident("UnmarshalInput"), ") (", protoifacePackage.Ident("UnmarshalOutput"), ", error){")
 	g.P("v, ok := input.Message.(*", msg.GoIdent.GoName, ")")
 	g.P("if !ok {")
-	g.P("return ", protoifacePackage.Ident("UnmarshalOutput"), "{}, errors.New(\"", msg.GoIdent.GoName, " does not implement the protoreflect.Message interface\")")
+	g.P("return ", protoifacePackage.Ident("UnmarshalOutput"), "{}, ", errorsPackage.Ident("New"), "(\"marshal error: ", msg.GoIdent.GoName, " does not implement the protoreflect.Message interface\")")
 	g.P("}")
 	g.P()
 	g.P("if len(input.Buf) < 1 {")
-	g.P("return ", protoifacePackage.Ident("UnmarshalOutput"), "{}, errors.New(\"unmarshal input did not contain any bytes to unmarshal\")")
+	g.P("return ", protoifacePackage.Ident("UnmarshalOutput"), "{}, ", errorsPackage.Ident("New"), "(\"unmarshal input did not contain any bytes to unmarshal\")")
 	g.P("}")
 	g.P("err := v.Unmarshal(input.Buf)")
 	g.P("if err != nil {")

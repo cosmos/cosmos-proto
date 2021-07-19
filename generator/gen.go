@@ -71,6 +71,7 @@ var (
 	protojsonPackage     goImportPath = protogen.GoImportPath("google.golang.org/protobuf/encoding/protojson")
 	protoreflectPackage  goImportPath = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 	protoregistryPackage goImportPath = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoregistry")
+	errorsPackage        goImportPath = protogen.GoImportPath("errors")
 )
 
 type goImportPath interface {
