@@ -3,15 +3,16 @@ package generator
 import (
 	"errors"
 	"fmt"
-	"google.golang.org/protobuf/encoding/protowire"
-	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/types/descriptorpb"
 	"math"
 	"runtime/debug"
 	"strconv"
 	"strings"
 	"unicode"
 	"unicode/utf8"
+
+	"google.golang.org/protobuf/encoding/protowire"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/descriptorpb"
 
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
