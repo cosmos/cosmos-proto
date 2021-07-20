@@ -411,20 +411,9 @@ func genMessageFields(g *GeneratedFile, f *fileInfo, m *messageInfo) {
 }
 
 func genMessageReflectMethods(g *GeneratedFile, f *fileInfo, m *messageInfo) {
-	idx := f.allMessagesByPtr[m]
-	typesVar := messageTypesVarName(f)
-
 	// ProtoReflect method.
 	g.P("func (x *", m.GoIdent, ") ProtoReflect() ", protoreflectPackage.Ident("Message"), " {")
-	g.P("mi := &", typesVar, "[", idx, "]")
-	g.P("if ", protoimplPackage.Ident("UnsafeEnabled"), " && x != nil {")
-	g.P("ms := ", protoimplPackage.Ident("X"), ".MessageStateOf(", protoimplPackage.Ident("Pointer"), "(x))")
-	g.P("if ms.LoadMessageInfo() == nil {")
-	g.P("ms.StoreMessageInfo(mi)")
-	g.P("}")
-	g.P("return ms")
-	g.P("}")
-	g.P("return mi.MessageOf(x)")
+	g.P("return x")
 	g.P("}")
 	g.P()
 }
