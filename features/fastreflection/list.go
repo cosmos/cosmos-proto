@@ -13,7 +13,7 @@ func GenList(g *protogen.GeneratedFile, field *protogen.Field) {
 	const fmtPkg = protogen.GoImportPath("fmt")
 	typeName := listTypeName(field)
 	g.P("type ", typeName, " struct {")
-	g.P("list []", getType(g, field))
+	g.P("list *[]", getType(g, field))
 	g.P("}")
 	g.P()
 
@@ -23,7 +23,7 @@ func GenList(g *protogen.GeneratedFile, field *protogen.Field) {
 
 	// Len
 	g.P("func (x *", typeName, ") Len() int {")
-	g.P("return len(x.list)")
+	g.P("return len(*x.list)")
 	g.P("}")
 	g.P()
 
@@ -32,11 +32,11 @@ func GenList(g *protogen.GeneratedFile, field *protogen.Field) {
 	constructor := kindToValueConstructor(field.Desc.Kind())
 	switch field.Desc.Kind() {
 	case protoreflect.MessageKind:
-		g.P("return ", constructor, "(x.list[i].ProtoReflect())")
+		g.P("return ", constructor, "((*x.list)[i].ProtoReflect())")
 	case protoreflect.EnumKind:
-		g.P("return ", constructor, "((", pref.Ident("EnumNumber"), ")(x.list[i]))")
+		g.P("return ", constructor, "((", pref.Ident("EnumNumber"), ")((*x.list)[i]))")
 	default:
-		g.P("return ", constructor, "(x.list[i])")
+		g.P("return ", constructor, "((*x.list)[i])")
 	}
 	g.P("}")
 	g.P()
@@ -44,14 +44,14 @@ func GenList(g *protogen.GeneratedFile, field *protogen.Field) {
 	// Set
 	g.P("func (x *", typeName, ") Set(i int, value ", pref.Ident("Value"), ") {")
 	concreteValueName := genPrefValueToGoValue(g, field)
-	g.P("x.list[i] = ", concreteValueName)
+	g.P("(*x.list)[i] = ", concreteValueName)
 	g.P("}")
 	g.P()
 
 	// Append
 	g.P("func (x *", typeName, ") Append(value ", pref.Ident("Value"), ") {")
 	concreteValueName = genPrefValueToGoValue(g, field)
-	g.P("x.list = append(x.list, ", concreteValueName, ")")
+	g.P("*x.list = append(*x.list, ", concreteValueName, ")")
 	g.P("}")
 	g.P()
 
@@ -60,7 +60,7 @@ func GenList(g *protogen.GeneratedFile, field *protogen.Field) {
 	switch field.Desc.Kind() {
 	case protoreflect.MessageKind:
 		g.P("v := new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
-		g.P("x.list = append(x.list, v)")
+		g.P("*x.list = append(*x.list, v)")
 		g.P("return ", pref.Ident("ValueOfMessage"), "(v.ProtoReflect())")
 	default:
 		panicMsg := fmt.Sprintf("AppendMutable can not be called on message %s at list field %s as it is not of Message kind", field.Parent.GoIdent.GoName, field.GoName)
@@ -74,11 +74,11 @@ func GenList(g *protogen.GeneratedFile, field *protogen.Field) {
 
 	switch field.Desc.Kind() {
 	case protoreflect.MessageKind: // zero message kinds to avoid keeping data alive
-		g.P("for i := n; i < len(x.list); i++ {")
-		g.P("x.list[i] = nil")
+		g.P("for i := n; i < len(*x.list); i++ {")
+		g.P("(*x.list)[i] = nil")
 		g.P("}")
 	}
-	g.P("x.list = x.list[:n]") // truncate
+	g.P("*x.list = (*x.list)[:n]") // truncate
 	g.P("}")
 	g.P()
 
@@ -88,7 +88,7 @@ func GenList(g *protogen.GeneratedFile, field *protogen.Field) {
 	g.P("v := ", zeroValue)
 	switch field.Desc.Kind() {
 	case protoreflect.MessageKind: // it can be mutable
-		g.P("x.list = append(x.list, v)")
+		g.P("*x.list = append(*x.list, v)")
 		g.P("return ", kindToValueConstructor(field.Desc.Kind()), "(v.ProtoReflect())")
 	case protoreflect.EnumKind:
 		g.P("return ", kindToValueConstructor(field.Desc.Kind()), "((", pref.Ident("EnumNumber"), ")(v))")
@@ -100,7 +100,7 @@ func GenList(g *protogen.GeneratedFile, field *protogen.Field) {
 
 	// IsValid
 	g.P("func (x *", typeName, ") IsValid() bool {")
-	g.P("return x.list == nil || len(x.list) == 0") // TODO(fdymylja) len(list) validity??
+	g.P("return *x.list != nil || len(*x.list) != 0") // TODO(fdymylja) len(list) validity??
 	g.P("}")
 	g.P()
 }

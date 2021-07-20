@@ -8,8 +8,54 @@ import (
 	"google.golang.org/protobuf/compiler/protogen"
 )
 
+const (
+	prefPkg   = protogen.GoImportPath("")
+	primplPkg = protogen.GoImportPath("")
+)
+
 func GenProtoMessage(f *protogen.File, g *protogen.GeneratedFile, message *protogen.Message) {
 	genProtoMessageFunctions(f, g, message)
+
+	gen := &generator{
+		file:    f,
+		g:       g,
+		message: message,
+		err:     nil,
+	}
+
+	gen.generateExtraTypes()
+}
+
+type generator struct {
+	file    *protogen.File
+	g       *protogen.GeneratedFile
+	message *protogen.Message
+
+	err error
+}
+
+// generateExtraTypes generates the protoreflect.List and protoreflect.Map types required.
+func (g *generator) generateExtraTypes() {
+	for _, field := range g.message.Fields {
+		switch {
+		case field.Desc.IsMap():
+			g.generateMapType(field)
+		case field.Desc.IsList():
+			g.generateListType(field)
+		}
+	}
+}
+
+// generateMapType generates the fast reflection protoreflect.Map type
+// related to the provided protogen.Field.
+func (g *generator) generateMapType(field *protogen.Field) {
+
+}
+
+// generateListType generates the fast reflection protoreflect.List type
+// related to the provided protogen.Field.
+func (g *generator) generateListType(field *protogen.Field) {
+
 }
 
 func genProtoMessageFunctions(f *protogen.File, g *protogen.GeneratedFile, msg *protogen.Message) {
