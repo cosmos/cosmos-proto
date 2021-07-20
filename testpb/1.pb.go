@@ -112,18 +112,6 @@ func (x *A) String() string {
 
 func (*A) ProtoMessage() {}
 
-func (x *A) ProtoReflect() protoreflect.Message {
-	mi := &file_testpb_1_proto_msgTypes[0]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
 // Deprecated: Use A.ProtoReflect.Descriptor instead.
 func (*A) Descriptor() ([]byte, []int) {
 	return file_testpb_1_proto_rawDescGZIP(), []int{0}
@@ -328,18 +316,6 @@ func (x *B) String() string {
 }
 
 func (*B) ProtoMessage() {}
-
-func (x *B) ProtoReflect() protoreflect.Message {
-	mi := &file_testpb_1_proto_msgTypes[1]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
 
 // Deprecated: Use B.ProtoReflect.Descriptor instead.
 func (*B) Descriptor() ([]byte, []int) {

@@ -139,7 +139,7 @@ func genInterfaceProto(g *protogen.GeneratedFile, msg *protogen.Message, typeNam
 	g.P("// Interface unwraps the message reflection interface and")
 	g.P("// returns the underlying ProtoMessage interface.")
 	g.P("func (x *", typeName, ") Interface() ", pref.Ident("ProtoMessage"), " {")
-	slowReflectionFallBack(g, msg, true, "Interface")
+	g.P("return (*", msg.GoIdent, ")(x)")
 	g.P("}")
 }
 

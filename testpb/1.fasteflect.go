@@ -48,7 +48,7 @@ func (x *fastReflection_A) New() protoreflect.Message {
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
 func (x *fastReflection_A) Interface() protoreflect.ProtoMessage {
-	return (*A)(x).slowProtoReflect().Interface()
+	return (*A)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -354,7 +354,7 @@ func (x *fastReflection_B) New() protoreflect.Message {
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
 func (x *fastReflection_B) Interface() protoreflect.ProtoMessage {
-	return (*B)(x).slowProtoReflect().Interface()
+	return (*B)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
