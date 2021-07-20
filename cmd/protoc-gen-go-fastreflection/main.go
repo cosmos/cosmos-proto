@@ -18,7 +18,7 @@ func main() {
 			genFile := plugin.NewGeneratedFile(fmt.Sprintf("%s.fasteflect.go", f.GeneratedFilenamePrefix), f.GoImportPath)
 			genFile.P("package ", f.GoPackageName)
 			for _, msg := range f.Messages {
-				fastreflection.GenProtoMessage(genFile, msg)
+				fastreflection.GenProtoMessage(f, genFile, msg)
 			}
 		}
 
