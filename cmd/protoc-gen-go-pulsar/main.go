@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	_ "github.com/cosmos/cosmos-proto/features/fastreflection"
 	_ "github.com/cosmos/cosmos-proto/features/grpc"
 	_ "github.com/cosmos/cosmos-proto/features/marshal"
 	_ "github.com/cosmos/cosmos-proto/features/pool"
