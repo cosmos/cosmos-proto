@@ -5,6 +5,7 @@
 //// source: foo.proto
 //
 package examples
+
 //
 //import (
 //	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -20,12 +21,63 @@ package examples
 //	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 //)
 //
+//type HelloN int32
+//
+//const (
+//	Hello_foonum HelloN = 0
+//	Hello_barnum HelloN = 1
+//)
+//
+//// Enum value maps for HelloN.
+//var (
+//	HelloN_name = map[int32]string{
+//		0: "foonum",
+//		1: "barnum",
+//	}
+//	HelloN_value = map[string]int32{
+//		"foonum": 0,
+//		"barnum": 1,
+//	}
+//)
+//
+//func (x HelloN) Enum() *HelloN {
+//	p := new(HelloN)
+//	*p = x
+//	return p
+//}
+//
+//func (x HelloN) String() string {
+//	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+//}
+//
+//func (HelloN) Descriptor() protoreflect.EnumDescriptor {
+//	return file_foo_proto_enumTypes[0].Descriptor()
+//}
+//
+//func (HelloN) Type() protoreflect.EnumType {
+//	return &file_foo_proto_enumTypes[0]
+//}
+//
+//func (x HelloN) Number() protoreflect.EnumNumber {
+//	return protoreflect.EnumNumber(x)
+//}
+//
+//// Deprecated: Use HelloN.Descriptor instead.
+//func (HelloN) EnumDescriptor() ([]byte, []int) {
+//	return file_foo_proto_rawDescGZIP(), []int{1, 0}
+//}
+//
 //type Bar struct {
 //	state         protoimpl.MessageState
 //	sizeCache     protoimpl.SizeCache
 //	unknownFields protoimpl.UnknownFields
 //
-//	Baz string `protobuf:"bytes,1,opt,name=baz,proto3" json:"baz,omitempty"`
+//	Qux []string `protobuf:"bytes,1,rep,name=qux,proto3" json:"qux,omitempty"`
+//	Baz string   `protobuf:"bytes,2,opt,name=baz,proto3" json:"baz,omitempty"`
+//	// Types that are assignable to ONEOF:
+//	//	*Bar_ONEOF_B
+//	//	*Bar_ONEOF_STRING
+//	ONEOF isBar_ONEOF `protobuf_oneof:"ONEOF"`
 //}
 //
 //func (x *Bar) Reset() {
@@ -60,9 +112,155 @@ package examples
 //	return file_foo_proto_rawDescGZIP(), []int{0}
 //}
 //
+//func (x *Bar) GetQux() []string {
+//	if x != nil {
+//		return x.Qux
+//	}
+//	return nil
+//}
+//
 //func (x *Bar) GetBaz() string {
 //	if x != nil {
 //		return x.Baz
+//	}
+//	return ""
+//}
+//
+//func (m *Bar) GetONEOF() isBar_ONEOF {
+//	if m != nil {
+//		return m.ONEOF
+//	}
+//	return nil
+//}
+//
+//func (x *Bar) GetONEOF_B() *B {
+//	if x, ok := x.GetONEOF().(*Bar_ONEOF_B); ok {
+//		return x.ONEOF_B
+//	}
+//	return nil
+//}
+//
+//func (x *Bar) GetONEOF_STRING() string {
+//	if x, ok := x.GetONEOF().(*Bar_ONEOF_STRING); ok {
+//		return x.ONEOF_STRING
+//	}
+//	return ""
+//}
+//
+//type isBar_ONEOF interface {
+//	isBar_ONEOF()
+//}
+//
+//type Bar_ONEOF_B struct {
+//	ONEOF_B *B `protobuf:"bytes,20,opt,name=ONEOF_B,json=ONEOFB,proto3,oneof"`
+//}
+//
+//type Bar_ONEOF_STRING struct {
+//	ONEOF_STRING string `protobuf:"bytes,21,opt,name=ONEOF_STRING,json=ONEOFSTRING,proto3,oneof"`
+//}
+//
+//func (*Bar_ONEOF_B) isBar_ONEOF() {}
+//
+//func (*Bar_ONEOF_STRING) isBar_ONEOF() {}
+//
+//type Hello struct {
+//	state         protoimpl.MessageState
+//	sizeCache     protoimpl.SizeCache
+//	unknownFields protoimpl.UnknownFields
+//
+//	World    string `protobuf:"bytes,2,opt,name=world,proto3" json:"world,omitempty"`
+//	Universe bool   `protobuf:"varint,3,opt,name=universe,proto3" json:"universe,omitempty"`
+//}
+//
+//func (x *Hello) Reset() {
+//	*x = Hello{}
+//	if protoimpl.UnsafeEnabled {
+//		mi := &file_foo_proto_msgTypes[1]
+//		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+//		ms.StoreMessageInfo(mi)
+//	}
+//}
+//
+//func (x *Hello) String() string {
+//	return protoimpl.X.MessageStringOf(x)
+//}
+//
+//func (*Hello) ProtoMessage() {}
+//
+//func (x *Hello) ProtoReflect() protoreflect.Message {
+//	mi := &file_foo_proto_msgTypes[1]
+//	if protoimpl.UnsafeEnabled && x != nil {
+//		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+//		if ms.LoadMessageInfo() == nil {
+//			ms.StoreMessageInfo(mi)
+//		}
+//		return ms
+//	}
+//	return mi.MessageOf(x)
+//}
+//
+//// Deprecated: Use Hello.ProtoReflect.Descriptor instead.
+//func (*Hello) Descriptor() ([]byte, []int) {
+//	return file_foo_proto_rawDescGZIP(), []int{1}
+//}
+//
+//func (x *Hello) GetWorld() string {
+//	if x != nil {
+//		return x.World
+//	}
+//	return ""
+//}
+//
+//func (x *Hello) GetUniverse() bool {
+//	if x != nil {
+//		return x.Universe
+//	}
+//	return false
+//}
+//
+//type B struct {
+//	state         protoimpl.MessageState
+//	sizeCache     protoimpl.SizeCache
+//	unknownFields protoimpl.UnknownFields
+//
+//	X string `protobuf:"bytes,1,opt,name=x,proto3" json:"x,omitempty"`
+//}
+//
+//func (x *B) Reset() {
+//	*x = B{}
+//	if protoimpl.UnsafeEnabled {
+//		mi := &file_foo_proto_msgTypes[2]
+//		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+//		ms.StoreMessageInfo(mi)
+//	}
+//}
+//
+//func (x *B) String() string {
+//	return protoimpl.X.MessageStringOf(x)
+//}
+//
+//func (*B) ProtoMessage() {}
+//
+//func (x *B) ProtoReflect() protoreflect.Message {
+//	mi := &file_foo_proto_msgTypes[2]
+//	if protoimpl.UnsafeEnabled && x != nil {
+//		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+//		if ms.LoadMessageInfo() == nil {
+//			ms.StoreMessageInfo(mi)
+//		}
+//		return ms
+//	}
+//	return mi.MessageOf(x)
+//}
+//
+//// Deprecated: Use B.ProtoReflect.Descriptor instead.
+//func (*B) Descriptor() ([]byte, []int) {
+//	return file_foo_proto_rawDescGZIP(), []int{2}
+//}
+//
+//func (x *B) GetX() string {
+//	if x != nil {
+//		return x.X
 //	}
 //	return ""
 //}
@@ -71,12 +269,25 @@ package examples
 //
 //var file_foo_proto_rawDesc = []byte{
 //	0x0a, 0x09, 0x66, 0x6f, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x0c, 0x63, 0x6f, 0x73,
-//	0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x17, 0x0a, 0x03, 0x42, 0x61, 0x72,
-//	0x12, 0x10, 0x0a, 0x03, 0x62, 0x61, 0x7a, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x62,
-//	0x61, 0x7a, 0x42, 0x29, 0x5a, 0x27, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
-//	0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x70,
-//	0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x65, 0x78, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x73, 0x62, 0x06, 0x70,
-//	0x72, 0x6f, 0x74, 0x6f, 0x33,
+//	0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x83, 0x01, 0x0a, 0x03, 0x42, 0x61,
+//	0x72, 0x12, 0x10, 0x0a, 0x03, 0x71, 0x75, 0x78, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52, 0x03,
+//	0x71, 0x75, 0x78, 0x12, 0x10, 0x0a, 0x03, 0x62, 0x61, 0x7a, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+//	0x52, 0x03, 0x62, 0x61, 0x7a, 0x12, 0x2a, 0x0a, 0x07, 0x4f, 0x4e, 0x45, 0x4f, 0x46, 0x5f, 0x42,
+//	0x18, 0x14, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
+//	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x42, 0x48, 0x00, 0x52, 0x06, 0x4f, 0x4e, 0x45, 0x4f, 0x46,
+//	0x42, 0x12, 0x23, 0x0a, 0x0c, 0x4f, 0x4e, 0x45, 0x4f, 0x46, 0x5f, 0x53, 0x54, 0x52, 0x49, 0x4e,
+//	0x47, 0x18, 0x15, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x0b, 0x4f, 0x4e, 0x45, 0x4f, 0x46,
+//	0x53, 0x54, 0x52, 0x49, 0x4e, 0x47, 0x42, 0x07, 0x0a, 0x05, 0x4f, 0x4e, 0x45, 0x4f, 0x46, 0x22,
+//	0x56, 0x0a, 0x05, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x12, 0x14, 0x0a, 0x05, 0x77, 0x6f, 0x72, 0x6c,
+//	0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x12, 0x1a,
+//	0x0a, 0x08, 0x75, 0x6e, 0x69, 0x76, 0x65, 0x72, 0x73, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x08,
+//	0x52, 0x08, 0x75, 0x6e, 0x69, 0x76, 0x65, 0x72, 0x73, 0x65, 0x22, 0x1b, 0x0a, 0x01, 0x6e, 0x12,
+//	0x0a, 0x0a, 0x06, 0x66, 0x6f, 0x6f, 0x6e, 0x75, 0x6d, 0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06, 0x62,
+//	0x61, 0x72, 0x6e, 0x75, 0x6d, 0x10, 0x01, 0x22, 0x11, 0x0a, 0x01, 0x42, 0x12, 0x0c, 0x0a, 0x01,
+//	0x78, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x01, 0x78, 0x42, 0x29, 0x5a, 0x27, 0x67, 0x69,
+//	0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f,
+//	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x65, 0x78, 0x61,
+//	0x6d, 0x70, 0x6c, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 //}
 //
 //var (
@@ -91,16 +302,21 @@ package examples
 //	return file_foo_proto_rawDescData
 //}
 //
-//var file_foo_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+//var file_foo_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+//var file_foo_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 //var file_foo_proto_goTypes = []interface{}{
-//	(*Bar)(nil), // 0: cosmos.proto.Bar
+//	(HelloN)(0),   // 0: cosmos.proto.Hello.n
+//	(*Bar)(nil),   // 1: cosmos.proto.Bar
+//	(*Hello)(nil), // 2: cosmos.proto.Hello
+//	(*B)(nil),     // 3: cosmos.proto.B
 //}
 //var file_foo_proto_depIdxs = []int32{
-//	0, // [0:0] is the sub-list for method output_type
-//	0, // [0:0] is the sub-list for method input_type
-//	0, // [0:0] is the sub-list for extension type_name
-//	0, // [0:0] is the sub-list for extension extendee
-//	0, // [0:0] is the sub-list for field type_name
+//	3, // 0: cosmos.proto.Bar.ONEOF_B:type_name -> cosmos.proto.B
+//	1, // [1:1] is the sub-list for method output_type
+//	1, // [1:1] is the sub-list for method input_type
+//	1, // [1:1] is the sub-list for extension type_name
+//	1, // [1:1] is the sub-list for extension extendee
+//	0, // [0:1] is the sub-list for field type_name
 //}
 //
 //func init() { file_foo_proto_init() }
@@ -121,19 +337,48 @@ package examples
 //				return nil
 //			}
 //		}
+//		file_foo_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+//			switch v := v.(*Hello); i {
+//			case 0:
+//				return &v.state
+//			case 1:
+//				return &v.sizeCache
+//			case 2:
+//				return &v.unknownFields
+//			default:
+//				return nil
+//			}
+//		}
+//		file_foo_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+//			switch v := v.(*B); i {
+//			case 0:
+//				return &v.state
+//			case 1:
+//				return &v.sizeCache
+//			case 2:
+//				return &v.unknownFields
+//			default:
+//				return nil
+//			}
+//		}
+//	}
+//	file_foo_proto_msgTypes[0].OneofWrappers = []interface{}{
+//		(*Bar_ONEOF_B)(nil),
+//		(*Bar_ONEOF_STRING)(nil),
 //	}
 //	type x struct{}
 //	out := protoimpl.TypeBuilder{
 //		File: protoimpl.DescBuilder{
 //			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 //			RawDescriptor: file_foo_proto_rawDesc,
-//			NumEnums:      0,
-//			NumMessages:   1,
+//			NumEnums:      1,
+//			NumMessages:   3,
 //			NumExtensions: 0,
 //			NumServices:   0,
 //		},
 //		GoTypes:           file_foo_proto_goTypes,
 //		DependencyIndexes: file_foo_proto_depIdxs,
+//		EnumInfos:         file_foo_proto_enumTypes,
 //		MessageInfos:      file_foo_proto_msgTypes,
 //	}.Build()
 //	File_foo_proto = out.File
