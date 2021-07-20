@@ -7,72 +7,106 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-// GenList generates the reflection fast paths over repeated fields
-func GenList(g *protogen.GeneratedFile, field *protogen.Field) {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
-	const fmtPkg = protogen.GoImportPath("fmt")
-	typeName := listTypeName(field)
-	g.P("type ", typeName, " struct {")
-	g.P("list *[]", getType(g, field))
+type listGen struct {
+	*protogen.GeneratedFile
+	field *protogen.Field
+
+	typeName string
+}
+
+func (g *listGen) generate() {
+	g.typeName = listTypeName(g.field)
+
+	g.genAssertions()
+	g.genType()
+	g.genLen()
+	g.genGet()
+	g.genSet()
+	g.genAppend()
+	g.genAppendMutable()
+	g.genTruncate()
+	g.genNewElement()
+	g.genIsValid()
+}
+
+// genAssertions generates protoreflect.List type assertions
+func (g *listGen) genAssertions() {
+	// type assertion
+	g.P("var _ ", protoreflectPkg.Ident("List"), " = (*", g.typeName, ")(nil)")
+}
+
+// genType generates the list type
+func (g *listGen) genType() {
+	g.P("type ", g.typeName, " struct {")
+	g.P("list *[]", getType(g.GeneratedFile, g.field))
 	g.P("}")
 	g.P()
+}
 
-	// implement protoreflect.List
-	// type assertion
-	g.P("var _ ", pref.Ident("List"), " = (*", typeName, ")(nil)")
-
-	// Len
-	g.P("func (x *", typeName, ") Len() int {")
+// genLen generates the implementation for protoreflect.List.Len
+func (g *listGen) genLen() {
+	g.P("func (x *", g.typeName, ") Len() int {")
 	g.P("return len(*x.list)")
 	g.P("}")
 	g.P()
+}
 
-	// Get
-	g.P("func (x *", typeName, ") Get(i int) ", pref.Ident("Value"), " {")
-	constructor := kindToValueConstructor(field.Desc.Kind())
-	switch field.Desc.Kind() {
+// genGet generates the implementation for protoreflect.List.Get
+func (g *listGen) genGet() {
+	g.P("func (x *", g.typeName, ") Get(i int) ", protoreflectPkg.Ident("Value"), " {")
+	constructor := kindToValueConstructor(g.field.Desc.Kind())
+	switch g.field.Desc.Kind() {
 	case protoreflect.MessageKind:
 		g.P("return ", constructor, "((*x.list)[i].ProtoReflect())")
 	case protoreflect.EnumKind:
-		g.P("return ", constructor, "((", pref.Ident("EnumNumber"), ")((*x.list)[i]))")
+		g.P("return ", constructor, "((", protoreflectPkg.Ident("EnumNumber"), ")((*x.list)[i]))")
 	default:
 		g.P("return ", constructor, "((*x.list)[i])")
 	}
 	g.P("}")
 	g.P()
+}
 
+// genSet generates the implementation for protoreflect.List.Set
+func (g *listGen) genSet() {
 	// Set
-	g.P("func (x *", typeName, ") Set(i int, value ", pref.Ident("Value"), ") {")
-	concreteValueName := genPrefValueToGoValue(g, field)
+	g.P("func (x *", g.typeName, ") Set(i int, value ", protoreflectPkg.Ident("Value"), ") {")
+	concreteValueName := genPrefValueToGoValue(g.GeneratedFile, g.field)
 	g.P("(*x.list)[i] = ", concreteValueName)
 	g.P("}")
 	g.P()
+}
 
-	// Append
-	g.P("func (x *", typeName, ") Append(value ", pref.Ident("Value"), ") {")
-	concreteValueName = genPrefValueToGoValue(g, field)
+// genAppend generates the protoreflect.List.Append implementation
+func (g *listGen) genAppend() {
+	g.P("func (x *", g.typeName, ") Append(value ", protoreflectPkg.Ident("Value"), ") {")
+	concreteValueName := genPrefValueToGoValue(g.GeneratedFile, g.field)
 	g.P("*x.list = append(*x.list, ", concreteValueName, ")")
 	g.P("}")
 	g.P()
+}
 
-	// AppendMutable
-	g.P("func (x *", typeName, ") AppendMutable() ", pref.Ident("Value"), " {")
-	switch field.Desc.Kind() {
+// genAppendMutable generates the protoreflect.List.AppendMutable implementation
+func (g *listGen) genAppendMutable() {
+	g.P("func (x *", g.typeName, ") AppendMutable() ", protoreflectPkg.Ident("Value"), " {")
+	switch g.field.Desc.Kind() {
 	case protoreflect.MessageKind:
-		g.P("v := new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
+		g.P("v := new(", g.QualifiedGoIdent(g.field.Message.GoIdent), ")")
 		g.P("*x.list = append(*x.list, v)")
-		g.P("return ", pref.Ident("ValueOfMessage"), "(v.ProtoReflect())")
+		g.P("return ", protoreflectPkg.Ident("ValueOfMessage"), "(v.ProtoReflect())")
 	default:
-		panicMsg := fmt.Sprintf("AppendMutable can not be called on message %s at list field %s as it is not of Message kind", field.Parent.GoIdent.GoName, field.GoName)
+		panicMsg := fmt.Sprintf("AppendMutable can not be called on message %s at list field %s as it is not of Message kind", g.field.Parent.GoIdent.GoName, g.field.GoName)
 		g.P("panic(", fmtPkg.Ident("Errorf"), "(\"", panicMsg, "\"))")
 	}
 	g.P("}")
 	g.P()
+}
 
-	// Truncate
-	g.P("func (x *", typeName, ") Truncate(n int)", "{")
+// genTruncate generates the protoreflect.List.Truncate implementation
+func (g *listGen) genTruncate() {
+	g.P("func (x *", g.typeName, ") Truncate(n int)", "{")
 
-	switch field.Desc.Kind() {
+	switch g.field.Desc.Kind() {
 	case protoreflect.MessageKind: // zero message kinds to avoid keeping data alive
 		g.P("for i := n; i < len(*x.list); i++ {")
 		g.P("(*x.list)[i] = nil")
@@ -81,25 +115,28 @@ func GenList(g *protogen.GeneratedFile, field *protogen.Field) {
 	g.P("*x.list = (*x.list)[:n]") // truncate
 	g.P("}")
 	g.P()
+}
 
-	// NewElement
-	g.P("func (x *", typeName, ") NewElement() ", pref.Ident("Value"), "{")
-	zeroValue := zeroValueForField(g, field)
+// genNewElement generates the protoreflect.List.NewElement implementation
+func (g *listGen) genNewElement() {
+	g.P("func (x *", g.typeName, ") NewElement() ", protoreflectPkg.Ident("Value"), "{")
+	zeroValue := zeroValueForField(g.GeneratedFile, g.field)
 	g.P("v := ", zeroValue)
-	switch field.Desc.Kind() {
+	switch g.field.Desc.Kind() {
 	case protoreflect.MessageKind: // it can be mutable
 		g.P("*x.list = append(*x.list, v)")
-		g.P("return ", kindToValueConstructor(field.Desc.Kind()), "(v.ProtoReflect())")
+		g.P("return ", kindToValueConstructor(g.field.Desc.Kind()), "(v.ProtoReflect())")
 	case protoreflect.EnumKind:
-		g.P("return ", kindToValueConstructor(field.Desc.Kind()), "((", pref.Ident("EnumNumber"), ")(v))")
+		g.P("return ", kindToValueConstructor(g.field.Desc.Kind()), "((", protoreflectPkg.Ident("EnumNumber"), ")(v))")
 	default:
-		g.P("return ", kindToValueConstructor(field.Desc.Kind()), "(v)")
+		g.P("return ", kindToValueConstructor(g.field.Desc.Kind()), "(v)")
 	}
 	g.P("}")
 	g.P()
+}
 
-	// IsValid
-	g.P("func (x *", typeName, ") IsValid() bool {")
+func (g *listGen) genIsValid() {
+	g.P("func (x *", g.typeName, ") IsValid() bool {")
 	g.P("return *x.list != nil || len(*x.list) != 0") // TODO(fdymylja) len(list) validity??
 	g.P("}")
 	g.P()
@@ -142,30 +179,29 @@ func getType(g *protogen.GeneratedFile, field *protogen.Field) (goType string) {
 }
 
 func kindToValueConstructor(kind protoreflect.Kind) protogen.GoIdent {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 	switch kind {
 	case protoreflect.BoolKind:
-		return pref.Ident("ValueOfBool")
+		return protoreflectPkg.Ident("ValueOfBool")
 	case protoreflect.EnumKind:
-		return pref.Ident("ValueOfEnum")
+		return protoreflectPkg.Ident("ValueOfEnum")
 	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
-		return pref.Ident("ValueOfInt32")
+		return protoreflectPkg.Ident("ValueOfInt32")
 	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
-		return pref.Ident("ValueOfUint32")
+		return protoreflectPkg.Ident("ValueOfUint32")
 	case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind:
-		return pref.Ident("ValueOfInt64")
+		return protoreflectPkg.Ident("ValueOfInt64")
 	case protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
-		return pref.Ident("ValueOfUint64")
+		return protoreflectPkg.Ident("ValueOfUint64")
 	case protoreflect.FloatKind:
-		return pref.Ident("ValueOfFloat32")
+		return protoreflectPkg.Ident("ValueOfFloat32")
 	case protoreflect.DoubleKind:
-		return pref.Ident("ValueOfFloat64")
+		return protoreflectPkg.Ident("ValueOfFloat64")
 	case protoreflect.StringKind:
-		return pref.Ident("ValueOfString")
+		return protoreflectPkg.Ident("ValueOfString")
 	case protoreflect.BytesKind:
-		return pref.Ident("ValueOfBytes")
+		return protoreflectPkg.Ident("ValueOfBytes")
 	case protoreflect.MessageKind, protoreflect.GroupKind:
-		return pref.Ident("ValueOfMessage")
+		return protoreflectPkg.Ident("ValueOfMessage")
 	default:
 		panic("should not reach here")
 	}

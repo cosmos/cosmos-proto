@@ -12,11 +12,11 @@ const (
 	protoreflectPkg = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 	protoifacePkg   = protogen.GoImportPath("google.golang.org/protobuf/runtime/protoiface")
 	protoimplPkg    = protogen.GoImportPath("google.golang.org/protobuf/runtime/protoimpl")
+
+	fmtPkg = protogen.GoImportPath("fmt")
 )
 
 func GenProtoMessage(f *protogen.File, g *protogen.GeneratedFile, message *protogen.Message) {
-	genProtoMessageFunctions(f, g, message)
-
 	gen := &generator{
 		file:    f,
 		g:       g,
@@ -25,6 +25,8 @@ func GenProtoMessage(f *protogen.File, g *protogen.GeneratedFile, message *proto
 	}
 
 	gen.generateExtraTypes()
+
+	genProtoMessageFunctions(f, g, message)
 }
 
 type generator struct {
@@ -56,7 +58,10 @@ func (g *generator) generateMapType(field *protogen.Field) {
 // generateListType generates the fast reflection protoreflect.List type
 // related to the provided protogen.Field.
 func (g *generator) generateListType(field *protogen.Field) {
-	GenList(g.g, field)
+	(&listGen{
+		GeneratedFile: g.g,
+		field:         field,
+	}).generate()
 }
 
 func genProtoMessageFunctions(f *protogen.File, g *protogen.GeneratedFile, msg *protogen.Message) {

@@ -1,7 +1,6 @@
 package generator
 
 import (
-	"github.com/cosmos/cosmos-proto/features/fastreflection"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
@@ -169,12 +168,6 @@ func genClearProto(g *GeneratedFile, msg *protogen.Message) {
 func genGetProto(g *GeneratedFile, msg *protogen.Message) {
 	// we check if there are map or list fields
 	// so that we can generate fast reflection wrapper types.
-	for _, genFd := range msg.Fields {
-		switch {
-		case genFd.Desc.IsList():
-			fastreflection.GenList(g.GeneratedFile, genFd)
-		}
-	}
 	g.P("// Get retrieves the value for a field.")
 	g.P("//")
 	g.P("// For unpopulated scalars, it returns the default value, where")
