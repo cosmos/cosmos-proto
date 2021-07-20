@@ -49,14 +49,18 @@ func genGetMethods(g *GeneratedFile, msg *messageInfo) {
 	g.P("return &", protoifacePackage.Ident("Methods{"))
 	g.P("NoUnkeyedLiterals: struct{}{},")
 	g.P("Flags: 0,")
+
+	// Size
 	g.P("Size: func(input ", protoifacePackage.Ident("SizeInput"), ") ", protoifacePackage.Ident("SizeOutput"), " {")
 	g.P("return ", protoifacePackage.Ident("SizeOutput"), "{")
 	g.P("NoUnkeyedLiterals: struct{}{},")
 	g.P("Size: x.Size(),")
 	g.P("}")
 	g.P("},")
+
+	// Marshal
 	g.P("Marshal: func(input ", protoifacePackage.Ident("MarshalInput"), ") (", protoifacePackage.Ident("MarshalOutput"), ", error) {")
-	g.P("v, ok := input.Message.(", msg.GoIdent.GoName, ")")
+	g.P("v, ok := input.Message.(*", msg.GoIdent.GoName, ")")
 	g.P("if !ok {")
 	g.P("return ", protoifacePackage.Ident("MarshalOutput"), "{}, ", errorsPackage.Ident("New"), "(\"", msg.GoIdent.GoName, " does not implement the protoreflect.Message interface\")")
 	g.P("}")
@@ -70,6 +74,8 @@ func genGetMethods(g *GeneratedFile, msg *messageInfo) {
 	g.P("Buf: bz,")
 	g.P("}, nil")
 	g.P("},")
+
+	// Unmarshal
 	g.P("Unmarshal: func(input ", protoifacePackage.Ident("UnmarshalInput"), ") (", protoifacePackage.Ident("UnmarshalOutput"), ", error){")
 	g.P("v, ok := input.Message.(*", msg.GoIdent.GoName, ")")
 	g.P("if !ok {")
@@ -182,11 +188,11 @@ func genGetProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("// For unpopulated composite types, it returns an empty, read-only view")
 	g.P("// of the value; to obtain a mutable reference, use Mutable.")
 	g.P("func (x *", msg.GoIdent.GoName, ") Get(descriptor ", protoreflectPackage.Ident("FieldDescriptor"), ") ", protoreflectPackage.Ident("Value"), " {")
-	g.P("switch descriptor.Number() {")
+	g.P("switch descriptor.Name() {")
 	// implement the fast Get function
-	for i, genFd := range msg.Fields {
+	for _, genFd := range msg.Fields {
 		fd := genFd.Desc
-		g.P("case ", i, ":")
+		g.P("case \"", fd.Name(), "\":")
 		getfuncForField(g, fd.Kind(), genFd.GoName, genFd)
 	}
 	// insert default case which panics
