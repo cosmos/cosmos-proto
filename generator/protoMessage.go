@@ -191,9 +191,16 @@ func genGetProto(g *GeneratedFile, msg *messageInfo) {
 	g.P("switch descriptor.Name() {")
 	// implement the fast Get function
 	for _, genFd := range msg.Fields {
-		fd := genFd.Desc
-		g.P("case \"", fd.Name(), "\":")
-		getfuncForField(g, fd.Kind(), genFd.GoName, genFd)
+		if genFd.Oneof == nil {
+			fd := genFd.Desc
+			g.P("case \"", fd.Name(), "\":")
+			getfuncForField(g, fd.Kind(), genFd.GoName, genFd)
+		} else {
+			fd := genFd.Desc
+			g.P(`case "`, fd.Name(), `":`)
+			getfuncForField(g, fd.Kind(), "Get"+genFd.GoName+"()", genFd)
+		}
+
 	}
 	// insert default case which panics
 	g.P("default:")

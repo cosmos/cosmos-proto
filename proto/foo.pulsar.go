@@ -329,9 +329,9 @@ func (x *Bar) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	case "baz":
 		return protoreflect.ValueOfString(x.Baz)
 	case "ONEOF_B":
-		return protoreflect.ValueOfMessage(x.ONEOF_B)
+		return protoreflect.ValueOfMessage(x.GetONEOF_B())
 	case "ONEOF_STRING":
-		return protoreflect.ValueOfString(x.ONEOF_STRING)
+		return protoreflect.ValueOfString(x.GetONEOF_STRING())
 	default:
 		panic(fmt.Errorf("message cosmos.proto.Bar does not contain field %s", descriptor.Name()))
 	}
