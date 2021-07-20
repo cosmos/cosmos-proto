@@ -85,98 +85,6 @@ func (x *fastReflection_A) Clear(descriptor protoreflect.FieldDescriptor) {
 	(*A)(x).slowProtoReflect().Clear(descriptor)
 }
 
-type _A_19_list struct {
-	list *[]*B
-}
-
-var _ protoreflect.List = (*_A_19_list)(nil)
-
-func (x *_A_19_list) Len() int {
-	return len(*x.list)
-}
-
-func (x *_A_19_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
-}
-
-func (x *_A_19_list) Set(i int, value protoreflect.Value) {
-	unwrapped := value.Message()
-	concreteValue := unwrapped.Interface().(*B)
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_A_19_list) Append(value protoreflect.Value) {
-	unwrapped := value.Message()
-	concreteValue := unwrapped.Interface().(*B)
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_A_19_list) AppendMutable() protoreflect.Value {
-	v := new(B)
-	*x.list = append(*x.list, v)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_A_19_list) Truncate(n int) {
-	for i := n; i < len(*x.list); i++ {
-		(*x.list)[i] = nil
-	}
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_A_19_list) NewElement() protoreflect.Value {
-	v := new(B)
-	*x.list = append(*x.list, v)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_A_19_list) IsValid() bool {
-	return *x.list != nil || len(*x.list) != 0
-}
-
-type _A_22_list struct {
-	list *[]Enumeration
-}
-
-var _ protoreflect.List = (*_A_22_list)(nil)
-
-func (x *_A_22_list) Len() int {
-	return len(*x.list)
-}
-
-func (x *_A_22_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfEnum((protoreflect.EnumNumber)((*x.list)[i]))
-}
-
-func (x *_A_22_list) Set(i int, value protoreflect.Value) {
-	unwrapped := value.Enum()
-	concreteValue := (Enumeration)(unwrapped)
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_A_22_list) Append(value protoreflect.Value) {
-	unwrapped := value.Enum()
-	concreteValue := (Enumeration)(unwrapped)
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_A_22_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message A at list field LIST_ENUM as it is not of Message kind"))
-}
-
-func (x *_A_22_list) Truncate(n int) {
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_A_22_list) NewElement() protoreflect.Value {
-	v := 0
-	return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(v))
-}
-
-func (x *_A_22_list) IsValid() bool {
-	return *x.list != nil || len(*x.list) != 0
-}
-
 // Get retrieves the value for a field.
 //
 // For unpopulated scalars, it returns the default value, where
@@ -357,6 +265,98 @@ func (x *fastReflection_A) IsValid() bool {
 // Consult the protoiface package documentation for details.
 func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 	return (*A)(x).slowProtoReflect().ProtoMethods()
+}
+
+type _A_19_list struct {
+	list *[]*B
+}
+
+var _ protoreflect.List = (*_A_19_list)(nil)
+
+func (x *_A_19_list) Len() int {
+	return len(*x.list)
+}
+
+func (x *_A_19_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_A_19_list) Set(i int, value protoreflect.Value) {
+	unwrapped := value.Message()
+	concreteValue := unwrapped.Interface().(*B)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_A_19_list) Append(value protoreflect.Value) {
+	unwrapped := value.Message()
+	concreteValue := unwrapped.Interface().(*B)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_A_19_list) AppendMutable() protoreflect.Value {
+	v := new(B)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_A_19_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_A_19_list) NewElement() protoreflect.Value {
+	v := new(B)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_A_19_list) IsValid() bool {
+	return *x.list != nil || len(*x.list) != 0
+}
+
+type _A_22_list struct {
+	list *[]Enumeration
+}
+
+var _ protoreflect.List = (*_A_22_list)(nil)
+
+func (x *_A_22_list) Len() int {
+	return len(*x.list)
+}
+
+func (x *_A_22_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfEnum((protoreflect.EnumNumber)((*x.list)[i]))
+}
+
+func (x *_A_22_list) Set(i int, value protoreflect.Value) {
+	unwrapped := value.Enum()
+	concreteValue := (Enumeration)(unwrapped)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_A_22_list) Append(value protoreflect.Value) {
+	unwrapped := value.Enum()
+	concreteValue := (Enumeration)(unwrapped)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_A_22_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message A at list field LIST_ENUM as it is not of Message kind"))
+}
+
+func (x *_A_22_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_A_22_list) NewElement() protoreflect.Value {
+	v := 0
+	return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(v))
+}
+
+func (x *_A_22_list) IsValid() bool {
+	return *x.list != nil || len(*x.list) != 0
 }
 
 func (x *B) slowProtoReflect() protoreflect.Message {

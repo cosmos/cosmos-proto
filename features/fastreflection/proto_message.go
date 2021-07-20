@@ -9,8 +9,9 @@ import (
 )
 
 const (
-	prefPkg   = protogen.GoImportPath("")
-	primplPkg = protogen.GoImportPath("")
+	protoreflectPkg = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
+	protoifacePkg   = protogen.GoImportPath("google.golang.org/protobuf/runtime/protoiface")
+	protoimplPkg    = protogen.GoImportPath("google.golang.org/protobuf/runtime/protoimpl")
 )
 
 func GenProtoMessage(f *protogen.File, g *protogen.GeneratedFile, message *protogen.Message) {
@@ -55,7 +56,7 @@ func (g *generator) generateMapType(field *protogen.Field) {
 // generateListType generates the fast reflection protoreflect.List type
 // related to the provided protogen.Field.
 func (g *generator) generateListType(field *protogen.Field) {
-
+	GenList(g.g, field)
 }
 
 func genProtoMessageFunctions(f *protogen.File, g *protogen.GeneratedFile, msg *protogen.Message) {
@@ -97,8 +98,6 @@ func genProtoMessageFunctions(f *protogen.File, g *protogen.GeneratedFile, msg *
 }
 
 func genMessageReflectMethods(g *protogen.GeneratedFile, f *copied.FileInfo, m *protogen.Message) {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
-	const primpl = protogen.GoImportPath("google.golang.org/protobuf/runtime/protoimpl")
 	idx := func() int {
 		var id int
 		var found bool
@@ -116,10 +115,10 @@ func genMessageReflectMethods(g *protogen.GeneratedFile, f *copied.FileInfo, m *
 	typesVar := copied.MessageTypesVarName(f)
 
 	// ProtoReflect method.
-	g.P("func (x *", m.GoIdent, ") slowProtoReflect() ", pref.Ident("Message"), " {")
+	g.P("func (x *", m.GoIdent, ") slowProtoReflect() ", protoreflectPkg.Ident("Message"), " {")
 	g.P("mi := &", typesVar, "[", idx, "]")
-	g.P("if ", primpl.Ident("UnsafeEnabled"), " && x != nil {")
-	g.P("ms := ", primpl.Ident("X"), ".MessageStateOf(", primpl.Ident("Pointer"), "(x))")
+	g.P("if ", protoimplPkg.Ident("UnsafeEnabled"), " && x != nil {")
+	g.P("ms := ", protoimplPkg.Ident("X"), ".MessageStateOf(", protoimplPkg.Ident("Pointer"), "(x))")
 	g.P("if ms.LoadMessageInfo() == nil {")
 	g.P("ms.StoreMessageInfo(mi)")
 	g.P("}")
@@ -132,16 +131,15 @@ func genMessageReflectMethods(g *protogen.GeneratedFile, f *copied.FileInfo, m *
 
 // genReflectionType generates the reflection type for the message
 func genReflectionType(file *protogen.File, g *protogen.GeneratedFile, msg *protogen.Message) string {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 	typeName := fmt.Sprintf("fastReflection_%s", msg.GoIdent.GoName)
 	genMessageReflectMethods(g, copied.NewFileInfo(file), msg)
 	// gen interface assertion
-	g.P("var _ ", pref.Ident("Message"), " = (*", typeName, ")(nil)") // TODO(fdymylja): pointer really required?
+	g.P("var _ ", protoreflectPkg.Ident("Message"), " = (*", typeName, ")(nil)") // TODO(fdymylja): pointer really required?
 	g.P()
 	// gen type
 	g.P("type ", typeName, " ", msg.GoIdent.GoName)
 	// gen msg implementation
-	g.P("func (x *", msg.GoIdent.GoName, ") ProtoReflect() ", pref.Ident("Message"), "{") // TODO(fdymylja): replace me with ProtoReflect function
+	g.P("func (x *", msg.GoIdent.GoName, ") ProtoReflect() ", protoreflectPkg.Ident("Message"), "{") // TODO(fdymylja): replace me with ProtoReflect function
 	g.P("return (*", typeName, ")(x)")
 	g.P("}")
 	g.P()
@@ -149,60 +147,53 @@ func genReflectionType(file *protogen.File, g *protogen.GeneratedFile, msg *prot
 }
 
 func genDescriptorProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName string) {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
 	g.P("// Descriptor returns message descriptor, which contains only the protobuf")
 	g.P("// type information for the message.")
-	g.P("func (x *", typeName, ") Descriptor() ", pref.Ident("MessageDescriptor"), " {")
+	g.P("func (x *", typeName, ") Descriptor() ", protoreflectPkg.Ident("MessageDescriptor"), " {")
 	slowReflectionFallBack(g, msg, true, "Descriptor")
 	g.P("}")
 }
 
 func genTypeProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName string) {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
 	g.P("// Type returns the message type, which encapsulates both Go and protobuf")
 	g.P("// type information. If the Go type information is not needed,")
 	g.P("// it is recommended that the message descriptor be used instead.")
-	g.P("func (x *", typeName, ") Type() ", pref.Ident("MessageType"), " {")
+	g.P("func (x *", typeName, ") Type() ", protoreflectPkg.Ident("MessageType"), " {")
 	slowReflectionFallBack(g, msg, true, "Type")
 	g.P("}")
 }
 
 func genNewProto(g *protogen.GeneratedFile, _ *protogen.Message, typeName string) {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
 	g.P("// New returns a newly allocated and mutable empty message.")
-	g.P("func (x *", typeName, ") New() ", pref.Ident("Message"), " {")
+	g.P("func (x *", typeName, ") New() ", protoreflectPkg.Ident("Message"), " {")
 	g.P("return new(", typeName, ")")
 	g.P("}")
 }
 
 func genInterfaceProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName string) {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
 	g.P("// Interface unwraps the message reflection interface and")
 	g.P("// returns the underlying ProtoMessage interface.")
-	g.P("func (x *", typeName, ") Interface() ", pref.Ident("ProtoMessage"), " {")
+	g.P("func (x *", typeName, ") Interface() ", protoreflectPkg.Ident("ProtoMessage"), " {")
 	g.P("return (*", msg.GoIdent, ")(x)")
 	g.P("}")
 }
 
 func genRangeProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName string) {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
-
 	g.P("// Range iterates over every populated field in an undefined order,")
 	g.P("// calling f for each field descriptor and value encountered.")
 	g.P("// Range returns immediately if f returns false.")
 	g.P("// While iterating, mutating operations may only be performed")
 	g.P("// on the current field descriptor.")
-	g.P("func (x *", typeName, ") Range(f func(", pref.Ident("FieldDescriptor"), ", ", pref.Ident("Value"), ") bool) {")
+	g.P("func (x *", typeName, ") Range(f func(", protoreflectPkg.Ident("FieldDescriptor"), ", ", protoreflectPkg.Ident("Value"), ") bool) {")
 	slowReflectionFallBack(g, msg, false, "Range", "f")
 	g.P("}")
 }
 
 func genHasProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName string) {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
 	g.P("// Has reports whether a field is populated.")
 	g.P("//")
@@ -215,13 +206,12 @@ func genHasProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName stri
 	g.P("// In other cases (aside from the nullable cases above),")
 	g.P("// a proto3 scalar field is populated if it contains a non-zero value, and")
 	g.P("// a repeated field is populated if it is non-empty.")
-	g.P("func (x *", typeName, ") Has(descriptor ", pref.Ident("FieldDescriptor"), ") bool {")
+	g.P("func (x *", typeName, ") Has(descriptor ", protoreflectPkg.Ident("FieldDescriptor"), ") bool {")
 	slowReflectionFallBack(g, msg, true, "Has", "descriptor")
 	g.P("}")
 }
 
 func genClearProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName string) {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
 	g.P("// Clear clears the field such that a subsequent Has call reports false.")
 	g.P("//")
@@ -229,13 +219,12 @@ func genClearProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName st
 	g.P("// associated with the given field number.")
 	g.P("//")
 	g.P("// Clear is a mutating operation and unsafe for concurrent use.")
-	g.P("func (x *", typeName, ") Clear(descriptor ", pref.Ident("FieldDescriptor"), ") {")
+	g.P("func (x *", typeName, ") Clear(descriptor ", protoreflectPkg.Ident("FieldDescriptor"), ") {")
 	slowReflectionFallBack(g, msg, false, "Clear", "descriptor")
 	g.P("}")
 }
 
 func genSetProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName string) {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
 	g.P("// Set stores the value for a field.")
 	g.P("//")
@@ -247,13 +236,12 @@ func genSetProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName stri
 	g.P("// empty, read-only value, then it panics.")
 	g.P("//")
 	g.P("// Set is a mutating operation and unsafe for concurrent use.")
-	g.P("func (x *", typeName, ") Set(descriptor ", pref.Ident("FieldDescriptor"), ", value ", pref.Ident("Value"), ") {")
+	g.P("func (x *", typeName, ") Set(descriptor ", protoreflectPkg.Ident("FieldDescriptor"), ", value ", protoreflectPkg.Ident("Value"), ") {")
 	slowReflectionFallBack(g, msg, false, "Set", "descriptor", "value")
 	g.P("}")
 }
 
 func genMutableProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName string) {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
 	g.P("// Mutable returns a mutable reference to a composite type.")
 	g.P("//")
@@ -265,46 +253,42 @@ func genMutableProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName 
 	g.P("// It panics if the field does not contain a composite type.")
 	g.P("//")
 	g.P("// Mutable is a mutating operation and unsafe for concurrent use.")
-	g.P("func (x *", typeName, ") Mutable(descriptor ", pref.Ident("FieldDescriptor"), ") ", pref.Ident("Value"), " {")
+	g.P("func (x *", typeName, ") Mutable(descriptor ", protoreflectPkg.Ident("FieldDescriptor"), ") ", protoreflectPkg.Ident("Value"), " {")
 	slowReflectionFallBack(g, msg, true, "Mutable", "descriptor")
 	g.P("}")
 }
 
 func genNewFieldProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName string) {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
 	g.P("// NewField returns a new value that is assignable to the field")
 	g.P("// for the given descriptor. For scalars, this returns the default value.")
 	g.P("// For lists, maps, and messages, this returns a new, empty, mutable value.")
-	g.P("func (x *", typeName, ") NewField(descriptor ", pref.Ident("FieldDescriptor"), ") ", pref.Ident("Value"), " {")
+	g.P("func (x *", typeName, ") NewField(descriptor ", protoreflectPkg.Ident("FieldDescriptor"), ") ", protoreflectPkg.Ident("Value"), " {")
 	slowReflectionFallBack(g, msg, true, "NewField", "descriptor")
 	g.P("}")
 }
 
 func genWhichOneOfProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName string) {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
 	g.P("// WhichOneof reports which field within the oneof is populated,")
 	g.P("// returning nil if none are populated.")
 	g.P("// It panics if the oneof descriptor does not belong to this message.")
-	g.P("func (x *", typeName, ") WhichOneof(descriptor ", pref.Ident("OneofDescriptor"), ") ", pref.Ident("FieldDescriptor"), " {")
+	g.P("func (x *", typeName, ") WhichOneof(descriptor ", protoreflectPkg.Ident("OneofDescriptor"), ") ", protoreflectPkg.Ident("FieldDescriptor"), " {")
 	slowReflectionFallBack(g, msg, true, "WhichOneof", "descriptor")
 	g.P("}")
 }
 
 func genGetUnkownProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName string) {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
 	g.P("// GetUnknown retrieves the entire list of unknown fields.")
 	g.P("// The caller may only mutate the contents of the RawFields")
 	g.P("// if the mutated bytes are stored back into the message with SetUnknown.")
-	g.P("func (x *", typeName, ") GetUnknown() ", pref.Ident("RawFields"), " {")
+	g.P("func (x *", typeName, ") GetUnknown() ", protoreflectPkg.Ident("RawFields"), " {")
 	slowReflectionFallBack(g, msg, true, "GetUnknown")
 	g.P("}")
 }
 
 func genSetUnkownProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName string) {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
 	g.P("// SetUnknown stores an entire list of unknown fields.")
 	g.P("// The raw fields must be syntactically valid according to the wire format.")
@@ -313,7 +297,7 @@ func genSetUnkownProto(g *protogen.GeneratedFile, msg *protogen.Message, typeNam
 	g.P("// An empty RawFields may be passed to clear the fields.")
 	g.P("//")
 	g.P("// SetUnknown is a mutating operation and unsafe for concurrent use.")
-	g.P("func (x *", typeName, ") SetUnknown(fields ", pref.Ident("RawFields"), ") {")
+	g.P("func (x *", typeName, ") SetUnknown(fields ", protoreflectPkg.Ident("RawFields"), ") {")
 	slowReflectionFallBack(g, msg, false, "SetUnknown", "fields")
 	g.P("}")
 }
@@ -334,7 +318,6 @@ func genIsValidProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName 
 }
 
 func genProtoMethodsProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName string) {
-	const protoiface = protogen.GoImportPath("google.golang.org/protobuf/runtime/protoiface")
 
 	g.P("// ProtoMethods returns optional fast-path implementations of various operations.")
 	g.P("// This method may return nil.")
@@ -342,7 +325,7 @@ func genProtoMethodsProto(g *protogen.GeneratedFile, msg *protogen.Message, type
 	g.P("// The returned methods type is identical to")
 	g.P(`// "google.golang.org/protobuf/runtime/protoiface".Methods.`)
 	g.P("// Consult the protoiface package documentation for details.")
-	g.P("func (x *", typeName, ") ProtoMethods() *", protoiface.Ident("Methods"), " {")
+	g.P("func (x *", typeName, ") ProtoMethods() *", protoifacePkg.Ident("Methods"), " {")
 	slowReflectionFallBack(g, msg, true, "ProtoMethods")
 	g.P("}")
 }

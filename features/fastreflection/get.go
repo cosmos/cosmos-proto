@@ -9,14 +9,6 @@ import (
 func genGetProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName string) {
 	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
-	// we check if there are map or list fields
-	// so that we can generate fast reflection wrapper types.
-	for _, genFd := range msg.Fields {
-		switch {
-		case genFd.Desc.IsList():
-			GenList(g, genFd)
-		}
-	}
 	g.P("// Get retrieves the value for a field.")
 	g.P("//")
 	g.P("// For unpopulated scalars, it returns the default value, where")
