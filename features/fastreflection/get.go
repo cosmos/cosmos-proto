@@ -34,7 +34,7 @@ func genGetProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName stri
 	}
 	// insert default case which panics
 	g.P("default:")
-	g.P("panic(fmt.Errorf(\"message ", msg.Desc.FullName(), " does not contain field %s\", descriptor.Name()))")
+	g.P("panic(fmt.Errorf(\"message ", msg.Desc.FullName(), " does not contain field %s\", descriptor.FullName()))")
 	g.P("}")
 	g.P("}")
 }
