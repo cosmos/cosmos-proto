@@ -124,12 +124,12 @@ func genTypeProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName str
 	g.P("}")
 }
 
-func genNewProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName string) {
+func genNewProto(g *protogen.GeneratedFile, _ *protogen.Message, typeName string) {
 	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
 	g.P("// New returns a newly allocated and mutable empty message.")
 	g.P("func (x *", typeName, ") New() ", pref.Ident("Message"), " {")
-	slowReflectionFallBack(g, msg, true, "New")
+	g.P("return new(", typeName, ")")
 	g.P("}")
 }
 

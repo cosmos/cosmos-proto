@@ -42,7 +42,7 @@ func (x *fastReflection_A) Type() protoreflect.MessageType {
 
 // New returns a newly allocated and mutable empty message.
 func (x *fastReflection_A) New() protoreflect.Message {
-	return (*A)(x).slowProtoReflect().New()
+	return new(fastReflection_A)
 }
 
 // Interface unwraps the message reflection interface and
@@ -348,7 +348,7 @@ func (x *fastReflection_B) Type() protoreflect.MessageType {
 
 // New returns a newly allocated and mutable empty message.
 func (x *fastReflection_B) New() protoreflect.Message {
-	return (*B)(x).slowProtoReflect().New()
+	return new(fastReflection_B)
 }
 
 // Interface unwraps the message reflection interface and
