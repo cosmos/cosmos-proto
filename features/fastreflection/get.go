@@ -5,8 +5,8 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-// genGetProto generates the implementation for protoreflect.Message.Get
-func genGetProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName string) {
+// genGet generates the implementation for protoreflect.Message.Get
+func (g *generator) genGet() {
 	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
 	g.P("// Get retrieves the value for a field.")
@@ -15,18 +15,18 @@ func genGetProto(g *protogen.GeneratedFile, msg *protogen.Message, typeName stri
 	g.P("// the default value of a bytes scalar is guaranteed to be a copy.")
 	g.P("// For unpopulated composite types, it returns an empty, read-only view")
 	g.P("// of the value; to obtain a mutable reference, use Mutable.")
-	g.P("func (x *", typeName, ") Get(descriptor ", pref.Ident("FieldDescriptor"), ") ", pref.Ident("Value"), " {")
-	genGetExtension(g, msg)
+	g.P("func (x *", g.typeName, ") Get(descriptor ", pref.Ident("FieldDescriptor"), ") ", pref.Ident("Value"), " {")
+	genGetExtension(g.GeneratedFile, g.message)
 	g.P("switch descriptor.FullName() {")
 	// implement the fast Get function
-	for _, genFd := range msg.Fields {
+	for _, genFd := range g.message.Fields {
 		fd := genFd.Desc
 		g.P("case \"", fd.FullName(), "\":")
-		getfuncForField(g, fd.Kind(), genFd.GoName, genFd)
+		getfuncForField(g.GeneratedFile, fd.Kind(), genFd.GoName, genFd)
 	}
 	// insert default case which panics
 	g.P("default:")
-	g.P("panic(fmt.Errorf(\"message ", msg.Desc.FullName(), " does not contain field %s\", descriptor.FullName()))")
+	g.P("panic(fmt.Errorf(\"message ", g.message.Desc.FullName(), " does not contain field %s\", descriptor.FullName()))")
 	g.P("}")
 	g.P("}")
 }
@@ -93,7 +93,7 @@ func getfuncForField(g *protogen.GeneratedFile, kind protoreflect.Kind, fieldNam
 	}
 }
 
-func getOneOf(g *protogen.GeneratedFile, kind protoreflect.Kind, fd *protogen.Field, oneof *protogen.Oneof) {
+func getOneOf(g *protogen.GeneratedFile, _ protoreflect.Kind, fd *protogen.Field, oneof *protogen.Oneof) {
 	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
 	// handle the case in which the oneof field is not set

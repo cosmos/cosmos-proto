@@ -2,6 +2,7 @@ package testpb
 
 import (
 	fmt "fmt"
+
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -174,6 +175,14 @@ func (x *_A_22_list) IsValid() bool {
 	return *x.list != nil || len(*x.list) != 0
 }
 
+var _ protoreflect.Message = (*fastReflection_A)(nil)
+
+type fastReflection_A A
+
+func (x *A) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_A)(x)
+}
+
 func (x *A) slowProtoReflect() protoreflect.Message {
 	mi := &file_testpb_1_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
@@ -184,14 +193,6 @@ func (x *A) slowProtoReflect() protoreflect.Message {
 		return ms
 	}
 	return mi.MessageOf(x)
-}
-
-var _ protoreflect.Message = (*fastReflection_A)(nil)
-
-type fastReflection_A A
-
-func (x *A) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_A)(x)
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
@@ -434,6 +435,14 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 	return (*A)(x).slowProtoReflect().ProtoMethods()
 }
 
+var _ protoreflect.Message = (*fastReflection_B)(nil)
+
+type fastReflection_B B
+
+func (x *B) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_B)(x)
+}
+
 func (x *B) slowProtoReflect() protoreflect.Message {
 	mi := &file_testpb_1_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
@@ -444,14 +453,6 @@ func (x *B) slowProtoReflect() protoreflect.Message {
 		return ms
 	}
 	return mi.MessageOf(x)
-}
-
-var _ protoreflect.Message = (*fastReflection_B)(nil)
-
-type fastReflection_B B
-
-func (x *B) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_B)(x)
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
