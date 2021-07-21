@@ -5,37 +5,42 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-// genGet generates the implementation for protoreflect.Message.Get
-func (g *generator) genGet() {
+type getGen struct {
+	*protogen.GeneratedFile
+	typeName string
+	message  *protogen.Message
+}
 
-	g.P("// Get retrieves the value for a field.")
-	g.P("//")
-	g.P("// For unpopulated scalars, it returns the default value, where")
-	g.P("// the default value of a bytes scalar is guaranteed to be a copy.")
-	g.P("// For unpopulated composite types, it returns an empty, read-only view")
-	g.P("// of the value; to obtain a mutable reference, use Mutable.")
+func (g *getGen) generate() {
+	g.genComment()
 	g.P("func (x *", g.typeName, ") Get(descriptor ", protoreflectPkg.Ident("FieldDescriptor"), ") ", protoreflectPkg.Ident("Value"), " {")
-	genGetExtension(g.GeneratedFile, g.message)
+	g.genGetExtension()
 	g.P("switch descriptor.FullName() {")
 	// implement the fast Get function
-	for _, genFd := range g.message.Fields {
-		fd := genFd.Desc
-		g.P("case \"", fd.FullName(), "\":")
-		getfuncForField(g.GeneratedFile, fd.Kind(), genFd.GoName, genFd)
+	for _, field := range g.message.Fields {
+		g.P("case \"", field.Desc.FullName(), "\":")
+		g.genFieldGetter(field)
 	}
 	// insert default case which panics
 	g.P("default:")
 	g.P("panic(fmt.Errorf(\"message ", g.message.Desc.FullName(), " does not contain field %s\", descriptor.FullName()))")
 	g.P("}")
 	g.P("}")
+	g.P()
 }
 
-// genGetExtension generates the logic that handles protobuf extensions
-func genGetExtension(g *protogen.GeneratedFile, msg *protogen.Message) {
-	const fmtPkg = protogen.GoImportPath("fmt")
+func (g *getGen) genComment() {
+	g.P("// Get retrieves the value for a field.")
+	g.P("//")
+	g.P("// For unpopulated scalars, it returns the default value, where")
+	g.P("// the default value of a bytes scalar is guaranteed to be a copy.")
+	g.P("// For unpopulated composite types, it returns an empty, read-only view")
+	g.P("// of the value; to obtain a mutable reference, use Mutable.")
+}
 
+func (g *getGen) genGetExtension() {
 	g.P("// handle extension logic")
-	g.P("if descriptor.IsExtension() && descriptor.ContainingMessage().FullName() == \"", msg.Desc.FullName(), "\" {")
+	g.P("if descriptor.IsExtension() && descriptor.ContainingMessage().FullName() == \"", g.message.Desc.FullName(), "\" {")
 	g.P("if _, ok := descriptor.(", protoreflectPkg.Ident("ExtensionTypeDescriptor"), "); !ok {")
 	g.P("panic(", fmtPkg.Ident("Errorf"), "(\"%s: extension field descriptor does not implement ExtensionTypeDescriptor\", descriptor.FullName()))")
 	g.P("}")
@@ -44,27 +49,26 @@ func genGetExtension(g *protogen.GeneratedFile, msg *protogen.Message) {
 	g.P()
 }
 
-func getfuncForField(g *protogen.GeneratedFile, kind protoreflect.Kind, fieldName string, genFd *protogen.Field) {
-
-	if genFd.Oneof != nil {
-		getOneOf(g, kind, genFd, genFd.Oneof)
+func (g *getGen) genFieldGetter(field *protogen.Field) {
+	if field.Oneof != nil {
+		g.genOneofGetter(field)
 		return
 	}
 
-	fieldRef := "x." + fieldName
+	fieldRef := "x." + field.GoName
 	g.P("value := ", fieldRef)
 	switch {
-	case genFd.Desc.IsMap():
+	case field.Desc.IsMap():
 		g.P("_ = value")
 		g.P("panic(\"not implemented\")")
 		return
-	case genFd.Desc.IsList():
+	case field.Desc.IsList():
 		g.P("_ = value")
 		g.P("panic(\"not implemented\")")
 		return
 	}
 
-	switch kind {
+	switch field.Desc.Kind() {
 	case protoreflect.BoolKind:
 		g.P("return ", protoreflectPkg.Ident("ValueOfBool"), "(value)")
 	case protoreflect.EnumKind:
@@ -90,18 +94,17 @@ func getfuncForField(g *protogen.GeneratedFile, kind protoreflect.Kind, fieldNam
 	}
 }
 
-func getOneOf(g *protogen.GeneratedFile, _ protoreflect.Kind, fd *protogen.Field, oneof *protogen.Oneof) {
-
+func (g *getGen) genOneofGetter(fd *protogen.Field) {
 	// handle the case in which the oneof field is not set
-	g.P("if x.", oneof.GoName, " == nil {")
+	g.P("if x.", fd.Oneof.GoName, " == nil {")
 	switch fd.Desc.Kind() {
 	case protoreflect.MessageKind:
 		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "(nil)")
 	default:
-		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "(", zeroValueForField(g, fd), ")")
+		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "(", zeroValueForField(g.GeneratedFile, fd), ")")
 	}
 	// handle the case in which oneof field is set and it matches our sub-onefield type
-	g.P("} else if v, ok := x.", oneof.GoName, ".(*", fd.GoIdent, "); ok {")
+	g.P("} else if v, ok := x.", fd.Oneof.GoName, ".(*", fd.GoIdent, "); ok {")
 	oneofTypeContainerFieldName := fd.GoName // field containing the oneof value
 	switch fd.Desc.Kind() {
 	case protoreflect.MessageKind: // it can be mutable
@@ -117,7 +120,16 @@ func getOneOf(g *protogen.GeneratedFile, _ protoreflect.Kind, fd *protogen.Field
 	case protoreflect.MessageKind:
 		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "(nil)")
 	default:
-		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "(", zeroValueForField(g, fd), ")")
+		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "(", zeroValueForField(g.GeneratedFile, fd), ")")
 	}
 	g.P("}")
+}
+
+// genGet generates the implementation for protoreflect.Message.Get
+func (g *generator) genGet() {
+	(&getGen{
+		GeneratedFile: g.GeneratedFile,
+		typeName:      g.typeName,
+		message:       g.message,
+	}).generate()
 }
