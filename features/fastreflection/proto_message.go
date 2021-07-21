@@ -36,7 +36,6 @@ func GenProtoMessage(f *protogen.File, g *protogen.GeneratedFile, message *proto
 	gen.genSetUnknown()
 	gen.genIsValid()
 	gen.genProtoMethods()
-
 }
 
 func newGenerator(f *protogen.File, g *protogen.GeneratedFile, message *protogen.Message) *generator {

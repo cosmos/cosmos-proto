@@ -7,7 +7,6 @@ import (
 
 // genGet generates the implementation for protoreflect.Message.Get
 func (g *generator) genGet() {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
 	g.P("// Get retrieves the value for a field.")
 	g.P("//")
@@ -15,7 +14,7 @@ func (g *generator) genGet() {
 	g.P("// the default value of a bytes scalar is guaranteed to be a copy.")
 	g.P("// For unpopulated composite types, it returns an empty, read-only view")
 	g.P("// of the value; to obtain a mutable reference, use Mutable.")
-	g.P("func (x *", g.typeName, ") Get(descriptor ", pref.Ident("FieldDescriptor"), ") ", pref.Ident("Value"), " {")
+	g.P("func (x *", g.typeName, ") Get(descriptor ", protoreflectPkg.Ident("FieldDescriptor"), ") ", protoreflectPkg.Ident("Value"), " {")
 	genGetExtension(g.GeneratedFile, g.message)
 	g.P("switch descriptor.FullName() {")
 	// implement the fast Get function
@@ -33,12 +32,11 @@ func (g *generator) genGet() {
 
 // genGetExtension generates the logic that handles protobuf extensions
 func genGetExtension(g *protogen.GeneratedFile, msg *protogen.Message) {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 	const fmtPkg = protogen.GoImportPath("fmt")
 
 	g.P("// handle extension logic")
 	g.P("if descriptor.IsExtension() && descriptor.ContainingMessage().FullName() == \"", msg.Desc.FullName(), "\" {")
-	g.P("if _, ok := descriptor.(", pref.Ident("ExtensionTypeDescriptor"), "); !ok {")
+	g.P("if _, ok := descriptor.(", protoreflectPkg.Ident("ExtensionTypeDescriptor"), "); !ok {")
 	g.P("panic(", fmtPkg.Ident("Errorf"), "(\"%s: extension field descriptor does not implement ExtensionTypeDescriptor\", descriptor.FullName()))")
 	g.P("}")
 	g.P("panic(\"implement xt logic\")") // TODO(fdymylja)
@@ -47,7 +45,6 @@ func genGetExtension(g *protogen.GeneratedFile, msg *protogen.Message) {
 }
 
 func getfuncForField(g *protogen.GeneratedFile, kind protoreflect.Kind, fieldName string, genFd *protogen.Field) {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
 	if genFd.Oneof != nil {
 		getOneOf(g, kind, genFd, genFd.Oneof)
@@ -69,32 +66,31 @@ func getfuncForField(g *protogen.GeneratedFile, kind protoreflect.Kind, fieldNam
 
 	switch kind {
 	case protoreflect.BoolKind:
-		g.P("return ", pref.Ident("ValueOfBool"), "(value)")
+		g.P("return ", protoreflectPkg.Ident("ValueOfBool"), "(value)")
 	case protoreflect.EnumKind:
-		g.P("return ", pref.Ident("ValueOfEnum"), "((", pref.Ident("EnumNumber"), ")", "(value)", ")")
+		g.P("return ", protoreflectPkg.Ident("ValueOfEnum"), "((", protoreflectPkg.Ident("EnumNumber"), ")", "(value)", ")")
 	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
-		g.P("return ", pref.Ident("ValueOfInt32"), "(value)")
+		g.P("return ", protoreflectPkg.Ident("ValueOfInt32"), "(value)")
 	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
-		g.P("return ", pref.Ident("ValueOfUint32"), "(value)")
+		g.P("return ", protoreflectPkg.Ident("ValueOfUint32"), "(value)")
 	case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind:
-		g.P("return ", pref.Ident("ValueOfInt64"), "(value)")
+		g.P("return ", protoreflectPkg.Ident("ValueOfInt64"), "(value)")
 	case protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
-		g.P("return ", pref.Ident("ValueOfUint64"), "(value)")
+		g.P("return ", protoreflectPkg.Ident("ValueOfUint64"), "(value)")
 	case protoreflect.FloatKind:
-		g.P("return ", pref.Ident("ValueOfFloat32"), "(value)")
+		g.P("return ", protoreflectPkg.Ident("ValueOfFloat32"), "(value)")
 	case protoreflect.DoubleKind:
-		g.P("return ", pref.Ident("ValueOfFloat64"), "(value)")
+		g.P("return ", protoreflectPkg.Ident("ValueOfFloat64"), "(value)")
 	case protoreflect.StringKind:
-		g.P("return ", pref.Ident("ValueOfString"), "(value)")
+		g.P("return ", protoreflectPkg.Ident("ValueOfString"), "(value)")
 	case protoreflect.BytesKind:
-		g.P("return ", pref.Ident("ValueOfBytes"), "(value)")
+		g.P("return ", protoreflectPkg.Ident("ValueOfBytes"), "(value)")
 	case protoreflect.MessageKind, protoreflect.GroupKind:
-		g.P("return ", pref.Ident("ValueOfMessage"), "(value.ProtoReflect())")
+		g.P("return ", protoreflectPkg.Ident("ValueOfMessage"), "(value.ProtoReflect())")
 	}
 }
 
 func getOneOf(g *protogen.GeneratedFile, _ protoreflect.Kind, fd *protogen.Field, oneof *protogen.Oneof) {
-	const pref = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 
 	// handle the case in which the oneof field is not set
 	g.P("if x.", oneof.GoName, " == nil {")
@@ -111,7 +107,7 @@ func getOneOf(g *protogen.GeneratedFile, _ protoreflect.Kind, fd *protogen.Field
 	case protoreflect.MessageKind: // it can be mutable
 		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "(v.", oneofTypeContainerFieldName, ".ProtoReflect())")
 	case protoreflect.EnumKind:
-		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "((", pref.Ident("EnumNumber"), ")(v.", oneofTypeContainerFieldName, "))")
+		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "((", protoreflectPkg.Ident("EnumNumber"), ")(v.", oneofTypeContainerFieldName, "))")
 	default:
 		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "(v.", oneofTypeContainerFieldName, ")")
 	}
