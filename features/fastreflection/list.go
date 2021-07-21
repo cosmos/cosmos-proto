@@ -38,7 +38,7 @@ func (g *listGen) genAssertions() {
 // genType generates the list type
 func (g *listGen) genType() {
 	g.P("type ", g.typeName, " struct {")
-	g.P("list *[]", getType(g.GeneratedFile, g.field))
+	g.P("list *[]", getGoType(g.GeneratedFile, g.field))
 	g.P("}")
 	g.P()
 }
@@ -71,7 +71,7 @@ func (g *listGen) genGet() {
 func (g *listGen) genSet() {
 	// Set
 	g.P("func (x *", g.typeName, ") Set(i int, value ", protoreflectPkg.Ident("Value"), ") {")
-	concreteValueName := genPrefValueToGoValue(g.GeneratedFile, g.field)
+	concreteValueName := genPrefValueToGoValue(g.GeneratedFile, g.field, "value", "concreteValue")
 	g.P("(*x.list)[i] = ", concreteValueName)
 	g.P("}")
 	g.P()
@@ -80,7 +80,7 @@ func (g *listGen) genSet() {
 // genAppend generates the protoreflect.List.Append implementation
 func (g *listGen) genAppend() {
 	g.P("func (x *", g.typeName, ") Append(value ", protoreflectPkg.Ident("Value"), ") {")
-	concreteValueName := genPrefValueToGoValue(g.GeneratedFile, g.field)
+	concreteValueName := genPrefValueToGoValue(g.GeneratedFile, g.field, "value", "concreteValue")
 	g.P("*x.list = append(*x.list, ", concreteValueName, ")")
 	g.P("}")
 	g.P()
@@ -146,7 +146,7 @@ func listTypeName(field *protogen.Field) string {
 	return fmt.Sprintf("_%s_%d_list", field.Parent.GoIdent.GoName, field.Desc.Number())
 }
 
-func getType(g *protogen.GeneratedFile, field *protogen.Field) (goType string) {
+func getGoType(g *protogen.GeneratedFile, field *protogen.Field) (goType string) {
 	if field.Desc.IsWeak() {
 		return "struct{}"
 	}
@@ -238,27 +238,27 @@ func valueUnwrapper(kind protoreflect.Kind) string {
 	}
 }
 
-func genPrefValueToGoValue(g *protogen.GeneratedFile, field *protogen.Field) string {
-	const concreteValueName = "concreteValue"
+func genPrefValueToGoValue(g *protogen.GeneratedFile, field *protogen.Field, inputName string, outputName string) string {
 
 	unwrapperFunc := valueUnwrapper(field.Desc.Kind())
-	g.P("unwrapped := value.", unwrapperFunc, "()")
+	unwrapperVar := fmt.Sprintf("%sUnwrapped", inputName)
+	g.P(unwrapperVar, " := ", inputName, ".", unwrapperFunc, "()")
 	switch field.Desc.Kind() {
 	case protoreflect.MessageKind:
-		g.P(concreteValueName, " := unwrapped.Interface().(*", g.QualifiedGoIdent(field.Message.GoIdent), ")")
+		g.P(outputName, " := ", unwrapperVar, ".Interface().(*", g.QualifiedGoIdent(field.Message.GoIdent), ")")
 	case protoreflect.EnumKind:
-		g.P(concreteValueName, " := (", g.QualifiedGoIdent(field.Enum.GoIdent), ")(unwrapped)")
+		g.P(outputName, " := (", g.QualifiedGoIdent(field.Enum.GoIdent), ")(", unwrapperVar, ")")
 	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
-		g.P(concreteValueName, " := (int32)(unwrapped)")
+		g.P(outputName, " := (int32)(", unwrapperVar, ")")
 	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
-		g.P(concreteValueName, " := (uint32)(unwrapped)")
+		g.P(outputName, " := (uint32)(", unwrapperVar, ")")
 	case protoreflect.FloatKind:
-		g.P(concreteValueName, " := (float32)(unwrapped)")
+		g.P(outputName, " := (float32)(", unwrapperVar, ")")
 	default:
-		g.P(concreteValueName, " := unwrapped")
+		g.P(outputName, " := ", unwrapperVar)
 	}
 
-	return concreteValueName
+	return outputName
 }
 
 func zeroValueForField(g *protogen.GeneratedFile, field *protogen.Field) string {

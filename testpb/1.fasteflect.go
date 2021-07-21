@@ -7,6 +7,81 @@ import (
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
+var _ protoreflect.Map = (*_A_18_map)(nil)
+
+type _A_18_map struct {
+	m *map[string]*B
+}
+
+func (x *_A_18_map) Len() int {
+	return len(*x.m)
+}
+
+func (x *_A_18_map) Range(f func(protoreflect.MapKey, protoreflect.Value) bool) {
+	for k, v := range *x.m {
+		mapKey := (protoreflect.MapKey)(protoreflect.ValueOfString(k))
+		mapValue := protoreflect.ValueOfMessage(v.ProtoReflect())
+		if !f(mapKey, mapValue) {
+			break
+		}
+	}
+}
+
+func (x *_A_18_map) Has(key protoreflect.MapKey) bool {
+	keyUnwrapped := key.String()
+	concreteValue := keyUnwrapped
+	_, ok := (*x.m)[concreteValue]
+	return ok
+}
+
+func (x *_A_18_map) Clear(key protoreflect.MapKey) {
+	keyUnwrapped := key.String()
+	concreteKey := keyUnwrapped
+	delete(*x.m, concreteKey)
+}
+
+func (x *_A_18_map) Get(key protoreflect.MapKey) protoreflect.Value {
+	keyUnwrapped := key.String()
+	concreteKey := keyUnwrapped
+	v, ok := (*x.m)[concreteKey]
+	if !ok {
+		return protoreflect.Value{}
+	}
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_A_18_map) Set(key protoreflect.MapKey, value protoreflect.Value) {
+	if !key.IsValid() || value.IsValid() {
+		panic("invalid key or value provided")
+	}
+	keyUnwrapped := key.String()
+	concreteKey := keyUnwrapped
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*B)
+	(*x.m)[concreteKey] = concreteValue
+}
+
+func (x *_A_18_map) Mutable(key protoreflect.MapKey) protoreflect.Value {
+	keyUnwrapped := key.String()
+	concreteKey := keyUnwrapped
+	v, ok := (*x.m)[concreteKey]
+	if ok {
+		return protoreflect.ValueOfMessage(v.ProtoReflect())
+	}
+	newValue := new(B)
+	(*x.m)[concreteKey] = newValue
+	return protoreflect.ValueOfMessage(newValue.ProtoReflect())
+}
+
+func (x *_A_18_map) NewValue() protoreflect.Value {
+	v := new(B)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_A_18_map) IsValid() bool {
+	return *x.m != nil || len(*x.m) != 0
+}
+
 var _ protoreflect.List = (*_A_19_list)(nil)
 
 type _A_19_list struct {
@@ -22,14 +97,14 @@ func (x *_A_19_list) Get(i int) protoreflect.Value {
 }
 
 func (x *_A_19_list) Set(i int, value protoreflect.Value) {
-	unwrapped := value.Message()
-	concreteValue := unwrapped.Interface().(*B)
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*B)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_A_19_list) Append(value protoreflect.Value) {
-	unwrapped := value.Message()
-	concreteValue := unwrapped.Interface().(*B)
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*B)
 	*x.list = append(*x.list, concreteValue)
 }
 
@@ -71,14 +146,14 @@ func (x *_A_22_list) Get(i int) protoreflect.Value {
 }
 
 func (x *_A_22_list) Set(i int, value protoreflect.Value) {
-	unwrapped := value.Enum()
-	concreteValue := (Enumeration)(unwrapped)
+	valueUnwrapped := value.Enum()
+	concreteValue := (Enumeration)(valueUnwrapped)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_A_22_list) Append(value protoreflect.Value) {
-	unwrapped := value.Enum()
-	concreteValue := (Enumeration)(unwrapped)
+	valueUnwrapped := value.Enum()
+	concreteValue := (Enumeration)(valueUnwrapped)
 	*x.list = append(*x.list, concreteValue)
 }
 

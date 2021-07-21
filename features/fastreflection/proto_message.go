@@ -52,7 +52,10 @@ func (g *generator) generateExtraTypes() {
 // generateMapType generates the fast reflection protoreflect.Map type
 // related to the provided protogen.Field.
 func (g *generator) generateMapType(field *protogen.Field) {
-
+	(&mapGen{
+		GeneratedFile: g.g,
+		field:         field,
+	}).generate()
 }
 
 // generateListType generates the fast reflection protoreflect.List type
