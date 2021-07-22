@@ -2,7 +2,6 @@ package testpb
 
 import (
 	fmt "fmt"
-
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -346,11 +345,11 @@ func (x *fastReflection_A) Get(descriptor protoreflect.FieldDescriptor) protoref
 		return protoreflect.ValueOfList(listValue)
 	case "A.ONEOF_B":
 		if x.ONEOF == nil {
-			return protoreflect.ValueOfMessage(nil)
+			return protoreflect.ValueOfMessage((*B)(nil).ProtoReflect())
 		} else if v, ok := x.ONEOF.(*A_ONEOF_B); ok {
 			return protoreflect.ValueOfMessage(v.ONEOF_B.ProtoReflect())
 		} else {
-			return protoreflect.ValueOfMessage(nil)
+			return protoreflect.ValueOfMessage((*B)(nil).ProtoReflect())
 		}
 	case "A.ONEOF_STRING":
 		if x.ONEOF == nil {

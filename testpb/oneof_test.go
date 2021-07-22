@@ -1,6 +1,8 @@
 package testpb
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestOneOf(t *testing.T) {
 	x := &A{}
@@ -12,5 +14,5 @@ func TestOneOf(t *testing.T) {
 	t.Logf("%s", v.Interface()) // empty string
 
 	v = x.ProtoReflect().Get(oneOf2)
-	t.Logf("%v", v.IsValid()) // nil object, is valid
+	t.Logf("%v", v.Message().IsValid()) // nil object, is valid
 }

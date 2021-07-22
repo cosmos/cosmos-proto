@@ -96,7 +96,7 @@ func (g *getGen) genOneofGetter(fd *protogen.Field) {
 	g.P("if x.", fd.Oneof.GoName, " == nil {")
 	switch fd.Desc.Kind() {
 	case protoreflect.MessageKind:
-		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "(nil)")
+		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "((*", g.QualifiedGoIdent(fd.Message.GoIdent), ")(nil).ProtoReflect())")
 	default:
 		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "(", zeroValueForField(g.GeneratedFile, fd), ")")
 	}
@@ -115,7 +115,7 @@ func (g *getGen) genOneofGetter(fd *protogen.Field) {
 	g.P("} else {")
 	switch fd.Desc.Kind() {
 	case protoreflect.MessageKind:
-		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "(nil)")
+		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "((*", g.QualifiedGoIdent(fd.Message.GoIdent), ")(nil).ProtoReflect())")
 	default:
 		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "(", zeroValueForField(g.GeneratedFile, fd), ")")
 	}

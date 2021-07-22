@@ -378,3 +378,9 @@ func TestGetMessage(t *testing.T) {
 		require.False(t, msg.ProtoReflect().Get(fd).Message().IsValid())
 	})
 }
+
+func TestGetOneof(t *testing.T) {
+	t.Run("nil oneof", func(t *testing.T) {
+
+	})
+}
