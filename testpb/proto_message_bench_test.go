@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Benchmark_GetFastReflection(b *testing.B) {
+func Benchmark_Get_FR(b *testing.B) {
 	msg := &A{LIST: []*B{
 		{
 			X: "test",
@@ -20,7 +20,7 @@ func Benchmark_GetFastReflection(b *testing.B) {
 	}
 }
 
-func Benchmark_GetSlowReflection(b *testing.B) {
+func Benchmark_Get_SR(b *testing.B) {
 	msg := &A{LIST: []*B{
 		{
 			X: "test",
