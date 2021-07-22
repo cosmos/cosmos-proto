@@ -14,7 +14,6 @@ type getGen struct {
 func (g *getGen) generate() {
 	g.genComment()
 	g.P("func (x *", g.typeName, ") Get(descriptor ", protoreflectPkg.Ident("FieldDescriptor"), ") ", protoreflectPkg.Ident("Value"), " {")
-	g.genGetExtension()
 	g.P("switch descriptor.FullName() {")
 	// implement the fast Get function
 	for _, field := range g.message.Fields {
@@ -23,7 +22,7 @@ func (g *getGen) generate() {
 	}
 	// insert default case which panics
 	g.P("default:")
-	g.P("panic(fmt.Errorf(\"message ", g.message.Desc.FullName(), " does not contain field %s\", descriptor.FullName()))")
+	g.genDefaultCase()
 	g.P("}")
 	g.P("}")
 	g.P()
@@ -55,19 +54,17 @@ func (g *getGen) genFieldGetter(field *protogen.Field) {
 		return
 	}
 
-	fieldRef := "x." + field.GoName
-	g.P("value := ", fieldRef)
 	switch {
 	case field.Desc.IsMap():
-		g.P("_ = value")
-		g.P("panic(\"not implemented\")")
+		g.genMap(field)
 		return
 	case field.Desc.IsList():
-		g.P("_ = value")
-		g.P("panic(\"not implemented\")")
+		g.genList(field)
 		return
 	}
 
+	fieldRef := "x." + field.GoName
+	g.P("value := ", fieldRef)
 	switch field.Desc.Kind() {
 	case protoreflect.BoolKind:
 		g.P("return ", protoreflectPkg.Ident("ValueOfBool"), "(value)")
@@ -123,6 +120,35 @@ func (g *getGen) genOneofGetter(fd *protogen.Field) {
 		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "(", zeroValueForField(g.GeneratedFile, fd), ")")
 	}
 	g.P("}")
+}
+
+// genDefaultCase generates the default case for field descriptor
+func (g *getGen) genDefaultCase() {
+	g.P("if descriptor.IsExtension() {")
+	g.P("panic(", fmtPkg.Ident("Errorf"), "(\"proto3 declared messages do not support extensions: ", g.message.Desc.FullName(), "\"))")
+	g.P("}")
+	g.P("panic(fmt.Errorf(\"message ", g.message.Desc.FullName(), " does not contain field %s\", descriptor.FullName()))")
+}
+
+// genMap generates the protoreflect.Message.Get for map types
+func (g *getGen) genMap(field *protogen.Field) {
+	// gen invalid case
+	g.P("if len(x.", field.GoName, ") == 0 {")
+	g.P("return ", protoreflectPkg.Ident("ValueOfMap"), "(&", mapTypeName(field), "{})")
+	g.P("}")
+	// gen valid case
+	g.P("mapValue := &", mapTypeName(field), "{m: &x.", field.GoName, "}")
+	g.P("return ", protoreflectPkg.Ident("ValueOfMap"), "(mapValue)")
+}
+
+func (g *getGen) genList(field *protogen.Field) {
+	// gen invalid case
+	g.P("if len(x.", field.GoName, ") == 0 {")
+	g.P("return ", protoreflectPkg.Ident("ValueOfList"), "(&", listTypeName(field), "{})")
+	g.P("}")
+	// gen valid case
+	g.P("listValue := &", listTypeName(field), "{list: &x.", field.GoName, "}")
+	g.P("return ", protoreflectPkg.Ident("ValueOfList"), "(listValue)")
 }
 
 // genGet generates the implementation for protoreflect.Message.Get

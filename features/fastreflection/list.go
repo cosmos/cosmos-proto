@@ -137,7 +137,7 @@ func (g *listGen) genNewElement() {
 
 func (g *listGen) genIsValid() {
 	g.P("func (x *", g.typeName, ") IsValid() bool {")
-	g.P("return *x.list != nil || len(*x.list) != 0") // TODO(fdymylja) len(list) validity??
+	g.P("return x.list != nil") // if we generate this type it's always valid, it either comes from Mutable path, or Get path in which the list is valid.
 	g.P("}")
 	g.P()
 }

@@ -2,7 +2,6 @@ package testpb
 
 import (
 	fmt "fmt"
-
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -80,7 +79,7 @@ func (x *_A_18_map) NewValue() protoreflect.Value {
 }
 
 func (x *_A_18_map) IsValid() bool {
-	return *x.m != nil || len(*x.m) != 0
+	return x.m != nil
 }
 
 var _ protoreflect.List = (*_A_19_list)(nil)
@@ -129,7 +128,7 @@ func (x *_A_19_list) NewElement() protoreflect.Value {
 }
 
 func (x *_A_19_list) IsValid() bool {
-	return *x.list != nil || len(*x.list) != 0
+	return x.list != nil
 }
 
 var _ protoreflect.List = (*_A_22_list)(nil)
@@ -172,7 +171,7 @@ func (x *_A_22_list) NewElement() protoreflect.Value {
 }
 
 func (x *_A_22_list) IsValid() bool {
-	return *x.list != nil || len(*x.list) != 0
+	return x.list != nil
 }
 
 var _ protoreflect.Message = (*fastReflection_A)(nil)
@@ -260,14 +259,6 @@ func (x *fastReflection_A) Clear(descriptor protoreflect.FieldDescriptor) {
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_A) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	// handle extension logic
-	if descriptor.IsExtension() && descriptor.ContainingMessage().FullName() == "A" {
-		if _, ok := descriptor.(protoreflect.ExtensionTypeDescriptor); !ok {
-			panic(fmt.Errorf("%s: extension field descriptor does not implement ExtensionTypeDescriptor", descriptor.FullName()))
-		}
-		panic("implement xt logic")
-	}
-
 	switch descriptor.FullName() {
 	case "A.enum":
 		value := x.Enum
@@ -321,13 +312,17 @@ func (x *fastReflection_A) Get(descriptor protoreflect.FieldDescriptor) protoref
 		value := x.MESSAGE
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "A.MAP":
-		value := x.MAP
-		_ = value
-		panic("not implemented")
+		if len(x.MAP) == 0 {
+			return protoreflect.ValueOfMap(&_A_18_map{})
+		}
+		mapValue := &_A_18_map{m: &x.MAP}
+		return protoreflect.ValueOfMap(mapValue)
 	case "A.LIST":
-		value := x.LIST
-		_ = value
-		panic("not implemented")
+		if len(x.LIST) == 0 {
+			return protoreflect.ValueOfList(&_A_19_list{})
+		}
+		listValue := &_A_19_list{list: &x.LIST}
+		return protoreflect.ValueOfList(listValue)
 	case "A.ONEOF_B":
 		if x.ONEOF == nil {
 			return protoreflect.ValueOfMessage(nil)
@@ -345,10 +340,15 @@ func (x *fastReflection_A) Get(descriptor protoreflect.FieldDescriptor) protoref
 			return protoreflect.ValueOfString("")
 		}
 	case "A.LIST_ENUM":
-		value := x.LIST_ENUM
-		_ = value
-		panic("not implemented")
+		if len(x.LIST_ENUM) == 0 {
+			return protoreflect.ValueOfList(&_A_22_list{})
+		}
+		listValue := &_A_22_list{list: &x.LIST_ENUM}
+		return protoreflect.ValueOfList(listValue)
 	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
+		}
 		panic(fmt.Errorf("message A does not contain field %s", descriptor.FullName()))
 	}
 }
@@ -520,19 +520,14 @@ func (x *fastReflection_B) Clear(descriptor protoreflect.FieldDescriptor) {
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_B) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	// handle extension logic
-	if descriptor.IsExtension() && descriptor.ContainingMessage().FullName() == "B" {
-		if _, ok := descriptor.(protoreflect.ExtensionTypeDescriptor); !ok {
-			panic(fmt.Errorf("%s: extension field descriptor does not implement ExtensionTypeDescriptor", descriptor.FullName()))
-		}
-		panic("implement xt logic")
-	}
-
 	switch descriptor.FullName() {
 	case "B.x":
 		value := x.X
 		return protoreflect.ValueOfString(value)
 	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: B"))
+		}
 		panic(fmt.Errorf("message B does not contain field %s", descriptor.FullName()))
 	}
 }

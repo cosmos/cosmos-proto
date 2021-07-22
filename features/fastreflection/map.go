@@ -160,7 +160,7 @@ func (g *mapGen) genNewValue() {
 
 func (g *mapGen) genIsValid() {
 	g.P("func (x *", g.typeName, ") IsValid() bool {")
-	g.P("return *x.m != nil || len(*x.m) != 0")
+	g.P("return x.m != nil")
 	g.P("}")
 	g.P()
 }
