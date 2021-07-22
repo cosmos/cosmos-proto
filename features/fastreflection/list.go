@@ -123,8 +123,7 @@ func (g *listGen) genNewElement() {
 	zeroValue := zeroValueForField(g.GeneratedFile, g.field)
 	g.P("v := ", zeroValue)
 	switch g.field.Desc.Kind() {
-	case protoreflect.MessageKind: // it can be mutable
-		g.P("*x.list = append(*x.list, v)")
+	case protoreflect.MessageKind:
 		g.P("return ", kindToValueConstructor(g.field.Desc.Kind()), "(v.ProtoReflect())")
 	case protoreflect.EnumKind:
 		g.P("return ", kindToValueConstructor(g.field.Desc.Kind()), "((", protoreflectPkg.Ident("EnumNumber"), ")(v))")

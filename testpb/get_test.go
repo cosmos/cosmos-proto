@@ -168,3 +168,96 @@ func TestGet_NoMap_NoList_NoOneof(t *testing.T) {
 		})
 	}
 }
+
+func TestPanics(t *testing.T) {
+	msg := &A{}
+
+	t.Run("unknown field", func(t *testing.T) {
+		fd := (&B{}).ProtoReflect().Descriptor().Fields().ByName("X")
+		require.Panics(t, func() {
+			msg.ProtoReflect().Get(fd)
+		})
+	})
+}
+
+func TestGetList(t *testing.T) {
+	fd := (&A{}).ProtoReflect().Descriptor().Fields().ByName("LIST")
+
+	t.Run("mutability", func(t *testing.T) {
+		msg := &A{LIST: []*B{
+			{
+				X: "1",
+			},
+		}}
+
+		v := msg.ProtoReflect().Get(fd).List()
+
+		require.True(t, v.IsValid())
+
+		// we append a variable
+		toAppend := &B{
+			X: "2",
+		}
+		v.Append(protoreflect.ValueOfMessage(toAppend.ProtoReflect()))
+
+		// assert that we find it inside A
+		require.Len(t, msg.LIST, 2)
+
+		require.Equal(t, toAppend, msg.LIST[1])
+	})
+
+	t.Run("invalidity", func(t *testing.T) {
+		t.Run("nil", func(t *testing.T) {
+			msg := &A{}
+
+			v := msg.ProtoReflect().Get(fd).List()
+
+			require.False(t, v.IsValid())
+
+		})
+
+		t.Run("empty", func(t *testing.T) {
+			msg := &A{LIST: []*B{}}
+
+			v := msg.ProtoReflect().Get(fd).List()
+
+			require.False(t, v.IsValid())
+		})
+
+		t.Run("invalidity panics", func(t *testing.T) {
+			msg := &A{}
+
+			v := msg.ProtoReflect().Get(fd).List()
+
+			require.Panics(t, func() {
+				v.Set(0, protoreflect.ValueOfMessage((&B{}).ProtoReflect()))
+			})
+
+			require.Panics(t, func() {
+				v.Append(protoreflect.ValueOfMessage((&B{}).ProtoReflect()))
+			})
+
+			require.Panics(t, func() {
+				v.AppendMutable()
+			})
+
+			require.Panics(t, func() {
+				v.Truncate(1)
+			})
+
+			require.Panics(t, func() {
+				v.Get(0)
+			})
+		})
+
+		t.Run("invalidty no panics", func(t *testing.T) {
+			msg := &A{}
+
+			v := msg.ProtoReflect().Get(fd).List()
+
+			require.NotPanics(t, func() {
+				v.NewElement()
+			})
+		})
+	})
+}

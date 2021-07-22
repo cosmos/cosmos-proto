@@ -123,7 +123,6 @@ func (x *_A_19_list) Truncate(n int) {
 
 func (x *_A_19_list) NewElement() protoreflect.Value {
 	v := new(B)
-	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
