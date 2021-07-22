@@ -365,3 +365,16 @@ func TestGetMap(t *testing.T) {
 		})
 	})
 }
+
+func TestGetMessage(t *testing.T) {
+	fd := (&A{}).ProtoReflect().Descriptor().Fields().ByName("MESSAGE")
+	t.Run("valid", func(t *testing.T) {
+		msg := &A{MESSAGE: &B{}}
+		require.True(t, msg.ProtoReflect().Get(fd).Message().IsValid())
+	})
+
+	t.Run("invalid", func(t *testing.T) {
+		msg := new(A)
+		require.False(t, msg.ProtoReflect().Get(fd).Message().IsValid())
+	})
+}
