@@ -46,6 +46,9 @@ func (g *listGen) genType() {
 // genLen generates the implementation for protoreflect.List.Len
 func (g *listGen) genLen() {
 	g.P("func (x *", g.typeName, ") Len() int {")
+	g.P("if x.list == nil {")
+	g.P("return 0")
+	g.P("}")
 	g.P("return len(*x.list)")
 	g.P("}")
 	g.P()

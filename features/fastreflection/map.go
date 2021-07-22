@@ -46,6 +46,11 @@ func (g *mapGen) genType() {
 // genLen generates the implementation of protoreflect.Map.Len
 func (g *mapGen) genLen() {
 	g.P("func (x *", g.typeName, ") Len() int {")
+	// invalid map
+	g.P("if x.m == nil {")
+	g.P("return 0")
+	g.P("}")
+	// valid map
 	g.P("return len(*x.m)")
 	g.P("}")
 	g.P()
@@ -54,6 +59,11 @@ func (g *mapGen) genLen() {
 // genRange generates the implementation for protoreflect.Map.Range
 func (g *mapGen) genRange() {
 	g.P("func (x *", g.typeName, ") Range(f func(", protoreflectPkg.Ident("MapKey"), ", ", protoreflectPkg.Ident("Value"), ") bool) {")
+	// invalid map
+	g.P("if x.m == nil {")
+	g.P("return")
+	g.P("}")
+	// valid map
 	g.P("for k, v := range *x.m {")
 	g.P("mapKey := (", protoreflectPkg.Ident("MapKey"), ")(", kindToValueConstructor(g.field.Message.Fields[0].Desc.Kind()), "(k))")
 	switch g.field.Message.Fields[1].Desc.Kind() {
@@ -73,6 +83,11 @@ func (g *mapGen) genRange() {
 // genHas generates the implementation for protoreflect.Map.Has
 func (g *mapGen) genHas() {
 	g.P("func (x *", g.typeName, ") Has(key ", protoreflectPkg.Ident("MapKey"), ") bool {")
+	// invalid map
+	g.P("if x.m == nil {")
+	g.P("return false")
+	g.P("}")
+	// valid map
 	genPrefValueToGoValue(g.GeneratedFile, g.field.Message.Fields[0], "key", "concreteValue")
 	g.P("_, ok := (*x.m)[concreteValue]")
 	g.P("return ok")
@@ -82,6 +97,11 @@ func (g *mapGen) genHas() {
 
 func (g *mapGen) genClear() {
 	g.P("func (x *", g.typeName, ") Clear(key ", protoreflectPkg.Ident("MapKey"), ") {")
+	// invalid map
+	g.P("if x.m == nil {")
+	g.P("return")
+	g.P("}")
+	// valid map
 	genPrefValueToGoValue(g.GeneratedFile, g.field.Message.Fields[0], "key", "concreteKey")
 	g.P("delete(*x.m, concreteKey)")
 	g.P("}")
@@ -90,6 +110,9 @@ func (g *mapGen) genClear() {
 
 func (g *mapGen) genGet() {
 	g.P("func (x *", g.typeName, ") Get(key ", protoreflectPkg.Ident("MapKey"), ") ", protoreflectPkg.Ident("Value"), "{")
+	g.P("if x.m == nil {")
+	g.P("return ", protoreflectPkg.Ident("Value"), "{}")
+	g.P("}")
 	genPrefValueToGoValue(g.GeneratedFile, g.field.Message.Fields[0], "key", "concreteKey")
 	g.P("v, ok := (*x.m)[concreteKey]")
 	g.P("if !ok {")
@@ -109,7 +132,7 @@ func (g *mapGen) genGet() {
 
 func (g *mapGen) genSet() {
 	g.P("func (x *", g.typeName, ") Set(key ", protoreflectPkg.Ident("MapKey"), ", value ", protoreflectPkg.Ident("Value"), ") {")
-	g.P("if !key.IsValid() || value.IsValid() {")
+	g.P("if !key.IsValid() || !value.IsValid() {")
 	g.P("panic(\"invalid key or value provided\")")
 	g.P("}")
 	genPrefValueToGoValue(g.GeneratedFile, g.field.Message.Fields[0], "key", "concreteKey")

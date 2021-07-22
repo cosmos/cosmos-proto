@@ -2,6 +2,7 @@ package testpb
 
 import (
 	fmt "fmt"
+
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -14,10 +15,16 @@ type _A_18_map struct {
 }
 
 func (x *_A_18_map) Len() int {
+	if x.m == nil {
+		return 0
+	}
 	return len(*x.m)
 }
 
 func (x *_A_18_map) Range(f func(protoreflect.MapKey, protoreflect.Value) bool) {
+	if x.m == nil {
+		return
+	}
 	for k, v := range *x.m {
 		mapKey := (protoreflect.MapKey)(protoreflect.ValueOfString(k))
 		mapValue := protoreflect.ValueOfMessage(v.ProtoReflect())
@@ -28,6 +35,9 @@ func (x *_A_18_map) Range(f func(protoreflect.MapKey, protoreflect.Value) bool) 
 }
 
 func (x *_A_18_map) Has(key protoreflect.MapKey) bool {
+	if x.m == nil {
+		return false
+	}
 	keyUnwrapped := key.String()
 	concreteValue := keyUnwrapped
 	_, ok := (*x.m)[concreteValue]
@@ -35,12 +45,18 @@ func (x *_A_18_map) Has(key protoreflect.MapKey) bool {
 }
 
 func (x *_A_18_map) Clear(key protoreflect.MapKey) {
+	if x.m == nil {
+		return
+	}
 	keyUnwrapped := key.String()
 	concreteKey := keyUnwrapped
 	delete(*x.m, concreteKey)
 }
 
 func (x *_A_18_map) Get(key protoreflect.MapKey) protoreflect.Value {
+	if x.m == nil {
+		return protoreflect.Value{}
+	}
 	keyUnwrapped := key.String()
 	concreteKey := keyUnwrapped
 	v, ok := (*x.m)[concreteKey]
@@ -51,7 +67,7 @@ func (x *_A_18_map) Get(key protoreflect.MapKey) protoreflect.Value {
 }
 
 func (x *_A_18_map) Set(key protoreflect.MapKey, value protoreflect.Value) {
-	if !key.IsValid() || value.IsValid() {
+	if !key.IsValid() || !value.IsValid() {
 		panic("invalid key or value provided")
 	}
 	keyUnwrapped := key.String()
@@ -89,6 +105,9 @@ type _A_19_list struct {
 }
 
 func (x *_A_19_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
 	return len(*x.list)
 }
 
@@ -137,6 +156,9 @@ type _A_22_list struct {
 }
 
 func (x *_A_22_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
 	return len(*x.list)
 }
 

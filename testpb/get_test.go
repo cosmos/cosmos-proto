@@ -98,6 +98,21 @@ func TestGet_NoMap_NoList_NoOneof(t *testing.T) {
 			expected:  msg.BYTES,
 		},
 
+		"string": {
+			fieldName: "STRING",
+			expected:  msg.STRING,
+		},
+
+		"sfixed64": {
+			fieldName: "SFIXED32",
+			expected:  msg.SFIXED64,
+		},
+
+		"fixed32": {
+			fieldName: "fixed32",
+			expected:  msg.FIXED32,
+		},
+
 		"message": {
 			fieldName: "MESSAGE",
 			expected:  msg.MESSAGE,
@@ -169,7 +184,7 @@ func TestGet_NoMap_NoList_NoOneof(t *testing.T) {
 	}
 }
 
-func TestPanics(t *testing.T) {
+func TestGetPanics(t *testing.T) {
 	msg := &A{}
 
 	t.Run("unknown field", func(t *testing.T) {
@@ -258,6 +273,95 @@ func TestGetList(t *testing.T) {
 			require.NotPanics(t, func() {
 				v.NewElement()
 			})
+
+			require.NotPanics(t, func() {
+				v.Len()
+			})
+		})
+	})
+}
+
+func TestGetMap(t *testing.T) {
+	fd := (&A{}).ProtoReflect().Descriptor().Fields().ByName("MAP")
+
+	t.Run("mutability", func(t *testing.T) {
+		msg := &A{MAP: map[string]*B{
+			"1": &B{X: "a"},
+		}}
+
+		mv := msg.ProtoReflect().Get(fd).Map()
+
+		key := "2"
+		value := &B{X: "b"}
+
+		mv.Set(protoreflect.MapKey(protoreflect.ValueOfString(key)), protoreflect.ValueOfMessage(value.ProtoReflect()))
+
+		require.Len(t, msg.MAP, 2)
+
+		require.Equal(t, value, msg.MAP[key])
+	})
+
+	t.Run("invalidity", func(t *testing.T) {
+		t.Run("nil", func(t *testing.T) {
+			msg := new(A)
+			require.False(t, msg.ProtoReflect().Get(fd).Map().IsValid())
+		})
+
+		t.Run("empty", func(t *testing.T) {
+			msg := &A{MAP: map[string]*B{}}
+			require.False(t, msg.ProtoReflect().Get(fd).Map().IsValid())
+		})
+
+		t.Run("invalidity panics", func(t *testing.T) {
+			msg := &A{MAP: map[string]*B{}}
+
+			mv := msg.ProtoReflect().Get(fd).Map()
+
+			require.Panics(t, func() {
+				mv.Mutable(protoreflect.MapKey(protoreflect.ValueOfString("something")))
+			})
+
+			require.Panics(t, func() {
+				mv.Set(protoreflect.MapKey(protoreflect.ValueOfString("something")), protoreflect.ValueOfMessage((&B{}).ProtoReflect()))
+			})
+		})
+
+		t.Run("invalidty no panics", func(t *testing.T) {
+			msg := &A{MAP: map[string]*B{}}
+
+			mv := msg.ProtoReflect().Get(fd).Map()
+
+			require.NotPanics(t, func() {
+				v := mv.Get(protoreflect.MapKey(protoreflect.ValueOfString("idk")))
+				require.False(t, v.IsValid())
+			})
+
+			require.NotPanics(t, func() {
+				mv.Len()
+			})
+
+			require.NotPanics(t, func() {
+				mv.NewValue()
+			})
+
+			require.NotPanics(t, func() {
+				mv.Clear(protoreflect.MapKey(protoreflect.ValueOfString("xd")))
+			})
+
+			require.NotPanics(t, func() {
+				require.False(t, mv.Has(protoreflect.MapKey(protoreflect.ValueOfString("xd"))))
+			})
+
+			require.NotPanics(t, func() {
+				ex := false
+				mv.Range(func(key protoreflect.MapKey, value protoreflect.Value) bool {
+					ex = true
+					return true
+				})
+
+				require.False(t, ex)
+			})
+
 		})
 	})
 }
