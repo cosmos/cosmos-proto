@@ -380,7 +380,32 @@ func TestGetMessage(t *testing.T) {
 }
 
 func TestGetOneof(t *testing.T) {
-	t.Run("nil oneof", func(t *testing.T) {
+	fdMsg := (&A{}).ProtoReflect().Descriptor().Fields().ByName("ONEOF_B")
+	fdString := (&A{}).ProtoReflect().Descriptor().Fields().ByName("ONEOF_STRING")
+	t.Run("nil message", func(t *testing.T) {
+		msg := &A{}
+		value := msg.ProtoReflect().Get(fdMsg)
 
+		require.True(t, value.IsValid())
+		require.False(t, value.Message().IsValid())
+	})
+
+	t.Run("empty string", func(t *testing.T) {
+		msg := &A{}
+		value := msg.ProtoReflect().Get(fdString)
+
+		require.True(t, value.IsValid())
+		require.Equal(t, "", value.String())
+	})
+
+	t.Run("existing message", func(t *testing.T) {
+		msg := &A{ONEOF: &A_ONEOF_B{ONEOF_B: &B{}}}
+		mv := msg.ProtoReflect().Get(fdMsg).Message()
+		sv := msg.ProtoReflect().Get(fdString).String()
+
+		require.True(t, mv.IsValid())
+		require.Empty(t, sv)
+
+		require.Equal(t, msg.GetONEOF_B(), mv.Interface())
 	})
 }
