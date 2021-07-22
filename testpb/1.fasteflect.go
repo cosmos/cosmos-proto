@@ -411,8 +411,22 @@ func (x *fastReflection_A) NewField(descriptor protoreflect.FieldDescriptor) pro
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_A) WhichOneof(descriptor protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	return (*A)(x).slowProtoReflect().WhichOneof(descriptor)
+func (x *fastReflection_A) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	case "A.ONEOF":
+		if x.ONEOF == nil {
+			return nil
+		}
+		switch x.ONEOF.(type) {
+		case *A_ONEOF_B:
+			return x.Descriptor().Fields().ByName("ONEOF_B")
+		case *A_ONEOF_STRING:
+			return x.Descriptor().Fields().ByName("ONEOF_STRING")
+		}
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in A", d.FullName()))
+	}
+	panic("unreachable")
 }
 
 // GetUnknown retrieves the entire list of unknown fields.
@@ -590,8 +604,12 @@ func (x *fastReflection_B) NewField(descriptor protoreflect.FieldDescriptor) pro
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_B) WhichOneof(descriptor protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	return (*B)(x).slowProtoReflect().WhichOneof(descriptor)
+func (x *fastReflection_B) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in B", d.FullName()))
+	}
+	panic("unreachable")
 }
 
 // GetUnknown retrieves the entire list of unknown fields.

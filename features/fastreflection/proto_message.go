@@ -257,13 +257,11 @@ func (g *generator) genNewField() {
 }
 
 func (g *generator) genWhichOneof() {
-	g.P("// WhichOneof reports which field within the oneof is populated,")
-	g.P("// returning nil if none are populated.")
-	g.P("// It panics if the oneof descriptor does not belong to this message.")
-	g.P("func (x *", g.typeName, ") WhichOneof(descriptor ", protoreflectPkg.Ident("OneofDescriptor"), ") ", protoreflectPkg.Ident("FieldDescriptor"), " {")
-	slowReflectionFallBack(g.GeneratedFile, g.message, true, "WhichOneof", "descriptor")
-	g.P("}")
-	g.P()
+	(&whichOneofGen{
+		GeneratedFile: g.GeneratedFile,
+		typeName:      g.typeName,
+		message:       g.message,
+	}).generate()
 }
 
 func (g *generator) genGetUnknown() {
