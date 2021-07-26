@@ -59,3 +59,25 @@ func Benchmark_WhichOneof_SR(b *testing.B) {
 		_ = msg.slowProtoReflect().WhichOneof(od)
 	}
 }
+
+func Benchmark_Has_FR(b *testing.B) {
+	msg := &A{BYTES: nil}
+	fd := (&A{}).ProtoReflect().Descriptor().Fields().ByName("BYTES")
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		msg.ProtoReflect().Has(fd)
+	}
+}
+
+func Benchmark_Has_SR(b *testing.B) {
+	msg := &A{BYTES: nil}
+	fd := (&A{}).ProtoReflect().Descriptor().Fields().ByName("BYTES")
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_ = msg.slowProtoReflect().Has(fd)
+	}
+}

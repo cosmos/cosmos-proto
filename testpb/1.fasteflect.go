@@ -2,6 +2,7 @@ package testpb
 
 import (
 	fmt "fmt"
+
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -291,7 +292,7 @@ func (x *fastReflection_A) Has(fd protoreflect.FieldDescriptor) bool {
 	case "A.STRING":
 		return x.STRING != ""
 	case "A.BYTES":
-		return x.BYTES != nil
+		return len(x.BYTES) != 0
 	case "A.MESSAGE":
 		return x.MESSAGE != nil
 	case "A.MAP":
@@ -305,7 +306,7 @@ func (x *fastReflection_A) Has(fd protoreflect.FieldDescriptor) bool {
 	case "A.LIST_ENUM":
 		return len(x.LIST_ENUM) != 0
 	default:
-
+		panic(fmt.Errorf("message A does not have field %s", fd.Name()))
 	}
 }
 
@@ -585,7 +586,7 @@ func (x *fastReflection_B) Has(fd protoreflect.FieldDescriptor) bool {
 	case "B.x":
 		return x.X != ""
 	default:
-
+		panic(fmt.Errorf("message B does not have field %s", fd.Name()))
 	}
 }
 

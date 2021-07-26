@@ -1,8 +1,6 @@
 package fastreflection
 
 import (
-	"log"
-
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
@@ -42,7 +40,7 @@ func (g *hasGen) generate() {
 		g.genField(field)
 	}
 	g.P("default:")
-	g.P("") // TODO panic
+	g.P("panic(", fmtPkg.Ident("Errorf"), "(\"message ", g.message.Desc.FullName(), " does not have field %s\", fd.Name()))")
 	g.P("}")
 	g.P("}")
 }
@@ -54,13 +52,15 @@ func (g *hasGen) genField(field *protogen.Field) {
 		return
 	}
 
-	// TODO bytes presence check if nil or len == 0
+	if field.Desc.Kind() == protoreflect.BytesKind {
+		g.P("return len(x.", field.GoName, ") != 0")
+		return
+	}
 
 	g.P("return x.", field.GoName, " != ", zeroValueForField(nil, field))
 }
 
 func (g *hasGen) genNullable(field *protogen.Field) {
-	log.Printf("%s is nullable", field.GoName)
 	switch {
 	case field.Desc.ContainingOneof() != nil:
 		g.P("return x.", field.Oneof.GoName, " != nil")
