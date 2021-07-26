@@ -189,15 +189,12 @@ func (g *generator) genHas() {
 }
 
 func (g *generator) genClear() {
-	g.P("// Clear clears the field such that a subsequent Has call reports false.")
-	g.P("//")
-	g.P("// Clearing an extension field clears both the extension type and value")
-	g.P("// associated with the given field number.")
-	g.P("//")
-	g.P("// Clear is a mutating operation and unsafe for concurrent use.")
-	g.P("func (x *", g.typeName, ") Clear(descriptor ", protoreflectPkg.Ident("FieldDescriptor"), ") {")
-	slowReflectionFallBack(g.GeneratedFile, g.message, false, "Clear", "descriptor")
-	g.P("}")
+	(&clearGen{
+		GeneratedFile: g.GeneratedFile,
+		typeName:      g.typeName,
+		message:       g.message,
+	}).generate()
+
 	g.P()
 }
 

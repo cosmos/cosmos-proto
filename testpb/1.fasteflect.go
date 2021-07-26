@@ -316,8 +316,55 @@ func (x *fastReflection_A) Has(fd protoreflect.FieldDescriptor) bool {
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_A) Clear(descriptor protoreflect.FieldDescriptor) {
-	(*A)(x).slowProtoReflect().Clear(descriptor)
+func (x *fastReflection_A) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "A.enum":
+		x.Enum = 0
+	case "A.some_boolean":
+		x.SomeBoolean = false
+	case "A.INT32":
+		x.INT32 = int32(0)
+	case "A.SINT32":
+		x.SINT32 = int32(0)
+	case "A.UINT32":
+		x.UINT32 = uint32(0)
+	case "A.INT64":
+		x.INT64 = int64(0)
+	case "A.SING64":
+		x.SING64 = int64(0)
+	case "A.UINT64":
+		x.UINT64 = uint64(0)
+	case "A.SFIXED32":
+		x.SFIXED32 = int32(0)
+	case "A.FIXED32":
+		x.FIXED32 = uint32(0)
+	case "A.FLOAT":
+		x.FLOAT = float32(0)
+	case "A.SFIXED64":
+		x.SFIXED64 = int64(0)
+	case "A.FIXED64":
+		x.FIXED64 = uint64(0)
+	case "A.DOUBLE":
+		x.DOUBLE = float64(0)
+	case "A.STRING":
+		x.STRING = ""
+	case "A.BYTES":
+		x.BYTES = nil
+	case "A.MESSAGE":
+		x.MESSAGE = nil
+	case "A.MAP":
+		x.MAP = nil
+	case "A.LIST":
+		x.LIST = nil
+	case "A.ONEOF_B":
+		x.ONEOF = nil
+	case "A.ONEOF_STRING":
+		x.ONEOF = nil
+	case "A.LIST_ENUM":
+		x.LIST_ENUM = nil
+	default:
+		panic(fmt.Errorf("message A does not have field %s", fd.Name()))
+	}
 }
 
 // Get retrieves the value for a field.
@@ -596,8 +643,13 @@ func (x *fastReflection_B) Has(fd protoreflect.FieldDescriptor) bool {
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_B) Clear(descriptor protoreflect.FieldDescriptor) {
-	(*B)(x).slowProtoReflect().Clear(descriptor)
+func (x *fastReflection_B) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "B.x":
+		x.X = ""
+	default:
+		panic(fmt.Errorf("message B does not have field %s", fd.Name()))
+	}
 }
 
 // Get retrieves the value for a field.
