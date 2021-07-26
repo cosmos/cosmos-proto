@@ -47,13 +47,8 @@ func (g *hasGen) generate() {
 
 func (g *hasGen) genField(field *protogen.Field) {
 	g.P("case \"", field.Desc.FullName(), "\":")
-	if field.Desc.HasPresence() || field.Desc.IsList() || field.Desc.IsMap() {
+	if field.Desc.HasPresence() || field.Desc.IsList() || field.Desc.IsMap() || field.Desc.Kind() == protoreflect.BytesKind {
 		g.genNullable(field)
-		return
-	}
-
-	if field.Desc.Kind() == protoreflect.BytesKind {
-		g.P("return len(x.", field.GoName, ") != 0")
 		return
 	}
 
@@ -64,7 +59,7 @@ func (g *hasGen) genNullable(field *protogen.Field) {
 	switch {
 	case field.Desc.ContainingOneof() != nil:
 		g.P("return x.", field.Oneof.GoName, " != nil")
-	case field.Desc.IsMap(), field.Desc.IsList():
+	case field.Desc.IsMap(), field.Desc.IsList(), field.Desc.Kind() == protoreflect.BytesKind:
 		g.P("return len(x.", field.GoName, ") != 0")
 	case field.Desc.Kind() == protoreflect.MessageKind:
 		g.P("return x.", field.GoName, " != nil")
