@@ -81,3 +81,25 @@ func Benchmark_Has_SR(b *testing.B) {
 		_ = msg.slowProtoReflect().Has(fd)
 	}
 }
+
+func Benchmark_Clear_FR(b *testing.B) {
+	msg := &A{BYTES: []byte("test")}
+	fd := (&A{}).ProtoReflect().Descriptor().Fields().ByName("BYTES")
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		msg.ProtoReflect().Clear(fd)
+	}
+}
+
+func Benchmark_Clear_SR(b *testing.B) {
+	msg := &A{BYTES: []byte("test")}
+	fd := (&A{}).ProtoReflect().Descriptor().Fields().ByName("BYTES")
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		msg.slowProtoReflect().Clear(fd)
+	}
+}
