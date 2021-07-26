@@ -258,8 +258,55 @@ func (x *fastReflection_A) Range(f func(protoreflect.FieldDescriptor, protorefle
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_A) Has(descriptor protoreflect.FieldDescriptor) bool {
-	return (*A)(x).slowProtoReflect().Has(descriptor)
+func (x *fastReflection_A) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "A.enum":
+		return x.Enum != 0
+	case "A.some_boolean":
+		return x.SomeBoolean != false
+	case "A.INT32":
+		return x.INT32 != int32(0)
+	case "A.SINT32":
+		return x.SINT32 != int32(0)
+	case "A.UINT32":
+		return x.UINT32 != uint32(0)
+	case "A.INT64":
+		return x.INT64 != int64(0)
+	case "A.SING64":
+		return x.SING64 != int64(0)
+	case "A.UINT64":
+		return x.UINT64 != uint64(0)
+	case "A.SFIXED32":
+		return x.SFIXED32 != int32(0)
+	case "A.FIXED32":
+		return x.FIXED32 != uint32(0)
+	case "A.FLOAT":
+		return x.FLOAT != float32(0)
+	case "A.SFIXED64":
+		return x.SFIXED64 != int64(0)
+	case "A.FIXED64":
+		return x.FIXED64 != uint64(0)
+	case "A.DOUBLE":
+		return x.DOUBLE != float64(0)
+	case "A.STRING":
+		return x.STRING != ""
+	case "A.BYTES":
+		return x.BYTES != nil
+	case "A.MESSAGE":
+		return x.MESSAGE != nil
+	case "A.MAP":
+		return len(x.MAP) != 0
+	case "A.LIST":
+		return len(x.LIST) != 0
+	case "A.ONEOF_B":
+		return x.ONEOF != nil
+	case "A.ONEOF_STRING":
+		return x.ONEOF != nil
+	case "A.LIST_ENUM":
+		return len(x.LIST_ENUM) != 0
+	default:
+
+	}
 }
 
 // Clear clears the field such that a subsequent Has call reports false.
@@ -533,8 +580,13 @@ func (x *fastReflection_B) Range(f func(protoreflect.FieldDescriptor, protorefle
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_B) Has(descriptor protoreflect.FieldDescriptor) bool {
-	return (*B)(x).slowProtoReflect().Has(descriptor)
+func (x *fastReflection_B) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "B.x":
+		return x.X != ""
+	default:
+
+	}
 }
 
 // Clear clears the field such that a subsequent Has call reports false.

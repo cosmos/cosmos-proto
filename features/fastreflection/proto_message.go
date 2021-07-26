@@ -181,22 +181,11 @@ func (g *generator) genRange() {
 }
 
 func (g *generator) genHas() {
-
-	g.P("// Has reports whether a field is populated.")
-	g.P("//")
-	g.P("// Some fields have the property of nullability where it is possible to")
-	g.P("// distinguish between the default value of a field and whether the field")
-	g.P("// was explicitly populated with the default value. Singular message fields,")
-	g.P("// member fields of a oneof, and proto2 scalar fields are nullable. Such")
-	g.P("// fields are populated only if explicitly set.")
-	g.P("//")
-	g.P("// In other cases (aside from the nullable cases above),")
-	g.P("// a proto3 scalar field is populated if it contains a non-zero value, and")
-	g.P("// a repeated field is populated if it is non-empty.")
-	g.P("func (x *", g.typeName, ") Has(descriptor ", protoreflectPkg.Ident("FieldDescriptor"), ") bool {")
-	slowReflectionFallBack(g.GeneratedFile, g.message, true, "Has", "descriptor")
-	g.P("}")
-	g.P()
+	(&hasGen{
+		GeneratedFile: g.GeneratedFile,
+		typeName:      g.typeName,
+		message:       g.message,
+	}).generate()
 }
 
 func (g *generator) genClear() {
