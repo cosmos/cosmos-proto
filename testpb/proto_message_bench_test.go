@@ -2,6 +2,8 @@ package testpb
 
 import (
 	"testing"
+
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 func Benchmark_Get_FR(b *testing.B) {
@@ -101,5 +103,27 @@ func Benchmark_Clear_SR(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		msg.slowProtoReflect().Clear(fd)
+	}
+}
+
+func Benchmark_Set_FR(b *testing.B) {
+	msg := &A{}
+	fd := (&A{}).ProtoReflect().Descriptor().Fields().ByName("BYTES")
+	v := protoreflect.ValueOfBytes([]byte("test"))
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		msg.ProtoReflect().Set(fd, v)
+	}
+}
+
+func Benchmark_Set_SR(b *testing.B) {
+	msg := &A{}
+	fd := (&A{}).ProtoReflect().Descriptor().Fields().ByName("BYTES")
+	v := protoreflect.ValueOfBytes([]byte("test"))
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		msg.slowProtoReflect().Set(fd, v)
 	}
 }
