@@ -2,6 +2,7 @@ package testpb
 
 import (
 	fmt "fmt"
+
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -562,8 +563,65 @@ func (x *fastReflection_A) Mutable(descriptor protoreflect.FieldDescriptor) prot
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_A) NewField(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	return (*A)(x).slowProtoReflect().NewField(descriptor)
+func (x *fastReflection_A) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "A.enum":
+		return protoreflect.ValueOfEnum(0)
+	case "A.some_boolean":
+		return protoreflect.ValueOfBool(false)
+	case "A.INT32":
+		return protoreflect.ValueOfInt32(int32(0))
+	case "A.SINT32":
+		return protoreflect.ValueOfInt32(int32(0))
+	case "A.UINT32":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "A.INT64":
+		return protoreflect.ValueOfInt64(int64(0))
+	case "A.SING64":
+		return protoreflect.ValueOfInt64(int64(0))
+	case "A.UINT64":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "A.SFIXED32":
+		return protoreflect.ValueOfInt32(int32(0))
+	case "A.FIXED32":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "A.FLOAT":
+		return protoreflect.ValueOfFloat32(float32(0))
+	case "A.SFIXED64":
+		return protoreflect.ValueOfInt64(int64(0))
+	case "A.FIXED64":
+		return protoreflect.ValueOfUint64(uint64(0))
+	case "A.DOUBLE":
+		return protoreflect.ValueOfFloat64(float64(0))
+	case "A.STRING":
+		return protoreflect.ValueOfString("")
+	case "A.BYTES":
+		return protoreflect.ValueOfBytes(nil)
+	case "A.MESSAGE":
+		x.MESSAGE = &B{}
+		return protoreflect.ValueOfMessage(x.MESSAGE.ProtoReflect())
+	case "A.MAP":
+		x.MAP = make(map[string]*B)
+		return protoreflect.ValueOfMap(&_A_18_map{m: &x.MAP})
+	case "A.LIST":
+		x.LIST = []*B{}
+		return protoreflect.ValueOfList(&_A_19_list{list: &x.LIST})
+	case "A.ONEOF_B":
+		value := &B{}
+		oneofValue := &A_ONEOF_B{ONEOF_B: value}
+		x.ONEOF = oneofValue
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "A.ONEOF_STRING":
+		return protoreflect.ValueOfString("")
+	case "A.LIST_ENUM":
+		x.LIST_ENUM = []Enumeration{}
+		return protoreflect.ValueOfList(&_A_22_list{list: &x.LIST_ENUM})
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
+		}
+		panic(fmt.Errorf("message A does not contain field %s", fd.FullName()))
+	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
@@ -779,8 +837,16 @@ func (x *fastReflection_B) Mutable(descriptor protoreflect.FieldDescriptor) prot
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_B) NewField(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	return (*B)(x).slowProtoReflect().NewField(descriptor)
+func (x *fastReflection_B) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "B.x":
+		return protoreflect.ValueOfString("")
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: B"))
+		}
+		panic(fmt.Errorf("message B does not contain field %s", fd.FullName()))
+	}
 }
 
 // WhichOneof reports which field within the oneof is populated,

@@ -127,3 +127,23 @@ func Benchmark_Set_SR(b *testing.B) {
 		msg.slowProtoReflect().Set(fd, v)
 	}
 }
+
+func Benchmark_NewField_FR(b *testing.B) {
+	msg := &A{}
+	fd := (&A{}).ProtoReflect().Descriptor().Fields().ByName("BYTES")
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_ = msg.ProtoReflect().NewField(fd)
+	}
+}
+
+func Benchmark_NewField_SR(b *testing.B) {
+	msg := &A{}
+	fd := (&A{}).ProtoReflect().Descriptor().Fields().ByName("BYTES")
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_ = msg.slowProtoReflect().NewField(fd)
+	}
+}

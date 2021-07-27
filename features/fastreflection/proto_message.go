@@ -224,12 +224,11 @@ func (g *generator) gentMutable() {
 }
 
 func (g *generator) genNewField() {
-	g.P("// NewField returns a new value that is assignable to the field")
-	g.P("// for the given descriptor. For scalars, this returns the default value.")
-	g.P("// For lists, maps, and messages, this returns a new, empty, mutable value.")
-	g.P("func (x *", g.typeName, ") NewField(descriptor ", protoreflectPkg.Ident("FieldDescriptor"), ") ", protoreflectPkg.Ident("Value"), " {")
-	slowReflectionFallBack(g.GeneratedFile, g.message, true, "NewField", "descriptor")
-	g.P("}")
+	(&newFieldGen{
+		GeneratedFile: g.GeneratedFile,
+		typeName:      g.typeName,
+		message:       g.message,
+	}).generate()
 	g.P()
 }
 
