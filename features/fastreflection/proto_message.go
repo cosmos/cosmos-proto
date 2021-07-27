@@ -207,20 +207,11 @@ func (g *generator) genSet() {
 }
 
 func (g *generator) gentMutable() {
-	g.P("// Mutable returns a mutable reference to a composite type.")
-	g.P("//")
-	g.P("// If the field is unpopulated, it may allocate a composite value.")
-	g.P("// For a field belonging to a oneof, it implicitly clears any other field")
-	g.P("// that may be currently set within the same oneof.")
-	g.P("// For extension fields, it implicitly stores the provided ExtensionType")
-	g.P("// if not already stored.")
-	g.P("// It panics if the field does not contain a composite type.")
-	g.P("//")
-	g.P("// Mutable is a mutating operation and unsafe for concurrent use.")
-	g.P("func (x *", g.typeName, ") Mutable(descriptor ", protoreflectPkg.Ident("FieldDescriptor"), ") ", protoreflectPkg.Ident("Value"), " {")
-	slowReflectionFallBack(g.GeneratedFile, g.message, true, "Mutable", "descriptor")
-	g.P("}")
-	g.P()
+	(&mutableGen{
+		GeneratedFile: g.GeneratedFile,
+		typeName:      g.typeName,
+		message:       g.message,
+	}).generate()
 }
 
 func (g *generator) genNewField() {

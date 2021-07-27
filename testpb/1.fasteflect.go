@@ -556,8 +556,87 @@ func (x *fastReflection_A) Set(fd protoreflect.FieldDescriptor, value protorefle
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_A) Mutable(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	return (*A)(x).slowProtoReflect().Mutable(descriptor)
+func (x *fastReflection_A) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "A.MESSAGE":
+		if x.MESSAGE == nil {
+			x.MESSAGE = new(B)
+		}
+		return protoreflect.ValueOfMessage(x.MESSAGE.ProtoReflect())
+	case "A.MAP":
+		if x.MAP == nil {
+			x.MAP = make(map[string]*B)
+		}
+		value := &_A_18_map{m: &x.MAP}
+		return protoreflect.ValueOfMap(value)
+	case "A.LIST":
+		if x.LIST == nil {
+			x.LIST = []*B{}
+		}
+		value := &_A_19_list{list: &x.LIST}
+		return protoreflect.ValueOfList(value)
+	case "A.ONEOF_B":
+		if x.ONEOF == nil {
+			value := &B{}
+			oneofValue := &A_ONEOF_B{ONEOF_B: value}
+			x.ONEOF = oneofValue
+			return protoreflect.ValueOfMessage(value.ProtoReflect())
+		}
+		switch m := x.ONEOF.(type) {
+		case *A_ONEOF_B:
+			return protoreflect.ValueOfMessage(m.ONEOF_B.ProtoReflect())
+		default:
+			value := &B{}
+			oneofValue := &A_ONEOF_B{ONEOF_B: value}
+			x.ONEOF = oneofValue
+			return protoreflect.ValueOfMessage(value.ProtoReflect())
+		}
+	case "A.LIST_ENUM":
+		if x.LIST_ENUM == nil {
+			x.LIST_ENUM = []Enumeration{}
+		}
+		value := &_A_22_list{list: &x.LIST_ENUM}
+		return protoreflect.ValueOfList(value)
+	case "A.enum":
+		panic(fmt.Errorf("field enum of message A is not mutable"))
+	case "A.some_boolean":
+		panic(fmt.Errorf("field some_boolean of message A is not mutable"))
+	case "A.INT32":
+		panic(fmt.Errorf("field INT32 of message A is not mutable"))
+	case "A.SINT32":
+		panic(fmt.Errorf("field SINT32 of message A is not mutable"))
+	case "A.UINT32":
+		panic(fmt.Errorf("field UINT32 of message A is not mutable"))
+	case "A.INT64":
+		panic(fmt.Errorf("field INT64 of message A is not mutable"))
+	case "A.SING64":
+		panic(fmt.Errorf("field SING64 of message A is not mutable"))
+	case "A.UINT64":
+		panic(fmt.Errorf("field UINT64 of message A is not mutable"))
+	case "A.SFIXED32":
+		panic(fmt.Errorf("field SFIXED32 of message A is not mutable"))
+	case "A.FIXED32":
+		panic(fmt.Errorf("field FIXED32 of message A is not mutable"))
+	case "A.FLOAT":
+		panic(fmt.Errorf("field FLOAT of message A is not mutable"))
+	case "A.SFIXED64":
+		panic(fmt.Errorf("field SFIXED64 of message A is not mutable"))
+	case "A.FIXED64":
+		panic(fmt.Errorf("field FIXED64 of message A is not mutable"))
+	case "A.DOUBLE":
+		panic(fmt.Errorf("field DOUBLE of message A is not mutable"))
+	case "A.STRING":
+		panic(fmt.Errorf("field STRING of message A is not mutable"))
+	case "A.BYTES":
+		panic(fmt.Errorf("field BYTES of message A is not mutable"))
+	case "A.ONEOF_STRING":
+		panic(fmt.Errorf("field ONEOF_STRING of message A is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
+		}
+		panic(fmt.Errorf("message A does not contain field %s", fd.FullName()))
+	}
 }
 
 // NewField returns a new value that is assignable to the field
@@ -830,8 +909,16 @@ func (x *fastReflection_B) Set(fd protoreflect.FieldDescriptor, value protorefle
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_B) Mutable(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	return (*B)(x).slowProtoReflect().Mutable(descriptor)
+func (x *fastReflection_B) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "B.x":
+		panic(fmt.Errorf("field x of message B is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: B"))
+		}
+		panic(fmt.Errorf("message B does not contain field %s", fd.FullName()))
+	}
 }
 
 // NewField returns a new value that is assignable to the field
