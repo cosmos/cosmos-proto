@@ -147,3 +147,23 @@ func Benchmark_NewField_SR(b *testing.B) {
 		_ = msg.slowProtoReflect().NewField(fd)
 	}
 }
+
+func Benchmark_Mutable_FR(b *testing.B) {
+	msg := &A{}
+	fd := (&A{}).ProtoReflect().Descriptor().Fields().ByName("MESSAGE")
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_ = msg.ProtoReflect().Mutable(fd)
+	}
+}
+
+func Benchmark_Mutable_SR(b *testing.B) {
+	msg := &A{}
+	fd := (&A{}).ProtoReflect().Descriptor().Fields().ByName("MESSAGE")
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_ = msg.slowProtoReflect().NewField(fd)
+	}
+}
