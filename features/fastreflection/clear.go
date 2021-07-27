@@ -35,7 +35,10 @@ func (g *clearGen) generate() {
 		g.genField(field)
 	}
 	g.P("default:")
-	g.P("panic(", fmtPkg.Ident("Errorf"), "(\"message ", g.message.Desc.FullName(), " does not have field %s\", fd.Name()))")
+	g.P("if fd.IsExtension() {")
+	g.P("panic(", fmtPkg.Ident("Errorf"), "(\"proto3 declared messages do not support extensions: ", g.message.Desc.FullName(), "\"))")
+	g.P("}")
+	g.P("panic(fmt.Errorf(\"message ", g.message.Desc.FullName(), " does not contain field %s\", fd.FullName()))")
 	g.P("}")
 	g.P("}")
 }

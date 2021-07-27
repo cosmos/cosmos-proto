@@ -37,17 +37,6 @@ func (g *getGen) genComment() {
 	g.P("// of the value; to obtain a mutable reference, use Mutable.")
 }
 
-func (g *getGen) genGetExtension() {
-	g.P("// handle extension logic")
-	g.P("if descriptor.IsExtension() && descriptor.ContainingMessage().FullName() == \"", g.message.Desc.FullName(), "\" {")
-	g.P("if _, ok := descriptor.(", protoreflectPkg.Ident("ExtensionTypeDescriptor"), "); !ok {")
-	g.P("panic(", fmtPkg.Ident("Errorf"), "(\"%s: extension field descriptor does not implement ExtensionTypeDescriptor\", descriptor.FullName()))")
-	g.P("}")
-	g.P("panic(\"implement xt logic\")") // TODO(fdymylja)
-	g.P("}")
-	g.P()
-}
-
 func (g *getGen) genFieldGetter(field *protogen.Field) {
 	if field.Oneof != nil {
 		g.genOneofGetter(field)

@@ -2,7 +2,6 @@ package testpb
 
 import (
 	fmt "fmt"
-
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -306,7 +305,10 @@ func (x *fastReflection_A) Has(fd protoreflect.FieldDescriptor) bool {
 	case "A.LIST_ENUM":
 		return len(x.LIST_ENUM) != 0
 	default:
-		panic(fmt.Errorf("message A does not have field %s", fd.Name()))
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
+		}
+		panic(fmt.Errorf("message A does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -363,7 +365,10 @@ func (x *fastReflection_A) Clear(fd protoreflect.FieldDescriptor) {
 	case "A.LIST_ENUM":
 		x.LIST_ENUM = nil
 	default:
-		panic(fmt.Errorf("message A does not have field %s", fd.Name()))
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
+		}
+		panic(fmt.Errorf("message A does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -478,8 +483,66 @@ func (x *fastReflection_A) Get(descriptor protoreflect.FieldDescriptor) protoref
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_A) Set(descriptor protoreflect.FieldDescriptor, value protoreflect.Value) {
-	(*A)(x).slowProtoReflect().Set(descriptor, value)
+func (x *fastReflection_A) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "A.enum":
+		x.Enum = (Enumeration)(value.Enum())
+	case "A.some_boolean":
+		x.SomeBoolean = value.Bool()
+	case "A.INT32":
+		x.INT32 = int32(value.Int())
+	case "A.SINT32":
+		x.SINT32 = int32(value.Int())
+	case "A.UINT32":
+		x.UINT32 = uint32(value.Uint())
+	case "A.INT64":
+		x.INT64 = value.Int()
+	case "A.SING64":
+		x.SING64 = value.Int()
+	case "A.UINT64":
+		x.UINT64 = value.Uint()
+	case "A.SFIXED32":
+		x.SFIXED32 = int32(value.Int())
+	case "A.FIXED32":
+		x.FIXED32 = uint32(value.Uint())
+	case "A.FLOAT":
+		x.FLOAT = float32(value.Float())
+	case "A.SFIXED64":
+		x.SFIXED64 = value.Int()
+	case "A.FIXED64":
+		x.FIXED64 = value.Uint()
+	case "A.DOUBLE":
+		x.DOUBLE = value.Float()
+	case "A.STRING":
+		x.STRING = value.String()
+	case "A.BYTES":
+		x.BYTES = value.Bytes()
+	case "A.MESSAGE":
+		x.MESSAGE = value.Message().Interface().(*B)
+	case "A.MAP":
+		mv := value.Map()
+		cmv := mv.(*_A_18_map)
+		x.MAP = *cmv.m
+	case "A.LIST":
+		lv := value.List()
+		clv := lv.(*_A_19_list)
+		x.LIST = *clv.list
+	case "A.ONEOF_B":
+		cv := value.Message().Interface().(*B)
+		x.ONEOF = &A_ONEOF_B{ONEOF_B: cv}
+	case "A.ONEOF_STRING":
+		cv := value.String()
+		x.ONEOF = &A_ONEOF_STRING{ONEOF_STRING: cv}
+	case "A.LIST_ENUM":
+		lv := value.List()
+		clv := lv.(*_A_22_list)
+		x.LIST_ENUM = *clv.list
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
+		}
+		panic(fmt.Errorf("message A does not contain field %s", fd.FullName()))
+	}
 }
 
 // Mutable returns a mutable reference to a composite type.
@@ -633,7 +696,10 @@ func (x *fastReflection_B) Has(fd protoreflect.FieldDescriptor) bool {
 	case "B.x":
 		return x.X != ""
 	default:
-		panic(fmt.Errorf("message B does not have field %s", fd.Name()))
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: B"))
+		}
+		panic(fmt.Errorf("message B does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -648,7 +714,10 @@ func (x *fastReflection_B) Clear(fd protoreflect.FieldDescriptor) {
 	case "B.x":
 		x.X = ""
 	default:
-		panic(fmt.Errorf("message B does not have field %s", fd.Name()))
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: B"))
+		}
+		panic(fmt.Errorf("message B does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -681,8 +750,16 @@ func (x *fastReflection_B) Get(descriptor protoreflect.FieldDescriptor) protoref
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_B) Set(descriptor protoreflect.FieldDescriptor, value protoreflect.Value) {
-	(*B)(x).slowProtoReflect().Set(descriptor, value)
+func (x *fastReflection_B) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "B.x":
+		x.X = value.String()
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: B"))
+		}
+		panic(fmt.Errorf("message B does not contain field %s", fd.FullName()))
+	}
 }
 
 // Mutable returns a mutable reference to a composite type.

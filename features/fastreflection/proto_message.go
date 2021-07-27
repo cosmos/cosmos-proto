@@ -199,20 +199,11 @@ func (g *generator) genClear() {
 }
 
 func (g *generator) genSet() {
-	g.P("// Set stores the value for a field.")
-	g.P("//")
-	g.P("// For a field belonging to a oneof, it implicitly clears any other field")
-	g.P("// that may be currently set within the same oneof.")
-	g.P("// For extension fields, it implicitly stores the provided ExtensionType.")
-	g.P("// When setting a composite type, it is unspecified whether the stored value")
-	g.P("// aliases the source's memory in any way. If the composite value is an")
-	g.P("// empty, read-only value, then it panics.")
-	g.P("//")
-	g.P("// Set is a mutating operation and unsafe for concurrent use.")
-	g.P("func (x *", g.typeName, ") Set(descriptor ", protoreflectPkg.Ident("FieldDescriptor"), ", value ", protoreflectPkg.Ident("Value"), ") {")
-	slowReflectionFallBack(g.GeneratedFile, g.message, false, "Set", "descriptor", "value")
-	g.P("}")
-	g.P()
+	(&setGen{
+		GeneratedFile: g.GeneratedFile,
+		typeName:      g.typeName,
+		message:       g.message,
+	}).generate()
 }
 
 func (g *generator) gentMutable() {
