@@ -167,3 +167,67 @@ func Benchmark_Mutable_SR(b *testing.B) {
 		_ = msg.slowProtoReflect().NewField(fd)
 	}
 }
+
+func Benchmark_Range_FR(b *testing.B) {
+	msg := &A{
+		Enum:        Enumeration_Two,
+		SomeBoolean: true,
+		INT32:       2,
+		SINT32:      3,
+		UINT32:      4,
+		INT64:       5,
+		SING64:      6,
+		UINT64:      7,
+		SFIXED32:    8,
+		FIXED32:     9,
+		FLOAT:       10.1,
+		SFIXED64:    11,
+		FIXED64:     12,
+		DOUBLE:      13,
+		STRING:      "fourteen",
+		BYTES:       []byte("fifteen"),
+		MESSAGE:     &B{X: "something"},
+		MAP:         map[string]*B{"a": &B{X: "aa"}},
+		LIST:        []*B{{X: "list"}},
+		ONEOF:       &A_ONEOF_B{ONEOF_B: &B{X: "ONEOF"}},
+		LIST_ENUM:   []Enumeration{Enumeration_One},
+	}
+
+	for i := 0; i < b.N; i++ {
+		msg.ProtoReflect().Range(func(_ protoreflect.FieldDescriptor, _ protoreflect.Value) bool {
+			return true
+		})
+	}
+}
+
+func Benchmark_Range_SR(b *testing.B) {
+	msg := &A{
+		Enum:        Enumeration_Two,
+		SomeBoolean: true,
+		INT32:       2,
+		SINT32:      3,
+		UINT32:      4,
+		INT64:       5,
+		SING64:      6,
+		UINT64:      7,
+		SFIXED32:    8,
+		FIXED32:     9,
+		FLOAT:       10.1,
+		SFIXED64:    11,
+		FIXED64:     12,
+		DOUBLE:      13,
+		STRING:      "fourteen",
+		BYTES:       []byte("fifteen"),
+		MESSAGE:     &B{X: "something"},
+		MAP:         map[string]*B{"a": &B{X: "aa"}},
+		LIST:        []*B{{X: "list"}},
+		ONEOF:       &A_ONEOF_B{ONEOF_B: &B{X: "ONEOF"}},
+		LIST_ENUM:   []Enumeration{Enumeration_One},
+	}
+
+	for i := 0; i < b.N; i++ {
+		msg.slowProtoReflect().Range(func(_ protoreflect.FieldDescriptor, _ protoreflect.Value) bool {
+			return true
+		})
+	}
+}
