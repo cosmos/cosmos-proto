@@ -48,14 +48,14 @@ func (g *newFieldGen) genMutable(field *protogen.Field) {
 	case field.Oneof != nil:
 		g.genOneof(field)
 	case field.Desc.IsMap():
-		g.P("x.", field.GoName, " = make(map[", getGoType(g.GeneratedFile, field.Message.Fields[0]), "]", getGoType(g.GeneratedFile, field.Message.Fields[1]), ")")
-		g.P("return ", protoreflectPkg.Ident("ValueOfMap"), "(&", mapTypeName(field), "{m: &x.", field.GoName, "})")
+		g.P("m := make(map[", getGoType(g.GeneratedFile, field.Message.Fields[0]), "]", getGoType(g.GeneratedFile, field.Message.Fields[1]), ")")
+		g.P("return ", protoreflectPkg.Ident("ValueOfMap"), "(&", mapTypeName(field), "{m: &m})")
 	case field.Desc.IsList():
-		g.P("x.", field.GoName, " = []", getGoType(g.GeneratedFile, field), "{}")
-		g.P("return ", protoreflectPkg.Ident("ValueOfList"), "(&", listTypeName(field), "{list: &x.", field.GoName, "})")
+		g.P("list := []", getGoType(g.GeneratedFile, field), "{}")
+		g.P("return ", protoreflectPkg.Ident("ValueOfList"), "(&", listTypeName(field), "{list: &list})")
 	case field.Desc.Kind() == protoreflect.MessageKind:
-		g.P("x.", field.GoName, " = &", g.QualifiedGoIdent(field.Message.GoIdent), "{}")
-		g.P("return ", protoreflectPkg.Ident("ValueOfMessage"), "(x.", field.GoName, ".ProtoReflect())")
+		g.P("m := new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
+		g.P("return ", protoreflectPkg.Ident("ValueOfMessage"), "(m.ProtoReflect())")
 	default:
 		panic("unreachable")
 	}
@@ -66,7 +66,5 @@ func (g *newFieldGen) genOneof(field *protogen.Field) {
 		panic("newfield oneof generator should be applied only to mutable message types")
 	}
 	g.P("value := &", g.QualifiedGoIdent(field.Message.GoIdent), "{}")
-	g.P("oneofValue := &", g.QualifiedGoIdent(field.GoIdent), "{", field.GoName, ": value }")
-	g.P("x.", field.Oneof.GoName, " = oneofValue")
 	g.P("return ", protoreflectPkg.Ident("ValueOfMessage"), "(value.ProtoReflect())")
 }

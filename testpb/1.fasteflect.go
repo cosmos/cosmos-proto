@@ -677,24 +677,22 @@ func (x *fastReflection_A) NewField(fd protoreflect.FieldDescriptor) protoreflec
 	case "A.BYTES":
 		return protoreflect.ValueOfBytes(nil)
 	case "A.MESSAGE":
-		x.MESSAGE = &B{}
-		return protoreflect.ValueOfMessage(x.MESSAGE.ProtoReflect())
+		m := new(B)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "A.MAP":
-		x.MAP = make(map[string]*B)
-		return protoreflect.ValueOfMap(&_A_18_map{m: &x.MAP})
+		m := make(map[string]*B)
+		return protoreflect.ValueOfMap(&_A_18_map{m: &m})
 	case "A.LIST":
-		x.LIST = []*B{}
-		return protoreflect.ValueOfList(&_A_19_list{list: &x.LIST})
+		list := []*B{}
+		return protoreflect.ValueOfList(&_A_19_list{list: &list})
 	case "A.ONEOF_B":
 		value := &B{}
-		oneofValue := &A_ONEOF_B{ONEOF_B: value}
-		x.ONEOF = oneofValue
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "A.ONEOF_STRING":
 		return protoreflect.ValueOfString("")
 	case "A.LIST_ENUM":
-		x.LIST_ENUM = []Enumeration{}
-		return protoreflect.ValueOfList(&_A_22_list{list: &x.LIST_ENUM})
+		list := []Enumeration{}
+		return protoreflect.ValueOfList(&_A_22_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
