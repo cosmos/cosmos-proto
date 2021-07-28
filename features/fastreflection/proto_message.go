@@ -169,14 +169,11 @@ func (g *generator) genInterface() {
 }
 
 func (g *generator) genRange() {
-	g.P("// Range iterates over every populated field in an undefined order,")
-	g.P("// calling f for each field descriptor and value encountered.")
-	g.P("// Range returns immediately if f returns false.")
-	g.P("// While iterating, mutating operations may only be performed")
-	g.P("// on the current field descriptor.")
-	g.P("func (x *", g.typeName, ") Range(f func(", protoreflectPkg.Ident("FieldDescriptor"), ", ", protoreflectPkg.Ident("Value"), ") bool) {")
-	slowReflectionFallBack(g.GeneratedFile, g.message, false, "Range", "f")
-	g.P("}")
+	(&rangeGen{
+		GeneratedFile: g.GeneratedFile,
+		typeName:      g.typeName,
+		message:       g.message,
+	}).generate()
 	g.P()
 }
 
