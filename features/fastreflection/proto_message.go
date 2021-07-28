@@ -263,7 +263,7 @@ func (g *generator) genIsValid() {
 	g.P("// be preserved in marshaling or other operations.")
 
 	g.P("func (x *", g.typeName, ") IsValid() bool {")
-	slowReflectionFallBack(g.GeneratedFile, g.message, true, "IsValid")
+	g.P("return x != nil")
 	g.P("}")
 	g.P()
 }

@@ -908,7 +908,7 @@ func (x *fastReflection_A) SetUnknown(fields protoreflect.RawFields) {
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
 func (x *fastReflection_A) IsValid() bool {
-	return (*A)(x).slowProtoReflect().IsValid()
+	return x != nil
 }
 
 // ProtoMethods returns optional fast-path implementations of various operations.
@@ -1139,7 +1139,7 @@ func (x *fastReflection_B) SetUnknown(fields protoreflect.RawFields) {
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
 func (x *fastReflection_B) IsValid() bool {
-	return (*B)(x).slowProtoReflect().IsValid()
+	return x != nil
 }
 
 // ProtoMethods returns optional fast-path implementations of various operations.
