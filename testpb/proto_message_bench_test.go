@@ -279,3 +279,45 @@ func Benchmark_Descriptor_SR(b *testing.B) {
 		_ = a.slowProtoReflect().Descriptor()
 	}
 }
+
+func Benchmark_GetUnknown_FR(b *testing.B) {
+	a := &A{unknownFields: []byte("unknown")}
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_ = a.ProtoReflect().GetUnknown()
+	}
+}
+
+func Benchmark_GetUnknown_SR(b *testing.B) {
+	a := &A{unknownFields: []byte("unknown")}
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_ = a.slowProtoReflect().GetUnknown()
+	}
+}
+
+func Benchmark_SetUnknown_FR(b *testing.B) {
+	a := &A{}
+	f := []byte("unknown")
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		a.ProtoReflect().SetUnknown(f)
+	}
+}
+
+func Benchmark_SetUnknown_SR(b *testing.B) {
+	a := &A{}
+	f := []byte("unknown")
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		a.slowProtoReflect().SetUnknown(f)
+	}
+}

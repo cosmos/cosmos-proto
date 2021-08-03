@@ -907,7 +907,7 @@ func (x *fastReflection_A) WhichOneof(d protoreflect.OneofDescriptor) protorefle
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
 func (x *fastReflection_A) GetUnknown() protoreflect.RawFields {
-	return (*A)(x).slowProtoReflect().GetUnknown()
+	return x.unknownFields
 }
 
 // SetUnknown stores an entire list of unknown fields.
@@ -918,7 +918,7 @@ func (x *fastReflection_A) GetUnknown() protoreflect.RawFields {
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_A) SetUnknown(fields protoreflect.RawFields) {
-	(*A)(x).slowProtoReflect().SetUnknown(fields)
+	x.unknownFields = fields
 }
 
 // IsValid reports whether the message is valid.
@@ -1160,7 +1160,7 @@ func (x *fastReflection_B) WhichOneof(d protoreflect.OneofDescriptor) protorefle
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
 func (x *fastReflection_B) GetUnknown() protoreflect.RawFields {
-	return (*B)(x).slowProtoReflect().GetUnknown()
+	return x.unknownFields
 }
 
 // SetUnknown stores an entire list of unknown fields.
@@ -1171,7 +1171,7 @@ func (x *fastReflection_B) GetUnknown() protoreflect.RawFields {
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_B) SetUnknown(fields protoreflect.RawFields) {
-	(*B)(x).slowProtoReflect().SetUnknown(fields)
+	x.unknownFields = fields
 }
 
 // IsValid reports whether the message is valid.

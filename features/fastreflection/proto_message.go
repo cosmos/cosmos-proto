@@ -248,7 +248,7 @@ func (g *generator) genGetUnknown() {
 	g.P("// The caller may only mutate the contents of the RawFields")
 	g.P("// if the mutated bytes are stored back into the message with SetUnknown.")
 	g.P("func (x *", g.typeName, ") GetUnknown() ", protoreflectPkg.Ident("RawFields"), " {")
-	slowReflectionFallBack(g.GeneratedFile, g.message, true, "GetUnknown")
+	g.P("return x.unknownFields")
 	g.P("}")
 	g.P()
 }
@@ -262,7 +262,7 @@ func (g *generator) genSetUnknown() {
 	g.P("//")
 	g.P("// SetUnknown is a mutating operation and unsafe for concurrent use.")
 	g.P("func (x *", g.typeName, ") SetUnknown(fields ", protoreflectPkg.Ident("RawFields"), ") {")
-	slowReflectionFallBack(g.GeneratedFile, g.message, false, "SetUnknown", "fields")
+	g.P("x.unknownFields = fields")
 	g.P("}")
 	g.P()
 }
