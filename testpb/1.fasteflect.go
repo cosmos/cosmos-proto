@@ -215,17 +215,39 @@ func (x *A) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
+var md_A protoreflect.MessageDescriptor
+
+func init() {
+	file_testpb_1_proto_init()
+	md_A = File_testpb_1_proto.Messages().ByName("A")
+}
+
+var _fastReflection_A_messageType fastReflection_A_messageType
+var _ protoreflect.MessageType = fastReflection_A_messageType{}
+
+type fastReflection_A_messageType struct{}
+
+func (x fastReflection_A_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_A)(nil)
+}
+func (x fastReflection_A_messageType) New() protoreflect.Message {
+	return new(fastReflection_A)
+}
+func (x fastReflection_A_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_A
+}
+
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
 func (x *fastReflection_A) Descriptor() protoreflect.MessageDescriptor {
-	return (*A)(x).slowProtoReflect().Descriptor()
+	return md_A
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
 func (x *fastReflection_A) Type() protoreflect.MessageType {
-	return (*A)(x).slowProtoReflect().Type()
+	return _fastReflection_A_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
@@ -941,17 +963,39 @@ func (x *B) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
+var md_B protoreflect.MessageDescriptor
+
+func init() {
+	file_testpb_1_proto_init()
+	md_B = File_testpb_1_proto.Messages().ByName("B")
+}
+
+var _fastReflection_B_messageType fastReflection_B_messageType
+var _ protoreflect.MessageType = fastReflection_B_messageType{}
+
+type fastReflection_B_messageType struct{}
+
+func (x fastReflection_B_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_B)(nil)
+}
+func (x fastReflection_B_messageType) New() protoreflect.Message {
+	return new(fastReflection_B)
+}
+func (x fastReflection_B_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_B
+}
+
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
 func (x *fastReflection_B) Descriptor() protoreflect.MessageDescriptor {
-	return (*B)(x).slowProtoReflect().Descriptor()
+	return md_B
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
 func (x *fastReflection_B) Type() protoreflect.MessageType {
-	return (*B)(x).slowProtoReflect().Type()
+	return _fastReflection_B_messageType
 }
 
 // New returns a newly allocated and mutable empty message.

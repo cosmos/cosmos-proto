@@ -17,3 +17,7 @@ func fileVarName(f *protogen.File, suffix string) string {
 func MessageTypesVarName(f *FileInfo) string {
 	return fileVarName(f.File, "msgTypes")
 }
+
+func InitFunctionName(f *protogen.File) string {
+	return fileVarName(f, "init")
+}

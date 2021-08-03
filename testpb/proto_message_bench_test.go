@@ -231,3 +231,51 @@ func Benchmark_Range_SR(b *testing.B) {
 		})
 	}
 }
+
+func Benchmark_Type_FR(b *testing.B) {
+	a := &A{}
+
+	for i := 0; i < b.N; i++ {
+		_ = a.ProtoReflect().Type()
+	}
+}
+
+func Benchmark_Type_SR(b *testing.B) {
+	a := &A{}
+
+	for i := 0; i < b.N; i++ {
+		_ = a.slowProtoReflect().Type()
+	}
+}
+
+func Benchmark_New_FR(b *testing.B) {
+	a := &A{}
+
+	for i := 0; i < b.N; i++ {
+		_ = a.ProtoReflect().New()
+	}
+}
+
+func Benchmark_New_SR(b *testing.B) {
+	a := &A{}
+
+	for i := 0; i < b.N; i++ {
+		_ = a.slowProtoReflect().New()
+	}
+}
+
+func Benchmark_Descriptor_FR(b *testing.B) {
+	a := &A{}
+
+	for i := 0; i < b.N; i++ {
+		_ = a.ProtoReflect().Descriptor()
+	}
+}
+
+func Benchmark_Descriptor_SR(b *testing.B) {
+	a := &A{}
+
+	for i := 0; i < b.N; i++ {
+		_ = a.slowProtoReflect().Descriptor()
+	}
+}

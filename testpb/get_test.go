@@ -104,12 +104,12 @@ func TestGet_NoMap_NoList_NoOneof(t *testing.T) {
 		},
 
 		"sfixed64": {
-			fieldName: "SFIXED32",
+			fieldName: "SFIXED64",
 			expected:  msg.SFIXED64,
 		},
 
 		"fixed32": {
-			fieldName: "fixed32",
+			fieldName: "FIXED32",
 			expected:  msg.FIXED32,
 		},
 

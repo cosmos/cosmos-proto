@@ -20,6 +20,7 @@ func GenProtoMessage(f *protogen.File, g *protogen.GeneratedFile, message *proto
 	gen := newGenerator(f, g, message)
 	gen.generateExtraTypes()
 	gen.generateReflectionType()
+	gen.genMessageType()
 	gen.genDescriptor()
 	gen.genType()
 	gen.genNew()
@@ -43,9 +44,13 @@ func newGenerator(f *protogen.File, g *protogen.GeneratedFile, message *protogen
 		GeneratedFile: g,
 		file:          f,
 		message:       message,
-		typeName:      fmt.Sprintf("fastReflection_%s", message.GoIdent.GoName),
+		typeName:      fastReflectionTypeName(message),
 		err:           nil,
 	}
+}
+
+func fastReflectionTypeName(message *protogen.Message) string {
+	return fmt.Sprintf("fastReflection_%s", message.GoIdent.GoName)
 }
 
 type generator struct {
@@ -84,6 +89,16 @@ func (g *generator) generateListType(field *protogen.Field) {
 	(&listGen{
 		GeneratedFile: g.GeneratedFile,
 		field:         field,
+	}).generate()
+}
+
+func (g *generator) genMessageType() {
+	(&messageTypeGen{
+		typeName:        g.typeName,
+		GeneratedFile:   g.GeneratedFile,
+		message:         g.message,
+		file:            g.file,
+		messageTypeName: "",
 	}).generate()
 }
 
@@ -136,7 +151,7 @@ func (g *generator) genDescriptor() {
 	g.P("// Descriptor returns message descriptor, which contains only the protobuf")
 	g.P("// type information for the message.")
 	g.P("func (x *", g.typeName, ") Descriptor() ", protoreflectPkg.Ident("MessageDescriptor"), " {")
-	slowReflectionFallBack(g.GeneratedFile, g.message, true, "Descriptor")
+	g.P("return ", messageDescriptorName(g.message))
 	g.P("}")
 	g.P()
 }
@@ -146,7 +161,7 @@ func (g *generator) genType() {
 	g.P("// type information. If the Go type information is not needed,")
 	g.P("// it is recommended that the message descriptor be used instead.")
 	g.P("func (x *", g.typeName, ") Type() ", protoreflectPkg.Ident("MessageType"), " {")
-	slowReflectionFallBack(g.GeneratedFile, g.message, true, "Type")
+	g.P("return ", messageTypeNameVar(g.message))
 	g.P("}")
 	g.P()
 }
