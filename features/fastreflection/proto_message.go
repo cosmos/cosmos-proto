@@ -72,6 +72,13 @@ func (g *generator) generateExtraTypes() {
 			g.generateListType(field)
 		}
 	}
+
+	// generate descriptors
+	(&descGen{
+		GeneratedFile: g.GeneratedFile,
+		file:          g.file,
+		message:       g.message,
+	}).generate()
 }
 
 // generateMapType generates the fast reflection protoreflect.Map type

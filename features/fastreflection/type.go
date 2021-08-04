@@ -3,7 +3,6 @@ package fastreflection
 import (
 	"fmt"
 
-	"github.com/cosmos/cosmos-proto/features/fastreflection/copied"
 	"google.golang.org/protobuf/compiler/protogen"
 )
 
@@ -27,7 +26,6 @@ type messageTypeGen struct {
 func (g *messageTypeGen) generate() {
 	g.messageTypeName = fmt.Sprintf("%s_messageType", g.typeName)
 
-	g.genInit()
 	g.P("var ", messageTypeNameVar(g.message), " ", g.messageTypeName)
 
 	g.P("var _ ", protoreflectPkg.Ident("MessageType"), " = ", g.messageTypeName, "{}")
@@ -48,14 +46,4 @@ func (g *messageTypeGen) generate() {
 
 func messageDescriptorName(message *protogen.Message) string {
 	return fmt.Sprintf("md_%s", message.GoIdent.GoName)
-}
-
-func (g *messageTypeGen) genInit() {
-	// init is going to initialize descriptor information
-	g.P("var ", messageDescriptorName(g.message), " ", protoreflectPkg.Ident("MessageDescriptor"))
-	g.P("func init() {")
-	g.P(copied.InitFunctionName(g.file), "()")
-	g.P(messageDescriptorName(g.message), " = ", g.file.GoDescriptorIdent.GoName, ".Messages().ByName(\"", g.message.Desc.Name(), "\")")
-
-	g.P("}")
 }

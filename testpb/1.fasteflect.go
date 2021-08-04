@@ -195,6 +195,59 @@ func (x *_A_22_list) IsValid() bool {
 	return x.list != nil
 }
 
+var (
+	md_A              protoreflect.MessageDescriptor
+	fd_A_enum         protoreflect.FieldDescriptor
+	fd_A_some_boolean protoreflect.FieldDescriptor
+	fd_A_INT32        protoreflect.FieldDescriptor
+	fd_A_SINT32       protoreflect.FieldDescriptor
+	fd_A_UINT32       protoreflect.FieldDescriptor
+	fd_A_INT64        protoreflect.FieldDescriptor
+	fd_A_SING64       protoreflect.FieldDescriptor
+	fd_A_UINT64       protoreflect.FieldDescriptor
+	fd_A_SFIXED32     protoreflect.FieldDescriptor
+	fd_A_FIXED32      protoreflect.FieldDescriptor
+	fd_A_FLOAT        protoreflect.FieldDescriptor
+	fd_A_SFIXED64     protoreflect.FieldDescriptor
+	fd_A_FIXED64      protoreflect.FieldDescriptor
+	fd_A_DOUBLE       protoreflect.FieldDescriptor
+	fd_A_STRING       protoreflect.FieldDescriptor
+	fd_A_BYTES        protoreflect.FieldDescriptor
+	fd_A_MESSAGE      protoreflect.FieldDescriptor
+	fd_A_MAP          protoreflect.FieldDescriptor
+	fd_A_LIST         protoreflect.FieldDescriptor
+	fd_A_ONEOF_B      protoreflect.FieldDescriptor
+	fd_A_ONEOF_STRING protoreflect.FieldDescriptor
+	fd_A_LIST_ENUM    protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_testpb_1_proto_init()
+	md_A = File_testpb_1_proto.Messages().ByName("A")
+	fd_A_enum = md_A.Fields().ByName("enum")
+	fd_A_some_boolean = md_A.Fields().ByName("some_boolean")
+	fd_A_INT32 = md_A.Fields().ByName("INT32")
+	fd_A_SINT32 = md_A.Fields().ByName("SINT32")
+	fd_A_UINT32 = md_A.Fields().ByName("UINT32")
+	fd_A_INT64 = md_A.Fields().ByName("INT64")
+	fd_A_SING64 = md_A.Fields().ByName("SING64")
+	fd_A_UINT64 = md_A.Fields().ByName("UINT64")
+	fd_A_SFIXED32 = md_A.Fields().ByName("SFIXED32")
+	fd_A_FIXED32 = md_A.Fields().ByName("FIXED32")
+	fd_A_FLOAT = md_A.Fields().ByName("FLOAT")
+	fd_A_SFIXED64 = md_A.Fields().ByName("SFIXED64")
+	fd_A_FIXED64 = md_A.Fields().ByName("FIXED64")
+	fd_A_DOUBLE = md_A.Fields().ByName("DOUBLE")
+	fd_A_STRING = md_A.Fields().ByName("STRING")
+	fd_A_BYTES = md_A.Fields().ByName("BYTES")
+	fd_A_MESSAGE = md_A.Fields().ByName("MESSAGE")
+	fd_A_MAP = md_A.Fields().ByName("MAP")
+	fd_A_LIST = md_A.Fields().ByName("LIST")
+	fd_A_ONEOF_B = md_A.Fields().ByName("ONEOF_B")
+	fd_A_ONEOF_STRING = md_A.Fields().ByName("ONEOF_STRING")
+	fd_A_LIST_ENUM = md_A.Fields().ByName("LIST_ENUM")
+}
+
 var _ protoreflect.Message = (*fastReflection_A)(nil)
 
 type fastReflection_A A
@@ -213,13 +266,6 @@ func (x *A) slowProtoReflect() protoreflect.Message {
 		return ms
 	}
 	return mi.MessageOf(x)
-}
-
-var md_A protoreflect.MessageDescriptor
-
-func init() {
-	file_testpb_1_proto_init()
-	md_A = File_testpb_1_proto.Messages().ByName("A")
 }
 
 var _fastReflection_A_messageType fastReflection_A_messageType
@@ -267,163 +313,139 @@ func (x *fastReflection_A) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_A) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	fds := x.Descriptor().Fields()
-	var fd protoreflect.FieldDescriptor
 	if x.Enum != 0 {
-		fd = fds.ByName("enum")
 		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.Enum))
-		if !f(fd, value) {
+		if !f(fd_A_enum, value) {
 			return
 		}
 	}
 	if x.SomeBoolean != false {
-		fd = fds.ByName("some_boolean")
 		value := protoreflect.ValueOfBool(x.SomeBoolean)
-		if !f(fd, value) {
+		if !f(fd_A_some_boolean, value) {
 			return
 		}
 	}
 	if x.INT32 != int32(0) {
-		fd = fds.ByName("INT32")
 		value := protoreflect.ValueOfInt32(x.INT32)
-		if !f(fd, value) {
+		if !f(fd_A_INT32, value) {
 			return
 		}
 	}
 	if x.SINT32 != int32(0) {
-		fd = fds.ByName("SINT32")
 		value := protoreflect.ValueOfInt32(x.SINT32)
-		if !f(fd, value) {
+		if !f(fd_A_SINT32, value) {
 			return
 		}
 	}
 	if x.UINT32 != uint32(0) {
-		fd = fds.ByName("UINT32")
 		value := protoreflect.ValueOfUint32(x.UINT32)
-		if !f(fd, value) {
+		if !f(fd_A_UINT32, value) {
 			return
 		}
 	}
 	if x.INT64 != int64(0) {
-		fd = fds.ByName("INT64")
 		value := protoreflect.ValueOfInt64(x.INT64)
-		if !f(fd, value) {
+		if !f(fd_A_INT64, value) {
 			return
 		}
 	}
 	if x.SING64 != int64(0) {
-		fd = fds.ByName("SING64")
 		value := protoreflect.ValueOfInt64(x.SING64)
-		if !f(fd, value) {
+		if !f(fd_A_SING64, value) {
 			return
 		}
 	}
 	if x.UINT64 != uint64(0) {
-		fd = fds.ByName("UINT64")
 		value := protoreflect.ValueOfUint64(x.UINT64)
-		if !f(fd, value) {
+		if !f(fd_A_UINT64, value) {
 			return
 		}
 	}
 	if x.SFIXED32 != int32(0) {
-		fd = fds.ByName("SFIXED32")
 		value := protoreflect.ValueOfInt32(x.SFIXED32)
-		if !f(fd, value) {
+		if !f(fd_A_SFIXED32, value) {
 			return
 		}
 	}
 	if x.FIXED32 != uint32(0) {
-		fd = fds.ByName("FIXED32")
 		value := protoreflect.ValueOfUint32(x.FIXED32)
-		if !f(fd, value) {
+		if !f(fd_A_FIXED32, value) {
 			return
 		}
 	}
 	if x.FLOAT != float32(0) {
-		fd = fds.ByName("FLOAT")
 		value := protoreflect.ValueOfFloat32(x.FLOAT)
-		if !f(fd, value) {
+		if !f(fd_A_FLOAT, value) {
 			return
 		}
 	}
 	if x.SFIXED64 != int64(0) {
-		fd = fds.ByName("SFIXED64")
 		value := protoreflect.ValueOfInt64(x.SFIXED64)
-		if !f(fd, value) {
+		if !f(fd_A_SFIXED64, value) {
 			return
 		}
 	}
 	if x.FIXED64 != uint64(0) {
-		fd = fds.ByName("FIXED64")
 		value := protoreflect.ValueOfUint64(x.FIXED64)
-		if !f(fd, value) {
+		if !f(fd_A_FIXED64, value) {
 			return
 		}
 	}
 	if x.DOUBLE != float64(0) {
-		fd = fds.ByName("DOUBLE")
 		value := protoreflect.ValueOfFloat64(x.DOUBLE)
-		if !f(fd, value) {
+		if !f(fd_A_DOUBLE, value) {
 			return
 		}
 	}
 	if x.STRING != "" {
-		fd = fds.ByName("STRING")
 		value := protoreflect.ValueOfString(x.STRING)
-		if !f(fd, value) {
+		if !f(fd_A_STRING, value) {
 			return
 		}
 	}
 	if len(x.BYTES) != 0 {
-		fd = fds.ByName("BYTES")
 		value := protoreflect.ValueOfBytes(x.BYTES)
-		if !f(fd, value) {
+		if !f(fd_A_BYTES, value) {
 			return
 		}
 	}
 	if x.MESSAGE != nil {
-		fd = fds.ByName("MESSAGE")
 		value := protoreflect.ValueOfMessage(x.MESSAGE.ProtoReflect())
-		if !f(fd, value) {
+		if !f(fd_A_MESSAGE, value) {
 			return
 		}
 	}
 	if len(x.MAP) != 0 {
-		fd = fds.ByName("MAP")
 		value := protoreflect.ValueOfMap(&_A_18_map{m: &x.MAP})
-		if !f(fd, value) {
+		if !f(fd_A_MAP, value) {
 			return
 		}
 	}
 	if len(x.LIST) != 0 {
-		fd = fds.ByName("LIST")
 		value := protoreflect.ValueOfList(&_A_19_list{list: &x.LIST})
-		if !f(fd, value) {
+		if !f(fd_A_LIST, value) {
 			return
 		}
 	}
 	if x.ONEOF != nil {
 		switch o := x.ONEOF.(type) {
 		case *A_ONEOF_B:
-			fd = fds.ByName("ONEOF_B")
 			v := o.ONEOF_B
 			value := protoreflect.ValueOfMessage(v.ProtoReflect())
-			if !f(fd, value) {
+			if !f(fd_A_ONEOF_B, value) {
 				return
 			}
 		case *A_ONEOF_STRING:
-			fd = fds.ByName("ONEOF_STRING")
 			v := o.ONEOF_STRING
 			value := protoreflect.ValueOfString(v)
-			if !f(fd, value) {
+			if !f(fd_A_ONEOF_B, value) {
 				return
 			}
 		}
 	}
 	if len(x.LIST_ENUM) != 0 {
-		fd = fds.ByName("LIST_ENUM")
 		value := protoreflect.ValueOfList(&_A_22_list{list: &x.LIST_ENUM})
-		if !f(fd, value) {
+		if !f(fd_A_LIST_ENUM, value) {
 			return
 		}
 	}
@@ -943,6 +965,17 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 	return (*A)(x).slowProtoReflect().ProtoMethods()
 }
 
+var (
+	md_B   protoreflect.MessageDescriptor
+	fd_B_x protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_testpb_1_proto_init()
+	md_B = File_testpb_1_proto.Messages().ByName("B")
+	fd_B_x = md_B.Fields().ByName("x")
+}
+
 var _ protoreflect.Message = (*fastReflection_B)(nil)
 
 type fastReflection_B B
@@ -961,13 +994,6 @@ func (x *B) slowProtoReflect() protoreflect.Message {
 		return ms
 	}
 	return mi.MessageOf(x)
-}
-
-var md_B protoreflect.MessageDescriptor
-
-func init() {
-	file_testpb_1_proto_init()
-	md_B = File_testpb_1_proto.Messages().ByName("B")
 }
 
 var _fastReflection_B_messageType fastReflection_B_messageType
@@ -1015,12 +1041,9 @@ func (x *fastReflection_B) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_B) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	fds := x.Descriptor().Fields()
-	var fd protoreflect.FieldDescriptor
 	if x.X != "" {
-		fd = fds.ByName("x")
 		value := protoreflect.ValueOfString(x.X)
-		if !f(fd, value) {
+		if !f(fd_B_x, value) {
 			return
 		}
 	}
