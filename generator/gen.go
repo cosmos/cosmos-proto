@@ -71,6 +71,7 @@ var (
 	protojsonPackage     goImportPath = protogen.GoImportPath("google.golang.org/protobuf/encoding/protojson")
 	protoreflectPackage  goImportPath = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 	protoregistryPackage goImportPath = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoregistry")
+	errorsPackage        goImportPath = protogen.GoImportPath("errors")
 )
 
 type goImportPath interface {
@@ -83,6 +84,9 @@ func GenerateProtocGenGo(plugin *protogen.Plugin, g *GeneratedFile, file *protog
 	f := newFileInfo(file)
 	genPackage(g, file.GoPackageName, file)
 	genTopLevelVars(g, file.Messages)
+	for _, enum := range f.allEnums {
+		genEnum(g, f, enum)
+	}
 	for i, msg := range file.Messages {
 		genMsgStruct(g, msg, i)
 		g.P()
@@ -92,18 +96,121 @@ func GenerateProtocGenGo(plugin *protogen.Plugin, g *GeneratedFile, file *protog
 	return g
 }
 
-//func genFileProtoTypes(g *GeneratedFile, file *protogen.File) {
-//	g.P("var File_", file.GeneratedFilenamePrefix,"_proto ", protoreflectPackage.Ident("FileDescriptor"))
-//	g.P("var file_", file.GeneratedFilenamePrefix,"_proto_msgTypes = make([]", protoimplPackage.Ident("MessageInfo"), ", ", len(file.Messages), ")")
-//	g.P("var file_", file.GeneratedFilenamePrefix, "_proto_goTypes = []interface{}{")
-//	for i, msg := range file.Messages {
-//		g.P("(*", msg.GoIdent.GoName, ")(nil), // ", i, ": cosmos.proto.", msg.GoIdent.GoName)
-//	}
-//	if anySeen {
-//		g.P(`(*any.Any)(nil), // `,len(file.Messages), `: google.protobuf.Any`)
-//	}
-//	g.P("}")
-//}
+// trailingComment is like protogen.Comments, but lacks a trailing newline.
+type trailingComment protogen.Comments
+
+func genEnum(g *GeneratedFile, f *fileInfo, e *enumInfo) {
+	// Enum type declaration.
+	g.Annotate(e.GoIdent.GoName, e.Location)
+	leadingComments := appendDeprecationSuffix(e.Comments.Leading,
+		e.Desc.Options().(*descriptorpb.EnumOptions).GetDeprecated())
+	g.P(leadingComments,
+		"type ", e.GoIdent, " int32")
+
+	// Enum value constants.
+	g.P("const (")
+	for _, value := range e.Values {
+		g.Annotate(value.GoIdent.GoName, value.Location)
+		leadingComments := appendDeprecationSuffix(value.Comments.Leading,
+			value.Desc.Options().(*descriptorpb.EnumValueOptions).GetDeprecated())
+		g.P(leadingComments,
+			value.GoIdent, " ", e.GoIdent, " = ", value.Desc.Number(),
+			trailingComment(value.Comments.Trailing))
+	}
+	g.P(")")
+	g.P()
+
+	// Enum value maps.
+	g.P("// Enum value maps for ", e.GoIdent, ".")
+	g.P("var (")
+	g.P(e.GoIdent.GoName+"_name", " = map[int32]string{")
+	for _, value := range e.Values {
+		duplicate := ""
+		if value.Desc != e.Desc.Values().ByNumber(value.Desc.Number()) {
+			duplicate = "// Duplicate value: "
+		}
+		g.P(duplicate, value.Desc.Number(), ": ", strconv.Quote(string(value.Desc.Name())), ",")
+	}
+	g.P("}")
+	g.P(e.GoIdent.GoName+"_value", " = map[string]int32{")
+	for _, value := range e.Values {
+		g.P(strconv.Quote(string(value.Desc.Name())), ": ", value.Desc.Number(), ",")
+	}
+	g.P("}")
+	g.P(")")
+	g.P()
+
+	// Enum method.
+	//
+	// NOTE: A pointer value is needed to represent presence in proto2.
+	// Since a proto2 message can reference a proto3 enum, it is useful to
+	// always generate this method (even on proto3 enums) to support that case.
+	g.P("func (x ", e.GoIdent, ") Enum() *", e.GoIdent, " {")
+	g.P("p := new(", e.GoIdent, ")")
+	g.P("*p = x")
+	g.P("return p")
+	g.P("}")
+	g.P()
+
+	// String method.
+	g.P("func (x ", e.GoIdent, ") String() string {")
+	g.P("return ", protoimplPackage.Ident("X"), ".EnumStringOf(x.Descriptor(), ", protoreflectPackage.Ident("EnumNumber"), "(x))")
+	g.P("}")
+	g.P()
+
+	genEnumReflectMethods(g, f, e)
+
+	// UnmarshalJSON method.
+	if e.genJSONMethod && e.Desc.Syntax() == protoreflect.Proto2 {
+		g.P("// Deprecated: Do not use.")
+		g.P("func (x *", e.GoIdent, ") UnmarshalJSON(b []byte) error {")
+		g.P("num, err := ", protoimplPackage.Ident("X"), ".UnmarshalJSONEnum(x.Descriptor(), b)")
+		g.P("if err != nil {")
+		g.P("return err")
+		g.P("}")
+		g.P("*x = ", e.GoIdent, "(num)")
+		g.P("return nil")
+		g.P("}")
+		g.P()
+	}
+
+	// EnumDescriptor method.
+	if e.genRawDescMethod {
+		var indexes []string
+		for i := 1; i < len(e.Location.Path); i += 2 {
+			indexes = append(indexes, strconv.Itoa(int(e.Location.Path[i])))
+		}
+		g.P("// Deprecated: Use ", e.GoIdent, ".Descriptor instead.")
+		g.P("func (", e.GoIdent, ") EnumDescriptor() ([]byte, []int) {")
+		g.P("return ", rawDescVarName(f), "GZIP(), []int{", strings.Join(indexes, ","), "}")
+		g.P("}")
+		g.P()
+		f.needRawDesc = true
+	}
+}
+
+func genEnumReflectMethods(g *GeneratedFile, f *fileInfo, e *enumInfo) {
+	idx := f.allEnumsByPtr[e]
+	typesVar := enumTypesVarName(f)
+
+	// Descriptor method.
+	g.P("func (", e.GoIdent, ") Descriptor() ", protoreflectPackage.Ident("EnumDescriptor"), " {")
+	g.P("return ", typesVar, "[", idx, "].Descriptor()")
+	g.P("}")
+	g.P()
+
+	// Type method.
+	g.P("func (", e.GoIdent, ") Type() ", protoreflectPackage.Ident("EnumType"), " {")
+	g.P("return &", typesVar, "[", idx, "]")
+	g.P("}")
+	g.P()
+
+	// Number method.
+	g.P("func (x ", e.GoIdent, ") Number() ", protoreflectPackage.Ident("EnumNumber"), " {")
+	g.P("return ", protoreflectPackage.Ident("EnumNumber"), "(x)")
+	g.P("}")
+	g.P()
+}
 
 func genPackage(g *GeneratedFile, packageName protogen.GoPackageName, file *protogen.File) {
 	/*
@@ -253,11 +360,10 @@ func getType(g *GeneratedFile, field *protogen.Field) (goType string, pointer bo
 	switch {
 	case field.Desc.IsList():
 		return "[]" + goType, false
-		// we dont use maps
-		//case field.Desc.IsMap():
-		//	keyType, _ := fieldGoType(g, f, field.Message.Fields[0])
-		//	valType, _ := fieldGoType(g, f, field.Message.Fields[1])
-		//	return fmt.Sprintf("map[%v]%v", keyType, valType), false
+	case field.Desc.IsMap():
+		keyType, _ := getType(g, field.Message.Fields[0])
+		valType, _ := getType(g, field.Message.Fields[1])
+		return fmt.Sprintf("map[%v]%v", keyType, valType), false
 	}
 	return goType, pointer
 }
@@ -1009,4 +1115,15 @@ func isTrackedMessage(m *messageInfo) (tracked bool) {
 func newExtensionInfo(f *fileInfo, extension *protogen.Extension) *extensionInfo {
 	x := &extensionInfo{Extension: extension}
 	return x
+}
+
+// appendDeprecationSuffix optionally appends a deprecation notice as a suffix.
+func appendDeprecationSuffix(prefix protogen.Comments, deprecated bool) protogen.Comments {
+	if !deprecated {
+		return prefix
+	}
+	if prefix != "" {
+		prefix += "\n"
+	}
+	return prefix + " Deprecated: Do not use.\n"
 }
