@@ -91,7 +91,7 @@ func TestUnmarshalProtoMethod(t *testing.T) {
 
 func TestReflectMethodGet(t *testing.T) {
 	foo := examples.Bar{Baz: "Qux"}
-	bz,err := foo.Marshal()
+	bz, err := foo.Marshal()
 	require.NoError(t, err)
 	var m protoreflect.Message = foo
 	methods := m.ProtoMethods()

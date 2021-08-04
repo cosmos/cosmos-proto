@@ -4,10 +4,16 @@ package cosmos.proto;
 option go_package = "github.com/cosmos/cosmos-proto/examples";
 
 message Bar {
-  string baz = 1;
+  repeated string qux = 1;
+  string baz = 2;
 }
 
+
 message Hello {
-  string world = 1;
-  bool universe = 2;
+  enum n {
+    foonum = 0;
+    barnum = 1;
+  }
+  string world = 2;
+  bool universe = 3;
 }
