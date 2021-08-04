@@ -298,7 +298,7 @@ func (g *generator) genProtoMethods() {
 	g.P(`// "google.golang.org/protobuf/runtime/protoiface".Methods.`)
 	g.P("// Consult the protoiface package documentation for details.")
 	g.P("func (x *", g.typeName, ") ProtoMethods() *", protoifacePkg.Ident("Methods"), " {")
-	slowReflectionFallBack(g.GeneratedFile, g.message, true, "ProtoMethods")
+	g.P("return nil")
 	g.P("}")
 }
 

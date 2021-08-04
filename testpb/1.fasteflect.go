@@ -962,7 +962,7 @@ func (x *fastReflection_A) IsValid() bool {
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
 func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
-	return (*A)(x).slowProtoReflect().ProtoMethods()
+	return nil
 }
 
 var (
@@ -1216,5 +1216,5 @@ func (x *fastReflection_B) IsValid() bool {
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
 func (x *fastReflection_B) ProtoMethods() *protoiface.Methods {
-	return (*B)(x).slowProtoReflect().ProtoMethods()
+	return nil
 }
