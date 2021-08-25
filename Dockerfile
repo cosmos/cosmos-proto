@@ -14,7 +14,7 @@ RUN protoc --version
 RUN GO111MODULE=on go get google.golang.org/protobuf/cmd/protoc-gen-go google.golang.org/grpc/cmd/protoc-gen-go-grpc
 
 WORKDIR /build
-COPY . ./
+COPY . .
 
 RUN go build -o protoc-gen-go-pulsar ./cmd/protoc-gen-go-pulsar
 RUN go build -o protoc-gen-go-fasteflection ./cmd/protoc-gen-go-fastreflection
