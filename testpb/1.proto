@@ -32,6 +32,7 @@ message A {
     string ONEOF_STRING = 21;
   };
   repeated Enumeration LIST_ENUM = 22;
+  repeated int64 NUMBERS = 23;
 }
 
 message B {

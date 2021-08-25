@@ -2,7 +2,6 @@ package testpb
 
 import (
 	fmt "fmt"
-
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -195,6 +194,52 @@ func (x *_A_22_list) IsValid() bool {
 	return x.list != nil
 }
 
+var _ protoreflect.List = (*_A_23_list)(nil)
+
+type _A_23_list struct {
+	list *[]int64
+}
+
+func (x *_A_23_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_A_23_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfInt64((*x.list)[i])
+}
+
+func (x *_A_23_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Int()
+	concreteValue := valueUnwrapped
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_A_23_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Int()
+	concreteValue := valueUnwrapped
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_A_23_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message A at list field NUMBERS as it is not of Message kind"))
+}
+
+func (x *_A_23_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_A_23_list) NewElement() protoreflect.Value {
+	v := int64(0)
+	return protoreflect.ValueOfInt64(v)
+}
+
+func (x *_A_23_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
 	md_A              protoreflect.MessageDescriptor
 	fd_A_enum         protoreflect.FieldDescriptor
@@ -219,6 +264,7 @@ var (
 	fd_A_ONEOF_B      protoreflect.FieldDescriptor
 	fd_A_ONEOF_STRING protoreflect.FieldDescriptor
 	fd_A_LIST_ENUM    protoreflect.FieldDescriptor
+	fd_A_NUMBERS      protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -246,6 +292,7 @@ func init() {
 	fd_A_ONEOF_B = md_A.Fields().ByName("ONEOF_B")
 	fd_A_ONEOF_STRING = md_A.Fields().ByName("ONEOF_STRING")
 	fd_A_LIST_ENUM = md_A.Fields().ByName("LIST_ENUM")
+	fd_A_NUMBERS = md_A.Fields().ByName("NUMBERS")
 }
 
 var _ protoreflect.Message = (*fastReflection_A)(nil)
@@ -449,6 +496,12 @@ func (x *fastReflection_A) Range(f func(protoreflect.FieldDescriptor, protorefle
 			return
 		}
 	}
+	if len(x.NUMBERS) != 0 {
+		value := protoreflect.ValueOfList(&_A_23_list{list: &x.NUMBERS})
+		if !f(fd_A_NUMBERS, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -508,6 +561,8 @@ func (x *fastReflection_A) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.ONEOF != nil
 	case "A.LIST_ENUM":
 		return len(x.LIST_ENUM) != 0
+	case "A.NUMBERS":
+		return len(x.NUMBERS) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -568,6 +623,8 @@ func (x *fastReflection_A) Clear(fd protoreflect.FieldDescriptor) {
 		x.ONEOF = nil
 	case "A.LIST_ENUM":
 		x.LIST_ENUM = nil
+	case "A.NUMBERS":
+		x.NUMBERS = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -669,6 +726,12 @@ func (x *fastReflection_A) Get(descriptor protoreflect.FieldDescriptor) protoref
 		}
 		listValue := &_A_22_list{list: &x.LIST_ENUM}
 		return protoreflect.ValueOfList(listValue)
+	case "A.NUMBERS":
+		if len(x.NUMBERS) == 0 {
+			return protoreflect.ValueOfList(&_A_23_list{})
+		}
+		listValue := &_A_23_list{list: &x.NUMBERS}
+		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -741,6 +804,10 @@ func (x *fastReflection_A) Set(fd protoreflect.FieldDescriptor, value protorefle
 		lv := value.List()
 		clv := lv.(*_A_22_list)
 		x.LIST_ENUM = *clv.list
+	case "A.NUMBERS":
+		lv := value.List()
+		clv := lv.(*_A_23_list)
+		x.NUMBERS = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -799,6 +866,12 @@ func (x *fastReflection_A) Mutable(fd protoreflect.FieldDescriptor) protoreflect
 			x.LIST_ENUM = []Enumeration{}
 		}
 		value := &_A_22_list{list: &x.LIST_ENUM}
+		return protoreflect.ValueOfList(value)
+	case "A.NUMBERS":
+		if x.NUMBERS == nil {
+			x.NUMBERS = []int64{}
+		}
+		value := &_A_23_list{list: &x.NUMBERS}
 		return protoreflect.ValueOfList(value)
 	case "A.enum":
 		panic(fmt.Errorf("field enum of message A is not mutable"))
@@ -896,6 +969,9 @@ func (x *fastReflection_A) NewField(fd protoreflect.FieldDescriptor) protoreflec
 	case "A.LIST_ENUM":
 		list := []Enumeration{}
 		return protoreflect.ValueOfList(&_A_22_list{list: &list})
+	case "A.NUMBERS":
+		list := []int64{}
+		return protoreflect.ValueOfList(&_A_23_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
