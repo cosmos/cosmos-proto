@@ -7,6 +7,28 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
+func TestGenericList(t *testing.T) {
+	msg := _A_19_list{list: &[]*B{{X: "hello"}, {X: "world"}}}
+
+	genericList := make([]interface{}, 0, msg.Len())
+	for _, v := range *msg.list {
+		genericList = append(genericList, v)
+	}
+
+	genericMsg := _A_19_ListWrapper{GenericList{&genericList}}
+
+	if genericMsg.Len() != msg.Len() {
+		t.Fatal("generic message length was not equal to msg length")
+	}
+
+	if !genericMsg.IsValid() {
+		t.Fatal("generic msg isnt valid")
+	}
+
+	// something := genericMsg.Get(0)
+	// fmt.Println(something) panics atm.
+}
+
 func TestGet_NoMap_NoList_NoOneof(t *testing.T) {
 	msg := &A{
 		Enum:        Enumeration_Two,

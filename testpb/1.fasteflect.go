@@ -103,6 +103,10 @@ type _A_19_list struct {
 	list *[]*B
 }
 
+type _A_19_ListWrapper struct {
+	GenericList
+}
+
 func (x *_A_19_list) Len() int {
 	if x.list == nil {
 		return 0
