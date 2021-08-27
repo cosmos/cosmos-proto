@@ -104,7 +104,7 @@ type _A_19_list struct {
 }
 
 type _A_19_ListWrapper struct {
-	GenericList
+	ProtoListWrapper
 }
 
 func (x *_A_19_list) Len() int {
@@ -202,6 +202,10 @@ var _ protoreflect.List = (*_A_23_list)(nil)
 
 type _A_23_list struct {
 	list *[]int64
+}
+
+func (x *_A_23_list) GetList() *[]int64 {
+	return x.list
 }
 
 func (x *_A_23_list) Len() int {

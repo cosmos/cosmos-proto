@@ -8,25 +8,60 @@ import (
 )
 
 func TestGenericList(t *testing.T) {
-	msg := _A_19_list{list: &[]*B{{X: "hello"}, {X: "world"}}}
 
-	genericList := make([]interface{}, 0, msg.Len())
-	for _, v := range *msg.list {
-		genericList = append(genericList, v)
+	testCases := []struct {
+		name   string
+		msg    *_A_23_list
+		expErr bool
+	}{
+		{
+			name: "int64 list",
+			msg:  &_A_23_list{list: &[]int64{1, 2, 3}},
+		},
 	}
 
-	genericMsg := _A_19_ListWrapper{GenericList{&genericList}}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
 
-	if genericMsg.Len() != msg.Len() {
-		t.Fatal("generic message length was not equal to msg length")
+			// make the generic list from original msg
+			genericList := make([]interface{}, 0, len(*tc.msg.list))
+			for _, v := range *tc.msg.list {
+				genericList = append(genericList, v)
+			}
+
+			// wrap it
+			genericMsg := ProtoListWrapper{list: &genericList}
+
+			genericVal := genericMsg.Get(0)
+			actualVal := (*tc.msg.list)[0]
+
+			if genericVal.Int() != actualVal {
+				t.Fatal("generic did not equal actual")
+			}
+		})
 	}
-
-	if !genericMsg.IsValid() {
-		t.Fatal("generic msg isnt valid")
-	}
-
-	// something := genericMsg.Get(0)
-	// fmt.Println(something) panics atm.
+	//msg := _A_19_list{list: &[]*B{{X: "hello"}, {X: "world"}}}
+	//
+	//genericList := make([]interface{}, 0, msg.Len())
+	//for _, v := range *msg.list {
+	//	genericList = append(genericList, v)
+	//}
+	//
+	//genericMsg := _A_19_ListWrapper{ProtoListWrapper{&genericList}}
+	//
+	//if genericMsg.Len() != msg.Len() {
+	//	t.Fatal("generic message length was not equal to msg length")
+	//}
+	//
+	//if !genericMsg.IsValid() {
+	//	t.Fatal("generic msg isnt valid")
+	//}
+	//
+	//thing := msg.Get(0)
+	//fmt.Println(thing)
+	//
+	//something := genericMsg.Get(0)
+	//fmt.Println(something)
 }
 
 func TestGet_NoMap_NoList_NoOneof(t *testing.T) {
