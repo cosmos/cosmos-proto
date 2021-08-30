@@ -10,13 +10,20 @@ import (
 func TestGenericList(t *testing.T) {
 
 	testCases := []struct {
-		name   string
-		msg    *_A_23_list
-		expErr bool
+		name      string
+		msg       *_A_23_list
+		checkFunc func(v1, v2 protoreflect.Value) bool
+		expErr    bool
 	}{
 		{
 			name: "int64 list",
 			msg:  &_A_23_list{list: &[]int64{1, 2, 3}},
+			checkFunc: func(v1, v2 protoreflect.Value) bool {
+				if v1.Int() != v2.Int() {
+					return false
+				}
+				return true
+			},
 		},
 	}
 
@@ -33,10 +40,12 @@ func TestGenericList(t *testing.T) {
 			genericMsg := ProtoListWrapper{list: &genericList}
 
 			genericVal := genericMsg.Get(0)
-			actualVal := (*tc.msg.list)[0]
-
-			if genericVal.Int() != actualVal {
-				t.Fatal("generic did not equal actual")
+			actualVal := protoreflect.ValueOf((*tc.msg.list)[0])
+			if genericMsg.Len() != len(*tc.msg.list) {
+				t.Fatal("list lengths were not equal")
+			}
+			if !tc.checkFunc(genericVal, actualVal) {
+				t.Fatal("values were not equal")
 			}
 		})
 	}
