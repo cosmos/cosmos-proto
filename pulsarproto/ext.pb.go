@@ -7,27 +7,27 @@
 package vtproto
 
 import (
-protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-descriptorpb "google.golang.org/protobuf/types/descriptorpb"
-reflect "reflect"
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	descriptorpb "google.golang.org/protobuf/types/descriptorpb"
+	reflect "reflect"
 )
 
 const (
 	// Verify that this generated code is sufficiently up-to-date.
-	_ = protoimpl.EnforceVersion(20 - protoimpl.MinVersion)
+	_	= protoimpl.EnforceVersion(20 - protoimpl.MinVersion)
 	// Verify that runtime/protoimpl is sufficiently up-to-date.
-	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
+	_	= protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
 var file_github_com_planetscale_vtprotobuf_vtproto_ext_proto_extTypes = []protoimpl.ExtensionInfo{
 	{
-		ExtendedType:  (*descriptorpb.MessageOptions)(nil),
-		ExtensionType: (*bool)(nil),
-		Field:         64101,
-		Name:          "vtproto.mempool",
-		Tag:           "varint,64101,opt,name=mempool",
-		Filename:      "github.com/planetscale/vtprotobuf/vtproto/ext.proto",
+		ExtendedType:	(*descriptorpb.MessageOptions)(nil),
+		ExtensionType:	(*bool)(nil),
+		Field:		64101,
+		Name:		"vtproto.mempool",
+		Tag:		"varint,64101,opt,name=mempool",
+		Filename:	"github.com/planetscale/vtprotobuf/vtproto/ext.proto",
 	},
 }
 
@@ -58,18 +58,18 @@ var file_github_com_planetscale_vtprotobuf_vtproto_ext_proto_rawDesc = []byte{
 }
 
 var file_github_com_planetscale_vtprotobuf_vtproto_ext_proto_goTypes = []interface{}{
-	(*descriptorpb.MessageOptions)(nil), // 0: google.protobuf.MessageOptions
+	(*descriptorpb.MessageOptions)(nil),	// 0: google.protobuf.MessageOptions
 }
 var file_github_com_planetscale_vtprotobuf_vtproto_ext_proto_depIdxs = []int32{
-	0, // 0: vtproto.mempool:extendee -> google.protobuf.MessageOptions
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	0, // [0:1] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0,	// 0: vtproto.mempool:extendee -> google.protobuf.MessageOptions
+	1,	// [1:1] is the sub-list for method output_type
+	1,	// [1:1] is the sub-list for method input_type
+	1,	// [1:1] is the sub-list for extension type_name
+	0,	// [0:1] is the sub-list for extension extendee
+	0,	// [0:0] is the sub-list for field type_name
 }
 
-func init() { file_github_com_planetscale_vtprotobuf_vtproto_ext_proto_init() }
+func init()	{ file_github_com_planetscale_vtprotobuf_vtproto_ext_proto_init() }
 func file_github_com_planetscale_vtprotobuf_vtproto_ext_proto_init() {
 	if File_github_com_planetscale_vtprotobuf_vtproto_ext_proto != nil {
 		return
@@ -77,16 +77,16 @@ func file_github_com_planetscale_vtprotobuf_vtproto_ext_proto_init() {
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
-			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_github_com_planetscale_vtprotobuf_vtproto_ext_proto_rawDesc,
-			NumEnums:      0,
-			NumMessages:   0,
-			NumExtensions: 1,
-			NumServices:   0,
+			GoPackagePath:	reflect.TypeOf(x{}).PkgPath(),
+			RawDescriptor:	file_github_com_planetscale_vtprotobuf_vtproto_ext_proto_rawDesc,
+			NumEnums:	0,
+			NumMessages:	0,
+			NumExtensions:	1,
+			NumServices:	0,
 		},
-		GoTypes:           file_github_com_planetscale_vtprotobuf_vtproto_ext_proto_goTypes,
-		DependencyIndexes: file_github_com_planetscale_vtprotobuf_vtproto_ext_proto_depIdxs,
-		ExtensionInfos:    file_github_com_planetscale_vtprotobuf_vtproto_ext_proto_extTypes,
+		GoTypes:		file_github_com_planetscale_vtprotobuf_vtproto_ext_proto_goTypes,
+		DependencyIndexes:	file_github_com_planetscale_vtprotobuf_vtproto_ext_proto_depIdxs,
+		ExtensionInfos:		file_github_com_planetscale_vtprotobuf_vtproto_ext_proto_extTypes,
 	}.Build()
 	File_github_com_planetscale_vtprotobuf_vtproto_ext_proto = out.File
 	file_github_com_planetscale_vtprotobuf_vtproto_ext_proto_rawDesc = nil
