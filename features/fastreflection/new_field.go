@@ -1,12 +1,13 @@
 package fastreflection
 
 import (
+	"github.com/cosmos/cosmos-proto/generator"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 type newFieldGen struct {
-	*protogen.GeneratedFile
+	*generator.GeneratedFile
 	typeName string
 	message  *protogen.Message
 }
@@ -63,7 +64,7 @@ func (g *newFieldGen) genMutable(field *protogen.Field) {
 
 func (g *newFieldGen) genOneof(field *protogen.Field) {
 	if field.Desc.Kind() != protoreflect.MessageKind {
-		panic("newfield oneof generator should be applied only to mutable message types")
+		panic("newfield oneof fastGenerator should be applied only to mutable message types")
 	}
 	g.P("value := &", g.QualifiedGoIdent(field.Message.GoIdent), "{}")
 	g.P("return ", protoreflectPkg.Ident("ValueOfMessage"), "(value.ProtoReflect())")

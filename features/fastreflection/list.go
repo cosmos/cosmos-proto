@@ -2,13 +2,14 @@ package fastreflection
 
 import (
 	"fmt"
+	"github.com/cosmos/cosmos-proto/generator"
 
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 type listGen struct {
-	*protogen.GeneratedFile
+	*generator.GeneratedFile
 	field *protogen.Field
 
 	typeName string
@@ -148,7 +149,7 @@ func listTypeName(field *protogen.Field) string {
 	return fmt.Sprintf("_%s_%d_list", field.Parent.GoIdent.GoName, field.Desc.Number())
 }
 
-func getGoType(g *protogen.GeneratedFile, field *protogen.Field) (goType string) {
+func getGoType(g *generator.GeneratedFile, field *protogen.Field) (goType string) {
 	if field.Desc.IsWeak() {
 		return "struct{}"
 	}
@@ -240,7 +241,7 @@ func valueUnwrapper(kind protoreflect.Kind) string {
 	}
 }
 
-func genPrefValueToGoValue(g *protogen.GeneratedFile, field *protogen.Field, inputName string, outputName string) string {
+func genPrefValueToGoValue(g *generator.GeneratedFile, field *protogen.Field, inputName string, outputName string) string {
 
 	unwrapperFunc := valueUnwrapper(field.Desc.Kind())
 	unwrapperVar := fmt.Sprintf("%sUnwrapped", inputName)
@@ -263,7 +264,7 @@ func genPrefValueToGoValue(g *protogen.GeneratedFile, field *protogen.Field, inp
 	return outputName
 }
 
-func zeroValueForField(g *protogen.GeneratedFile, field *protogen.Field) string {
+func zeroValueForField(g *generator.GeneratedFile, field *protogen.Field) string {
 	switch field.Desc.Kind() {
 	case protoreflect.BoolKind:
 		return "false"

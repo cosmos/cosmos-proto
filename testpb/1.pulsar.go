@@ -2,7 +2,6 @@ package testpb
 
 import (
 	fmt "fmt"
-
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -955,7 +954,7 @@ func (x *fastReflection_A) IsValid() bool {
 	return x != nil
 }
 
-// ProtoMethods returns optional fast-path implementations of various operations.
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
 // This method may return nil.
 //
 // The returned methods type is identical to
@@ -1209,7 +1208,7 @@ func (x *fastReflection_B) IsValid() bool {
 	return x != nil
 }
 
-// ProtoMethods returns optional fast-path implementations of various operations.
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
 // This method may return nil.
 //
 // The returned methods type is identical to

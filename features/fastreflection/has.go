@@ -1,6 +1,7 @@
 package fastreflection
 
 import (
+	"github.com/cosmos/cosmos-proto/generator"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
@@ -13,7 +14,7 @@ import (
 // if oneof: oneof != nil (if oneof is scalar do we need to check it??)
 // if bytes: len(bytes) != 0
 type hasGen struct {
-	*protogen.GeneratedFile
+	*generator.GeneratedFile
 	typeName string
 	message  *protogen.Message
 }

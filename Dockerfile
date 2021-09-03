@@ -17,9 +17,7 @@ WORKDIR /build
 COPY . .
 
 RUN go build -o protoc-gen-go-pulsar ./cmd/protoc-gen-go-pulsar
-RUN go build -o protoc-gen-go-fasteflection ./cmd/protoc-gen-go-fastreflection
 
 WORKDIR /codegen
 
 RUN mv /build/protoc-gen-go-pulsar /usr/bin/protoc-gen-go-pulsar
-RUN mv /build/protoc-gen-go-fasteflection /usr/bin/protoc-gen-go-fasteflection

@@ -2,13 +2,14 @@ package fastreflection
 
 import (
 	"fmt"
+	"github.com/cosmos/cosmos-proto/generator"
 
 	"github.com/cosmos/cosmos-proto/features/fastreflection/copied"
 	"google.golang.org/protobuf/compiler/protogen"
 )
 
 type descGen struct {
-	*protogen.GeneratedFile
+	*generator.GeneratedFile
 	file    *protogen.File
 	message *protogen.Message
 }
