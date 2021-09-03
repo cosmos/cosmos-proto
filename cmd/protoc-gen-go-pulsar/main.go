@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	_ "github.com/cosmos/cosmos-proto/features/fastreflection"
 	_ "github.com/cosmos/cosmos-proto/features/grpc"
 	_ "github.com/cosmos/cosmos-proto/features/marshal"
 	_ "github.com/cosmos/cosmos-proto/features/pool"
@@ -64,6 +65,7 @@ func generateAllFiles(plugin *protogen.Plugin, featureNames []string, poolable O
 		}
 
 		gf := plugin.NewGeneratedFile(file.GeneratedFilenamePrefix+".pulsar.go", file.GoImportPath)
+		gf.P("package ", file.GoPackageName)
 		if !gen.GenerateFile(plugin, gf, file) {
 			gf.Skip()
 		}
