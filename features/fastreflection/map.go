@@ -2,13 +2,14 @@ package fastreflection
 
 import (
 	"fmt"
+	"github.com/cosmos/cosmos-proto/generator"
 
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 type mapGen struct {
-	*protogen.GeneratedFile
+	*generator.GeneratedFile
 
 	field    *protogen.Field // TODO(fdmylja): maybe we could split this field into 2 fields one for key and one for value for the sake of being more readable
 	typeName string

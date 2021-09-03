@@ -1,11 +1,12 @@
 package fastreflection
 
 import (
+	"github.com/cosmos/cosmos-proto/generator"
 	"google.golang.org/protobuf/compiler/protogen"
 )
 
 type whichOneofGen struct {
-	*protogen.GeneratedFile
+	*generator.GeneratedFile
 	typeName string
 	message  *protogen.Message
 }

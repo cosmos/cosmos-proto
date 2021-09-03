@@ -1,12 +1,13 @@
 package fastreflection
 
 import (
+	"github.com/cosmos/cosmos-proto/generator"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 type rangeGen struct {
-	*protogen.GeneratedFile
+	*generator.GeneratedFile
 	typeName string
 	message  *protogen.Message
 

@@ -1,12 +1,13 @@
 package fastreflection
 
 import (
+	"github.com/cosmos/cosmos-proto/generator"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 type getGen struct {
-	*protogen.GeneratedFile
+	*generator.GeneratedFile
 	typeName string
 	message  *protogen.Message
 }
@@ -15,7 +16,7 @@ func (g *getGen) generate() {
 	g.genComment()
 	g.P("func (x *", g.typeName, ") Get(descriptor ", protoreflectPkg.Ident("FieldDescriptor"), ") ", protoreflectPkg.Ident("Value"), " {")
 	g.P("switch descriptor.FullName() {")
-	// implement the fast Get function
+	// implement the fastReflectionFeature Get function
 	for _, field := range g.message.Fields {
 		g.P("case \"", field.Desc.FullName(), "\":")
 		g.genFieldGetter(field)
@@ -141,7 +142,7 @@ func (g *getGen) genList(field *protogen.Field) {
 }
 
 // genGet generates the implementation for protoreflect.Message.Get
-func (g *generator) genGet() {
+func (g *fastGenerator) genGet() {
 	(&getGen{
 		GeneratedFile: g.GeneratedFile,
 		typeName:      g.typeName,

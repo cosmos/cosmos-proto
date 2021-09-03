@@ -2,6 +2,7 @@ package fastreflection
 
 import (
 	"fmt"
+	"github.com/cosmos/cosmos-proto/generator"
 
 	"google.golang.org/protobuf/compiler/protogen"
 )
@@ -16,7 +17,7 @@ func messageTypeNameVar(message *protogen.Message) string {
 
 type messageTypeGen struct {
 	typeName string
-	*protogen.GeneratedFile
+	*generator.GeneratedFile
 	message *protogen.Message
 
 	messageTypeName string

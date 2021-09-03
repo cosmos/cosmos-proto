@@ -58,7 +58,8 @@ func (gen *Generator) GenerateFile(plugin *protogen.Plugin, gf *protogen.Generat
 		LocalPackages: gen.local,
 	}
 
-	GenerateProtocGenGo(plugin, p, file)
+	// DEPRECATED: this was used for our fork/copy of protoc-gen-go
+	// GenerateProtocGenGo(plugin, p, file)
 
 	var generated bool
 	for fidx, feat := range gen.features {

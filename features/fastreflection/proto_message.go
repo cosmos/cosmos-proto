@@ -2,6 +2,7 @@ package fastreflection
 
 import (
 	"fmt"
+	"github.com/cosmos/cosmos-proto/generator"
 	"strings"
 
 	"github.com/cosmos/cosmos-proto/features/fastreflection/copied"
@@ -16,7 +17,7 @@ const (
 	fmtPkg = protogen.GoImportPath("fmt")
 )
 
-func GenProtoMessage(f *protogen.File, g *protogen.GeneratedFile, message *protogen.Message) {
+func GenProtoMessage(f *protogen.File, g *generator.GeneratedFile, message *protogen.Message) {
 	gen := newGenerator(f, g, message)
 	gen.generateExtraTypes()
 	gen.generateReflectionType()
@@ -39,31 +40,12 @@ func GenProtoMessage(f *protogen.File, g *protogen.GeneratedFile, message *proto
 	gen.genProtoMethods()
 }
 
-func newGenerator(f *protogen.File, g *protogen.GeneratedFile, message *protogen.Message) *generator {
-	return &generator{
-		GeneratedFile: g,
-		file:          f,
-		message:       message,
-		typeName:      fastReflectionTypeName(message),
-		err:           nil,
-	}
-}
-
 func fastReflectionTypeName(message *protogen.Message) string {
 	return fmt.Sprintf("fastReflection_%s", message.GoIdent.GoName)
 }
 
-type generator struct {
-	*protogen.GeneratedFile
-	file    *protogen.File
-	message *protogen.Message
-
-	typeName string
-	err      error
-}
-
 // generateExtraTypes generates the protoreflect.List and protoreflect.Map types required.
-func (g *generator) generateExtraTypes() {
+func (g *fastGenerator) generateExtraTypes() {
 	for _, field := range g.message.Fields {
 		switch {
 		case field.Desc.IsMap():
@@ -81,25 +63,25 @@ func (g *generator) generateExtraTypes() {
 	}).generate()
 }
 
-// generateMapType generates the fast reflection protoreflect.Map type
+// generateMapType generates the fastReflectionFeature reflection protoreflect.Map type
 // related to the provided protogen.Field.
-func (g *generator) generateMapType(field *protogen.Field) {
+func (g *fastGenerator) generateMapType(field *protogen.Field) {
 	(&mapGen{
 		GeneratedFile: g.GeneratedFile,
 		field:         field,
 	}).generate()
 }
 
-// generateListType generates the fast reflection protoreflect.List type
+// generateListType generates the fastReflectionFeature reflection protoreflect.List type
 // related to the provided protogen.Field.
-func (g *generator) generateListType(field *protogen.Field) {
+func (g *fastGenerator) generateListType(field *protogen.Field) {
 	(&listGen{
 		GeneratedFile: g.GeneratedFile,
 		field:         field,
 	}).generate()
 }
 
-func (g *generator) genMessageType() {
+func (g *fastGenerator) genMessageType() {
 	(&messageTypeGen{
 		typeName:        g.typeName,
 		GeneratedFile:   g.GeneratedFile,
@@ -109,7 +91,7 @@ func (g *generator) genMessageType() {
 	}).generate()
 }
 
-func (g *generator) generateReflectionType() {
+func (g *fastGenerator) generateReflectionType() {
 	// gen interface assertion
 	g.P("var _ ", protoreflectPkg.Ident("Message"), " = (*", g.typeName, ")(nil)")
 	g.P()
@@ -154,7 +136,7 @@ func (g *generator) generateReflectionType() {
 	g.P()
 }
 
-func (g *generator) genDescriptor() {
+func (g *fastGenerator) genDescriptor() {
 	g.P("// Descriptor returns message descriptor, which contains only the protobuf")
 	g.P("// type information for the message.")
 	g.P("func (x *", g.typeName, ") Descriptor() ", protoreflectPkg.Ident("MessageDescriptor"), " {")
@@ -163,7 +145,7 @@ func (g *generator) genDescriptor() {
 	g.P()
 }
 
-func (g *generator) genType() {
+func (g *fastGenerator) genType() {
 	g.P("// Type returns the message type, which encapsulates both Go and protobuf")
 	g.P("// type information. If the Go type information is not needed,")
 	g.P("// it is recommended that the message descriptor be used instead.")
@@ -173,7 +155,7 @@ func (g *generator) genType() {
 	g.P()
 }
 
-func (g *generator) genNew() {
+func (g *fastGenerator) genNew() {
 	g.P("// New returns a newly allocated and mutable empty message.")
 	g.P("func (x *", g.typeName, ") New() ", protoreflectPkg.Ident("Message"), " {")
 	g.P("return new(", g.typeName, ")")
@@ -181,7 +163,7 @@ func (g *generator) genNew() {
 	g.P()
 }
 
-func (g *generator) genInterface() {
+func (g *fastGenerator) genInterface() {
 	g.P("// Interface unwraps the message reflection interface and")
 	g.P("// returns the underlying ProtoMessage interface.")
 	g.P("func (x *", g.typeName, ") Interface() ", protoreflectPkg.Ident("ProtoMessage"), " {")
@@ -190,7 +172,7 @@ func (g *generator) genInterface() {
 	g.P()
 }
 
-func (g *generator) genRange() {
+func (g *fastGenerator) genRange() {
 	(&rangeGen{
 		GeneratedFile: g.GeneratedFile,
 		typeName:      g.typeName,
@@ -199,7 +181,7 @@ func (g *generator) genRange() {
 	g.P()
 }
 
-func (g *generator) genHas() {
+func (g *fastGenerator) genHas() {
 	(&hasGen{
 		GeneratedFile: g.GeneratedFile,
 		typeName:      g.typeName,
@@ -207,7 +189,7 @@ func (g *generator) genHas() {
 	}).generate()
 }
 
-func (g *generator) genClear() {
+func (g *fastGenerator) genClear() {
 	(&clearGen{
 		GeneratedFile: g.GeneratedFile,
 		typeName:      g.typeName,
@@ -217,7 +199,7 @@ func (g *generator) genClear() {
 	g.P()
 }
 
-func (g *generator) genSet() {
+func (g *fastGenerator) genSet() {
 	(&setGen{
 		GeneratedFile: g.GeneratedFile,
 		typeName:      g.typeName,
@@ -225,7 +207,7 @@ func (g *generator) genSet() {
 	}).generate()
 }
 
-func (g *generator) gentMutable() {
+func (g *fastGenerator) gentMutable() {
 	(&mutableGen{
 		GeneratedFile: g.GeneratedFile,
 		typeName:      g.typeName,
@@ -233,7 +215,7 @@ func (g *generator) gentMutable() {
 	}).generate()
 }
 
-func (g *generator) genNewField() {
+func (g *fastGenerator) genNewField() {
 	(&newFieldGen{
 		GeneratedFile: g.GeneratedFile,
 		typeName:      g.typeName,
@@ -242,7 +224,7 @@ func (g *generator) genNewField() {
 	g.P()
 }
 
-func (g *generator) genWhichOneof() {
+func (g *fastGenerator) genWhichOneof() {
 	(&whichOneofGen{
 		GeneratedFile: g.GeneratedFile,
 		typeName:      g.typeName,
@@ -250,7 +232,7 @@ func (g *generator) genWhichOneof() {
 	}).generate()
 }
 
-func (g *generator) genGetUnknown() {
+func (g *fastGenerator) genGetUnknown() {
 	g.P("// GetUnknown retrieves the entire list of unknown fields.")
 	g.P("// The caller may only mutate the contents of the RawFields")
 	g.P("// if the mutated bytes are stored back into the message with SetUnknown.")
@@ -260,7 +242,7 @@ func (g *generator) genGetUnknown() {
 	g.P()
 }
 
-func (g *generator) genSetUnknown() {
+func (g *fastGenerator) genSetUnknown() {
 	g.P("// SetUnknown stores an entire list of unknown fields.")
 	g.P("// The raw fields must be syntactically valid according to the wire format.")
 	g.P("// An implementation may panic if this is not the case.")
@@ -274,7 +256,7 @@ func (g *generator) genSetUnknown() {
 	g.P()
 }
 
-func (g *generator) genIsValid() {
+func (g *fastGenerator) genIsValid() {
 	g.P("// IsValid reports whether the message is valid.")
 	g.P("//")
 	g.P("// An invalid message is an empty, read-only value.")
@@ -290,8 +272,8 @@ func (g *generator) genIsValid() {
 	g.P()
 }
 
-func (g *generator) genProtoMethods() {
-	g.P("// ProtoMethods returns optional fast-path implementations of various operations.")
+func (g *fastGenerator) genProtoMethods() {
+	g.P("// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.")
 	g.P("// This method may return nil.")
 	g.P("//")
 	g.P("// The returned methods type is identical to")
@@ -303,7 +285,7 @@ func (g *generator) genProtoMethods() {
 }
 
 // slowReflectionFallBack can be used to fallback on slow reflection methods
-func slowReflectionFallBack(g *protogen.GeneratedFile, msg *protogen.Message, returns bool, method string, args ...string) {
+func slowReflectionFallBack(g *generator.GeneratedFile, msg *protogen.Message, returns bool, method string, args ...string) {
 	switch returns {
 	case true:
 		g.P("return (*", msg.GoIdent.GoName, ")(x).slowProtoReflect().", method, "(", strings.Join(args, ","), ")")
