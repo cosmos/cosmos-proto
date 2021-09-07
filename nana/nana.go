@@ -83,35 +83,14 @@ func RemoveFunction(path, function string) error {
 		case *ast.FuncDecl:
 			if t.Name.String() == function {
 				found = true
-				// delete all protoreflect methods so we can make our own
+
+				// move method to end
 				if i != len(f.Decls)-1 {
 					f.Decls[i] = f.Decls[len(f.Decls)-1]
 				}
+
 				// drop the last element
 				f.Decls = f.Decls[:len(f.Decls)-1]
-				//if len(t.Recv.List) < 1 {
-				//	return errors.New("expected receiver on ProtoReflect Method")
-				//}
-				//if len(t.Recv.List[0].Names) < 1 {
-				//	return errors.New("expected receiver on ProtoReflect Method")
-				//}
-				//
-				//rewrite := t.Recv.List[0].Names[0].Name
-				//exp, err := parser.ParseExpr(rewrite)
-				//if err != nil {
-				//	return err
-				//}
-				//
-				//returnThis := ast.ReturnStmt{
-				//	Return:  t.Body.List[len(t.Body.List)-1].Pos(),
-				//	Results: []ast.Expr{exp},
-				//}
-				//block := ast.BlockStmt{
-				//	Lbrace: t.Body.Lbrace,
-				//	List:   []ast.Stmt{&returnThis},
-				//	Rbrace: t.Body.Rbrace,
-				//}
-				//t.Body = &block
 			}
 		}
 	}
