@@ -50,6 +50,17 @@ func TestHas(t *testing.T) {
 		}
 	})
 
+	t.Run("has all unset", func(t *testing.T) {
+		m := &A{}
+		dyn := dynamicpb.NewMessage(m.ProtoReflect().Descriptor())
+
+		for i := 0; i < dyn.Descriptor().Fields().Len(); i++ {
+			fd := dyn.Descriptor().Fields().Get(i)
+
+			require.Equal(t, dyn.Has(fd), m.ProtoReflect().Has(fd), fd.FullName())
+		}
+	})
+
 	t.Run("oneof field is set but the value is the default one", func(t *testing.T) {
 		dyn := dynamicpb.NewMessage(md_A)
 		dyn.Set(md_A.Fields().ByName("ONEOF_STRING"), protoreflect.ValueOfString(""))
