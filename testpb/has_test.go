@@ -7,6 +7,7 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/types/dynamicpb"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 func TestHas(t *testing.T) {
@@ -83,5 +84,13 @@ func TestHas(t *testing.T) {
 
 		require.False(t, m.slowProtoReflect().Has(fd))
 		require.False(t, m.ProtoReflect().Has(fd))
+	})
+
+	t.Run("invalid fd", func(t *testing.T) {
+		invalidFd := (&anypb.Any{}).ProtoReflect().Descriptor().Fields().ByName("value")
+
+		require.Panics(t, func() {
+			(&A{}).ProtoReflect().Has(invalidFd)
+		})
 	})
 }
