@@ -2,6 +2,7 @@ package testpb
 
 import (
 	fmt "fmt"
+
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -502,9 +503,21 @@ func (x *fastReflection_A) Has(fd protoreflect.FieldDescriptor) bool {
 	case "A.LIST":
 		return len(x.LIST) != 0
 	case "A.ONEOF_B":
-		return x.ONEOF != nil
+		if x.ONEOF == nil {
+			return false
+		} else if _, ok := x.ONEOF.(*A_ONEOF_B); ok {
+			return true
+		} else {
+			return false
+		}
 	case "A.ONEOF_STRING":
-		return x.ONEOF != nil
+		if x.ONEOF == nil {
+			return false
+		} else if _, ok := x.ONEOF.(*A_ONEOF_STRING); ok {
+			return true
+		} else {
+			return false
+		}
 	case "A.LIST_ENUM":
 		return len(x.LIST_ENUM) != 0
 	default:
