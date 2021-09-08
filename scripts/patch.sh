@@ -11,7 +11,6 @@ for dir in "$@"
 do
   echo stitching up "$dir"
   stitch "$dir"
-  #hello
 done
 
 echo "done stitching"

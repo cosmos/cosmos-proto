@@ -15,27 +15,27 @@ import (
 
 const (
 	// Verify that this generated code is sufficiently up-to-date.
-	_	= protoimpl.EnforceVersion(20 - protoimpl.MinVersion)
+	_ = protoimpl.EnforceVersion(20 - protoimpl.MinVersion)
 	// Verify that runtime/protoimpl is sufficiently up-to-date.
-	_	= protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
+	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
 type Enumeration int32
 
 const (
-	Enumeration_One	Enumeration	= 0
-	Enumeration_Two	Enumeration	= 1
+	Enumeration_One Enumeration = 0
+	Enumeration_Two Enumeration = 1
 )
 
 // Enum value maps for Enumeration.
 var (
-	Enumeration_name	= map[int32]string{
-		0:	"One",
-		1:	"Two",
+	Enumeration_name = map[int32]string{
+		0: "One",
+		1: "Two",
 	}
-	Enumeration_value	= map[string]int32{
-		"One":	0,
-		"Two":	1,
+	Enumeration_value = map[string]int32{
+		"One": 0,
+		"Two": 1,
 	}
 )
 
@@ -67,34 +67,34 @@ func (Enumeration) EnumDescriptor() ([]byte, []int) {
 }
 
 type A struct {
-	state		protoimpl.MessageState
-	sizeCache	protoimpl.SizeCache
-	unknownFields	protoimpl.UnknownFields
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
 
-	Enum		Enumeration	`protobuf:"varint,1,opt,name=enum,proto3,enum=Enumeration" json:"enum,omitempty"`
-	SomeBoolean	bool		`protobuf:"varint,2,opt,name=some_boolean,json=someBoolean,proto3" json:"some_boolean,omitempty"`
-	INT32		int32		`protobuf:"varint,3,opt,name=INT32,proto3" json:"INT32,omitempty"`
-	SINT32		int32		`protobuf:"zigzag32,4,opt,name=SINT32,proto3" json:"SINT32,omitempty"`
-	UINT32		uint32		`protobuf:"varint,5,opt,name=UINT32,proto3" json:"UINT32,omitempty"`
-	INT64		int64		`protobuf:"varint,6,opt,name=INT64,proto3" json:"INT64,omitempty"`
-	SING64		int64		`protobuf:"zigzag64,7,opt,name=SING64,proto3" json:"SING64,omitempty"`
-	UINT64		uint64		`protobuf:"varint,8,opt,name=UINT64,proto3" json:"UINT64,omitempty"`
-	SFIXED32	int32		`protobuf:"fixed32,9,opt,name=SFIXED32,proto3" json:"SFIXED32,omitempty"`
-	FIXED32		uint32		`protobuf:"fixed32,10,opt,name=FIXED32,proto3" json:"FIXED32,omitempty"`
-	FLOAT		float32		`protobuf:"fixed32,11,opt,name=FLOAT,proto3" json:"FLOAT,omitempty"`
-	SFIXED64	int64		`protobuf:"fixed64,12,opt,name=SFIXED64,proto3" json:"SFIXED64,omitempty"`
-	FIXED64		uint64		`protobuf:"fixed64,13,opt,name=FIXED64,proto3" json:"FIXED64,omitempty"`
-	DOUBLE		float64		`protobuf:"fixed64,14,opt,name=DOUBLE,proto3" json:"DOUBLE,omitempty"`
-	STRING		string		`protobuf:"bytes,15,opt,name=STRING,proto3" json:"STRING,omitempty"`
-	BYTES		[]byte		`protobuf:"bytes,16,opt,name=BYTES,proto3" json:"BYTES,omitempty"`
-	MESSAGE		*B		`protobuf:"bytes,17,opt,name=MESSAGE,proto3" json:"MESSAGE,omitempty"`
-	MAP		map[string]*B	`protobuf:"bytes,18,rep,name=MAP,proto3" json:"MAP,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	LIST		[]*B		`protobuf:"bytes,19,rep,name=LIST,proto3" json:"LIST,omitempty"`
+	Enum        Enumeration   `protobuf:"varint,1,opt,name=enum,proto3,enum=Enumeration" json:"enum,omitempty"`
+	SomeBoolean bool          `protobuf:"varint,2,opt,name=some_boolean,json=someBoolean,proto3" json:"some_boolean,omitempty"`
+	INT32       int32         `protobuf:"varint,3,opt,name=INT32,proto3" json:"INT32,omitempty"`
+	SINT32      int32         `protobuf:"zigzag32,4,opt,name=SINT32,proto3" json:"SINT32,omitempty"`
+	UINT32      uint32        `protobuf:"varint,5,opt,name=UINT32,proto3" json:"UINT32,omitempty"`
+	INT64       int64         `protobuf:"varint,6,opt,name=INT64,proto3" json:"INT64,omitempty"`
+	SING64      int64         `protobuf:"zigzag64,7,opt,name=SING64,proto3" json:"SING64,omitempty"`
+	UINT64      uint64        `protobuf:"varint,8,opt,name=UINT64,proto3" json:"UINT64,omitempty"`
+	SFIXED32    int32         `protobuf:"fixed32,9,opt,name=SFIXED32,proto3" json:"SFIXED32,omitempty"`
+	FIXED32     uint32        `protobuf:"fixed32,10,opt,name=FIXED32,proto3" json:"FIXED32,omitempty"`
+	FLOAT       float32       `protobuf:"fixed32,11,opt,name=FLOAT,proto3" json:"FLOAT,omitempty"`
+	SFIXED64    int64         `protobuf:"fixed64,12,opt,name=SFIXED64,proto3" json:"SFIXED64,omitempty"`
+	FIXED64     uint64        `protobuf:"fixed64,13,opt,name=FIXED64,proto3" json:"FIXED64,omitempty"`
+	DOUBLE      float64       `protobuf:"fixed64,14,opt,name=DOUBLE,proto3" json:"DOUBLE,omitempty"`
+	STRING      string        `protobuf:"bytes,15,opt,name=STRING,proto3" json:"STRING,omitempty"`
+	BYTES       []byte        `protobuf:"bytes,16,opt,name=BYTES,proto3" json:"BYTES,omitempty"`
+	MESSAGE     *B            `protobuf:"bytes,17,opt,name=MESSAGE,proto3" json:"MESSAGE,omitempty"`
+	MAP         map[string]*B `protobuf:"bytes,18,rep,name=MAP,proto3" json:"MAP,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	LIST        []*B          `protobuf:"bytes,19,rep,name=LIST,proto3" json:"LIST,omitempty"`
 	// Types that are assignable to ONEOF:
 	//	*A_ONEOF_B
 	//	*A_ONEOF_STRING
-	ONEOF		isA_ONEOF	`protobuf_oneof:"ONEOF"`
-	LIST_ENUM	[]Enumeration	`protobuf:"varint,22,rep,packed,name=LIST_ENUM,json=LISTENUM,proto3,enum=Enumeration" json:"LIST_ENUM,omitempty"`
+	ONEOF     isA_ONEOF     `protobuf_oneof:"ONEOF"`
+	LIST_ENUM []Enumeration `protobuf:"varint,22,rep,packed,name=LIST_ENUM,json=LISTENUM,proto3,enum=Enumeration" json:"LIST_ENUM,omitempty"`
 }
 
 func (x *A) Reset() {
@@ -110,7 +110,7 @@ func (x *A) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*A) ProtoMessage()	{}
+func (*A) ProtoMessage() {}
 
 // Deprecated: Use A.ProtoReflect.Descriptor instead.
 
@@ -171,17 +171,17 @@ func file_testpb_1_proto_init() {
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
-			GoPackagePath:	reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor:	file_testpb_1_proto_rawDesc,
-			NumEnums:	1,
-			NumMessages:	3,
-			NumExtensions:	0,
-			NumServices:	0,
+			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
+			RawDescriptor: file_testpb_1_proto_rawDesc,
+			NumEnums:      1,
+			NumMessages:   3,
+			NumExtensions: 0,
+			NumServices:   0,
 		},
-		GoTypes:		file_testpb_1_proto_goTypes,
-		DependencyIndexes:	file_testpb_1_proto_depIdxs,
-		EnumInfos:		file_testpb_1_proto_enumTypes,
-		MessageInfos:		file_testpb_1_proto_msgTypes,
+		GoTypes:           file_testpb_1_proto_goTypes,
+		DependencyIndexes: file_testpb_1_proto_depIdxs,
+		EnumInfos:         file_testpb_1_proto_enumTypes,
+		MessageInfos:      file_testpb_1_proto_msgTypes,
 	}.Build()
 	File_testpb_1_proto = out.File
 	file_testpb_1_proto_rawDesc = nil
@@ -366,16 +366,16 @@ type A_ONEOF_STRING struct {
 	ONEOF_STRING string `protobuf:"bytes,21,opt,name=ONEOF_STRING,json=ONEOFSTRING,proto3,oneof"`
 }
 
-func (*A_ONEOF_B) isA_ONEOF()	{}
+func (*A_ONEOF_B) isA_ONEOF() {}
 
-func (*A_ONEOF_STRING) isA_ONEOF()	{}
+func (*A_ONEOF_STRING) isA_ONEOF() {}
 
 type B struct {
-	state		protoimpl.MessageState
-	sizeCache	protoimpl.SizeCache
-	unknownFields	protoimpl.UnknownFields
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
 
-	X	string	`protobuf:"bytes,1,opt,name=x,proto3" json:"x,omitempty"`
+	X string `protobuf:"bytes,1,opt,name=x,proto3" json:"x,omitempty"`
 }
 
 func (x *B) Reset() {
@@ -391,9 +391,9 @@ func (x *B) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*B) ProtoMessage()	{}
+func (*B) ProtoMessage() {}
 
-func init()	{ file_testpb_1_proto_init() }
+func init() { file_testpb_1_proto_init() }
 
 func (*B) Descriptor() ([]byte, []int) {
 	return file_testpb_1_proto_rawDescGZIP(), []int{1}
@@ -462,8 +462,8 @@ var file_testpb_1_proto_rawDesc = []byte{
 }
 
 var (
-	file_testpb_1_proto_rawDescOnce	sync.Once
-	file_testpb_1_proto_rawDescData	= file_testpb_1_proto_rawDesc
+	file_testpb_1_proto_rawDescOnce sync.Once
+	file_testpb_1_proto_rawDescData = file_testpb_1_proto_rawDesc
 )
 
 func file_testpb_1_proto_rawDescGZIP() []byte {
