@@ -20,35 +20,36 @@ func main() {
 	patcher.StringVar(&fNames, "files", "", "the files to sew together")
 	remove := patcher.Bool("D", false, "delete files after patching")
 
-	deleter := flag.NewFlagSet("delete", flag.ExitOnError)
-	funcName := deleter.String("func", "", "function to patch -- example: -func nameOfFunc")
-	fileName := deleter.String("file", "", "the path to the file to delete -- example: -file path/to/file")
+	deleter := flag.NewFlagSet("deleteCmd", flag.ExitOnError)
+	funcName := deleter.String("func", "", "function to patchCmd -- example: -func nameOfFunc")
+	fileName := deleter.String("file", "", "the path to the file to deleteCmd -- example: -file path/to/file")
 
 	if len(os.Args) < 3 {
-		fmt.Println("not enough arguments passed")
-		os.Exit(51)
+		panic("not enough arguments passed")
 	}
 
-	if os.Args[1] == "delete" {
-		deleter.Parse(os.Args[2:])
-		fmt.Println("deleting ", *fileName)
-		delete(*fileName, *funcName)
-	} else if os.Args[1] == "sew" {
-		patcher.Parse(os.Args[2:])
+	switch os.Args[1] {
+	case "deleteCmd":
+		err := deleter.Parse(os.Args[2:])
+		if err != nil {
+			panic(err)
+		}
+		deleteCmd(*fileName, *funcName)
+	case "sew":
+		err := patcher.Parse(os.Args[2:])
+		if err != nil {
+			panic(err)
+		}
 		args := patcher.Args()
-		fmt.Println(*saveAs)
-		fmt.Println(args)
-		patch(*saveAs, *remove, args...)
+		patchCmd(*saveAs, *remove, args...)
+	default:
+		panic(fmt.Sprintf("command '%s' not recognized", os.Args[1]))
 	}
-
-	fmt.Printf("command '%s' not recognized", os.Args[1])
-	os.Exit(50)
-
 }
 
-func patch(saveAs string, deleteFiles bool, files ...string) {
+func patchCmd(saveAs string, deleteFiles bool, files ...string) {
 	if len(files) < 1 {
-		panic("patch requires at least 2 files to merge")
+		panic("patchCmd requires at least 2 files to merge")
 	}
 	file, fset, err := Patch(files[0], files[1:]...)
 	if err != nil {
@@ -58,12 +59,15 @@ func patch(saveAs string, deleteFiles bool, files ...string) {
 	os.WriteFile(saveAs, bz.Bytes(), 0766)
 	if deleteFiles {
 		for _, f := range files {
-			os.Remove(f)
+			err := os.Remove(f)
+			if err != nil {
+				panic(err)
+			}
 		}
 	}
 }
 
-func delete(funcName, fileName string) {
+func deleteCmd(funcName, fileName string) {
 	err := RemoveFunction(fileName, funcName)
 	if err != nil {
 		panic(err)
@@ -104,7 +108,7 @@ func RemoveFunction(path, function string) error {
 	if err != nil {
 		return err
 	}
-	err = os.WriteFile(path, buf.Bytes(), 0776)
+	err = os.WriteFile(path, buf.Bytes(), 0766)
 	if err != nil {
 		return err
 	}
