@@ -3,7 +3,7 @@ stitch() {
   pb_files=$(find "$1" -name "*.pb.go")
   for file in $pb_files; do
     echo "patching pb file $file"
-    nana delete -func ProtoReflect -file "$file"
+    nana delete --func ProtoReflect --file "$file"
   done
 }
 

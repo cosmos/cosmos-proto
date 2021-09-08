@@ -17,7 +17,9 @@ WORKDIR /build
 COPY . .
 
 RUN go build -o protoc-gen-go-pulsar ./cmd/protoc-gen-go-pulsar
+RUN go build -o nana ./cmd/nana
 
 WORKDIR /codegen
 
 RUN mv /build/protoc-gen-go-pulsar /usr/bin/protoc-gen-go-pulsar
+RUN mv /build/nana /usr/bin/nana

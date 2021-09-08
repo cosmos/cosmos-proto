@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"regexp"
 	"strings"
 
 	_ "github.com/cosmos/cosmos-proto/features/fastreflection"
@@ -16,6 +17,8 @@ import (
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/types/pluginpb"
 )
+
+var pbRegExp = regexp.MustCompile("(.*?)\\.(pb\\.go)$")
 
 type ObjectSet map[protogen.GoIdent]bool
 
