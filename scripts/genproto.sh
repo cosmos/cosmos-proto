@@ -11,6 +11,12 @@ build() {
     done
 }
 
+cosmos_proto() {
+  echo "generating cosmos.proto"
+  protoc -I=.  -I=./third_party/proto cosmos.proto --go_out=.
+}
+
+cosmos_proto
 for dir in "$@"
 do
   build "$dir"
