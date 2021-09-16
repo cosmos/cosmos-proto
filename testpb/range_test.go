@@ -125,6 +125,11 @@ func valueEquality(t *testing.T, field protoreflect.FieldDescriptor, v1, v2 prot
 		map1 := v1.Map()
 		map2 := v2.Map()
 
+		if !map1.IsValid() {
+			require.False(t, map2.IsValid())
+			return
+		}
+
 		require.Equal(t, map1.Len(), map2.Len())
 
 		map1.Range(func(key protoreflect.MapKey, map1Value protoreflect.Value) bool {
@@ -137,6 +142,10 @@ func valueEquality(t *testing.T, field protoreflect.FieldDescriptor, v1, v2 prot
 			return true
 		})
 	case field.Kind() == protoreflect.MessageKind:
+		if !v1.Message().IsValid() {
+			require.False(t, v2.Message().IsValid())
+			return
+		}
 		require.True(t, proto.Equal(v1.Message().Interface(), v2.Message().Interface()))
 	default:
 		require.Equal(t, v1.Interface(), v2.Interface())
