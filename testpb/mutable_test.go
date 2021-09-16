@@ -39,31 +39,4 @@ func TestMutable(t *testing.T) {
 			}
 		}
 	})
-
-	/*
-		t.Run("mutability", func(t *testing.T) {
-			dyn := dynamicpb.NewMessage(md_A)
-			m := &A{}
-			for i := 0; i < fds.Len(); i++ {
-				fd := fds.Get(i)
-				// skip panic cases
-				if panics(func() {
-					dyn.Mutable(fd)
-				}) {
-					continue
-				}
-
-				v := m.ProtoReflect().Mutable(fd)
-				dv := dyn.Mutable(fd)
-
-				switch {
-				case fd.IsMap():
-				case fd.IsList():
-				case fd.Kind() == protoreflect.MessageKind:
-				}
-
-			}
-		})
-	*/
-
 }
