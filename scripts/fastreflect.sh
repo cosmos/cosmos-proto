@@ -7,7 +7,7 @@ build() {
     proto_files=$(find "$1" -name "*.proto")
     for file in $proto_files; do
       echo "building proto file $file"
-      protoc -I=. -I=./third_party/proto --plugin /usr/bin/protoc-gen-go-fasteflection --go-fasteflection_out=. --go_out=. "$file"
+      protoc -I=. -I=./third_party/proto --plugin /usr/bin/protoc-gen-go-pulsar --go-pulsar_out=. --go-pulsar_opt=features=fast+protoc "$file"
     done
 }
 

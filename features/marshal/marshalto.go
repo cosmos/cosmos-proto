@@ -19,7 +19,7 @@ import (
 )
 
 func init() {
-	generator.RegisterFeature("marshal", func(gen *generator.GeneratedFile) generator.FeatureGenerator {
+	generator.RegisterFeature("marshal", func(gen *generator.GeneratedFile, plugin *protogen.Plugin) generator.FeatureGenerator {
 		return &marshal{GeneratedFile: gen, Stable: false}
 	})
 }
@@ -42,7 +42,7 @@ type marshal struct {
 
 var _ generator.FeatureGenerator = (*marshal)(nil)
 
-func (p *marshal) GenerateFile(file *protogen.File) bool {
+func (p *marshal) GenerateFile(file *protogen.File, plugin *protogen.Plugin) bool {
 	for _, message := range file.Messages {
 		p.message(message)
 	}

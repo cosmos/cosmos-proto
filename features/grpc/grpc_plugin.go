@@ -15,7 +15,7 @@ var requireUnimplementedAlways = true
 var requireUnimplemented = &requireUnimplementedAlways
 
 func init() {
-	generator.RegisterFeature("grpc", func(gen *generator.GeneratedFile) generator.FeatureGenerator {
+	generator.RegisterFeature("grpc", func(gen *generator.GeneratedFile, _ *protogen.Plugin) generator.FeatureGenerator {
 		return &grpc{gen}
 	})
 }
@@ -24,7 +24,7 @@ type grpc struct {
 	*generator.GeneratedFile
 }
 
-func (g *grpc) GenerateFile(file *protogen.File) bool {
+func (g *grpc) GenerateFile(file *protogen.File, _ *protogen.Plugin) bool {
 	if len(file.Services) == 0 {
 		return false
 	}

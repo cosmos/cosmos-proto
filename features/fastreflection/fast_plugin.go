@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	generator.RegisterFeature("fast", func(gen *generator.GeneratedFile) generator.FeatureGenerator {
+	generator.RegisterFeature("fast", func(gen *generator.GeneratedFile, _ *protogen.Plugin) generator.FeatureGenerator {
 		return fastReflectionFeature{
 			GeneratedFile: gen,
 			Stable:        false,
@@ -39,7 +39,7 @@ func newGenerator(f *protogen.File, g *generator.GeneratedFile, message *protoge
 	}
 }
 
-func (g fastReflectionFeature) GenerateFile(file *protogen.File) bool {
+func (g fastReflectionFeature) GenerateFile(file *protogen.File, _ *protogen.Plugin) bool {
 	for _, msg := range file.Messages {
 		GenProtoMessage(file, g.GeneratedFile, msg)
 	}
