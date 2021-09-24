@@ -1451,10 +1451,9 @@ func genMessageField(g *generator.GeneratedFile, f *fileInfo, m *messageInfo, fi
 		sf.append(oneof.GoName)
 		return
 	}
-	gt, pointer := fieldGoType(g, f, field)
-	goType := gt.Display()
+	goType, pointer := fieldGoType(g, f, field)
 	if pointer {
-		goType = "*" + gt.Display().(string)
+		goType = "*" + goType.(string)
 	}
 	tags := structTags{
 		{"protobuf", fieldProtobufTagValue(field)},
@@ -1494,8 +1493,7 @@ func genMessageDefaultDecls(g *generator.GeneratedFile, f *fileInfo, m *messageI
 			continue
 		}
 		name := "Default_" + m.GoIdent.GoName + "_" + field.GoName
-		gt, _ := fieldGoType(g, f, field)
-		goType := gt.Display()
+		goType, _ := fieldGoType(g, f, field)
 		defVal := field.Desc.Default()
 		switch field.Desc.Kind() {
 		case protoreflect.StringKind:
@@ -1615,8 +1613,7 @@ func genMessageGetterMethods(g *generator.GeneratedFile, f *fileInfo, m *message
 		}
 
 		// Getter for message field.
-		gt, pointer := fieldGoType(g, f, field)
-		goType := gt.Display()
+		goType, pointer := fieldGoType(g, f, field)
 		defaultValue := fieldDefaultValue(g, f, m, field)
 		g.Annotate(m.GoIdent.GoName+".Get"+field.GoName, field.Location)
 		leadingComments := appendDeprecationSuffix("",
@@ -1688,7 +1685,7 @@ func genMessageSetterMethods(g *generator.GeneratedFile, f *fileInfo, m *message
 // fieldGoType returns the Go type used for a field.
 //
 // If it returns pointer=true, the struct field is a pointer to the type.
-func fieldGoType(g *generator.GeneratedFile, f *fileInfo, field *protogen.Field) (_ GoType, pointer bool) {
+func fieldGoType(g *generator.GeneratedFile, f *fileInfo, field *protogen.Field) (_ interface{}, pointer bool) {
 	opt := field.Desc.Options().(*descriptorpb.FieldOptions)
 	if opt != nil {
 		// extracting the option gives us two pieces of information:
@@ -1706,10 +1703,10 @@ func fieldGoType(g *generator.GeneratedFile, f *fileInfo, field *protogen.Field)
 		id := getIdentifier(val)
 		var iType goImportPath = protogen.GoImportPath(impPath)
 		field.GoIdent = iType.Ident(id)
-		return NewGoType(iType.Ident(id)), false
+		return iType.Ident(id), false
 	}
 	if field.Desc.IsWeak() {
-		return NewGoType("struct{}"), false
+		return "struct{}", false
 	}
 
 	var goType string
@@ -1743,13 +1740,13 @@ func fieldGoType(g *generator.GeneratedFile, f *fileInfo, field *protogen.Field)
 	}
 	switch {
 	case field.Desc.IsList():
-		return  NewGoType("[]" + goType), false
+		return  "[]" + goType, false
 	case field.Desc.IsMap():
 		keyType, _ := fieldGoType(g, f, field.Message.Fields[0])
 		valType, _ := fieldGoType(g, f, field.Message.Fields[1])
-		return NewGoType(fmt.Sprintf("map[%v]%v", keyType.Display(), valType.Display())), false
+		return fmt.Sprintf("map[%v]%v", keyType, valType), false
 	}
-	return NewGoType(goType), pointer
+	return goType, pointer
 }
 
 func fieldProtobufTagValue(field *protogen.Field) string {
@@ -1806,8 +1803,7 @@ func genExtensions(g *generator.GeneratedFile, f *fileInfo) {
 	for _, x := range f.allExtensions {
 		g.P("{")
 		g.P("ExtendedType: (*", x.Extendee.GoIdent, ")(nil),")
-		gt, pointer := fieldGoType(g, f, x.Extension)
-		goType := gt.Display()
+		goType, pointer := fieldGoType(g, f, x.Extension)
 		if pointer {
 			goType = "*" + goType.(string)
 		}
@@ -1880,8 +1876,7 @@ func genMessageOneofWrapperTypes(g *generator.GeneratedFile, f *fileInfo, m *mes
 			g.Annotate(field.GoIdent.GoName, field.Location)
 			g.Annotate(field.GoIdent.GoName+"."+field.GoName, field.Location)
 			g.P("type ", field.GoIdent, " struct {")
-			gt, _ := fieldGoType(g, f, field)
-			goType := gt.Display()
+			goType, _ := fieldGoType(g, f, field)
 			tags := structTags{
 				{"protobuf", fieldProtobufTagValue(field)},
 			}
