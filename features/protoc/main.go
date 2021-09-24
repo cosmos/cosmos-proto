@@ -63,7 +63,6 @@ var (
 	protoregistryPackage goImportPath = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoregistry")
 )
 
-
 // GenerateFile generates the contents of a .pb.go file.
 func GenerateFile(gen *protogen.Plugin, file *protogen.File, g *generator.GeneratedFile) *generator.GeneratedFile {
 	// filename := file.GeneratedFilenamePrefix + ".pb.go"
@@ -1451,10 +1450,9 @@ func genMessageField(g *generator.GeneratedFile, f *fileInfo, m *messageInfo, fi
 		sf.append(oneof.GoName)
 		return
 	}
-	gt, pointer := fieldGoType(g, f, field)
-	goType := gt.Display()
+	goType, pointer := fieldGoType(g, f, field)
 	if pointer {
-		goType = "*" + gt.Display().(string)
+		goType = "*" + goType
 	}
 	tags := structTags{
 		{"protobuf", fieldProtobufTagValue(field)},
@@ -1494,8 +1492,7 @@ func genMessageDefaultDecls(g *generator.GeneratedFile, f *fileInfo, m *messageI
 			continue
 		}
 		name := "Default_" + m.GoIdent.GoName + "_" + field.GoName
-		gt, _ := fieldGoType(g, f, field)
-		goType := gt.Display()
+		goType, _ := fieldGoType(g, f, field)
 		defVal := field.Desc.Default()
 		switch field.Desc.Kind() {
 		case protoreflect.StringKind:
@@ -1615,8 +1612,7 @@ func genMessageGetterMethods(g *generator.GeneratedFile, f *fileInfo, m *message
 		}
 
 		// Getter for message field.
-		gt, pointer := fieldGoType(g, f, field)
-		goType := gt.Display()
+		goType, pointer := fieldGoType(g, f, field)
 		defaultValue := fieldDefaultValue(g, f, m, field)
 		g.Annotate(m.GoIdent.GoName+".Get"+field.GoName, field.Location)
 		leadingComments := appendDeprecationSuffix("",
@@ -1688,31 +1684,11 @@ func genMessageSetterMethods(g *generator.GeneratedFile, f *fileInfo, m *message
 // fieldGoType returns the Go type used for a field.
 //
 // If it returns pointer=true, the struct field is a pointer to the type.
-func fieldGoType(g *generator.GeneratedFile, f *fileInfo, field *protogen.Field) (_ GoType, pointer bool) {
-	opt := field.Desc.Options().(*descriptorpb.FieldOptions)
-	if opt != nil {
-		// extracting the option gives us two pieces of information:
-		// num: the number of the option: i.e. 93001
-		// val: the value passed with that option i.e. "cosmos.gov.Content"
-		// cosmos.gov.Content should correspond to some field in a yaml file.
-		// this field should give us the import path for this interface i.e. github.com/cosmos/cosmos-sdk/x/gov/types
-		_, val := extractOption(opt.String())
-
-		// this will give us the import path that maps from the given option.
-		// i.e.
-		// interfaces:
-		//    - cosmos.gov.Content: github.com/cosmos/cosmos-sdk/x/gov/types
-		impPath := getInterfaceImport(val)
-		id := getIdentifier(val)
-		var iType goImportPath = protogen.GoImportPath(impPath)
-		field.GoIdent = iType.Ident(id)
-		return NewGoType(iType.Ident(id)), false
-	}
+func fieldGoType(g *generator.GeneratedFile, f *fileInfo, field *protogen.Field) (goType string, pointer bool) {
 	if field.Desc.IsWeak() {
-		return NewGoType("struct{}"), false
+		return "struct{}", false
 	}
 
-	var goType string
 	pointer = field.Desc.HasPresence()
 	switch field.Desc.Kind() {
 	case protoreflect.BoolKind:
@@ -1737,19 +1713,18 @@ func fieldGoType(g *generator.GeneratedFile, f *fileInfo, field *protogen.Field)
 		goType = "[]byte"
 		pointer = false // rely on nullability of slices for presence
 	case protoreflect.MessageKind, protoreflect.GroupKind:
-		gt := "*" + g.QualifiedGoIdent(field.Message.GoIdent)
+		goType = "*" + g.QualifiedGoIdent(field.Message.GoIdent)
 		pointer = false // pointer captured as part of the type
-		goType = gt
 	}
 	switch {
 	case field.Desc.IsList():
-		return  NewGoType("[]" + goType), false
+		return "[]" + goType, false
 	case field.Desc.IsMap():
 		keyType, _ := fieldGoType(g, f, field.Message.Fields[0])
 		valType, _ := fieldGoType(g, f, field.Message.Fields[1])
-		return NewGoType(fmt.Sprintf("map[%v]%v", keyType.Display(), valType.Display())), false
+		return fmt.Sprintf("map[%v]%v", keyType, valType), false
 	}
-	return NewGoType(goType), pointer
+	return goType, pointer
 }
 
 func fieldProtobufTagValue(field *protogen.Field) string {
@@ -1806,10 +1781,9 @@ func genExtensions(g *generator.GeneratedFile, f *fileInfo) {
 	for _, x := range f.allExtensions {
 		g.P("{")
 		g.P("ExtendedType: (*", x.Extendee.GoIdent, ")(nil),")
-		gt, pointer := fieldGoType(g, f, x.Extension)
-		goType := gt.Display()
+		goType, pointer := fieldGoType(g, f, x.Extension)
 		if pointer {
-			goType = "*" + goType.(string)
+			goType = "*" + goType
 		}
 		g.P("ExtensionType: (", goType, ")(nil),")
 		g.P("Field: ", x.Desc.Number(), ",")
@@ -1880,8 +1854,7 @@ func genMessageOneofWrapperTypes(g *generator.GeneratedFile, f *fileInfo, m *mes
 			g.Annotate(field.GoIdent.GoName, field.Location)
 			g.Annotate(field.GoIdent.GoName+"."+field.GoName, field.Location)
 			g.P("type ", field.GoIdent, " struct {")
-			gt, _ := fieldGoType(g, f, field)
-			goType := gt.Display()
+			goType, _ := fieldGoType(g, f, field)
 			tags := structTags{
 				{"protobuf", fieldProtobufTagValue(field)},
 			}

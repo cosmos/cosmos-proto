@@ -1,8 +1,5 @@
 syntax="proto3";
 
-import "cosmos/cosmos.proto";
-import "google/protobuf/any.proto";
-
 option go_package = "github.com/cosmos/cosmos-proto/testpb";
 
 enum Enumeration {
@@ -28,7 +25,7 @@ message A {
   string STRING = 15;
   bytes BYTES = 16;
   B MESSAGE = 17;
-  // map<string, B> MAP = 18;
+  map<string, B> MAP = 18;
   repeated B LIST = 19;
   oneof ONEOF {
     B ONEOF_B = 20;
@@ -39,8 +36,4 @@ message A {
 
 message B {
   string x = 1;
-}
-
-message Foo {
-  google.protobuf.Any bar = 1 [(cosmos_proto.accepts_interface) = "cosmos.gov.Content"];
 }
