@@ -51,9 +51,9 @@ func RegisterFeature(name string, feat Feature) {
 	defaultFeatures[name] = feat
 }
 
-type Feature func(gen *GeneratedFile) FeatureGenerator
+type Feature func(gen *GeneratedFile, plugin *protogen.Plugin) FeatureGenerator
 
 type FeatureGenerator interface {
-	GenerateFile(file *protogen.File) bool
+	GenerateFile(file *protogen.File, plugin *protogen.Plugin) bool
 	GenerateHelpers()
 }

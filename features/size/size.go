@@ -17,7 +17,7 @@ import (
 )
 
 func init() {
-	generator.RegisterFeature("size", func(gen *generator.GeneratedFile) generator.FeatureGenerator {
+	generator.RegisterFeature("size", func(gen *generator.GeneratedFile, plugin *protogen.Plugin) generator.FeatureGenerator {
 		return &size{GeneratedFile: gen}
 	})
 }
@@ -33,7 +33,7 @@ func (p *size) Name() string {
 	return "size"
 }
 
-func (p *size) GenerateFile(file *protogen.File) bool {
+func (p *size) GenerateFile(file *protogen.File, plugin *protogen.Plugin) bool {
 	for _, message := range file.Messages {
 		p.message(message)
 	}
