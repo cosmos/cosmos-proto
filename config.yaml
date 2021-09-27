@@ -1,0 +1,3 @@
+interfaces:
+  cosmos.gov.Content: "github.com/cosmos/cosmos-sdk/x/gov/types"
+  cosmos.authz.Authorization: "github.com/cosmos/cosmos-sdk/x/authz"

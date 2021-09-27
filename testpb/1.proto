@@ -44,4 +44,5 @@ message B {
 message Foo {
   string bro = 1;
   google.protobuf.Any bar = 2 [(cosmos_proto.accepts_interface) = "cosmos.gov.Content"];
+  google.protobuf.Any baz = 3 [(cosmos_proto.accepts_interface) = "cosmos.authz.Authorization"];
 }
