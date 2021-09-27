@@ -6,7 +6,6 @@ import (
 	"strings"
 )
 
-
 type config struct {
 	Interfaces map[string]string `yaml:"interfaces"`
 }

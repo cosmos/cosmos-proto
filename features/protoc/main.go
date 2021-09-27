@@ -62,7 +62,6 @@ var (
 	protoregistryPackage goImportPath = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoregistry")
 )
 
-
 // GenerateFile generates the contents of a .pb.go file.
 func GenerateFile(gen *protogen.Plugin, file *protogen.File, g *generator.GeneratedFile) *generator.GeneratedFile {
 	// filename := file.GeneratedFilenamePrefix + ".pb.go"
@@ -175,7 +174,6 @@ func genFileDescriptor(gen *protogen.Plugin, g *generator.GeneratedFile, f *file
 		g.P()
 	}
 }
-
 
 func genReflectFileDescriptor(gen *protogen.Plugin, g *generator.GeneratedFile, f *fileInfo) {
 	g.P("var ", f.GoDescriptorIdent, " ", protoreflectPackage.Ident("FileDescriptor"))
@@ -1728,7 +1726,7 @@ func fieldGoType(g *generator.GeneratedFile, f *fileInfo, field *protogen.Field)
 	}
 	switch {
 	case field.Desc.IsList():
-		return  "[]" + goType, false
+		return "[]" + goType, false
 	case field.Desc.IsMap():
 		keyType, _ := fieldGoType(g, f, field.Message.Fields[0])
 		valType, _ := fieldGoType(g, f, field.Message.Fields[1])

@@ -8,7 +8,7 @@ import (
 func init() {
 	generator.RegisterFeature("protoc", func(gen *generator.GeneratedFile, plugin *protogen.Plugin) generator.FeatureGenerator {
 		return protocGenGoFeature{
-			Plugin: plugin,
+			Plugin:        plugin,
 			GeneratedFile: gen,
 			once:          false,
 		}
@@ -26,4 +26,4 @@ func (pg protocGenGoFeature) GenerateFile(file *protogen.File, plugin *protogen.
 	return pg.once
 }
 
-func (pg  protocGenGoFeature) GenerateHelpers() {} //noop
+func (pg protocGenGoFeature) GenerateHelpers() {} //noop

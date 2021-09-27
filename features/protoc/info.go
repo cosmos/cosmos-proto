@@ -15,7 +15,6 @@ type enumInfo struct {
 	genRawDescMethod bool
 }
 
-
 func newEnumInfo(f *fileInfo, enum *protogen.Enum) *enumInfo {
 	e := &enumInfo{Enum: enum}
 	e.genJSONMethod = true
@@ -63,7 +62,6 @@ func newMessageInfo(f *fileInfo, message *protogen.Message) *messageInfo {
 	}
 	return m
 }
-
 
 type extensionInfo struct {
 	*protogen.Extension
