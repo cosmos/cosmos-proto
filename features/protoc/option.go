@@ -22,9 +22,6 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	//cfg.Interfaces = make(map[string]string)
-	//cfg.Interfaces["cosmos.gov.Content"] = "github.com/cosmos/cosmos-sdk/x/gov/types"
-	//cfg.Interfaces["cosmos.staking.Validator"] = "github.com/cosmos/cosmos-sdk/x/staking/types"
 }
 
 // cosmos proto option definitions
