@@ -1,0 +1,17 @@
+syntax="proto3";
+
+package anyinterface.testpb.ifaceimpl;
+
+import "cosmos.proto";
+import "anyinterface/testpb/iface/iface.proto";
+
+option go_package = "github.com/cosmos/cosmos-proto/anyinterface/testpb/ifaceimpl";
+
+message MsgSend {
+  option (cosmos_proto.implements_interface) = {
+    fullname: "anyinterface.testpb.iface.Msg",
+  };
+  string from_address = 1;
+  string to_address = 2;
+  string amount = 3;
+}

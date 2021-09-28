@@ -1,4 +1,4 @@
-DIRECTORIES_TO_BUILD := "./testpb"
+DIRECTORIES_TO_BUILD := "./testpb . ./anyinterface"
 
 pulsar:
 	docker build -t dev:proto-build -f Dockerfile .

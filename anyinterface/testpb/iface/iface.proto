@@ -1,0 +1,18 @@
+syntax="proto3";
+
+import "cosmos.proto";
+
+package anyinterface.testpb.iface;
+
+option go_package = "github.com/cosmos/cosmos-proto/anyinterface/testpb/iface";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
+service Msg {
+  option (cosmos_proto.interface_service) = {};
+  // GetSigners gets the signers
+  rpc GetSigners(google.protobuf.Empty) returns (google.protobuf.StringValue) {};
+
+  rpc ValidateBasic(google.protobuf.Empty) returns (google.protobuf.BytesValue) {};
+}
