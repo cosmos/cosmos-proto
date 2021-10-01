@@ -7,18 +7,23 @@ package protoc
 
 import (
 	"fmt"
-	"github.com/cosmos/cosmos-proto/features/protoc/genid"
-	"github.com/cosmos/cosmos-proto/generator"
 	"go/ast"
 	"go/parser"
 	"go/token"
-	"google.golang.org/protobuf/encoding/protowire"
-	"google.golang.org/protobuf/proto"
 	"math"
 	"strconv"
 	"strings"
 	"unicode"
 	"unicode/utf8"
+
+	cosmos_proto "github.com/cosmos/cosmos-proto"
+	"github.com/cosmos/cosmos-proto/features/interfaceservice"
+	"github.com/cosmos/cosmos-proto/features/protoc/genid"
+	"github.com/cosmos/cosmos-proto/generator"
+	"google.golang.org/protobuf/encoding/protowire"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protodesc"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	pref "google.golang.org/protobuf/reflect/protoreflect"
 
@@ -175,7 +180,6 @@ func genFileDescriptor(gen *protogen.Plugin, g *generator.GeneratedFile, f *file
 		g.P()
 	}
 }
-
 
 func genReflectFileDescriptor(gen *protogen.Plugin, g *generator.GeneratedFile, f *fileInfo) {
 	g.P("var ", f.GoDescriptorIdent, " ", protoreflectPackage.Ident("FileDescriptor"))
@@ -1713,8 +1717,38 @@ func fieldGoType(g *generator.GeneratedFile, f *fileInfo, field *protogen.Field)
 		goType = "[]byte"
 		pointer = false // rely on nullability of slices for presence
 	case protoreflect.MessageKind, protoreflect.GroupKind:
-		goType = "*" + g.QualifiedGoIdent(field.Message.GoIdent)
-		pointer = false // pointer captured as part of the type
+		// we check if the field has accepts_interface options
+		interfaceName := protoreflect.FullName(proto.GetExtension(field.Desc.Options(), cosmos_proto.E_AcceptsInterface).(string))
+		switch interfaceName {
+		// normal proto case
+		case "":
+			goType = "*" + g.QualifiedGoIdent(field.Message.GoIdent)
+			pointer = false // pointer captured as part of the type
+		// any as interface
+		default:
+			if field.Desc.Message().FullName() != (&anypb.Any{}).ProtoReflect().Descriptor().FullName() {
+				panic(fmt.Errorf("interface fields must be represented as google.Protobuf.Any: %s, %s", field.Desc.FullName(), field.Desc.Message().FullName()))
+			}
+
+			// check imports for the interface name
+			var interfaceSvcDesc protoreflect.ServiceDescriptor
+			for i := 0; i < f.Desc.Imports().Len(); i++ {
+				fd := f.Desc.Imports().Get(i)
+				if interfaceSvcDesc = fd.Services().ByName(interfaceName.Name()); interfaceSvcDesc != nil {
+					break
+				}
+			}
+
+			if interfaceSvcDesc == nil {
+				panic(fmt.Errorf("interface service descriptor %s was not found or was not imported", interfaceName))
+			}
+			ifacePkg := protogen.GoImportPath(*(protodesc.ToFileDescriptorProto(interfaceSvcDesc.ParentFile()).Options.GoPackage))
+			g.Import(ifacePkg)
+			goType = g.QualifiedGoIdent(protogen.GoIdent{
+				GoName:       interfaceservice.AnyInterfaceType(interfaceSvcDesc),
+				GoImportPath: ifacePkg,
+			})
+		}
 	}
 	switch {
 	case field.Desc.IsList():
@@ -2137,14 +2171,12 @@ type goImportPath interface {
 	Ident(string) protogen.GoIdent
 }
 
-
 type enumInfo struct {
 	*protogen.Enum
 
 	genJSONMethod    bool
 	genRawDescMethod bool
 }
-
 
 func newEnumInfo(f *fileInfo, enum *protogen.Enum) *enumInfo {
 	e := &enumInfo{Enum: enum}
@@ -2193,7 +2225,6 @@ func newMessageInfo(f *fileInfo, message *protogen.Message) *messageInfo {
 	}
 	return m
 }
-
 
 type extensionInfo struct {
 	*protogen.Extension

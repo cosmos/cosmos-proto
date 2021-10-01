@@ -1,11 +1,11 @@
 package interfaceservice
 
 import (
-	"fmt"
-
 	cosmos_proto "github.com/cosmos/cosmos-proto"
 	"github.com/cosmos/cosmos-proto/generator"
+	"github.com/cosmos/cosmos-proto/internal/strs"
 	"google.golang.org/protobuf/compiler/protogen"
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 const (
@@ -60,7 +60,7 @@ func (g *gen) genInterface() error {
 }
 
 func (g *gen) genAnyInterface() error {
-	name := anyInterfaceName(g.svc)
+	name := AnyInterfaceType(g.svc.Desc)
 
 	// interface assertion
 	g.P("var _ ", interfaceServiceName(g.svc), " = (*", name, ")(nil)")
@@ -97,6 +97,6 @@ func interfaceServiceName(svc *protogen.Service) string {
 	return svc.GoName
 }
 
-func anyInterfaceName(svc *protogen.Service) string {
-	return fmt.Sprintf("%sAny", svc.GoName)
+func AnyInterfaceType(desc protoreflect.ServiceDescriptor) string {
+	return strs.GoCamelCase(string(desc.Name()) + "Any")
 }

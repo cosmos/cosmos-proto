@@ -1,0 +1,13 @@
+syntax="proto3";
+
+package anyinterface.testpb.ifaceaccepter;
+
+import "cosmos.proto";
+import "anyinterface/testpb/iface/iface.proto";
+import "google/protobuf/any.proto";
+
+option go_package = "github.com/cosmos/cosmos-proto/anyinterface/testpb/ifaceaccepter";
+
+message Tx {
+  google.protobuf.Any Msg = 1 [(cosmos_proto.accepts_interface) = "anyinterface.testpb.iface.Msg"];
+}

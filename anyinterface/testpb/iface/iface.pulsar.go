@@ -1,8 +1,6 @@
 package iface
 
 import (
-	reflect "reflect"
-
 	_ "github.com/cosmos/cosmos-proto"
 	proto "google.golang.org/protobuf/proto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -10,6 +8,7 @@ import (
 	anypb "google.golang.org/protobuf/types/known/anypb"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	wrapperspb "google.golang.org/protobuf/types/known/wrapperspb"
+	reflect "reflect"
 )
 
 type Msg interface {
@@ -22,22 +21,9 @@ type Msg interface {
 
 var _ Msg = (*MsgAny)(nil)
 
-type ProtoWithInterface struct {
-	Interface *MsgAny
-}
-
-func NewMsgAny(concrete Msg, packer interface{}) (*MsgAny, error) {
-	panic("impl")
-}
-
 type MsgAny struct {
 	any   *anypb.Any
 	iface Msg
-}
-
-func (x *MsgAny) ProtoReflect() protoreflect.Message {
-	// mocks any behaviour
-	panic("gencode")
 }
 
 // GetSigners gets the signers
