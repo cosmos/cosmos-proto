@@ -19,6 +19,7 @@ const (
 
 func GenProtoMessage(f *protogen.File, g *generator.GeneratedFile, message *protogen.Message) {
 	gen := newGenerator(f, g, message)
+	gen.genUnwrap()
 	gen.generateExtraTypes()
 	gen.generateReflectionType()
 	gen.genMessageType()
@@ -42,6 +43,14 @@ func GenProtoMessage(f *protogen.File, g *generator.GeneratedFile, message *prot
 
 func fastReflectionTypeName(message *protogen.Message) string {
 	return fmt.Sprintf("fastReflection_%s", message.GoIdent.GoName)
+}
+
+// generates a method to unwrap a fast-wrapped message into its parent type
+// this makes it easier to use proto methods.
+func (g *fastGenerator) genUnwrap() {
+	g.P(`func (x *`, fastReflectionTypeName(g.message), `) Unwrap() *`, g.message.GoIdent, ` {`)
+	g.P(`		return (*`, g.message.GoIdent, `)(x)`)
+	g.P(`}`)
 }
 
 // generateExtraTypes generates the protoreflect.List and protoreflect.Map types required.
@@ -280,7 +289,51 @@ func (g *fastGenerator) genProtoMethods() {
 	g.P(`// "google.golang.org/protobuf/runtime/protoiface".Methods.`)
 	g.P("// Consult the protoiface package documentation for details.")
 	g.P("func (x *", g.typeName, ") ProtoMethods() *", protoifacePkg.Ident("Methods"), " {")
-	g.P("return nil")
+
+	// SIZE METHOD
+	g.P(`size := func(input `, protoifacePkg.Ident("SizeInput"), ") ", protoifacePkg.Ident("SizeOutput"), " {")
+	g.P("s := input.Message.(*", fastReflectionTypeName(g.message), ").Unwrap().Size()")
+	g.P("return ", protoifacePkg.Ident("SizeOutput"), "{")
+	g.P("NoUnkeyedLiterals: struct{}{},")
+	g.P("Size: s,")
+	g.P("}")
+	g.P("}")
+
+	// MARSHAL METHOD
+	g.P(`marshal := func(input `, protoifacePkg.Ident("MarshalInput"), `) (`, protoifacePkg.Ident("MarshalOutput"), `, error) {`)
+	g.P(`bz, err := input.Message.(*`, fastReflectionTypeName(g.message), `).Unwrap().Marshal()`)
+	g.P(`if err != nil {`)
+	g.P(`		return `, protoifacePkg.Ident("MarshalOutput"), `{}, err`)
+	g.P(`}`)
+	g.P("if input.Buf != nil {")
+	g.P(`input.Buf = append(input.Buf, bz...)`)
+	g.P("} else {")
+	g.P("input.Buf = bz")
+	g.P("}")
+	g.P(`return `, protoifacePkg.Ident("MarshalOutput"), `{`)
+	g.P(`		NoUnkeyedLiterals: struct{}{},`)
+	g.P(`		Buf: input.Buf,`)
+	g.P("}, nil")
+	g.P("}")
+
+	// UNMARSHAL METHOD
+	g.P(`unmarshal := func(input `, protoifacePkg.Ident("UnmarshalInput"), `) (`, protoifacePkg.Ident("UnmarshalOutput"), `, error) {`)
+	g.P(`err := input.Message.(*`, fastReflectionTypeName(g.message), `).Unwrap().Unmarshal(input.Buf)`)
+	g.P(`if err != nil {`)
+	g.P(`return `, protoifacePkg.Ident("UnmarshalOutput"), `{}, err`)
+	g.P("}")
+	g.P("return ", protoifacePkg.Ident("UnmarshalOutput"), "{}, nil")
+	g.P("}")
+
+	g.P("return &", protoifacePkg.Ident("Methods"), "{ ")
+	g.P("NoUnkeyedLiterals: struct{}{},")
+	g.P("Flags: 0,")
+	g.P("Size: size,")
+	g.P("Marshal: marshal,")
+	g.P("Unmarshal: unmarshal,")
+	g.P("Merge: nil,")
+	g.P("CheckInitialized: nil,")
+	g.P("}")
 	g.P("}")
 }
 
