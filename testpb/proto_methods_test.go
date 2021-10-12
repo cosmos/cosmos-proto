@@ -130,7 +130,6 @@ func getRapidMsg(t *rapid.T) A {
 		MESSAGE:     genMessageB.Draw(t, "MESSAGE").(*B),
 		LIST:        rapid.SliceOf(genMessageB).Draw(t, "LIST").([]*B),
 		ONEOF:       genOneOf.Draw(t, "one of").(isA_ONEOF),
-		ONEOF2:      genOneof2.Draw(t, "oneof2").(isA_ONEOF2),
 		LIST_ENUM:   rapid.SliceOf(genEnumSlice).Draw(t, "slice enum").([]Enumeration),
 	}
 }
@@ -151,23 +150,6 @@ var genOneOfB = rapid.Custom(func(t *rapid.T) *A_ONEOF_B {
 
 var genOneOfString = rapid.Custom(func(t *rapid.T) *A_ONEOF_STRING {
 	return &A_ONEOF_STRING{ONEOF_STRING: rapid.StringN(1, -1, -1).Draw(t, "string in one of").(string)}
-})
-
-var genOneof2 = rapid.Custom(func(t *rapid.T) isA_ONEOF2 {
-	oneof := rapid.OneOf(genOneofStringy, genOneofbooly, genOneof2int).Draw(t, "oneof2").(isA_ONEOF2)
-	return oneof
-})
-
-var genOneofbooly = rapid.Custom(func(t *rapid.T) *A_Boolyboy {
-	return &A_Boolyboy{Boolyboy: rapid.Bool().Draw(t, "bool oneof").(bool)}
-})
-
-var genOneofStringy = rapid.Custom(func(t *rapid.T) *A_Stringyboy {
-	return &A_Stringyboy{Stringyboy: rapid.StringN(1, -1, -1).Draw(t, "string in one of").(string)}
-})
-
-var genOneof2int = rapid.Custom(func(t *rapid.T) *A_Intyboy {
-	return &A_Intyboy{Intyboy: rapid.Int64().Draw(t, "intboy").(int64)}
 })
 
 var genMessageB = rapid.Custom(func(t *rapid.T) *B {

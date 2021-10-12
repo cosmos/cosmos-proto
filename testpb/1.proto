@@ -32,11 +32,6 @@ message A {
     string ONEOF_STRING = 21;
   };
   repeated Enumeration LIST_ENUM = 22;
-  oneof ONEOF2 {
-    int64 intyboy  = 23;
-    string stringyboy = 24;
-    bool boolyboy = 25;
-  }
 }
 
 message B {
