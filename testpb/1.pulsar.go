@@ -228,6 +228,9 @@ var (
 	fd_A_ONEOF_B      protoreflect.FieldDescriptor
 	fd_A_ONEOF_STRING protoreflect.FieldDescriptor
 	fd_A_LIST_ENUM    protoreflect.FieldDescriptor
+	fd_A_intyboy      protoreflect.FieldDescriptor
+	fd_A_stringyboy   protoreflect.FieldDescriptor
+	fd_A_boolyboy     protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -255,6 +258,9 @@ func init() {
 	fd_A_ONEOF_B = md_A.Fields().ByName("ONEOF_B")
 	fd_A_ONEOF_STRING = md_A.Fields().ByName("ONEOF_STRING")
 	fd_A_LIST_ENUM = md_A.Fields().ByName("LIST_ENUM")
+	fd_A_intyboy = md_A.Fields().ByName("intyboy")
+	fd_A_stringyboy = md_A.Fields().ByName("stringyboy")
+	fd_A_boolyboy = md_A.Fields().ByName("boolyboy")
 }
 
 var _ protoreflect.Message = (*fastReflection_A)(nil)
@@ -447,7 +453,7 @@ func (x *fastReflection_A) Range(f func(protoreflect.FieldDescriptor, protorefle
 		case *A_ONEOF_STRING:
 			v := o.ONEOF_STRING
 			value := protoreflect.ValueOfString(v)
-			if !f(fd_A_ONEOF_B, value) {
+			if !f(fd_A_ONEOF_STRING, value) {
 				return
 			}
 		}
@@ -456,6 +462,28 @@ func (x *fastReflection_A) Range(f func(protoreflect.FieldDescriptor, protorefle
 		value := protoreflect.ValueOfList(&_A_22_list{list: &x.LIST_ENUM})
 		if !f(fd_A_LIST_ENUM, value) {
 			return
+		}
+	}
+	if x.ONEOF2 != nil {
+		switch o := x.ONEOF2.(type) {
+		case *A_Intyboy:
+			v := o.Intyboy
+			value := protoreflect.ValueOfInt64(v)
+			if !f(fd_A_intyboy, value) {
+				return
+			}
+		case *A_Stringyboy:
+			v := o.Stringyboy
+			value := protoreflect.ValueOfString(v)
+			if !f(fd_A_stringyboy, value) {
+				return
+			}
+		case *A_Boolyboy:
+			v := o.Boolyboy
+			value := protoreflect.ValueOfBool(v)
+			if !f(fd_A_boolyboy, value) {
+				return
+			}
 		}
 	}
 }
@@ -517,6 +545,12 @@ func (x *fastReflection_A) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.ONEOF != nil
 	case "A.LIST_ENUM":
 		return len(x.LIST_ENUM) != 0
+	case "A.intyboy":
+		return x.ONEOF2 != nil
+	case "A.stringyboy":
+		return x.ONEOF2 != nil
+	case "A.boolyboy":
+		return x.ONEOF2 != nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -577,6 +611,12 @@ func (x *fastReflection_A) Clear(fd protoreflect.FieldDescriptor) {
 		x.ONEOF = nil
 	case "A.LIST_ENUM":
 		x.LIST_ENUM = nil
+	case "A.intyboy":
+		x.ONEOF2 = nil
+	case "A.stringyboy":
+		x.ONEOF2 = nil
+	case "A.boolyboy":
+		x.ONEOF2 = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -678,6 +718,30 @@ func (x *fastReflection_A) Get(descriptor protoreflect.FieldDescriptor) protoref
 		}
 		listValue := &_A_22_list{list: &x.LIST_ENUM}
 		return protoreflect.ValueOfList(listValue)
+	case "A.intyboy":
+		if x.ONEOF2 == nil {
+			return protoreflect.ValueOfInt64(int64(0))
+		} else if v, ok := x.ONEOF2.(*A_Intyboy); ok {
+			return protoreflect.ValueOfInt64(v.Intyboy)
+		} else {
+			return protoreflect.ValueOfInt64(int64(0))
+		}
+	case "A.stringyboy":
+		if x.ONEOF2 == nil {
+			return protoreflect.ValueOfString("")
+		} else if v, ok := x.ONEOF2.(*A_Stringyboy); ok {
+			return protoreflect.ValueOfString(v.Stringyboy)
+		} else {
+			return protoreflect.ValueOfString("")
+		}
+	case "A.boolyboy":
+		if x.ONEOF2 == nil {
+			return protoreflect.ValueOfBool(false)
+		} else if v, ok := x.ONEOF2.(*A_Boolyboy); ok {
+			return protoreflect.ValueOfBool(v.Boolyboy)
+		} else {
+			return protoreflect.ValueOfBool(false)
+		}
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -750,6 +814,15 @@ func (x *fastReflection_A) Set(fd protoreflect.FieldDescriptor, value protorefle
 		lv := value.List()
 		clv := lv.(*_A_22_list)
 		x.LIST_ENUM = *clv.list
+	case "A.intyboy":
+		cv := value.Int()
+		x.ONEOF2 = &A_Intyboy{Intyboy: cv}
+	case "A.stringyboy":
+		cv := value.String()
+		x.ONEOF2 = &A_Stringyboy{Stringyboy: cv}
+	case "A.boolyboy":
+		cv := value.Bool()
+		x.ONEOF2 = &A_Boolyboy{Boolyboy: cv}
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -843,6 +916,12 @@ func (x *fastReflection_A) Mutable(fd protoreflect.FieldDescriptor) protoreflect
 		panic(fmt.Errorf("field BYTES of message A is not mutable"))
 	case "A.ONEOF_STRING":
 		panic(fmt.Errorf("field ONEOF_STRING of message A is not mutable"))
+	case "A.intyboy":
+		panic(fmt.Errorf("field intyboy of message A is not mutable"))
+	case "A.stringyboy":
+		panic(fmt.Errorf("field stringyboy of message A is not mutable"))
+	case "A.boolyboy":
+		panic(fmt.Errorf("field boolyboy of message A is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -905,6 +984,12 @@ func (x *fastReflection_A) NewField(fd protoreflect.FieldDescriptor) protoreflec
 	case "A.LIST_ENUM":
 		list := []Enumeration{}
 		return protoreflect.ValueOfList(&_A_22_list{list: &list})
+	case "A.intyboy":
+		return protoreflect.ValueOfInt64(int64(0))
+	case "A.stringyboy":
+		return protoreflect.ValueOfString("")
+	case "A.boolyboy":
+		return protoreflect.ValueOfBool(false)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -927,6 +1012,18 @@ func (x *fastReflection_A) WhichOneof(d protoreflect.OneofDescriptor) protorefle
 			return x.Descriptor().Fields().ByName("ONEOF_B")
 		case *A_ONEOF_STRING:
 			return x.Descriptor().Fields().ByName("ONEOF_STRING")
+		}
+	case "A.ONEOF2":
+		if x.ONEOF2 == nil {
+			return nil
+		}
+		switch x.ONEOF2.(type) {
+		case *A_Intyboy:
+			return x.Descriptor().Fields().ByName("intyboy")
+		case *A_Stringyboy:
+			return x.Descriptor().Fields().ByName("stringyboy")
+		case *A_Boolyboy:
+			return x.Descriptor().Fields().ByName("boolyboy")
 		}
 	default:
 		panic(fmt.Errorf("%s is not a oneof field in A", d.FullName()))
@@ -1334,6 +1431,30 @@ func (m *A) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.unknownFields)
 		copy(dAtA[i:], m.unknownFields)
 	}
+	if vtmsg, ok := m.ONEOF2.(interface {
+		MarshalTo([]byte) (int, error)
+		Size() int
+	}); ok {
+		{
+			size := vtmsg.Size()
+			i -= size
+			if _, err := vtmsg.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if vtmsg, ok := m.ONEOF.(interface {
+		MarshalTo([]byte) (int, error)
+		Size() int
+	}); ok {
+		{
+			size := vtmsg.Size()
+			i -= size
+			if _, err := vtmsg.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.LIST_ENUM) > 0 {
 		var pksize2 int
 		for _, num := range m.LIST_ENUM {
@@ -1356,18 +1477,6 @@ func (m *A) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0xb2
-	}
-	if vtmsg, ok := m.ONEOF.(interface {
-		MarshalTo([]byte) (int, error)
-		Size() int
-	}); ok {
-		{
-			size := vtmsg.Size()
-			i -= size
-			if _, err := vtmsg.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
 	}
 	if len(m.LIST) > 0 {
 		for iNdEx := len(m.LIST) - 1; iNdEx >= 0; iNdEx-- {
@@ -1556,6 +1665,55 @@ func (m *A_ONEOF_STRING) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	dAtA[i] = 0xaa
 	return len(dAtA) - i, nil
 }
+func (m *A_Intyboy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *A_Intyboy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i = encodeVarint(dAtA, i, uint64(m.Intyboy))
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xb8
+	return len(dAtA) - i, nil
+}
+func (m *A_Stringyboy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *A_Stringyboy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Stringyboy)
+	copy(dAtA[i:], m.Stringyboy)
+	i = encodeVarint(dAtA, i, uint64(len(m.Stringyboy)))
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xc2
+	return len(dAtA) - i, nil
+}
+func (m *A_Boolyboy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *A_Boolyboy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Boolyboy {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xc8
+	return len(dAtA) - i, nil
+}
 func (m *B) Marshal() (dAtA []byte, err error) {
 	if m == nil {
 		return nil, nil
@@ -1696,6 +1854,11 @@ type A struct {
 	//	*A_ONEOF_STRING
 	ONEOF     isA_ONEOF     `protobuf_oneof:"ONEOF"`
 	LIST_ENUM []Enumeration `protobuf:"varint,22,rep,packed,name=LIST_ENUM,json=LISTENUM,proto3,enum=Enumeration" json:"LIST_ENUM,omitempty"`
+	// Types that are assignable to ONEOF2:
+	//	*A_Intyboy
+	//	*A_Stringyboy
+	//	*A_Boolyboy
+	ONEOF2 isA_ONEOF2 `protobuf_oneof:"ONEOF2"`
 }
 
 func (x *A) Reset() {
@@ -1879,6 +2042,34 @@ func (x *A) GetLIST_ENUM() []Enumeration {
 	return nil
 }
 
+func (m *A) GetONEOF2() isA_ONEOF2 {
+	if m != nil {
+		return m.ONEOF2
+	}
+	return nil
+}
+
+func (x *A) GetIntyboy() int64 {
+	if x, ok := x.GetONEOF2().(*A_Intyboy); ok {
+		return x.Intyboy
+	}
+	return 0
+}
+
+func (x *A) GetStringyboy() string {
+	if x, ok := x.GetONEOF2().(*A_Stringyboy); ok {
+		return x.Stringyboy
+	}
+	return ""
+}
+
+func (x *A) GetBoolyboy() bool {
+	if x, ok := x.GetONEOF2().(*A_Boolyboy); ok {
+		return x.Boolyboy
+	}
+	return false
+}
+
 type isA_ONEOF interface {
 	isA_ONEOF()
 }
@@ -1894,6 +2085,28 @@ type A_ONEOF_STRING struct {
 func (*A_ONEOF_B) isA_ONEOF() {}
 
 func (*A_ONEOF_STRING) isA_ONEOF() {}
+
+type isA_ONEOF2 interface {
+	isA_ONEOF2()
+}
+
+type A_Intyboy struct {
+	Intyboy int64 `protobuf:"varint,23,opt,name=intyboy,proto3,oneof"`
+}
+
+type A_Stringyboy struct {
+	Stringyboy string `protobuf:"bytes,24,opt,name=stringyboy,proto3,oneof"`
+}
+
+type A_Boolyboy struct {
+	Boolyboy bool `protobuf:"varint,25,opt,name=boolyboy,proto3,oneof"`
+}
+
+func (*A_Intyboy) isA_ONEOF2() {}
+
+func (*A_Stringyboy) isA_ONEOF2() {}
+
+func (*A_Boolyboy) isA_ONEOF2() {}
 
 type B struct {
 	state         protoimpl.MessageState
@@ -1934,7 +2147,7 @@ var File_testpb_1_proto protoreflect.FileDescriptor
 
 var file_testpb_1_proto_rawDesc = []byte{
 	0x0a, 0x0e, 0x74, 0x65, 0x73, 0x74, 0x70, 0x62, 0x2f, 0x31, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x22, 0xa5, 0x05, 0x0a, 0x01, 0x41, 0x12, 0x20, 0x0a, 0x04, 0x65, 0x6e, 0x75, 0x6d, 0x18, 0x01,
+	0x22, 0x8b, 0x06, 0x0a, 0x01, 0x41, 0x12, 0x20, 0x0a, 0x04, 0x65, 0x6e, 0x75, 0x6d, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x0e, 0x32, 0x0c, 0x2e, 0x45, 0x6e, 0x75, 0x6d, 0x65, 0x72, 0x61, 0x74, 0x69,
 	0x6f, 0x6e, 0x52, 0x04, 0x65, 0x6e, 0x75, 0x6d, 0x12, 0x21, 0x0a, 0x0c, 0x73, 0x6f, 0x6d, 0x65,
 	0x5f, 0x62, 0x6f, 0x6f, 0x6c, 0x65, 0x61, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0b,
@@ -1972,17 +2185,24 @@ var file_testpb_1_proto_rawDesc = []byte{
 	0x4f, 0x46, 0x53, 0x54, 0x52, 0x49, 0x4e, 0x47, 0x12, 0x29, 0x0a, 0x09, 0x4c, 0x49, 0x53, 0x54,
 	0x5f, 0x45, 0x4e, 0x55, 0x4d, 0x18, 0x16, 0x20, 0x03, 0x28, 0x0e, 0x32, 0x0c, 0x2e, 0x45, 0x6e,
 	0x75, 0x6d, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x08, 0x4c, 0x49, 0x53, 0x54, 0x45,
-	0x4e, 0x55, 0x4d, 0x1a, 0x3a, 0x0a, 0x08, 0x4d, 0x41, 0x50, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12,
-	0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65,
-	0x79, 0x12, 0x18, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x02, 0x2e, 0x42, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x42,
-	0x07, 0x0a, 0x05, 0x4f, 0x4e, 0x45, 0x4f, 0x46, 0x22, 0x11, 0x0a, 0x01, 0x42, 0x12, 0x0c, 0x0a,
-	0x01, 0x78, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x01, 0x78, 0x2a, 0x1f, 0x0a, 0x0b, 0x45,
-	0x6e, 0x75, 0x6d, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x07, 0x0a, 0x03, 0x4f, 0x6e,
-	0x65, 0x10, 0x00, 0x12, 0x07, 0x0a, 0x03, 0x54, 0x77, 0x6f, 0x10, 0x01, 0x42, 0x27, 0x5a, 0x25,
-	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x74,
-	0x65, 0x73, 0x74, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x4e, 0x55, 0x4d, 0x12, 0x1a, 0x0a, 0x07, 0x69, 0x6e, 0x74, 0x79, 0x62, 0x6f, 0x79, 0x18, 0x17,
+	0x20, 0x01, 0x28, 0x03, 0x48, 0x01, 0x52, 0x07, 0x69, 0x6e, 0x74, 0x79, 0x62, 0x6f, 0x79, 0x12,
+	0x20, 0x0a, 0x0a, 0x73, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x79, 0x62, 0x6f, 0x79, 0x18, 0x18, 0x20,
+	0x01, 0x28, 0x09, 0x48, 0x01, 0x52, 0x0a, 0x73, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x79, 0x62, 0x6f,
+	0x79, 0x12, 0x1c, 0x0a, 0x08, 0x62, 0x6f, 0x6f, 0x6c, 0x79, 0x62, 0x6f, 0x79, 0x18, 0x19, 0x20,
+	0x01, 0x28, 0x08, 0x48, 0x01, 0x52, 0x08, 0x62, 0x6f, 0x6f, 0x6c, 0x79, 0x62, 0x6f, 0x79, 0x1a,
+	0x3a, 0x0a, 0x08, 0x4d, 0x41, 0x50, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b,
+	0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x18, 0x0a,
+	0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x02, 0x2e, 0x42,
+	0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x42, 0x07, 0x0a, 0x05, 0x4f,
+	0x4e, 0x45, 0x4f, 0x46, 0x42, 0x08, 0x0a, 0x06, 0x4f, 0x4e, 0x45, 0x4f, 0x46, 0x32, 0x22, 0x11,
+	0x0a, 0x01, 0x42, 0x12, 0x0c, 0x0a, 0x01, 0x78, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x01,
+	0x78, 0x2a, 0x1f, 0x0a, 0x0b, 0x45, 0x6e, 0x75, 0x6d, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x12, 0x07, 0x0a, 0x03, 0x4f, 0x6e, 0x65, 0x10, 0x00, 0x12, 0x07, 0x0a, 0x03, 0x54, 0x77, 0x6f,
+	0x10, 0x01, 0x42, 0x27, 0x5a, 0x25, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
+	0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x74, 0x65, 0x73, 0x74, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -2054,6 +2274,9 @@ func file_testpb_1_proto_init() {
 	file_testpb_1_proto_msgTypes[0].OneofWrappers = []interface{}{
 		(*A_ONEOF_B)(nil),
 		(*A_ONEOF_STRING)(nil),
+		(*A_Intyboy)(nil),
+		(*A_Stringyboy)(nil),
+		(*A_Boolyboy)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -2164,6 +2387,9 @@ func (m *A) Size() (n int) {
 		}
 		n += 2 + sov(uint64(l)) + l
 	}
+	if vtmsg, ok := m.ONEOF2.(interface{ Size() int }); ok {
+		n += vtmsg.Size()
+	}
 	if m.unknownFields != nil {
 		n += len(m.unknownFields)
 	}
@@ -2190,6 +2416,34 @@ func (m *A_ONEOF_STRING) Size() (n int) {
 	_ = l
 	l = len(m.ONEOF_STRING)
 	n += 2 + l + sov(uint64(l))
+	return n
+}
+func (m *A_Intyboy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 2 + sov(uint64(m.Intyboy))
+	return n
+}
+func (m *A_Stringyboy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Stringyboy)
+	n += 2 + l + sov(uint64(l))
+	return n
+}
+func (m *A_Boolyboy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
 	return n
 }
 func (m *B) Size() (n int) {
@@ -2869,6 +3123,79 @@ func (m *A) Unmarshal(dAtA []byte) error {
 			} else {
 				return fmt.Errorf("proto: wrong wireType = %d for field LIST_ENUM", wireType)
 			}
+		case 23:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Intyboy", wireType)
+			}
+			var v int64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.ONEOF2 = &A_Intyboy{v}
+		case 24:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Stringyboy", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLength
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ONEOF2 = &A_Stringyboy{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 25:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Boolyboy", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.ONEOF2 = &A_Boolyboy{b}
 		default:
 			iNdEx = preIndex
 			skippy, err := skip(dAtA[iNdEx:])
