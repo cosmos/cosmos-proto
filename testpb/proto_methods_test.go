@@ -104,49 +104,7 @@ func testUnmarshal(t *rapid.T) {
 		tc.unmarshal(bz, &aa)
 		fastAA := fastReflection_A(aa)
 		underlying := fastMsg.(*fastReflection_A)
-		CheckEqual(t, fastAA, *underlying)
-	}
-}
-
-func CheckEqual(t *rapid.T, a1, a2 fastReflection_A) {
-	require.Equal(t, a1.Enum, a2.Enum)
-	require.Equal(t, a1.SomeBoolean, a2.SomeBoolean)
-	require.Equal(t, a1.INT32, a2.INT32)
-	require.Equal(t, a1.SINT32, a2.SINT32)
-	require.Equal(t, a1.UINT32, a2.UINT32)
-	require.Equal(t, a1.INT64, a2.INT64)
-	require.Equal(t, a1.SING64, a2.SING64)
-	require.Equal(t, a1.UINT64, a2.UINT64)
-	require.Equal(t, a1.SFIXED32, a2.SFIXED32)
-	require.Equal(t, a1.FIXED32, a2.FIXED32)
-	require.Equal(t, a1.FLOAT, a2.FLOAT)
-	require.Equal(t, a1.SFIXED64, a2.SFIXED64)
-	require.Equal(t, a1.FIXED64, a2.FIXED64)
-	require.Equal(t, a1.DOUBLE, a2.DOUBLE)
-	require.Equal(t, a1.STRING, a2.STRING)
-	if len(a1.BYTES) == 0 {
-		require.True(t, len(a2.BYTES) == 0)
-	} else {
-		require.Equal(t, a1.BYTES, a2.BYTES)
-	}
-	require.Equal(t, a1.MESSAGE.X, a2.MESSAGE.X)
-	switch a1o := a1.ONEOF.(type) {
-	case *A_ONEOF_B:
-		a2o := a2.ONEOF.(*A_ONEOF_B)
-		require.Equal(t, a1o.ONEOF_B.X, a2o.ONEOF_B.X)
-	case *A_ONEOF_STRING:
-		a2o := a2.ONEOF.(*A_ONEOF_STRING)
-		require.Equal(t, a1o.ONEOF_STRING, a2o.ONEOF_STRING)
-	}
-	if len(a1.LIST_ENUM) == 0 {
-		require.True(t, len(a2.LIST_ENUM) == 0)
-	} else {
-		require.Equal(t, a1.LIST_ENUM, a2.LIST_ENUM)
-	}
-	for i := range a1.LIST {
-		a1list := a1.LIST
-		a2list := a2.LIST
-		require.Equal(t, a1list[i].X, a2list[i].X)
+		require.True(t, proto.Equal(fastAA.Interface(), underlying.Interface()))
 	}
 }
 
