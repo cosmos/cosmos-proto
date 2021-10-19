@@ -16,6 +16,11 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
+// Standard library dependencies.
+const (
+	runtimePackage = protogen.GoImportPath("github.com/cosmos/cosmos-proto/runtime")
+)
+
 func init() {
 	generator.RegisterFeature("unmarshal", func(gen *generator.GeneratedFile, plugin *protogen.Plugin) generator.FeatureGenerator {
 		return &unmarshal{GeneratedFile: gen}
@@ -37,93 +42,7 @@ func (p *unmarshal) GenerateFile(file *protogen.File, plugin *protogen.Plugin) b
 	return p.once
 }
 
-func (p *unmarshal) GenerateHelpers() {
-	p.P(`func skip(dAtA []byte) (n int, err error) {
-		l := len(dAtA)
-		iNdEx := 0
-		depth := 0
-		for iNdEx < l {
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return 0, `, p.Ident("io", "ErrUnexpectedEOF"), `
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			wireType := int(wire & 0x7)
-			switch wireType {
-			case 0:
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return 0, `, p.Ident("io", "ErrUnexpectedEOF"), `
-					}
-					iNdEx++
-					if dAtA[iNdEx-1] < 0x80 {
-						break
-					}
-				}
-			case 1:
-				iNdEx += 8
-			case 2:
-				var length int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return 0, `, p.Ident("io", "ErrUnexpectedEOF"), `
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					length |= (int(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if length < 0 {
-					return 0, ErrInvalidLength
-				}
-				iNdEx += length
-			case 3:
-				depth++
-			case 4:
-				if depth == 0 {
-					return 0, ErrUnexpectedEndOfGroup
-				}
-				depth--
-			case 5:
-				iNdEx += 4
-			default:
-				return 0, `, p.Ident("fmt", `Errorf`), `("proto: illegal wireType %d", wireType)
-			}
-			if iNdEx < 0 {
-				return 0, ErrInvalidLength
-			}
-			if depth == 0 {
-				return iNdEx, nil
-			}
-		}
-		return 0, `, p.Ident("io", "ErrUnexpectedEOF"), `
-	}
-
-	var (
-		ErrInvalidLength = `, p.Ident("fmt", "Errorf"), `("proto: negative length found during unmarshaling")
-		ErrIntOverflow = `, p.Ident("fmt", "Errorf"), `("proto: integer overflow")
-		ErrUnexpectedEndOfGroup = `, p.Ident("fmt", "Errorf"), `("proto: unexpected end of group")
-	)
-	`)
-}
+func (p *unmarshal) GenerateHelpers() {}
 
 func (p *unmarshal) decodeMessage(varName, buf string, message *protogen.Message) {
 	local := p.IsLocalMessage(message)
@@ -150,7 +69,7 @@ func (p *unmarshal) decodeMessage(varName, buf string, message *protogen.Message
 func (p *unmarshal) decodeVarint(varName string, typName string) {
 	p.P(`for shift := uint(0); ; shift += 7 {`)
 	p.P(`if shift >= 64 {`)
-	p.P(`return ErrIntOverflow`)
+	p.P(`return `, runtimePackage.Ident("ErrIntOverflow"))
 	p.P(`}`)
 	p.P(`if iNdEx >= l {`)
 	p.P(`return `, p.Ident("io", `ErrUnexpectedEOF`))
@@ -253,11 +172,11 @@ func (p *unmarshal) mapField(varName string, field *protogen.Field) {
 		p.decodeVarint("stringLen"+varName, "uint64")
 		p.P(`intStringLen`, varName, ` := int(stringLen`, varName, `)`)
 		p.P(`if intStringLen`, varName, ` < 0 {`)
-		p.P(`return ErrInvalidLength`)
+		p.P(`return `, runtimePackage.Ident("ErrInvalidLength"))
 		p.P(`}`)
 		p.P(`postStringIndex`, varName, ` := iNdEx + intStringLen`, varName)
 		p.P(`if postStringIndex`, varName, ` < 0 {`)
-		p.P(`return ErrInvalidLength`)
+		p.P(`return `, runtimePackage.Ident("ErrInvalidLength"))
 		p.P(`}`)
 		p.P(`if postStringIndex`, varName, ` > l {`)
 		p.P(`return `, p.Ident("io", `ErrUnexpectedEOF`))
@@ -268,11 +187,11 @@ func (p *unmarshal) mapField(varName string, field *protogen.Field) {
 		p.P(`var mapmsglen int`)
 		p.decodeVarint("mapmsglen", "int")
 		p.P(`if mapmsglen < 0 {`)
-		p.P(`return ErrInvalidLength`)
+		p.P(`return `, runtimePackage.Ident("ErrInvalidLength"))
 		p.P(`}`)
 		p.P(`postmsgIndex := iNdEx + mapmsglen`)
 		p.P(`if postmsgIndex < 0 {`)
-		p.P(`return ErrInvalidLength`)
+		p.P(`return `, runtimePackage.Ident("ErrInvalidLength"))
 		p.P(`}`)
 		p.P(`if postmsgIndex > l {`)
 		p.P(`return `, p.Ident("io", `ErrUnexpectedEOF`))
@@ -286,11 +205,11 @@ func (p *unmarshal) mapField(varName string, field *protogen.Field) {
 		p.decodeVarint("mapbyteLen", "uint64")
 		p.P(`intMapbyteLen := int(mapbyteLen)`)
 		p.P(`if intMapbyteLen < 0 {`)
-		p.P(`return ErrInvalidLength`)
+		p.P(`return `, runtimePackage.Ident("ErrInvalidLength"))
 		p.P(`}`)
 		p.P(`postbytesIndex := iNdEx + intMapbyteLen`)
 		p.P(`if postbytesIndex < 0 {`)
-		p.P(`return ErrInvalidLength`)
+		p.P(`return `, runtimePackage.Ident("ErrInvalidLength"))
 		p.P(`}`)
 		p.P(`if postbytesIndex > l {`)
 		p.P(`return `, p.Ident("io", `ErrUnexpectedEOF`))
@@ -470,11 +389,11 @@ func (p *unmarshal) fieldItem(field *protogen.Field, fieldname string, message *
 		p.decodeVarint("stringLen", "uint64")
 		p.P(`intStringLen := int(stringLen)`)
 		p.P(`if intStringLen < 0 {`)
-		p.P(`return ErrInvalidLength`)
+		p.P(`return `, runtimePackage.Ident("ErrInvalidLength"))
 		p.P(`}`)
 		p.P(`postIndex := iNdEx + intStringLen`)
 		p.P(`if postIndex < 0 {`)
-		p.P(`return ErrInvalidLength`)
+		p.P(`return `, runtimePackage.Ident("ErrInvalidLength"))
 		p.P(`}`)
 		p.P(`if postIndex > l {`)
 		p.P(`return `, p.Ident("io", `ErrUnexpectedEOF`))
@@ -496,11 +415,11 @@ func (p *unmarshal) fieldItem(field *protogen.Field, fieldname string, message *
 		p.P(`var msglen int`)
 		p.decodeVarint("msglen", "int")
 		p.P(`if msglen < 0 {`)
-		p.P(`return ErrInvalidLength`)
+		p.P(`return `, runtimePackage.Ident("ErrInvalidLength"))
 		p.P(`}`)
 		p.P(`postIndex := iNdEx + msglen`)
 		p.P(`if postIndex < 0 {`)
-		p.P(`return ErrInvalidLength`)
+		p.P(`return `, runtimePackage.Ident("ErrInvalidLength"))
 		p.P(`}`)
 		p.P(`if postIndex > l {`)
 		p.P(`return `, p.Ident("io", `ErrUnexpectedEOF`))
@@ -539,12 +458,12 @@ func (p *unmarshal) fieldItem(field *protogen.Field, fieldname string, message *
 			p.mapField("mapvalue", field.Message.Fields[1])
 			p.P(`} else {`)
 			p.P(`iNdEx = entryPreIndex`)
-			p.P(`skippy, err := skip(dAtA[iNdEx:])`)
+			p.P(`skippy, err := `, runtimePackage.Ident("Skip"), `(dAtA[iNdEx:])`)
 			p.P(`if err != nil {`)
 			p.P(`return err`)
 			p.P(`}`)
 			p.P(`if (skippy < 0) || (iNdEx + skippy) < 0 {`)
-			p.P(`return ErrInvalidLength`)
+			p.P(`return `, runtimePackage.Ident("ErrInvalidLength"))
 			p.P(`}`)
 			p.P(`if (iNdEx + skippy) > postIndex {`)
 			p.P(`return `, p.Ident("io", `ErrUnexpectedEOF`))
@@ -585,11 +504,11 @@ func (p *unmarshal) fieldItem(field *protogen.Field, fieldname string, message *
 		p.P(`var byteLen int`)
 		p.decodeVarint("byteLen", "int")
 		p.P(`if byteLen < 0 {`)
-		p.P(`return ErrInvalidLength`)
+		p.P(`return `, runtimePackage.Ident("ErrInvalidLength"))
 		p.P(`}`)
 		p.P(`postIndex := iNdEx + byteLen`)
 		p.P(`if postIndex < 0 {`)
-		p.P(`return ErrInvalidLength`)
+		p.P(`return `, runtimePackage.Ident("ErrInvalidLength"))
 		p.P(`}`)
 		p.P(`if postIndex > l {`)
 		p.P(`return `, p.Ident("io", `ErrUnexpectedEOF`))
@@ -724,11 +643,11 @@ func (p *unmarshal) field(field *protogen.Field, message *protogen.Message, prot
 		p.P(`var packedLen int`)
 		p.decodeVarint("packedLen", "int")
 		p.P(`if packedLen < 0 {`)
-		p.P(`return ErrInvalidLength`)
+		p.P(`return `, runtimePackage.Ident("ErrInvalidLength"))
 		p.P(`}`)
 		p.P(`postIndex := iNdEx + packedLen`)
 		p.P(`if postIndex < 0 {`)
-		p.P(`return ErrInvalidLength`)
+		p.P(`return `, runtimePackage.Ident("ErrInvalidLength"))
 		p.P(`}`)
 		p.P(`if postIndex > l {`)
 		p.P(`return `, p.Ident("io", "ErrUnexpectedEOF"))
@@ -842,12 +761,12 @@ func (p *unmarshal) message(message *protogen.Message) {
 		p.P(`}`)
 		p.P(`}`)
 		p.P(`iNdEx-=sizeOfWire`)
-		p.P(`skippy, err := skip(dAtA[iNdEx:])`)
+		p.P(`skippy, err := `, runtimePackage.Ident("Skip"), `(dAtA[iNdEx:])`)
 		p.P(`if err != nil {`)
 		p.P(`return err`)
 		p.P(`}`)
 		p.P(`if (skippy < 0) || (iNdEx + skippy) < 0 {`)
-		p.P(`return ErrInvalidLength`)
+		p.P(`return `, runtimePackage.Ident("ErrInvalidLength"))
 		p.P(`}`)
 		p.P(`if (iNdEx + skippy) > l {`)
 		p.P(`return `, p.Ident("io", `ErrUnexpectedEOF`))
@@ -857,12 +776,12 @@ func (p *unmarshal) message(message *protogen.Message) {
 		p.P(`} else {`)
 	}
 	p.P(`iNdEx=preIndex`)
-	p.P(`skippy, err := skip(dAtA[iNdEx:])`)
+	p.P(`skippy, err := `, runtimePackage.Ident("Skip"), `(dAtA[iNdEx:])`)
 	p.P(`if err != nil {`)
 	p.P(`return err`)
 	p.P(`}`)
 	p.P(`if (skippy < 0) || (iNdEx + skippy) < 0 {`)
-	p.P(`return ErrInvalidLength`)
+	p.P(`return `, runtimePackage.Ident("ErrInvalidLength"))
 	p.P(`}`)
 	p.P(`if (iNdEx + skippy) > l {`)
 	p.P(`return `, p.Ident("io", `ErrUnexpectedEOF`))
