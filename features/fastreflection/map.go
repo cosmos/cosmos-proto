@@ -70,6 +70,8 @@ func (g *mapGen) genRange() {
 	switch g.field.Message.Fields[1].Desc.Kind() {
 	case protoreflect.MessageKind:
 		g.P("mapValue := ", kindToValueConstructor(g.field.Message.Fields[1].Desc.Kind()), "(v.ProtoReflect())")
+	case protoreflect.EnumKind:
+		g.P("mapValue := ", kindToValueConstructor(g.field.Message.Fields[1].Desc.Kind()), "((", protoreflectPkg.Ident("EnumNumber"), ")(v))")
 	default:
 		g.P("mapValue := ", kindToValueConstructor(g.field.Message.Fields[1].Desc.Kind()), "(v)")
 	}
@@ -148,7 +150,7 @@ func (g *mapGen) genMutable() {
 	g.P("func (x *", g.typeName, ") Mutable(key ", protoreflectPkg.Ident("MapKey"), ") ", protoreflectPkg.Ident("Value"), " {")
 	if g.field.Message.Fields[1].Desc.Kind() != protoreflect.MessageKind {
 		panicMsg := fmt.Sprintf("should not call Mutable on protoreflect.Map whose value is not of type protoreflect.Message")
-		g.P("panic(\"", panicMsg, "\"))")
+		g.P("panic(\"", panicMsg, "\")")
 		g.P("}")
 		g.P()
 		return
@@ -169,7 +171,12 @@ func (g *mapGen) genMutable() {
 func (g *mapGen) genNewValue() {
 	g.P("func (x *", g.typeName, ") NewValue() ", protoreflectPkg.Ident("Value"), " {")
 	valueField := g.field.Message.Fields[1]
-	g.P("v := ", zeroValueForField(g.GeneratedFile, valueField))
+	switch {
+	case valueField.Desc.Kind() == protoreflect.BytesKind:
+		g.P("var v []byte")
+	default:
+		g.P("v := ", zeroValueForField(g.GeneratedFile, valueField))
+	}
 	switch valueField.Desc.Kind() {
 	case protoreflect.MessageKind:
 		g.P("return ", kindToValueConstructor(valueField.Desc.Kind()), "(v.ProtoReflect())")

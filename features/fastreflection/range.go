@@ -72,7 +72,7 @@ func (g *rangeGen) genField(field *protogen.Field) {
 		g.P("if x.", field.GoName, " != ", zeroValueForField(g.GeneratedFile, field), "{")
 		switch {
 		case field.Desc.Kind() == protoreflect.EnumKind:
-			g.P("value := ", kindToValueConstructor(field.Desc.Kind()), "((", protoreflectPkg.Ident("EnumNumber"), ")(x.", field.GoName, ")) ")
+			g.P("value := ", kindToValueConstructor(field.Desc.Kind()), "((", protoreflectPkg.Ident("EnumNumber"), ")(x.", field.GoName, "))")
 		default:
 			g.P("value := ", kindToValueConstructor(field.Desc.Kind()), "(x.", field.GoName, ")")
 		}
@@ -98,7 +98,7 @@ func (g *rangeGen) genOneof(field *protogen.Field) {
 		case protoreflect.MessageKind:
 			g.P("value := ", kindToValueConstructor(oneofField.Desc.Kind()), "(v.ProtoReflect())")
 		case protoreflect.EnumKind:
-			g.P("value :=", kindToValueConstructor(oneofField.Desc.Kind()), "((", protoreflectPkg.Ident("EnumNumber"), ")(v.ProtoReflect())")
+			g.P("value :=", kindToValueConstructor(oneofField.Desc.Kind()), "((", protoreflectPkg.Ident("EnumNumber"), ")(v))")
 		default:
 			g.P("value := ", kindToValueConstructor(oneofField.Desc.Kind()), "(v)")
 

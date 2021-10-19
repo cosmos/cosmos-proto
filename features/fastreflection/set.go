@@ -75,7 +75,7 @@ func (g *setGen) genField(field *protogen.Field) {
 	case protoreflect.DoubleKind:
 		g.P(fieldRef, " = value.Float()")
 	case protoreflect.StringKind:
-		g.P(fieldRef, " = value.String()")
+		g.P(fieldRef, " = value.Interface().(string)")
 	case protoreflect.BytesKind:
 		g.P(fieldRef, " = value.Bytes()")
 	case protoreflect.MessageKind, protoreflect.GroupKind:
@@ -137,7 +137,7 @@ func (g *setGen) genOneofValueUnwrapper(field *protogen.Field) {
 	case protoreflect.DoubleKind:
 		g.P(fieldRef, "  value.Float()")
 	case protoreflect.StringKind:
-		g.P(fieldRef, "  value.String()")
+		g.P(fieldRef, "  value.Interface().(string)")
 	case protoreflect.BytesKind:
 		g.P(fieldRef, "  value.Bytes()")
 	case protoreflect.MessageKind, protoreflect.GroupKind:

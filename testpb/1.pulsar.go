@@ -204,6 +204,170 @@ func (x *_A_22_list) IsValid() bool {
 	return x.list != nil
 }
 
+var _ protoreflect.Map = (*_A_23_map)(nil)
+
+type _A_23_map struct {
+	m *map[string][]byte
+}
+
+func (x *_A_23_map) Len() int {
+	if x.m == nil {
+		return 0
+	}
+	return len(*x.m)
+}
+
+func (x *_A_23_map) Range(f func(protoreflect.MapKey, protoreflect.Value) bool) {
+	if x.m == nil {
+		return
+	}
+	for k, v := range *x.m {
+		mapKey := (protoreflect.MapKey)(protoreflect.ValueOfString(k))
+		mapValue := protoreflect.ValueOfBytes(v)
+		if !f(mapKey, mapValue) {
+			break
+		}
+	}
+}
+
+func (x *_A_23_map) Has(key protoreflect.MapKey) bool {
+	if x.m == nil {
+		return false
+	}
+	keyUnwrapped := key.String()
+	concreteValue := keyUnwrapped
+	_, ok := (*x.m)[concreteValue]
+	return ok
+}
+
+func (x *_A_23_map) Clear(key protoreflect.MapKey) {
+	if x.m == nil {
+		return
+	}
+	keyUnwrapped := key.String()
+	concreteKey := keyUnwrapped
+	delete(*x.m, concreteKey)
+}
+
+func (x *_A_23_map) Get(key protoreflect.MapKey) protoreflect.Value {
+	if x.m == nil {
+		return protoreflect.Value{}
+	}
+	keyUnwrapped := key.String()
+	concreteKey := keyUnwrapped
+	v, ok := (*x.m)[concreteKey]
+	if !ok {
+		return protoreflect.Value{}
+	}
+	return protoreflect.ValueOfBytes(v)
+}
+
+func (x *_A_23_map) Set(key protoreflect.MapKey, value protoreflect.Value) {
+	if !key.IsValid() || !value.IsValid() {
+		panic("invalid key or value provided")
+	}
+	keyUnwrapped := key.String()
+	concreteKey := keyUnwrapped
+	valueUnwrapped := value.Bytes()
+	concreteValue := valueUnwrapped
+	(*x.m)[concreteKey] = concreteValue
+}
+
+func (x *_A_23_map) Mutable(key protoreflect.MapKey) protoreflect.Value {
+	panic("should not call Mutable on protoreflect.Map whose value is not of type protoreflect.Message")
+}
+
+func (x *_A_23_map) NewValue() protoreflect.Value {
+	var v []byte
+	return protoreflect.ValueOfBytes(v)
+}
+
+func (x *_A_23_map) IsValid() bool {
+	return x.m != nil
+}
+
+var _ protoreflect.Map = (*_A_24_map)(nil)
+
+type _A_24_map struct {
+	m *map[int64]int64
+}
+
+func (x *_A_24_map) Len() int {
+	if x.m == nil {
+		return 0
+	}
+	return len(*x.m)
+}
+
+func (x *_A_24_map) Range(f func(protoreflect.MapKey, protoreflect.Value) bool) {
+	if x.m == nil {
+		return
+	}
+	for k, v := range *x.m {
+		mapKey := (protoreflect.MapKey)(protoreflect.ValueOfInt64(k))
+		mapValue := protoreflect.ValueOfInt64(v)
+		if !f(mapKey, mapValue) {
+			break
+		}
+	}
+}
+
+func (x *_A_24_map) Has(key protoreflect.MapKey) bool {
+	if x.m == nil {
+		return false
+	}
+	keyUnwrapped := key.Int()
+	concreteValue := keyUnwrapped
+	_, ok := (*x.m)[concreteValue]
+	return ok
+}
+
+func (x *_A_24_map) Clear(key protoreflect.MapKey) {
+	if x.m == nil {
+		return
+	}
+	keyUnwrapped := key.Int()
+	concreteKey := keyUnwrapped
+	delete(*x.m, concreteKey)
+}
+
+func (x *_A_24_map) Get(key protoreflect.MapKey) protoreflect.Value {
+	if x.m == nil {
+		return protoreflect.Value{}
+	}
+	keyUnwrapped := key.Int()
+	concreteKey := keyUnwrapped
+	v, ok := (*x.m)[concreteKey]
+	if !ok {
+		return protoreflect.Value{}
+	}
+	return protoreflect.ValueOfInt64(v)
+}
+
+func (x *_A_24_map) Set(key protoreflect.MapKey, value protoreflect.Value) {
+	if !key.IsValid() || !value.IsValid() {
+		panic("invalid key or value provided")
+	}
+	keyUnwrapped := key.Int()
+	concreteKey := keyUnwrapped
+	valueUnwrapped := value.Int()
+	concreteValue := valueUnwrapped
+	(*x.m)[concreteKey] = concreteValue
+}
+
+func (x *_A_24_map) Mutable(key protoreflect.MapKey) protoreflect.Value {
+	panic("should not call Mutable on protoreflect.Map whose value is not of type protoreflect.Message")
+}
+
+func (x *_A_24_map) NewValue() protoreflect.Value {
+	v := int64(0)
+	return protoreflect.ValueOfInt64(v)
+}
+
+func (x *_A_24_map) IsValid() bool {
+	return x.m != nil
+}
+
 var (
 	md_A              protoreflect.MessageDescriptor
 	fd_A_enum         protoreflect.FieldDescriptor
@@ -228,6 +392,8 @@ var (
 	fd_A_ONEOF_B      protoreflect.FieldDescriptor
 	fd_A_ONEOF_STRING protoreflect.FieldDescriptor
 	fd_A_LIST_ENUM    protoreflect.FieldDescriptor
+	fd_A_BYTES_MAP    protoreflect.FieldDescriptor
+	fd_A_INT_INT_MAP  protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -255,6 +421,8 @@ func init() {
 	fd_A_ONEOF_B = md_A.Fields().ByName("ONEOF_B")
 	fd_A_ONEOF_STRING = md_A.Fields().ByName("ONEOF_STRING")
 	fd_A_LIST_ENUM = md_A.Fields().ByName("LIST_ENUM")
+	fd_A_BYTES_MAP = md_A.Fields().ByName("BYTES_MAP")
+	fd_A_INT_INT_MAP = md_A.Fields().ByName("INT_INT_MAP")
 }
 
 var _ protoreflect.Message = (*fastReflection_A)(nil)
@@ -458,6 +626,18 @@ func (x *fastReflection_A) Range(f func(protoreflect.FieldDescriptor, protorefle
 			return
 		}
 	}
+	if len(x.BYTES_MAP) != 0 {
+		value := protoreflect.ValueOfMap(&_A_23_map{m: &x.BYTES_MAP})
+		if !f(fd_A_BYTES_MAP, value) {
+			return
+		}
+	}
+	if len(x.INT_INT_MAP) != 0 {
+		value := protoreflect.ValueOfMap(&_A_24_map{m: &x.INT_INT_MAP})
+		if !f(fd_A_INT_INT_MAP, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -512,11 +692,29 @@ func (x *fastReflection_A) Has(fd protoreflect.FieldDescriptor) bool {
 	case "A.LIST":
 		return len(x.LIST) != 0
 	case "A.ONEOF_B":
-		return x.ONEOF != nil
+		if x.ONEOF == nil {
+			return false
+		}
+		_, ok := x.ONEOF.(*A_ONEOF_B)
+		if ok {
+			return true
+		}
+		return false
 	case "A.ONEOF_STRING":
-		return x.ONEOF != nil
+		if x.ONEOF == nil {
+			return false
+		}
+		_, ok := x.ONEOF.(*A_ONEOF_STRING)
+		if ok {
+			return true
+		}
+		return false
 	case "A.LIST_ENUM":
 		return len(x.LIST_ENUM) != 0
+	case "A.BYTES_MAP":
+		return len(x.BYTES_MAP) != 0
+	case "A.INT_INT_MAP":
+		return len(x.INT_INT_MAP) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -577,6 +775,10 @@ func (x *fastReflection_A) Clear(fd protoreflect.FieldDescriptor) {
 		x.ONEOF = nil
 	case "A.LIST_ENUM":
 		x.LIST_ENUM = nil
+	case "A.BYTES_MAP":
+		x.BYTES_MAP = nil
+	case "A.INT_INT_MAP":
+		x.INT_INT_MAP = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -678,6 +880,18 @@ func (x *fastReflection_A) Get(descriptor protoreflect.FieldDescriptor) protoref
 		}
 		listValue := &_A_22_list{list: &x.LIST_ENUM}
 		return protoreflect.ValueOfList(listValue)
+	case "A.BYTES_MAP":
+		if len(x.BYTES_MAP) == 0 {
+			return protoreflect.ValueOfMap(&_A_23_map{})
+		}
+		mapValue := &_A_23_map{m: &x.BYTES_MAP}
+		return protoreflect.ValueOfMap(mapValue)
+	case "A.INT_INT_MAP":
+		if len(x.INT_INT_MAP) == 0 {
+			return protoreflect.ValueOfMap(&_A_24_map{})
+		}
+		mapValue := &_A_24_map{m: &x.INT_INT_MAP}
+		return protoreflect.ValueOfMap(mapValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -727,7 +941,7 @@ func (x *fastReflection_A) Set(fd protoreflect.FieldDescriptor, value protorefle
 	case "A.DOUBLE":
 		x.DOUBLE = value.Float()
 	case "A.STRING":
-		x.STRING = value.String()
+		x.STRING = value.Interface().(string)
 	case "A.BYTES":
 		x.BYTES = value.Bytes()
 	case "A.MESSAGE":
@@ -744,12 +958,20 @@ func (x *fastReflection_A) Set(fd protoreflect.FieldDescriptor, value protorefle
 		cv := value.Message().Interface().(*B)
 		x.ONEOF = &A_ONEOF_B{ONEOF_B: cv}
 	case "A.ONEOF_STRING":
-		cv := value.String()
+		cv := value.Interface().(string)
 		x.ONEOF = &A_ONEOF_STRING{ONEOF_STRING: cv}
 	case "A.LIST_ENUM":
 		lv := value.List()
 		clv := lv.(*_A_22_list)
 		x.LIST_ENUM = *clv.list
+	case "A.BYTES_MAP":
+		mv := value.Map()
+		cmv := mv.(*_A_23_map)
+		x.BYTES_MAP = *cmv.m
+	case "A.INT_INT_MAP":
+		mv := value.Map()
+		cmv := mv.(*_A_24_map)
+		x.INT_INT_MAP = *cmv.m
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -809,6 +1031,18 @@ func (x *fastReflection_A) Mutable(fd protoreflect.FieldDescriptor) protoreflect
 		}
 		value := &_A_22_list{list: &x.LIST_ENUM}
 		return protoreflect.ValueOfList(value)
+	case "A.BYTES_MAP":
+		if x.BYTES_MAP == nil {
+			x.BYTES_MAP = make(map[string][]byte)
+		}
+		value := &_A_23_map{m: &x.BYTES_MAP}
+		return protoreflect.ValueOfMap(value)
+	case "A.INT_INT_MAP":
+		if x.INT_INT_MAP == nil {
+			x.INT_INT_MAP = make(map[int64]int64)
+		}
+		value := &_A_24_map{m: &x.INT_INT_MAP}
+		return protoreflect.ValueOfMap(value)
 	case "A.enum":
 		panic(fmt.Errorf("field enum of message A is not mutable"))
 	case "A.some_boolean":
@@ -905,6 +1139,12 @@ func (x *fastReflection_A) NewField(fd protoreflect.FieldDescriptor) protoreflec
 	case "A.LIST_ENUM":
 		list := []Enumeration{}
 		return protoreflect.ValueOfList(&_A_22_list{list: &list})
+	case "A.BYTES_MAP":
+		m := make(map[string][]byte)
+		return protoreflect.ValueOfMap(&_A_23_map{m: &m})
+	case "A.INT_INT_MAP":
+		m := make(map[int64]int64)
+		return protoreflect.ValueOfMap(&_A_24_map{m: &m})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -1171,7 +1411,7 @@ func (x *fastReflection_B) Get(descriptor protoreflect.FieldDescriptor) protoref
 func (x *fastReflection_B) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	case "B.x":
-		x.X = value.String()
+		x.X = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: B"))
@@ -1344,6 +1584,44 @@ func (m *A) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			if _, err := vtmsg.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
+		}
+	}
+	if len(m.INT_INT_MAP) > 0 {
+		for k := range m.INT_INT_MAP {
+			v := m.INT_INT_MAP[k]
+			baseI := i
+			i = encodeVarint(dAtA, i, uint64(v))
+			i--
+			dAtA[i] = 0x10
+			i = encodeVarint(dAtA, i, uint64(k))
+			i--
+			dAtA[i] = 0x8
+			i = encodeVarint(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xc2
+		}
+	}
+	if len(m.BYTES_MAP) > 0 {
+		for k := range m.BYTES_MAP {
+			v := m.BYTES_MAP[k]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarint(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(k)
+			copy(dAtA[i:], k)
+			i = encodeVarint(dAtA, i, uint64(len(k)))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarint(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xba
 		}
 	}
 	if len(m.LIST_ENUM) > 0 {
@@ -1694,8 +1972,10 @@ type A struct {
 	// Types that are assignable to ONEOF:
 	//	*A_ONEOF_B
 	//	*A_ONEOF_STRING
-	ONEOF     isA_ONEOF     `protobuf_oneof:"ONEOF"`
-	LIST_ENUM []Enumeration `protobuf:"varint,22,rep,packed,name=LIST_ENUM,json=LISTENUM,proto3,enum=Enumeration" json:"LIST_ENUM,omitempty"`
+	ONEOF       isA_ONEOF         `protobuf_oneof:"ONEOF"`
+	LIST_ENUM   []Enumeration     `protobuf:"varint,22,rep,packed,name=LIST_ENUM,json=LISTENUM,proto3,enum=Enumeration" json:"LIST_ENUM,omitempty"`
+	BYTES_MAP   map[string][]byte `protobuf:"bytes,23,rep,name=BYTES_MAP,json=BYTESMAP,proto3" json:"BYTES_MAP,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	INT_INT_MAP map[int64]int64   `protobuf:"bytes,24,rep,name=INT_INT_MAP,json=INTINTMAP,proto3" json:"INT_INT_MAP,omitempty" protobuf_key:"varint,1,opt,name=key,proto3" protobuf_val:"varint,2,opt,name=value,proto3"`
 }
 
 func (x *A) Reset() {
@@ -1879,6 +2159,20 @@ func (x *A) GetLIST_ENUM() []Enumeration {
 	return nil
 }
 
+func (x *A) GetBYTES_MAP() map[string][]byte {
+	if x != nil {
+		return x.BYTES_MAP
+	}
+	return nil
+}
+
+func (x *A) GetINT_INT_MAP() map[int64]int64 {
+	if x != nil {
+		return x.INT_INT_MAP
+	}
+	return nil
+}
+
 type isA_ONEOF interface {
 	isA_ONEOF()
 }
@@ -1934,7 +2228,7 @@ var File_testpb_1_proto protoreflect.FileDescriptor
 
 var file_testpb_1_proto_rawDesc = []byte{
 	0x0a, 0x0e, 0x74, 0x65, 0x73, 0x74, 0x70, 0x62, 0x2f, 0x31, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x22, 0xa5, 0x05, 0x0a, 0x01, 0x41, 0x12, 0x20, 0x0a, 0x04, 0x65, 0x6e, 0x75, 0x6d, 0x18, 0x01,
+	0x22, 0x82, 0x07, 0x0a, 0x01, 0x41, 0x12, 0x20, 0x0a, 0x04, 0x65, 0x6e, 0x75, 0x6d, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x0e, 0x32, 0x0c, 0x2e, 0x45, 0x6e, 0x75, 0x6d, 0x65, 0x72, 0x61, 0x74, 0x69,
 	0x6f, 0x6e, 0x52, 0x04, 0x65, 0x6e, 0x75, 0x6d, 0x12, 0x21, 0x0a, 0x0c, 0x73, 0x6f, 0x6d, 0x65,
 	0x5f, 0x62, 0x6f, 0x6f, 0x6c, 0x65, 0x61, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0b,
@@ -1972,17 +2266,31 @@ var file_testpb_1_proto_rawDesc = []byte{
 	0x4f, 0x46, 0x53, 0x54, 0x52, 0x49, 0x4e, 0x47, 0x12, 0x29, 0x0a, 0x09, 0x4c, 0x49, 0x53, 0x54,
 	0x5f, 0x45, 0x4e, 0x55, 0x4d, 0x18, 0x16, 0x20, 0x03, 0x28, 0x0e, 0x32, 0x0c, 0x2e, 0x45, 0x6e,
 	0x75, 0x6d, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x08, 0x4c, 0x49, 0x53, 0x54, 0x45,
-	0x4e, 0x55, 0x4d, 0x1a, 0x3a, 0x0a, 0x08, 0x4d, 0x41, 0x50, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12,
-	0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65,
-	0x79, 0x12, 0x18, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x02, 0x2e, 0x42, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x42,
-	0x07, 0x0a, 0x05, 0x4f, 0x4e, 0x45, 0x4f, 0x46, 0x22, 0x11, 0x0a, 0x01, 0x42, 0x12, 0x0c, 0x0a,
-	0x01, 0x78, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x01, 0x78, 0x2a, 0x1f, 0x0a, 0x0b, 0x45,
-	0x6e, 0x75, 0x6d, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x07, 0x0a, 0x03, 0x4f, 0x6e,
-	0x65, 0x10, 0x00, 0x12, 0x07, 0x0a, 0x03, 0x54, 0x77, 0x6f, 0x10, 0x01, 0x42, 0x27, 0x5a, 0x25,
-	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x74,
-	0x65, 0x73, 0x74, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x4e, 0x55, 0x4d, 0x12, 0x2d, 0x0a, 0x09, 0x42, 0x59, 0x54, 0x45, 0x53, 0x5f, 0x4d, 0x41, 0x50,
+	0x18, 0x17, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x41, 0x2e, 0x42, 0x59, 0x54, 0x45, 0x53,
+	0x4d, 0x41, 0x50, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x52, 0x08, 0x42, 0x59, 0x54, 0x45, 0x53, 0x4d,
+	0x41, 0x50, 0x12, 0x31, 0x0a, 0x0b, 0x49, 0x4e, 0x54, 0x5f, 0x49, 0x4e, 0x54, 0x5f, 0x4d, 0x41,
+	0x50, 0x18, 0x18, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x11, 0x2e, 0x41, 0x2e, 0x49, 0x4e, 0x54, 0x49,
+	0x4e, 0x54, 0x4d, 0x41, 0x50, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x52, 0x09, 0x49, 0x4e, 0x54, 0x49,
+	0x4e, 0x54, 0x4d, 0x41, 0x50, 0x1a, 0x3a, 0x0a, 0x08, 0x4d, 0x41, 0x50, 0x45, 0x6e, 0x74, 0x72,
+	0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03,
+	0x6b, 0x65, 0x79, 0x12, 0x18, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x02, 0x2e, 0x42, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38,
+	0x01, 0x1a, 0x3b, 0x0a, 0x0d, 0x42, 0x59, 0x54, 0x45, 0x53, 0x4d, 0x41, 0x50, 0x45, 0x6e, 0x74,
+	0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x0c, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x1a, 0x3c,
+	0x0a, 0x0e, 0x49, 0x4e, 0x54, 0x49, 0x4e, 0x54, 0x4d, 0x41, 0x50, 0x45, 0x6e, 0x74, 0x72, 0x79,
+	0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x03, 0x6b,
+	0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x03, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x42, 0x07, 0x0a, 0x05,
+	0x4f, 0x4e, 0x45, 0x4f, 0x46, 0x22, 0x11, 0x0a, 0x01, 0x42, 0x12, 0x0c, 0x0a, 0x01, 0x78, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x01, 0x78, 0x2a, 0x1f, 0x0a, 0x0b, 0x45, 0x6e, 0x75, 0x6d,
+	0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x07, 0x0a, 0x03, 0x4f, 0x6e, 0x65, 0x10, 0x00,
+	0x12, 0x07, 0x0a, 0x03, 0x54, 0x77, 0x6f, 0x10, 0x01, 0x42, 0x27, 0x5a, 0x25, 0x67, 0x69, 0x74,
+	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63,
+	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x74, 0x65, 0x73, 0x74,
+	0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1998,12 +2306,14 @@ func file_testpb_1_proto_rawDescGZIP() []byte {
 }
 
 var file_testpb_1_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_testpb_1_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_testpb_1_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_testpb_1_proto_goTypes = []interface{}{
 	(Enumeration)(0), // 0: Enumeration
 	(*A)(nil),        // 1: A
 	(*B)(nil),        // 2: B
 	nil,              // 3: A.MAPEntry
+	nil,              // 4: A.BYTESMAPEntry
+	nil,              // 5: A.INTINTMAPEntry
 }
 var file_testpb_1_proto_depIdxs = []int32{
 	0, // 0: A.enum:type_name -> Enumeration
@@ -2012,12 +2322,14 @@ var file_testpb_1_proto_depIdxs = []int32{
 	2, // 3: A.LIST:type_name -> B
 	2, // 4: A.ONEOF_B:type_name -> B
 	0, // 5: A.LIST_ENUM:type_name -> Enumeration
-	2, // 6: A.MAPEntry.value:type_name -> B
-	7, // [7:7] is the sub-list for method output_type
-	7, // [7:7] is the sub-list for method input_type
-	7, // [7:7] is the sub-list for extension type_name
-	7, // [7:7] is the sub-list for extension extendee
-	0, // [0:7] is the sub-list for field type_name
+	4, // 6: A.BYTES_MAP:type_name -> A.BYTESMAPEntry
+	5, // 7: A.INT_INT_MAP:type_name -> A.INTINTMAPEntry
+	2, // 8: A.MAPEntry.value:type_name -> B
+	9, // [9:9] is the sub-list for method output_type
+	9, // [9:9] is the sub-list for method input_type
+	9, // [9:9] is the sub-list for extension type_name
+	9, // [9:9] is the sub-list for extension extendee
+	0, // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_testpb_1_proto_init() }
@@ -2061,7 +2373,7 @@ func file_testpb_1_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_testpb_1_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   3,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
@@ -2163,6 +2475,23 @@ func (m *A) Size() (n int) {
 			l += sov(uint64(e))
 		}
 		n += 2 + sov(uint64(l)) + l
+	}
+	if len(m.BYTES_MAP) > 0 {
+		for k, v := range m.BYTES_MAP {
+			_ = k
+			_ = v
+			l = 1 + len(v) + sov(uint64(len(v)))
+			mapEntrySize := 1 + len(k) + sov(uint64(len(k))) + l
+			n += mapEntrySize + 2 + sov(uint64(mapEntrySize))
+		}
+	}
+	if len(m.INT_INT_MAP) > 0 {
+		for k, v := range m.INT_INT_MAP {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + sov(uint64(k)) + 1 + sov(uint64(v))
+			n += mapEntrySize + 2 + sov(uint64(mapEntrySize))
+		}
 	}
 	if m.unknownFields != nil {
 		n += len(m.unknownFields)
@@ -2869,6 +3198,233 @@ func (m *A) Unmarshal(dAtA []byte) error {
 			} else {
 				return fmt.Errorf("proto: wrong wireType = %d for field LIST_ENUM", wireType)
 			}
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BYTES_MAP", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLength
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.BYTES_MAP == nil {
+				m.BYTES_MAP = make(map[string][]byte)
+			}
+			var mapkey string
+			var mapvalue []byte
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflow
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLength
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLength
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var mapbyteLen uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflow
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						mapbyteLen |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intMapbyteLen := int(mapbyteLen)
+					if intMapbyteLen < 0 {
+						return ErrInvalidLength
+					}
+					postbytesIndex := iNdEx + intMapbyteLen
+					if postbytesIndex < 0 {
+						return ErrInvalidLength
+					}
+					if postbytesIndex > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = make([]byte, mapbyteLen)
+					copy(mapvalue, dAtA[iNdEx:postbytesIndex])
+					iNdEx = postbytesIndex
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skip(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if (skippy < 0) || (iNdEx+skippy) < 0 {
+						return ErrInvalidLength
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.BYTES_MAP[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 24:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field INT_INT_MAP", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLength
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.INT_INT_MAP == nil {
+				m.INT_INT_MAP = make(map[int64]int64)
+			}
+			var mapkey int64
+			var mapvalue int64
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflow
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						mapkey |= int64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+				} else if fieldNum == 2 {
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflow
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						mapvalue |= int64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skip(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if (skippy < 0) || (iNdEx+skippy) < 0 {
+						return ErrInvalidLength
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.INT_INT_MAP[mapkey] = mapvalue
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skip(dAtA[iNdEx:])

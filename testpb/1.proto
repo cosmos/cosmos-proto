@@ -32,6 +32,8 @@ message A {
     string ONEOF_STRING = 21;
   };
   repeated Enumeration LIST_ENUM = 22;
+  map<string, bytes> BYTES_MAP = 23;
+  map<int64, int64> INT_INT_MAP = 24;
 }
 
 message B {

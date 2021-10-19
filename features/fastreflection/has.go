@@ -62,7 +62,12 @@ func (g *hasGen) genField(field *protogen.Field) {
 func (g *hasGen) genNullable(field *protogen.Field) {
 	switch {
 	case field.Desc.ContainingOneof() != nil:
-		g.P("return x.", field.Oneof.GoName, " != nil")
+		g.P("if x.", field.Oneof.GoName, " == nil {")
+		g.P("return false")
+		g.P("}")
+		g.P("_, ok := x.", field.Oneof.GoName, ".(*", g.QualifiedGoIdent(field.GoIdent), ")")
+		g.P("if ok { return true }")
+		g.P("return false")
 	case field.Desc.IsMap(), field.Desc.IsList(), field.Desc.Kind() == protoreflect.BytesKind:
 		g.P("return len(x.", field.GoName, ") != 0")
 	case field.Desc.Kind() == protoreflect.MessageKind:
