@@ -7,16 +7,10 @@ build() {
     proto_files=$(find "$1" -name "*.proto")
     for file in $proto_files; do
       echo "building proto file $file"
-      protoc -I=. -I=./third_party/proto --plugin /usr/bin/protoc-gen-go-pulsar --go-pulsar_out=. --go-pulsar_opt=features=fast "$file"
+      protoc -I=. -I=./third_party/proto --plugin /usr/bin/protoc-gen-go-pulsar --go-pulsar_out=. --go-pulsar_opt=features=fast+protoc "$file"
     done
 }
 
-cosmos_proto() {
-  echo "generating cosmos.proto"
-  protoc -I=.  -I=./third_party/proto cosmos.proto --go_out=.
-}
-
-cosmos_proto
 for dir in "$@"
 do
   build "$dir"

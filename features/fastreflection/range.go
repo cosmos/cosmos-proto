@@ -103,7 +103,7 @@ func (g *rangeGen) genOneof(field *protogen.Field) {
 			g.P("value := ", kindToValueConstructor(oneofField.Desc.Kind()), "(v)")
 
 		}
-		g.P("if !f(", fieldDescriptorName(field), ", value) {")
+		g.P("if !f(", fieldDescriptorName(oneofField), ", value) {")
 		g.P("return")
 		g.P("}")
 

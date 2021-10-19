@@ -63,8 +63,8 @@ func (gen *Generator) GenerateFile(plugin *protogen.Plugin, gf *protogen.Generat
 
 	var generated bool
 	for fidx, feat := range gen.features {
-		featGenerator := feat(p)
-		if featGenerator.GenerateFile(file) {
+		featGenerator := feat(p, plugin)
+		if featGenerator.GenerateFile(file, plugin) {
 			generated = true
 
 			helpersForPlugin := featureHelpers{

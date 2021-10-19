@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	generator.RegisterFeature("pool", func(gen *generator.GeneratedFile) generator.FeatureGenerator {
+	generator.RegisterFeature("pool", func(gen *generator.GeneratedFile, plugin *protogen.Plugin) generator.FeatureGenerator {
 		return &pool{GeneratedFile: gen}
 	})
 }
@@ -23,7 +23,7 @@ var _ generator.FeatureGenerator = (*pool)(nil)
 
 func (p *pool) GenerateHelpers() {}
 
-func (p *pool) GenerateFile(file *protogen.File) bool {
+func (p *pool) GenerateFile(file *protogen.File, plugin *protogen.Plugin) bool {
 	for _, message := range file.Messages {
 		p.message(message)
 	}
