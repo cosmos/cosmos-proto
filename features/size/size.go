@@ -106,13 +106,25 @@ func (p *size) field(proto3 bool, field *protogen.Field, sizeName string) {
 		} else {
 			p.P(`n+=`, strconv.Itoa(key+8))
 		}
-	case protoreflect.FloatKind, protoreflect.Fixed32Kind, protoreflect.Sfixed32Kind:
+	case protoreflect.Fixed32Kind, protoreflect.Sfixed32Kind:
 		if packed {
 			p.P(`n+=`, strconv.Itoa(key), `+`, runtimePackage.Ident("Sov"), `(uint64(len(m.`, fieldname, `)*4))`, `+len(m.`, fieldname, `)*4`)
 		} else if repeated {
 			p.P(`n+=`, strconv.Itoa(key+4), `*len(m.`, fieldname, `)`)
 		} else if proto3 && !nullable {
 			p.P(`if m.`, fieldname, ` != 0 {`)
+			p.P(`n+=`, strconv.Itoa(key+4))
+			p.P(`}`)
+		} else {
+			p.P(`n+=`, strconv.Itoa(key+4))
+		}
+	case protoreflect.FloatKind:
+		if packed {
+			p.P(`n+=`, strconv.Itoa(key), `+`, runtimePackage.Ident("Sov"), `(uint64(len(m.`, fieldname, `)*4))`, `+len(m.`, fieldname, `)*4`)
+		} else if repeated {
+			p.P(`n+=`, strconv.Itoa(key+4), `*len(m.`, fieldname, `)`)
+		} else if proto3 && !nullable {
+			p.P(`if m.`, fieldname, ` != 0 || `, mathPackage.Ident("Signbit"), `(float64(m.`, fieldname, `)) {`)
 			p.P(`n+=`, strconv.Itoa(key+4))
 			p.P(`}`)
 		} else {

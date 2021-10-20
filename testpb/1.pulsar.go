@@ -1465,7 +1465,7 @@ func (m *A) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x61
 	}
-	if m.FLOAT != 0 {
+	if m.FLOAT != 0 || math.Signbit(float64(m.FLOAT)) {
 		i -= 4
 		binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(m.FLOAT))))
 		i--
@@ -2111,7 +2111,7 @@ func (m *A) Size() (n int) {
 	if m.FIXED32 != 0 {
 		n += 5
 	}
-	if m.FLOAT != 0 {
+	if m.FLOAT != 0 || math.Signbit(float64(m.FLOAT)) {
 		n += 5
 	}
 	if m.SFIXED64 != 0 {
