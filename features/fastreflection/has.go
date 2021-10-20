@@ -6,6 +6,10 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
+const (
+	mathPkg = protogen.GoImportPath("math")
+)
+
 // fields are not populated if
 // if scalar: value != zero value
 // if msg value != nil
@@ -51,12 +55,33 @@ func (g *hasGen) generate() {
 
 func (g *hasGen) genField(field *protogen.Field) {
 	g.P("case \"", field.Desc.FullName(), "\":")
-	if field.Desc.HasPresence() || field.Desc.IsList() || field.Desc.IsMap() || field.Desc.Kind() == protoreflect.BytesKind {
+	switch {
+	case field.Desc.HasPresence() || field.Desc.IsList() || field.Desc.IsMap() || field.Desc.Kind() == protoreflect.BytesKind:
 		g.genNullable(field)
 		return
+	case field.Desc.Kind() == protoreflect.DoubleKind:
+		g.Import(mathPkg)
+		g.P("if x.", field.GoName, " != 0 {")
+		g.P("return true")
+		g.P("}")
+		g.P("if ", mathPkg.Ident("Signbit"), "(x.", field.GoName, ") {")
+		g.P("return true")
+		g.P("}")
+		g.P("return false")
+	case field.Desc.Kind() == protoreflect.FloatKind:
+		g.Import(mathPkg)
+		g.Import(mathPkg)
+		g.P("if x.", field.GoName, " != 0 {")
+		g.P("return true")
+		g.P("}")
+		g.P("if ", mathPkg.Ident("Signbit"), "(float64(x.", field.GoName, ")) {")
+		g.P("return true")
+		g.P("}")
+		g.P("return false")
+	default:
+		g.P("return x.", field.GoName, " != ", zeroValueForField(nil, field))
 	}
 
-	g.P("return x.", field.GoName, " != ", zeroValueForField(nil, field))
 }
 
 func (g *hasGen) genNullable(field *protogen.Field) {

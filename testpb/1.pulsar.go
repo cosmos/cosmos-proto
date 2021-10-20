@@ -674,13 +674,25 @@ func (x *fastReflection_A) Has(fd protoreflect.FieldDescriptor) bool {
 	case "A.FIXED32":
 		return x.FIXED32 != uint32(0)
 	case "A.FLOAT":
-		return x.FLOAT != float32(0)
+		if x.FLOAT != 0 {
+			return true
+		}
+		if math.Signbit(float64(x.FLOAT)) {
+			return true
+		}
+		return false
 	case "A.SFIXED64":
 		return x.SFIXED64 != int64(0)
 	case "A.FIXED64":
 		return x.FIXED64 != uint64(0)
 	case "A.DOUBLE":
-		return x.DOUBLE != float64(0)
+		if x.DOUBLE != 0 {
+			return true
+		}
+		if math.Signbit(x.DOUBLE) {
+			return true
+		}
+		return false
 	case "A.STRING":
 		return x.STRING != ""
 	case "A.BYTES":
