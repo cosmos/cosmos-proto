@@ -12,25 +12,41 @@ import (
 )
 
 func TestNegativeZero(t *testing.T) {
-	var x float64 = 0
-	x = math.Copysign(x, -1)
-	a := A{}
-	a.DOUBLE = x
 
-	dyn := dynamicpb.NewMessage(md_A)
-	dyn.Set(fd_A_DOUBLE, a.ProtoReflect().Get(fd_A_DOUBLE))
+	testCases := []struct {
+		name  string
+		value float64
+	}{
+		{
+			name:  "negative 0",
+			value: math.Copysign(0, -1),
+		},
+		{
+			name:  "negative float",
+			value: -0.420,
+		},
+	}
 
-	bz, err := proto.Marshal(dyn)
-	require.NoError(t, err)
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			a := A{}
+			a.DOUBLE = tc.value
 
-	bz2, err := proto.Marshal(a.ProtoReflect().Interface())
-	require.NoError(t, err)
+			dyn := dynamicpb.NewMessage(md_A)
+			dyn.Set(fd_A_DOUBLE, a.ProtoReflect().Get(fd_A_DOUBLE))
+			bz, err := proto.Marshal(dyn)
+			require.NoError(t, err)
 
-	bz3, err := a.ProtoReflect().ProtoMethods().Marshal(protoiface.MarshalInput{Message: a.ProtoReflect()})
-	require.NoError(t, err)
+			bz2, err := proto.Marshal(a.ProtoReflect().Interface())
+			require.NoError(t, err)
 
-	require.Equal(t, bz, bz2)
-	require.Equal(t, bz, bz3.Buf)
+			bz3, err := a.ProtoReflect().ProtoMethods().Marshal(protoiface.MarshalInput{Message: a.ProtoReflect()})
+			require.NoError(t, err)
+
+			require.Equal(t, bz, bz2)
+			require.Equal(t, bz, bz3.Buf)
+		})
+	}
 }
 
 func TestProtoMethods(t *testing.T) {
