@@ -152,7 +152,7 @@ func (p *marshal) field(proto3 bool, numGen *counter, field *protogen.Field) {
 			p.encodeFixed64(p.Ident("math", "Float64bits"), `(float64(*m.`+fieldname, `))`)
 			p.encodeKey(fieldNumber, wireType)
 		} else if proto3 {
-			p.P(`if m.`, fieldname, ` == 0 && `, mathPackage.Ident("Signbit"), `(m.`, fieldname, `) {`)
+			p.P(`if m.`, fieldname, ` != 0 || `, mathPackage.Ident("Signbit"), `(m.`, fieldname, `) {`)
 			p.encodeFixed64(p.Ident("math", "Float64bits"), `(float64(m.`, fieldname, `))`)
 			p.encodeKey(fieldNumber, wireType)
 			p.P(`}`)
