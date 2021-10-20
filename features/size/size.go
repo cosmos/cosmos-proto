@@ -19,6 +19,7 @@ import (
 // Standard library dependencies.
 const (
 	runtimePackage = protogen.GoImportPath("github.com/cosmos/cosmos-proto/runtime")
+	mathPackage    = protogen.GoImportPath("math")
 )
 
 func init() {
@@ -81,13 +82,25 @@ func (p *size) field(proto3 bool, field *protogen.Field, sizeName string) {
 	}
 	key := generator.KeySize(fieldNumber, wireType)
 	switch field.Desc.Kind() {
-	case protoreflect.DoubleKind, protoreflect.Fixed64Kind, protoreflect.Sfixed64Kind:
+	case protoreflect.Fixed64Kind, protoreflect.Sfixed64Kind:
 		if packed {
 			p.P(`n+=`, strconv.Itoa(key), `+`, runtimePackage.Ident("Sov"), `(uint64(len(m.`, fieldname, `)*8))`, `+len(m.`, fieldname, `)*8`)
 		} else if repeated {
 			p.P(`n+=`, strconv.Itoa(key+8), `*len(m.`, fieldname, `)`)
 		} else if proto3 && !nullable {
 			p.P(`if m.`, fieldname, ` != 0 {`)
+			p.P(`n+=`, strconv.Itoa(key+8))
+			p.P(`}`)
+		} else {
+			p.P(`n+=`, strconv.Itoa(key+8))
+		}
+	case protoreflect.DoubleKind:
+		if packed {
+			p.P(`n+=`, strconv.Itoa(key), `+`, runtimePackage.Ident("Sov"), `(uint64(len(m.`, fieldname, `)*8))`, `+len(m.`, fieldname, `)*8`)
+		} else if repeated {
+			p.P(`n+=`, strconv.Itoa(key+8), `*len(m.`, fieldname, `)`)
+		} else if proto3 && !nullable {
+			p.P(`if m.`, fieldname, ` == 0 && `, mathPackage.Ident("Signbit"), `(m.`, fieldname, `) {`)
 			p.P(`n+=`, strconv.Itoa(key+8))
 			p.P(`}`)
 		} else {

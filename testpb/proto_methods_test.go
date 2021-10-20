@@ -3,11 +3,38 @@ package testpb
 import (
 	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/runtime/protoiface"
 	"google.golang.org/protobuf/runtime/protoimpl"
+	"google.golang.org/protobuf/types/dynamicpb"
+	"math"
 	"pgregory.net/rapid"
 	"testing"
 )
+
+func TestNegativeZero(t *testing.T) {
+	var x float64 = 0
+	x = math.Copysign(x, -1)
+	a := A{}
+	a.DOUBLE = x
+
+	dyn := dynamicpb.NewMessage(md_A)
+	dyn2 := dynamicpb.NewMessage(md_A)
+	dyn.Set(fd_A_DOUBLE, a.ProtoReflect().Get(fd_A_DOUBLE))
+	dyn2.Set(fd_A_DOUBLE, protoreflect.ValueOfFloat64(0))
+
+	bz, err := proto.Marshal(dyn)
+	require.NoError(t, err)
+
+	bz2, err := proto.Marshal(a.ProtoReflect().Interface())
+	require.NoError(t, err)
+
+	bz3, err := a.ProtoReflect().ProtoMethods().Marshal(protoiface.MarshalInput{Message: a.ProtoReflect()})
+	require.NoError(t, err)
+
+	require.Equal(t, bz, bz2)
+	require.Equal(t, bz, bz3.Buf)
+}
 
 func TestProtoMethods(t *testing.T) {
 	t.Run("testSize", rapid.MakeCheck(testSize))
