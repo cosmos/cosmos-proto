@@ -3,6 +3,7 @@ package testpb
 import (
 	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/runtime/protoiface"
 	"google.golang.org/protobuf/runtime/protoimpl"
 	"google.golang.org/protobuf/types/dynamicpb"
@@ -25,6 +26,10 @@ func TestNegativeZero(t *testing.T) {
 			name:  "negative float",
 			value: -0.420,
 		},
+		{
+			name:  "regular zero",
+			value: 0,
+		},
 	}
 
 	for _, tc := range testCases {
@@ -33,18 +38,15 @@ func TestNegativeZero(t *testing.T) {
 			a.DOUBLE = tc.value
 
 			dyn := dynamicpb.NewMessage(md_A)
-			dyn.Set(fd_A_DOUBLE, a.ProtoReflect().Get(fd_A_DOUBLE))
-			bz, err := proto.Marshal(dyn)
+			dyn.Set(fd_A_DOUBLE, protoreflect.ValueOfFloat64(tc.value))
+
+			bz, err := proto.MarshalOptions{Deterministic: true}.Marshal(dyn)
 			require.NoError(t, err)
 
 			bz2, err := proto.Marshal(a.ProtoReflect().Interface())
 			require.NoError(t, err)
 
-			bz3, err := a.ProtoReflect().ProtoMethods().Marshal(protoiface.MarshalInput{Message: a.ProtoReflect()})
-			require.NoError(t, err)
-
 			require.Equal(t, bz, bz2)
-			require.Equal(t, bz, bz3.Buf)
 		})
 	}
 }
@@ -70,21 +72,19 @@ func testSize(t *rapid.T) {
 func testMarshal(t *rapid.T) {
 	slowMsg := getRapidMsg(t)
 	fastMsg := slowMsg.ProtoReflect()
-
-	methods := fastMsg.ProtoMethods()
-
-	result, err := methods.Marshal(protoiface.MarshalInput{
-		NoUnkeyedLiterals: struct{}{},
-		Message:           fastMsg,
-		Buf:               nil,
-		Flags:             0,
+	dyn := dynamicpb.NewMessage(md_A)
+	fastMsg.Range(func(descriptor protoreflect.FieldDescriptor, value protoreflect.Value) bool {
+		dyn.Set(descriptor, value)
+		return true
 	})
+
+	result, err := proto.MarshalOptions{Deterministic: true}.Marshal(fastMsg.Interface())
 	require.NoError(t, err)
 
-	canonical, err := proto.MarshalOptions{Deterministic: true}.Marshal(fastMsg.Interface())
+	canonical, err := proto.MarshalOptions{Deterministic: true}.Marshal(dyn)
 	require.NoError(t, err)
 
-	require.Equal(t, canonical, result.Buf)
+	require.Equal(t, canonical, result)
 }
 
 func testUnmarshal(t *rapid.T) {
@@ -167,9 +167,9 @@ func getRapidMsg(t *rapid.T) A {
 		STRING:      rapid.String().Draw(t, "STRING").(string),
 		BYTES:       rapid.SliceOf(rapid.Byte()).Draw(t, "byte slice").([]byte),
 		MESSAGE:     genMessageB.Draw(t, "MESSAGE").(*B),
-		LIST:        rapid.SliceOf(genMessageB).Draw(t, "LIST").([]*B),
-		ONEOF:       genOneOf.Draw(t, "one of").(isA_ONEOF),
-		LIST_ENUM:   rapid.SliceOf(genEnumSlice).Draw(t, "slice enum").([]Enumeration),
+		//LIST:        rapid.SliceOf(genMessageB).Draw(t, "LIST").([]*B),
+		ONEOF: genOneOf.Draw(t, "one of").(isA_ONEOF),
+		//LIST_ENUM: rapid.SliceOf(genEnumSlice).Draw(t, "slice enum").([]Enumeration),
 	}
 }
 
