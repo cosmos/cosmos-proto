@@ -382,7 +382,7 @@ func (x *fastReflection_A) Range(f func(protoreflect.FieldDescriptor, protorefle
 			return
 		}
 	}
-	if x.FLOAT != 0 || math.Signbit(float64(x.FLOAT)) {
+	if x.FLOAT != float32(0) {
 		value := protoreflect.ValueOfFloat32(x.FLOAT)
 		if !f(fd_A_FLOAT, value) {
 			return
@@ -400,7 +400,7 @@ func (x *fastReflection_A) Range(f func(protoreflect.FieldDescriptor, protorefle
 			return
 		}
 	}
-	if x.DOUBLE != 0 || math.Signbit(x.DOUBLE) {
+	if x.DOUBLE != float64(0) {
 		value := protoreflect.ValueOfFloat64(x.DOUBLE)
 		if !f(fd_A_DOUBLE, value) {
 			return

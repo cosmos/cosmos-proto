@@ -1,7 +1,6 @@
 package fastreflection
 
 import (
-	"fmt"
 	"github.com/cosmos/cosmos-proto/generator"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
@@ -14,10 +13,6 @@ type rangeGen struct {
 
 	processedOneofs map[string]struct{}
 }
-
-const (
-	mathPackage = protogen.GoImportPath("math")
-)
 
 func (g *rangeGen) generate() {
 	g.processedOneofs = map[string]struct{}{}
@@ -69,18 +64,6 @@ func (g *rangeGen) genField(field *protogen.Field) {
 	case field.Desc.Kind() == protoreflect.BytesKind:
 		g.P("if len(x.", field.GoName, ") != 0 {")
 		g.P("value := ", protoreflectPkg.Ident("ValueOfBytes"), "(x.", field.GoName, ")")
-		g.P("if !f(", fieldDescriptorName(field), ", value) {")
-		g.P("return")
-		g.P("}")
-		g.P("}")
-	case field.Desc.Kind() == protoreflect.DoubleKind || field.Desc.Kind() == protoreflect.FloatKind:
-		// Signbit only operates on float64s, so we check and cast here if its a float32
-		inner := fmt.Sprintf("(x.%s)", field.GoName)
-		if field.Desc.Kind() == protoreflect.FloatKind {
-			inner = fmt.Sprintf("(float64%s)", inner)
-		}
-		g.P("if x.", field.GoName, " != 0 || ", mathPackage.Ident("Signbit"), inner, " {")
-		g.P("value := ", kindToValueConstructor(field.Desc.Kind()), "(x.", field.GoName, ")")
 		g.P("if !f(", fieldDescriptorName(field), ", value) {")
 		g.P("return")
 		g.P("}")

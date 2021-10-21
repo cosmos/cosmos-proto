@@ -70,8 +70,8 @@ func testSize(t *rapid.T) {
 }
 
 func testMarshal(t *rapid.T) {
-	slowMsg := getRapidMsg(t)
-	fastMsg := slowMsg.ProtoReflect()
+	msg := getRapidMsg(t)
+	fastMsg := msg.ProtoReflect()
 	dyn := dynamicpb.NewMessage(md_A)
 	fastMsg.Range(func(descriptor protoreflect.FieldDescriptor, value protoreflect.Value) bool {
 		dyn.Set(descriptor, value)
@@ -88,64 +88,19 @@ func testMarshal(t *rapid.T) {
 }
 
 func testUnmarshal(t *rapid.T) {
-	slowMsg := getRapidMsg(t)
-	fastMsg := slowMsg.ProtoReflect()
+	a := getRapidMsg(t)
+	dyn := dynamicpb.NewMessage(md_A)
+	a.ProtoReflect().Range(func(descriptor protoreflect.FieldDescriptor, value protoreflect.Value) bool {
+		dyn.Set(descriptor, value)
+		return true
+	})
+	bz, err := proto.MarshalOptions{Deterministic: true}.Marshal(dyn)
+	require.NoError(t, err)
 
-	proto.Marshal(fastMsg.Interface())
+	aa := A{}
+	err = proto.Unmarshal(bz, aa.ProtoReflect().Interface())
 
-	methods := fastMsg.ProtoMethods()
-
-	testCases := []struct {
-		name      string
-		unmarshal func(bz []byte, msg *A)
-		marshal   func(msg proto.Message) []byte
-	}{
-		{
-			name: "proto.Marshal pulsar Unmarshal",
-			marshal: func(msg proto.Message) []byte {
-				bz, err := proto.Marshal(msg)
-				require.NoError(t, err)
-				return bz
-			},
-			unmarshal: func(bz []byte, msg *A) {
-				_, err := methods.Unmarshal(protoiface.UnmarshalInput{
-					NoUnkeyedLiterals: struct{}{},
-					Message:           msg.ProtoReflect(),
-					Buf:               bz,
-					Flags:             0,
-					Resolver:          nil,
-				})
-				require.NoError(t, err)
-			},
-		},
-		{
-			name: "pulsar.Marshal, proto.Unmarshal",
-			marshal: func(msg proto.Message) []byte {
-				res, err := methods.Marshal(protoiface.MarshalInput{
-					NoUnkeyedLiterals: struct{}{},
-					Message:           msg.ProtoReflect(),
-					Buf:               nil,
-					Flags:             0,
-				})
-				require.NoError(t, err)
-				return res.Buf
-			},
-			unmarshal: func(bz []byte, msg *A) {
-				err := proto.Unmarshal(bz, msg)
-				require.NoError(t, err)
-			},
-		},
-	}
-
-	for _, tc := range testCases {
-		t.Logf("Test: %s\n", tc.name)
-		aa := A{}
-		bz := tc.marshal(fastMsg.Interface())
-		tc.unmarshal(bz, &aa)
-		fastAA := fastReflection_A(aa)
-		underlying := fastMsg.(*fastReflection_A)
-		require.True(t, proto.Equal(fastAA.Interface(), underlying.Interface()))
-	}
+	require.True(t, proto.Equal(a.ProtoReflect().Interface(), aa.ProtoReflect().Interface()))
 }
 
 func getRapidMsg(t *rapid.T) A {
