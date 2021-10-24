@@ -68,6 +68,20 @@ func (g *rangeGen) genField(field *protogen.Field) {
 		g.P("return")
 		g.P("}")
 		g.P("}")
+	case field.Desc.Kind() == protoreflect.DoubleKind:
+		g.P("if x.", field.GoName, " != ", zeroValueForField(g.GeneratedFile, field), " || ", mathPkg.Ident("Signbit"), "(x.", field.GoName, ")", "{")
+		g.P("value := ", kindToValueConstructor(field.Desc.Kind()), "(x.", field.GoName, ")")
+		g.P("if !f(", fieldDescriptorName(field), ", value) {")
+		g.P("return")
+		g.P("}")
+		g.P("}")
+	case field.Desc.Kind() == protoreflect.FloatKind:
+		g.P("if x.", field.GoName, " != ", zeroValueForField(g.GeneratedFile, field), " || ", mathPkg.Ident("Signbit"), "(float64(x.", field.GoName, "))", "{")
+		g.P("value := ", kindToValueConstructor(field.Desc.Kind()), "(x.", field.GoName, ")")
+		g.P("if !f(", fieldDescriptorName(field), ", value) {")
+		g.P("return")
+		g.P("}")
+		g.P("}")
 	default:
 		g.P("if x.", field.GoName, " != ", zeroValueForField(g.GeneratedFile, field), "{")
 		switch {

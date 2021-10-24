@@ -382,7 +382,7 @@ func (x *fastReflection_A) Range(f func(protoreflect.FieldDescriptor, protorefle
 			return
 		}
 	}
-	if x.FLOAT != float32(0) {
+	if x.FLOAT != float32(0) || math.Signbit(float64(x.FLOAT)) {
 		value := protoreflect.ValueOfFloat32(x.FLOAT)
 		if !f(fd_A_FLOAT, value) {
 			return
@@ -400,7 +400,7 @@ func (x *fastReflection_A) Range(f func(protoreflect.FieldDescriptor, protorefle
 			return
 		}
 	}
-	if x.DOUBLE != float64(0) {
+	if x.DOUBLE != float64(0) || math.Signbit(x.DOUBLE) {
 		value := protoreflect.ValueOfFloat64(x.DOUBLE)
 		if !f(fd_A_DOUBLE, value) {
 			return
@@ -494,13 +494,13 @@ func (x *fastReflection_A) Has(fd protoreflect.FieldDescriptor) bool {
 	case "A.FIXED32":
 		return x.FIXED32 != uint32(0)
 	case "A.FLOAT":
-		return x.FLOAT != float32(0)
+		return x.FLOAT != float32(0) || math.Signbit(float64(x.FLOAT))
 	case "A.SFIXED64":
 		return x.SFIXED64 != int64(0)
 	case "A.FIXED64":
 		return x.FIXED64 != uint64(0)
 	case "A.DOUBLE":
-		return x.DOUBLE != float64(0)
+		return x.DOUBLE != float64(0) || math.Signbit(x.DOUBLE)
 	case "A.STRING":
 		return x.STRING != ""
 	case "A.BYTES":

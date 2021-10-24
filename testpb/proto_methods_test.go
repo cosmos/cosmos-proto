@@ -1,6 +1,7 @@
 package testpb
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
@@ -60,11 +61,12 @@ func TestProtoMethods(t *testing.T) {
 func testSize(t *rapid.T) {
 	slowMsg := getRapidMsg(t)
 	fastMsg := slowMsg.ProtoReflect()
-
+	dyn := dynamicpb.NewMessage(md_A)
+	populateDynamicMsg(dyn, fastMsg)
 	methods := fastMsg.ProtoMethods()
 
 	result := methods.Size(protoiface.SizeInput{Message: fastMsg})
-	expected := proto.Size(fastMsg.Interface())
+	expected := proto.Size(dyn)
 
 	require.Equal(t, expected, result.Size)
 }
@@ -73,10 +75,7 @@ func testMarshal(t *rapid.T) {
 	msg := getRapidMsg(t)
 	fastMsg := msg.ProtoReflect()
 	dyn := dynamicpb.NewMessage(md_A)
-	fastMsg.Range(func(descriptor protoreflect.FieldDescriptor, value protoreflect.Value) bool {
-		dyn.Set(descriptor, value)
-		return true
-	})
+	populateDynamicMsg(dyn, fastMsg)
 
 	result, err := proto.MarshalOptions{Deterministic: true}.Marshal(fastMsg.Interface())
 	require.NoError(t, err)
@@ -89,18 +88,43 @@ func testMarshal(t *rapid.T) {
 
 func testUnmarshal(t *rapid.T) {
 	a := getRapidMsg(t)
+	fastMsg := a.ProtoReflect()
 	dyn := dynamicpb.NewMessage(md_A)
-	a.ProtoReflect().Range(func(descriptor protoreflect.FieldDescriptor, value protoreflect.Value) bool {
-		dyn.Set(descriptor, value)
-		return true
-	})
+	populateDynamicMsg(dyn, fastMsg)
 	bz, err := proto.MarshalOptions{Deterministic: true}.Marshal(dyn)
 	require.NoError(t, err)
 
 	aa := A{}
-	err = proto.Unmarshal(bz, aa.ProtoReflect().Interface())
+	fastaa := aa.ProtoReflect()
+	unmarshal := fastaa.ProtoMethods().Unmarshal
+	_, err = unmarshal(protoiface.UnmarshalInput{Message: fastaa, Buf: bz})
+	require.NoError(t, err)
 
-	require.True(t, proto.Equal(a.ProtoReflect().Interface(), aa.ProtoReflect().Interface()))
+	require.True(t, proto.Equal(fastMsg.Interface(), fastaa.Interface()), fmt.Sprintf("left: %+v\nright:%+v", fastMsg, fastaa))
+}
+
+func populateDynamicMsg(dyn *dynamicpb.Message, msg protoreflect.Message) {
+	msg.Range(func(descriptor protoreflect.FieldDescriptor, value protoreflect.Value) bool {
+		if descriptor.IsMap() {
+			dynMap := dyn.Mutable(descriptor).Map()
+			underlying := value.Map()
+			underlying.Range(func(key protoreflect.MapKey, value protoreflect.Value) bool {
+				dynMap.Set(key, value)
+				return true
+			})
+			dyn.Set(fd_A_MAP, protoreflect.ValueOfMap(dynMap))
+		} else if descriptor.IsList() {
+			dynList := dyn.Mutable(descriptor).List()
+			underlying := value.List()
+			for i := 0; i < underlying.Len(); i++ {
+				dynList.Append(underlying.Get(i))
+			}
+			dyn.Set(descriptor, protoreflect.ValueOfList(dynList))
+		} else {
+			dyn.Set(descriptor, value)
+		}
+		return true
+	})
 }
 
 func getRapidMsg(t *rapid.T) A {
@@ -122,9 +146,10 @@ func getRapidMsg(t *rapid.T) A {
 		STRING:      rapid.String().Draw(t, "STRING").(string),
 		BYTES:       rapid.SliceOf(rapid.Byte()).Draw(t, "byte slice").([]byte),
 		MESSAGE:     genMessageB.Draw(t, "MESSAGE").(*B),
-		//LIST:        rapid.SliceOf(genMessageB).Draw(t, "LIST").([]*B),
-		ONEOF: genOneOf.Draw(t, "one of").(isA_ONEOF),
-		//LIST_ENUM: rapid.SliceOf(genEnumSlice).Draw(t, "slice enum").([]Enumeration),
+		LIST:        rapid.SliceOf(genMessageB).Draw(t, "LIST").([]*B),
+		// ONEOF:       genOneOf.Draw(t, "one of").(isA_ONEOF),
+		MAP:       rapid.MapOf(rapid.String(), genMessageB).Draw(t, "map[string]*B").(map[string]*B),
+		LIST_ENUM: rapid.SliceOf(genEnumSlice).Draw(t, "slice enum").([]Enumeration),
 	}
 }
 
