@@ -261,128 +261,128 @@ func (p *unmarshal) fieldItem(field *protogen.Field, fieldname string, message *
 		p.P(`var v uint64`)
 		p.decodeFixed64("v", "uint64")
 		if oneof {
-			p.P(`m.`, fieldname, ` = &`, field.GoIdent, `{`, typ, "(", p.Ident("math", `Float64frombits`), `(v))}`)
+			p.P(`x.`, fieldname, ` = &`, field.GoIdent, `{`, typ, "(", p.Ident("math", `Float64frombits`), `(v))}`)
 		} else if repeated {
 			p.P(`v2 := `, typ, "(", p.Ident("math", "Float64frombits"), `(v))`)
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v2)`)
+			p.P(`x.`, fieldname, ` = append(x.`, fieldname, `, v2)`)
 		} else if proto3 && !nullable {
-			p.P(`m.`, fieldname, ` = `, typ, "(", p.Ident("math", "Float64frombits"), `(v))`)
+			p.P(`x.`, fieldname, ` = `, typ, "(", p.Ident("math", "Float64frombits"), `(v))`)
 		} else {
 			p.P(`v2 := `, typ, "(", p.Ident("math", "Float64frombits"), `(v))`)
-			p.P(`m.`, fieldname, ` = &v2`)
+			p.P(`x.`, fieldname, ` = &v2`)
 		}
 	case protoreflect.FloatKind:
 		p.P(`var v uint32`)
 		p.decodeFixed32("v", "uint32")
 		if oneof {
-			p.P(`m.`, fieldname, ` = &`, field.GoIdent, `{`, typ, "(", p.Ident("math", "Float32frombits"), `(v))}`)
+			p.P(`x.`, fieldname, ` = &`, field.GoIdent, `{`, typ, "(", p.Ident("math", "Float32frombits"), `(v))}`)
 		} else if repeated {
 			p.P(`v2 := `, typ, "(", p.Ident("math", "Float32frombits"), `(v))`)
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v2)`)
+			p.P(`x.`, fieldname, ` = append(x.`, fieldname, `, v2)`)
 		} else if proto3 && !nullable {
-			p.P(`m.`, fieldname, ` = `, typ, "(", p.Ident("math", "Float32frombits"), `(v))`)
+			p.P(`x.`, fieldname, ` = `, typ, "(", p.Ident("math", "Float32frombits"), `(v))`)
 		} else {
 			p.P(`v2 := `, typ, "(", p.Ident("math", "Float32frombits"), `(v))`)
-			p.P(`m.`, fieldname, ` = &v2`)
+			p.P(`x.`, fieldname, ` = &v2`)
 		}
 	case protoreflect.Int64Kind:
 		if oneof {
 			p.P(`var v `, typ)
 			p.decodeVarint("v", typ)
-			p.P(`m.`, fieldname, ` = &`, field.GoIdent, `{v}`)
+			p.P(`x.`, fieldname, ` = &`, field.GoIdent, `{v}`)
 		} else if repeated {
 			p.P(`var v `, typ)
 			p.decodeVarint("v", typ)
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
+			p.P(`x.`, fieldname, ` = append(x.`, fieldname, `, v)`)
 		} else if proto3 && !nullable {
-			p.P(`m.`, fieldname, ` = 0`)
-			p.decodeVarint("m."+fieldname, typ)
+			p.P(`x.`, fieldname, ` = 0`)
+			p.decodeVarint("x."+fieldname, typ)
 		} else {
 			p.P(`var v `, typ)
 			p.decodeVarint("v", typ)
-			p.P(`m.`, fieldname, ` = &v`)
+			p.P(`x.`, fieldname, ` = &v`)
 		}
 	case protoreflect.Uint64Kind:
 		if oneof {
 			p.P(`var v `, typ)
 			p.decodeVarint("v", typ)
-			p.P(`m.`, fieldname, ` = &`, field.GoIdent, `{v}`)
+			p.P(`x.`, fieldname, ` = &`, field.GoIdent, `{v}`)
 		} else if repeated {
 			p.P(`var v `, typ)
 			p.decodeVarint("v", typ)
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
+			p.P(`x.`, fieldname, ` = append(x.`, fieldname, `, v)`)
 		} else if proto3 && !nullable {
-			p.P(`m.`, fieldname, ` = 0`)
-			p.decodeVarint("m."+fieldname, typ)
+			p.P(`x.`, fieldname, ` = 0`)
+			p.decodeVarint("x."+fieldname, typ)
 		} else {
 			p.P(`var v `, typ)
 			p.decodeVarint("v", typ)
-			p.P(`m.`, fieldname, ` = &v`)
+			p.P(`x.`, fieldname, ` = &v`)
 		}
 	case protoreflect.Int32Kind:
 		if oneof {
 			p.P(`var v `, typ)
 			p.decodeVarint("v", typ)
-			p.P(`m.`, fieldname, ` = &`, field.GoIdent, `{v}`)
+			p.P(`x.`, fieldname, ` = &`, field.GoIdent, `{v}`)
 		} else if repeated {
 			p.P(`var v `, typ)
 			p.decodeVarint("v", typ)
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
+			p.P(`x.`, fieldname, ` = append(x.`, fieldname, `, v)`)
 		} else if proto3 && !nullable {
-			p.P(`m.`, fieldname, ` = 0`)
-			p.decodeVarint("m."+fieldname, typ)
+			p.P(`x.`, fieldname, ` = 0`)
+			p.decodeVarint("x."+fieldname, typ)
 		} else {
 			p.P(`var v `, typ)
 			p.decodeVarint("v", typ)
-			p.P(`m.`, fieldname, ` = &v`)
+			p.P(`x.`, fieldname, ` = &v`)
 		}
 	case protoreflect.Fixed64Kind:
 		if oneof {
 			p.P(`var v `, typ)
 			p.decodeFixed64("v", typ)
-			p.P(`m.`, fieldname, ` = &`, field.GoIdent, `{v}`)
+			p.P(`x.`, fieldname, ` = &`, field.GoIdent, `{v}`)
 		} else if repeated {
 			p.P(`var v `, typ)
 			p.decodeFixed64("v", typ)
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
+			p.P(`x.`, fieldname, ` = append(x.`, fieldname, `, v)`)
 		} else if proto3 && !nullable {
-			p.P(`m.`, fieldname, ` = 0`)
-			p.decodeFixed64("m."+fieldname, typ)
+			p.P(`x.`, fieldname, ` = 0`)
+			p.decodeFixed64("x."+fieldname, typ)
 		} else {
 			p.P(`var v `, typ)
 			p.decodeFixed64("v", typ)
-			p.P(`m.`, fieldname, ` = &v`)
+			p.P(`x.`, fieldname, ` = &v`)
 		}
 	case protoreflect.Fixed32Kind:
 		if oneof {
 			p.P(`var v `, typ)
 			p.decodeFixed32("v", typ)
-			p.P(`m.`, fieldname, ` = &`, field.GoIdent, `{v}`)
+			p.P(`x.`, fieldname, ` = &`, field.GoIdent, `{v}`)
 		} else if repeated {
 			p.P(`var v `, typ)
 			p.decodeFixed32("v", typ)
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
+			p.P(`x.`, fieldname, ` = append(x.`, fieldname, `, v)`)
 		} else if proto3 && !nullable {
-			p.P(`m.`, fieldname, ` = 0`)
-			p.decodeFixed32("m."+fieldname, typ)
+			p.P(`x.`, fieldname, ` = 0`)
+			p.decodeFixed32("x."+fieldname, typ)
 		} else {
 			p.P(`var v `, typ)
 			p.decodeFixed32("v", typ)
-			p.P(`m.`, fieldname, ` = &v`)
+			p.P(`x.`, fieldname, ` = &v`)
 		}
 	case protoreflect.BoolKind:
 		p.P(`var v int`)
 		p.decodeVarint("v", "int")
 		if oneof {
 			p.P(`b := `, typ, `(v != 0)`)
-			p.P(`m.`, fieldname, ` = &`, field.GoIdent, `{b}`)
+			p.P(`x.`, fieldname, ` = &`, field.GoIdent, `{b}`)
 		} else if repeated {
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, `, typ, `(v != 0))`)
+			p.P(`x.`, fieldname, ` = append(x.`, fieldname, `, `, typ, `(v != 0))`)
 		} else if proto3 && !nullable {
-			p.P(`m.`, fieldname, ` = `, typ, `(v != 0)`)
+			p.P(`x.`, fieldname, ` = `, typ, `(v != 0)`)
 		} else {
 			p.P(`b := `, typ, `(v != 0)`)
-			p.P(`m.`, fieldname, ` = &b`)
+			p.P(`x.`, fieldname, ` = &b`)
 		}
 	case protoreflect.StringKind:
 		p.P(`var stringLen uint64`)
@@ -399,14 +399,14 @@ func (p *unmarshal) fieldItem(field *protogen.Field, fieldname string, message *
 		p.P(`return `, p.Ident("io", `ErrUnexpectedEOF`))
 		p.P(`}`)
 		if oneof {
-			p.P(`m.`, fieldname, ` = &`, field.GoIdent, `{`, typ, `(dAtA[iNdEx:postIndex])}`)
+			p.P(`x.`, fieldname, ` = &`, field.GoIdent, `{`, typ, `(dAtA[iNdEx:postIndex])}`)
 		} else if repeated {
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, `, typ, `(dAtA[iNdEx:postIndex]))`)
+			p.P(`x.`, fieldname, ` = append(x.`, fieldname, `, `, typ, `(dAtA[iNdEx:postIndex]))`)
 		} else if proto3 && !nullable {
-			p.P(`m.`, fieldname, ` = `, typ, `(dAtA[iNdEx:postIndex])`)
+			p.P(`x.`, fieldname, ` = `, typ, `(dAtA[iNdEx:postIndex])`)
 		} else {
 			p.P(`s := `, typ, `(dAtA[iNdEx:postIndex])`)
-			p.P(`m.`, fieldname, ` = &s`)
+			p.P(`x.`, fieldname, ` = &s`)
 		}
 		p.P(`iNdEx = postIndex`)
 	case protoreflect.GroupKind:
@@ -427,20 +427,20 @@ func (p *unmarshal) fieldItem(field *protogen.Field, fieldname string, message *
 		if oneof {
 			buf := `dAtA[iNdEx:postIndex]`
 			msgname := p.noStarOrSliceType(field)
-			p.P(`if oneof, ok := m.`, fieldname, `.(*`, field.GoIdent, `); ok {`)
+			p.P(`if oneof, ok := x.`, fieldname, `.(*`, field.GoIdent, `); ok {`)
 			p.decodeMessage("oneof."+field.GoName, buf, field.Message)
 			p.P(`} else {`)
 			p.P(`v := &`, msgname, `{}`)
 			p.decodeMessage("v", buf, field.Message)
-			p.P(`m.`, fieldname, ` = &`, field.GoIdent, `{v}`)
+			p.P(`x.`, fieldname, ` = &`, field.GoIdent, `{v}`)
 			p.P(`}`)
 		} else if field.Desc.IsMap() {
 			goTyp, _ := p.FieldGoType(field)
 			goTypK, _ := p.FieldGoType(field.Message.Fields[0])
 			goTypV, _ := p.FieldGoType(field.Message.Fields[1])
 
-			p.P(`if m.`, fieldname, ` == nil {`)
-			p.P(`m.`, fieldname, ` = make(`, goTyp, `)`)
+			p.P(`if x.`, fieldname, ` == nil {`)
+			p.P(`x.`, fieldname, ` = make(`, goTyp, `)`)
 			p.P(`}`)
 
 			p.P("var mapkey ", goTypK)
@@ -471,32 +471,32 @@ func (p *unmarshal) fieldItem(field *protogen.Field, fieldname string, message *
 			p.P(`iNdEx += skippy`)
 			p.P(`}`)
 			p.P(`}`)
-			p.P(`m.`, fieldname, `[mapkey] = mapvalue`)
+			p.P(`x.`, fieldname, `[mapkey] = mapvalue`)
 		} else if repeated {
 			if p.ShouldPool(message) {
-				p.P(`if len(m.`, fieldname, `) == cap(m.`, fieldname, `) {`)
-				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, &`, field.Message.GoIdent, `{})`)
+				p.P(`if len(x.`, fieldname, `) == cap(x.`, fieldname, `) {`)
+				p.P(`x.`, fieldname, ` = append(x.`, fieldname, `, &`, field.Message.GoIdent, `{})`)
 				p.P(`} else {`)
-				p.P(`m.`, fieldname, ` = m.`, fieldname, `[:len(m.`, fieldname, `) + 1]`)
-				p.P(`if m.`, fieldname, `[len(m.`, fieldname, `) - 1] == nil {`)
-				p.P(`m.`, fieldname, `[len(m.`, fieldname, `) - 1] = &`, field.Message.GoIdent, `{}`)
+				p.P(`x.`, fieldname, ` = x.`, fieldname, `[:len(x.`, fieldname, `) + 1]`)
+				p.P(`if x.`, fieldname, `[len(x.`, fieldname, `) - 1] == nil {`)
+				p.P(`x.`, fieldname, `[len(x.`, fieldname, `) - 1] = &`, field.Message.GoIdent, `{}`)
 				p.P(`}`)
 				p.P(`}`)
 			} else {
-				p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, &`, field.Message.GoIdent, `{})`)
+				p.P(`x.`, fieldname, ` = append(x.`, fieldname, `, &`, field.Message.GoIdent, `{})`)
 			}
-			varname := fmt.Sprintf("m.%s[len(m.%s) - 1]", fieldname, fieldname)
+			varname := fmt.Sprintf("x.%s[len(x.%s) - 1]", fieldname, fieldname)
 			buf := `dAtA[iNdEx:postIndex]`
 			p.decodeMessage(varname, buf, field.Message)
 		} else {
-			p.P(`if m.`, fieldname, ` == nil {`)
+			p.P(`if x.`, fieldname, ` == nil {`)
 			if p.ShouldPool(message) && p.ShouldPool(field.Message) {
-				p.P(`m.`, fieldname, ` = `, field.Message.GoIdent, `FromVTPool()`)
+				p.P(`x.`, fieldname, ` = `, field.Message.GoIdent, `FromVTPool()`)
 			} else {
-				p.P(`m.`, fieldname, ` = &`, field.Message.GoIdent, `{}`)
+				p.P(`x.`, fieldname, ` = &`, field.Message.GoIdent, `{}`)
 			}
 			p.P(`}`)
-			p.decodeMessage("m."+fieldname, "dAtA[iNdEx:postIndex]", field.Message)
+			p.decodeMessage("x."+fieldname, "dAtA[iNdEx:postIndex]", field.Message)
 		}
 		p.P(`iNdEx = postIndex`)
 
@@ -516,14 +516,14 @@ func (p *unmarshal) fieldItem(field *protogen.Field, fieldname string, message *
 		if oneof {
 			p.P(`v := make([]byte, postIndex-iNdEx)`)
 			p.P(`copy(v, dAtA[iNdEx:postIndex])`)
-			p.P(`m.`, fieldname, ` = &`, field.GoIdent, `{v}`)
+			p.P(`x.`, fieldname, ` = &`, field.GoIdent, `{v}`)
 		} else if repeated {
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, make([]byte, postIndex-iNdEx))`)
-			p.P(`copy(m.`, fieldname, `[len(m.`, fieldname, `)-1], dAtA[iNdEx:postIndex])`)
+			p.P(`x.`, fieldname, ` = append(x.`, fieldname, `, make([]byte, postIndex-iNdEx))`)
+			p.P(`copy(x.`, fieldname, `[len(x.`, fieldname, `)-1], dAtA[iNdEx:postIndex])`)
 		} else {
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `[:0] , dAtA[iNdEx:postIndex]...)`)
-			p.P(`if m.`, fieldname, ` == nil {`)
-			p.P(`m.`, fieldname, ` = []byte{}`)
+			p.P(`x.`, fieldname, ` = append(x.`, fieldname, `[:0] , dAtA[iNdEx:postIndex]...)`)
+			p.P(`if x.`, fieldname, ` == nil {`)
+			p.P(`x.`, fieldname, ` = []byte{}`)
 			p.P(`}`)
 		}
 		p.P(`iNdEx = postIndex`)
@@ -531,96 +531,96 @@ func (p *unmarshal) fieldItem(field *protogen.Field, fieldname string, message *
 		if oneof {
 			p.P(`var v `, typ)
 			p.decodeVarint("v", typ)
-			p.P(`m.`, fieldname, ` = &`, field.GoIdent, `{v}`)
+			p.P(`x.`, fieldname, ` = &`, field.GoIdent, `{v}`)
 		} else if repeated {
 			p.P(`var v `, typ)
 			p.decodeVarint("v", typ)
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
+			p.P(`x.`, fieldname, ` = append(x.`, fieldname, `, v)`)
 		} else if proto3 && !nullable {
-			p.P(`m.`, fieldname, ` = 0`)
-			p.decodeVarint("m."+fieldname, typ)
+			p.P(`x.`, fieldname, ` = 0`)
+			p.decodeVarint("x."+fieldname, typ)
 		} else {
 			p.P(`var v `, typ)
 			p.decodeVarint("v", typ)
-			p.P(`m.`, fieldname, ` = &v`)
+			p.P(`x.`, fieldname, ` = &v`)
 		}
 	case protoreflect.EnumKind:
 		if oneof {
 			p.P(`var v `, typ)
 			p.decodeVarint("v", typ)
-			p.P(`m.`, fieldname, ` = &`, field.GoIdent, `{v}`)
+			p.P(`x.`, fieldname, ` = &`, field.GoIdent, `{v}`)
 		} else if repeated {
 			p.P(`var v `, typ)
 			p.decodeVarint("v", typ)
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
+			p.P(`x.`, fieldname, ` = append(x.`, fieldname, `, v)`)
 		} else if proto3 && !nullable {
-			p.P(`m.`, fieldname, ` = 0`)
-			p.decodeVarint("m."+fieldname, typ)
+			p.P(`x.`, fieldname, ` = 0`)
+			p.decodeVarint("x."+fieldname, typ)
 		} else {
 			p.P(`var v `, typ)
 			p.decodeVarint("v", typ)
-			p.P(`m.`, fieldname, ` = &v`)
+			p.P(`x.`, fieldname, ` = &v`)
 		}
 	case protoreflect.Sfixed32Kind:
 		if oneof {
 			p.P(`var v `, typ)
 			p.decodeFixed32("v", typ)
-			p.P(`m.`, fieldname, ` = &`, field.GoIdent, `{v}`)
+			p.P(`x.`, fieldname, ` = &`, field.GoIdent, `{v}`)
 		} else if repeated {
 			p.P(`var v `, typ)
 			p.decodeFixed32("v", typ)
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
+			p.P(`x.`, fieldname, ` = append(x.`, fieldname, `, v)`)
 		} else if proto3 && !nullable {
-			p.P(`m.`, fieldname, ` = 0`)
-			p.decodeFixed32("m."+fieldname, typ)
+			p.P(`x.`, fieldname, ` = 0`)
+			p.decodeFixed32("x."+fieldname, typ)
 		} else {
 			p.P(`var v `, typ)
 			p.decodeFixed32("v", typ)
-			p.P(`m.`, fieldname, ` = &v`)
+			p.P(`x.`, fieldname, ` = &v`)
 		}
 	case protoreflect.Sfixed64Kind:
 		if oneof {
 			p.P(`var v `, typ)
 			p.decodeFixed64("v", typ)
-			p.P(`m.`, fieldname, ` = &`, field.GoIdent, `{v}`)
+			p.P(`x.`, fieldname, ` = &`, field.GoIdent, `{v}`)
 		} else if repeated {
 			p.P(`var v `, typ)
 			p.decodeFixed64("v", typ)
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
+			p.P(`x.`, fieldname, ` = append(x.`, fieldname, `, v)`)
 		} else if proto3 && !nullable {
-			p.P(`m.`, fieldname, ` = 0`)
-			p.decodeFixed64("m."+fieldname, typ)
+			p.P(`x.`, fieldname, ` = 0`)
+			p.decodeFixed64("x."+fieldname, typ)
 		} else {
 			p.P(`var v `, typ)
 			p.decodeFixed64("v", typ)
-			p.P(`m.`, fieldname, ` = &v`)
+			p.P(`x.`, fieldname, ` = &v`)
 		}
 	case protoreflect.Sint32Kind:
 		p.P(`var v `, typ)
 		p.decodeVarint("v", typ)
 		p.P(`v = `, typ, `((uint32(v) >> 1) ^ uint32(((v&1)<<31)>>31))`)
 		if oneof {
-			p.P(`m.`, fieldname, ` = &`, field.GoIdent, `{v}`)
+			p.P(`x.`, fieldname, ` = &`, field.GoIdent, `{v}`)
 		} else if repeated {
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, v)`)
+			p.P(`x.`, fieldname, ` = append(x.`, fieldname, `, v)`)
 		} else if proto3 && !nullable {
-			p.P(`m.`, fieldname, ` = v`)
+			p.P(`x.`, fieldname, ` = v`)
 		} else {
-			p.P(`m.`, fieldname, ` = &v`)
+			p.P(`x.`, fieldname, ` = &v`)
 		}
 	case protoreflect.Sint64Kind:
 		p.P(`var v uint64`)
 		p.decodeVarint("v", "uint64")
 		p.P(`v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)`)
 		if oneof {
-			p.P(`m.`, fieldname, ` = &`, field.GoIdent, `{`, typ, `(v)}`)
+			p.P(`x.`, fieldname, ` = &`, field.GoIdent, `{`, typ, `(v)}`)
 		} else if repeated {
-			p.P(`m.`, fieldname, ` = append(m.`, fieldname, `, `, typ, `(v))`)
+			p.P(`x.`, fieldname, ` = append(x.`, fieldname, `, `, typ, `(v))`)
 		} else if proto3 && !nullable {
-			p.P(`m.`, fieldname, ` = `, typ, `(v)`)
+			p.P(`x.`, fieldname, ` = `, typ, `(v)`)
 		} else {
 			p.P(`v2 := `, typ, `(v)`)
-			p.P(`m.`, fieldname, ` = &v2`)
+			p.P(`x.`, fieldname, ` = &v2`)
 		}
 	default:
 		panic("not implemented")
@@ -672,13 +672,13 @@ func (p *unmarshal) field(field *protogen.Field, message *protogen.Message, prot
 		}
 
 		if p.ShouldPool(message) {
-			p.P(`if elementCount != 0 && len(m.`, fieldname, `) == 0 && cap(m.`, fieldname, `) < elementCount {`)
+			p.P(`if elementCount != 0 && len(x.`, fieldname, `) == 0 && cap(x.`, fieldname, `) < elementCount {`)
 		} else {
-			p.P(`if elementCount != 0 && len(m.`, fieldname, `) == 0 {`)
+			p.P(`if elementCount != 0 && len(x.`, fieldname, `) == 0 {`)
 		}
 
 		fieldtyp, _ := p.FieldGoType(field)
-		p.P(`m.`, fieldname, ` = make(`, fieldtyp, `, 0, elementCount)`)
+		p.P(`x.`, fieldname, ` = make(`, fieldtyp, `, 0, elementCount)`)
 		p.P(`}`)
 
 		p.P(`for iNdEx < postIndex {`)
@@ -721,7 +721,7 @@ func (p *unmarshal) message(message *protogen.Message) {
 	ccTypeName := message.GoIdent
 	required := message.Desc.RequiredNumbers()
 
-	p.P(`func (m *`, ccTypeName, `) Unmarshal(dAtA []byte) error {`)
+	p.P(`func (x *`, ccTypeName, `) Unmarshal(dAtA []byte) error {`)
 	if required.Len() > 0 {
 		p.P(`var hasFields [`, strconv.Itoa(1+(required.Len()-1)/64), `]uint64`)
 	}
@@ -786,7 +786,7 @@ func (p *unmarshal) message(message *protogen.Message) {
 	p.P(`if (iNdEx + skippy) > l {`)
 	p.P(`return `, p.Ident("io", `ErrUnexpectedEOF`))
 	p.P(`}`)
-	p.P(`m.unknownFields = append(m.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)`)
+	p.P(`x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)`)
 	p.P(`iNdEx += skippy`)
 	if len(message.Extensions) > 0 {
 		p.P(`}`)

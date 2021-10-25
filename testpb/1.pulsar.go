@@ -1309,37 +1309,37 @@ func (x *fastReflection_B) ProtoMethods() *protoiface.Methods {
 		CheckInitialized:  nil,
 	}
 }
-func (m *A) Marshal() (dAtA []byte, err error) {
-	if m == nil {
+func (x *A) Marshal() (dAtA []byte, err error) {
+	if x == nil {
 		return nil, nil
 	}
-	size := m.Size()
+	size := x.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := x.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
 	return dAtA[:n], nil
 }
 
-func (m *A) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+func (x *A) MarshalTo(dAtA []byte) (int, error) {
+	size := x.Size()
+	return x.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *A) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	if m == nil {
+func (x *A) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	if x == nil {
 		return 0, nil
 	}
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.unknownFields != nil {
-		i -= len(m.unknownFields)
-		copy(dAtA[i:], m.unknownFields)
+	if x.unknownFields != nil {
+		i -= len(x.unknownFields)
+		copy(dAtA[i:], x.unknownFields)
 	}
-	if vtmsg, ok := m.ONEOF.(interface {
+	if vtmsg, ok := x.ONEOF.(interface {
 		MarshalTo([]byte) (int, error)
 		Size() int
 	}); ok {
@@ -1351,14 +1351,14 @@ func (m *A) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 		}
 	}
-	if len(m.LIST_ENUM) > 0 {
+	if len(x.LIST_ENUM) > 0 {
 		var pksize2 int
-		for _, num := range m.LIST_ENUM {
+		for _, num := range x.LIST_ENUM {
 			pksize2 += runtime.Sov(uint64(num))
 		}
 		i -= pksize2
 		j1 := i
-		for _, num1 := range m.LIST_ENUM {
+		for _, num1 := range x.LIST_ENUM {
 			num := uint64(num1)
 			for num >= 1<<7 {
 				dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
@@ -1374,9 +1374,9 @@ func (m *A) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xb2
 	}
-	if len(m.LIST) > 0 {
-		for iNdEx := len(m.LIST) - 1; iNdEx >= 0; iNdEx-- {
-			size, err := m.LIST[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+	if len(x.LIST) > 0 {
+		for iNdEx := len(x.LIST) - 1; iNdEx >= 0; iNdEx-- {
+			size, err := x.LIST[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -1388,9 +1388,9 @@ func (m *A) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x9a
 		}
 	}
-	if len(m.MAP) > 0 {
-		for k := range m.MAP {
-			v := m.MAP[k]
+	if len(x.MAP) > 0 {
+		for k := range x.MAP {
+			v := x.MAP[k]
 			baseI := i
 			size, err := v.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
@@ -1412,8 +1412,8 @@ func (m *A) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x92
 		}
 	}
-	if m.MESSAGE != nil {
-		size, err := m.MESSAGE.MarshalToSizedBuffer(dAtA[:i])
+	if x.MESSAGE != nil {
+		size, err := x.MESSAGE.MarshalToSizedBuffer(dAtA[:i])
 		if err != nil {
 			return 0, err
 		}
@@ -1424,91 +1424,91 @@ func (m *A) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x8a
 	}
-	if len(m.BYTES) > 0 {
-		i -= len(m.BYTES)
-		copy(dAtA[i:], m.BYTES)
-		i = runtime.EncodeVarint(dAtA, i, uint64(len(m.BYTES)))
+	if len(x.BYTES) > 0 {
+		i -= len(x.BYTES)
+		copy(dAtA[i:], x.BYTES)
+		i = runtime.EncodeVarint(dAtA, i, uint64(len(x.BYTES)))
 		i--
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0x82
 	}
-	if len(m.STRING) > 0 {
-		i -= len(m.STRING)
-		copy(dAtA[i:], m.STRING)
-		i = runtime.EncodeVarint(dAtA, i, uint64(len(m.STRING)))
+	if len(x.STRING) > 0 {
+		i -= len(x.STRING)
+		copy(dAtA[i:], x.STRING)
+		i = runtime.EncodeVarint(dAtA, i, uint64(len(x.STRING)))
 		i--
 		dAtA[i] = 0x7a
 	}
-	if m.DOUBLE != 0 || math.Signbit(m.DOUBLE) {
+	if x.DOUBLE != 0 || math.Signbit(x.DOUBLE) {
 		i -= 8
-		binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.DOUBLE))))
+		binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(x.DOUBLE))))
 		i--
 		dAtA[i] = 0x71
 	}
-	if m.FIXED64 != 0 {
+	if x.FIXED64 != 0 {
 		i -= 8
-		binary.LittleEndian.PutUint64(dAtA[i:], uint64(m.FIXED64))
+		binary.LittleEndian.PutUint64(dAtA[i:], uint64(x.FIXED64))
 		i--
 		dAtA[i] = 0x69
 	}
-	if m.SFIXED64 != 0 {
+	if x.SFIXED64 != 0 {
 		i -= 8
-		binary.LittleEndian.PutUint64(dAtA[i:], uint64(m.SFIXED64))
+		binary.LittleEndian.PutUint64(dAtA[i:], uint64(x.SFIXED64))
 		i--
 		dAtA[i] = 0x61
 	}
-	if m.FLOAT != 0 || math.Signbit(float64(m.FLOAT)) {
+	if x.FLOAT != 0 || math.Signbit(float64(x.FLOAT)) {
 		i -= 4
-		binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(m.FLOAT))))
+		binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(x.FLOAT))))
 		i--
 		dAtA[i] = 0x5d
 	}
-	if m.FIXED32 != 0 {
+	if x.FIXED32 != 0 {
 		i -= 4
-		binary.LittleEndian.PutUint32(dAtA[i:], uint32(m.FIXED32))
+		binary.LittleEndian.PutUint32(dAtA[i:], uint32(x.FIXED32))
 		i--
 		dAtA[i] = 0x55
 	}
-	if m.SFIXED32 != 0 {
+	if x.SFIXED32 != 0 {
 		i -= 4
-		binary.LittleEndian.PutUint32(dAtA[i:], uint32(m.SFIXED32))
+		binary.LittleEndian.PutUint32(dAtA[i:], uint32(x.SFIXED32))
 		i--
 		dAtA[i] = 0x4d
 	}
-	if m.UINT64 != 0 {
-		i = runtime.EncodeVarint(dAtA, i, uint64(m.UINT64))
+	if x.UINT64 != 0 {
+		i = runtime.EncodeVarint(dAtA, i, uint64(x.UINT64))
 		i--
 		dAtA[i] = 0x40
 	}
-	if m.SING64 != 0 {
-		i = runtime.EncodeVarint(dAtA, i, uint64((uint64(m.SING64)<<1)^uint64((m.SING64>>63))))
+	if x.SING64 != 0 {
+		i = runtime.EncodeVarint(dAtA, i, uint64((uint64(x.SING64)<<1)^uint64((x.SING64>>63))))
 		i--
 		dAtA[i] = 0x38
 	}
-	if m.INT64 != 0 {
-		i = runtime.EncodeVarint(dAtA, i, uint64(m.INT64))
+	if x.INT64 != 0 {
+		i = runtime.EncodeVarint(dAtA, i, uint64(x.INT64))
 		i--
 		dAtA[i] = 0x30
 	}
-	if m.UINT32 != 0 {
-		i = runtime.EncodeVarint(dAtA, i, uint64(m.UINT32))
+	if x.UINT32 != 0 {
+		i = runtime.EncodeVarint(dAtA, i, uint64(x.UINT32))
 		i--
 		dAtA[i] = 0x28
 	}
-	if m.SINT32 != 0 {
-		i = runtime.EncodeVarint(dAtA, i, uint64((uint32(m.SINT32)<<1)^uint32((m.SINT32>>31))))
+	if x.SINT32 != 0 {
+		i = runtime.EncodeVarint(dAtA, i, uint64((uint32(x.SINT32)<<1)^uint32((x.SINT32>>31))))
 		i--
 		dAtA[i] = 0x20
 	}
-	if m.INT32 != 0 {
-		i = runtime.EncodeVarint(dAtA, i, uint64(m.INT32))
+	if x.INT32 != 0 {
+		i = runtime.EncodeVarint(dAtA, i, uint64(x.INT32))
 		i--
 		dAtA[i] = 0x18
 	}
-	if m.SomeBoolean {
+	if x.SomeBoolean {
 		i--
-		if m.SomeBoolean {
+		if x.SomeBoolean {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
@@ -1516,23 +1516,23 @@ func (m *A) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x10
 	}
-	if m.Enum != 0 {
-		i = runtime.EncodeVarint(dAtA, i, uint64(m.Enum))
+	if x.Enum != 0 {
+		i = runtime.EncodeVarint(dAtA, i, uint64(x.Enum))
 		i--
 		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *A_ONEOF_B) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+func (x *A_ONEOF_B) MarshalTo(dAtA []byte) (int, error) {
+	size := x.Size()
+	return x.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *A_ONEOF_B) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (x *A_ONEOF_B) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.ONEOF_B != nil {
-		size, err := m.ONEOF_B.MarshalToSizedBuffer(dAtA[:i])
+	if x.ONEOF_B != nil {
+		size, err := x.ONEOF_B.MarshalToSizedBuffer(dAtA[:i])
 		if err != nil {
 			return 0, err
 		}
@@ -1545,56 +1545,56 @@ func (m *A_ONEOF_B) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	return len(dAtA) - i, nil
 }
-func (m *A_ONEOF_STRING) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+func (x *A_ONEOF_STRING) MarshalTo(dAtA []byte) (int, error) {
+	size := x.Size()
+	return x.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *A_ONEOF_STRING) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (x *A_ONEOF_STRING) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	i -= len(m.ONEOF_STRING)
-	copy(dAtA[i:], m.ONEOF_STRING)
-	i = runtime.EncodeVarint(dAtA, i, uint64(len(m.ONEOF_STRING)))
+	i -= len(x.ONEOF_STRING)
+	copy(dAtA[i:], x.ONEOF_STRING)
+	i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ONEOF_STRING)))
 	i--
 	dAtA[i] = 0x1
 	i--
 	dAtA[i] = 0xaa
 	return len(dAtA) - i, nil
 }
-func (m *B) Marshal() (dAtA []byte, err error) {
-	if m == nil {
+func (x *B) Marshal() (dAtA []byte, err error) {
+	if x == nil {
 		return nil, nil
 	}
-	size := m.Size()
+	size := x.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := x.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
 	return dAtA[:n], nil
 }
 
-func (m *B) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+func (x *B) MarshalTo(dAtA []byte) (int, error) {
+	size := x.Size()
+	return x.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *B) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	if m == nil {
+func (x *B) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	if x == nil {
 		return 0, nil
 	}
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.unknownFields != nil {
-		i -= len(m.unknownFields)
-		copy(dAtA[i:], m.unknownFields)
+	if x.unknownFields != nil {
+		i -= len(x.unknownFields)
+		copy(dAtA[i:], x.unknownFields)
 	}
-	if len(m.X) > 0 {
-		i -= len(m.X)
-		copy(dAtA[i:], m.X)
-		i = runtime.EncodeVarint(dAtA, i, uint64(len(m.X)))
+	if len(x.X) > 0 {
+		i -= len(x.X)
+		copy(dAtA[i:], x.X)
+		i = runtime.EncodeVarint(dAtA, i, uint64(len(x.X)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -2068,68 +2068,68 @@ func file_testpb_1_proto_init() {
 	file_testpb_1_proto_goTypes = nil
 	file_testpb_1_proto_depIdxs = nil
 }
-func (m *A) Size() (n int) {
-	if m == nil {
+func (x *A) Size() (n int) {
+	if x == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.Enum != 0 {
-		n += 1 + runtime.Sov(uint64(m.Enum))
+	if x.Enum != 0 {
+		n += 1 + runtime.Sov(uint64(x.Enum))
 	}
-	if m.SomeBoolean {
+	if x.SomeBoolean {
 		n += 2
 	}
-	if m.INT32 != 0 {
-		n += 1 + runtime.Sov(uint64(m.INT32))
+	if x.INT32 != 0 {
+		n += 1 + runtime.Sov(uint64(x.INT32))
 	}
-	if m.SINT32 != 0 {
-		n += 1 + runtime.Soz(uint64(m.SINT32))
+	if x.SINT32 != 0 {
+		n += 1 + runtime.Soz(uint64(x.SINT32))
 	}
-	if m.UINT32 != 0 {
-		n += 1 + runtime.Sov(uint64(m.UINT32))
+	if x.UINT32 != 0 {
+		n += 1 + runtime.Sov(uint64(x.UINT32))
 	}
-	if m.INT64 != 0 {
-		n += 1 + runtime.Sov(uint64(m.INT64))
+	if x.INT64 != 0 {
+		n += 1 + runtime.Sov(uint64(x.INT64))
 	}
-	if m.SING64 != 0 {
-		n += 1 + runtime.Soz(uint64(m.SING64))
+	if x.SING64 != 0 {
+		n += 1 + runtime.Soz(uint64(x.SING64))
 	}
-	if m.UINT64 != 0 {
-		n += 1 + runtime.Sov(uint64(m.UINT64))
+	if x.UINT64 != 0 {
+		n += 1 + runtime.Sov(uint64(x.UINT64))
 	}
-	if m.SFIXED32 != 0 {
+	if x.SFIXED32 != 0 {
 		n += 5
 	}
-	if m.FIXED32 != 0 {
+	if x.FIXED32 != 0 {
 		n += 5
 	}
-	if m.FLOAT != 0 || math.Signbit(float64(m.FLOAT)) {
+	if x.FLOAT != 0 || math.Signbit(float64(x.FLOAT)) {
 		n += 5
 	}
-	if m.SFIXED64 != 0 {
+	if x.SFIXED64 != 0 {
 		n += 9
 	}
-	if m.FIXED64 != 0 {
+	if x.FIXED64 != 0 {
 		n += 9
 	}
-	if m.DOUBLE != 0 || math.Signbit(m.DOUBLE) {
+	if x.DOUBLE != 0 || math.Signbit(x.DOUBLE) {
 		n += 9
 	}
-	l = len(m.STRING)
+	l = len(x.STRING)
 	if l > 0 {
 		n += 1 + l + runtime.Sov(uint64(l))
 	}
-	l = len(m.BYTES)
+	l = len(x.BYTES)
 	if l > 0 {
 		n += 2 + l + runtime.Sov(uint64(l))
 	}
-	if m.MESSAGE != nil {
-		l = m.MESSAGE.Size()
+	if x.MESSAGE != nil {
+		l = x.MESSAGE.Size()
 		n += 2 + l + runtime.Sov(uint64(l))
 	}
-	if len(m.MAP) > 0 {
-		for k, v := range m.MAP {
+	if len(x.MAP) > 0 {
+		for k, v := range x.MAP {
 			_ = k
 			_ = v
 			l = 0
@@ -2141,67 +2141,67 @@ func (m *A) Size() (n int) {
 			n += mapEntrySize + 2 + runtime.Sov(uint64(mapEntrySize))
 		}
 	}
-	if len(m.LIST) > 0 {
-		for _, e := range m.LIST {
+	if len(x.LIST) > 0 {
+		for _, e := range x.LIST {
 			l = e.Size()
 			n += 2 + l + runtime.Sov(uint64(l))
 		}
 	}
-	if vtmsg, ok := m.ONEOF.(interface{ Size() int }); ok {
+	if vtmsg, ok := x.ONEOF.(interface{ Size() int }); ok {
 		n += vtmsg.Size()
 	}
-	if len(m.LIST_ENUM) > 0 {
+	if len(x.LIST_ENUM) > 0 {
 		l = 0
-		for _, e := range m.LIST_ENUM {
+		for _, e := range x.LIST_ENUM {
 			l += runtime.Sov(uint64(e))
 		}
 		n += 2 + runtime.Sov(uint64(l)) + l
 	}
-	if m.unknownFields != nil {
-		n += len(m.unknownFields)
+	if x.unknownFields != nil {
+		n += len(x.unknownFields)
 	}
 	return n
 }
 
-func (m *A_ONEOF_B) Size() (n int) {
-	if m == nil {
+func (x *A_ONEOF_B) Size() (n int) {
+	if x == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.ONEOF_B != nil {
-		l = m.ONEOF_B.Size()
+	if x.ONEOF_B != nil {
+		l = x.ONEOF_B.Size()
 		n += 2 + l + runtime.Sov(uint64(l))
 	}
 	return n
 }
-func (m *A_ONEOF_STRING) Size() (n int) {
-	if m == nil {
+func (x *A_ONEOF_STRING) Size() (n int) {
+	if x == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.ONEOF_STRING)
+	l = len(x.ONEOF_STRING)
 	n += 2 + l + runtime.Sov(uint64(l))
 	return n
 }
-func (m *B) Size() (n int) {
-	if m == nil {
+func (x *B) Size() (n int) {
+	if x == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.X)
+	l = len(x.X)
 	if l > 0 {
 		n += 1 + l + runtime.Sov(uint64(l))
 	}
-	if m.unknownFields != nil {
-		n += len(m.unknownFields)
+	if x.unknownFields != nil {
+		n += len(x.unknownFields)
 	}
 	return n
 }
 
-func (m *A) Unmarshal(dAtA []byte) error {
+func (x *A) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2234,7 +2234,7 @@ func (m *A) Unmarshal(dAtA []byte) error {
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Enum", wireType)
 			}
-			m.Enum = 0
+			x.Enum = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return runtime.ErrIntOverflow
@@ -2244,7 +2244,7 @@ func (m *A) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Enum |= Enumeration(b&0x7F) << shift
+				x.Enum |= Enumeration(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2268,12 +2268,12 @@ func (m *A) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-			m.SomeBoolean = bool(v != 0)
+			x.SomeBoolean = bool(v != 0)
 		case 3:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field INT32", wireType)
 			}
-			m.INT32 = 0
+			x.INT32 = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return runtime.ErrIntOverflow
@@ -2283,7 +2283,7 @@ func (m *A) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.INT32 |= int32(b&0x7F) << shift
+				x.INT32 |= int32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2308,12 +2308,12 @@ func (m *A) Unmarshal(dAtA []byte) error {
 				}
 			}
 			v = int32((uint32(v) >> 1) ^ uint32(((v&1)<<31)>>31))
-			m.SINT32 = v
+			x.SINT32 = v
 		case 5:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field UINT32", wireType)
 			}
-			m.UINT32 = 0
+			x.UINT32 = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return runtime.ErrIntOverflow
@@ -2323,7 +2323,7 @@ func (m *A) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.UINT32 |= uint32(b&0x7F) << shift
+				x.UINT32 |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2332,7 +2332,7 @@ func (m *A) Unmarshal(dAtA []byte) error {
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field INT64", wireType)
 			}
-			m.INT64 = 0
+			x.INT64 = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return runtime.ErrIntOverflow
@@ -2342,7 +2342,7 @@ func (m *A) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.INT64 |= int64(b&0x7F) << shift
+				x.INT64 |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2367,12 +2367,12 @@ func (m *A) Unmarshal(dAtA []byte) error {
 				}
 			}
 			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
-			m.SING64 = int64(v)
+			x.SING64 = int64(v)
 		case 8:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field UINT64", wireType)
 			}
-			m.UINT64 = 0
+			x.UINT64 = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return runtime.ErrIntOverflow
@@ -2382,7 +2382,7 @@ func (m *A) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.UINT64 |= uint64(b&0x7F) << shift
+				x.UINT64 |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2391,21 +2391,21 @@ func (m *A) Unmarshal(dAtA []byte) error {
 			if wireType != 5 {
 				return fmt.Errorf("proto: wrong wireType = %d for field SFIXED32", wireType)
 			}
-			m.SFIXED32 = 0
+			x.SFIXED32 = 0
 			if (iNdEx + 4) > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.SFIXED32 = int32(binary.LittleEndian.Uint32(dAtA[iNdEx:]))
+			x.SFIXED32 = int32(binary.LittleEndian.Uint32(dAtA[iNdEx:]))
 			iNdEx += 4
 		case 10:
 			if wireType != 5 {
 				return fmt.Errorf("proto: wrong wireType = %d for field FIXED32", wireType)
 			}
-			m.FIXED32 = 0
+			x.FIXED32 = 0
 			if (iNdEx + 4) > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.FIXED32 = uint32(binary.LittleEndian.Uint32(dAtA[iNdEx:]))
+			x.FIXED32 = uint32(binary.LittleEndian.Uint32(dAtA[iNdEx:]))
 			iNdEx += 4
 		case 11:
 			if wireType != 5 {
@@ -2417,26 +2417,26 @@ func (m *A) Unmarshal(dAtA []byte) error {
 			}
 			v = uint32(binary.LittleEndian.Uint32(dAtA[iNdEx:]))
 			iNdEx += 4
-			m.FLOAT = float32(math.Float32frombits(v))
+			x.FLOAT = float32(math.Float32frombits(v))
 		case 12:
 			if wireType != 1 {
 				return fmt.Errorf("proto: wrong wireType = %d for field SFIXED64", wireType)
 			}
-			m.SFIXED64 = 0
+			x.SFIXED64 = 0
 			if (iNdEx + 8) > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.SFIXED64 = int64(binary.LittleEndian.Uint64(dAtA[iNdEx:]))
+			x.SFIXED64 = int64(binary.LittleEndian.Uint64(dAtA[iNdEx:]))
 			iNdEx += 8
 		case 13:
 			if wireType != 1 {
 				return fmt.Errorf("proto: wrong wireType = %d for field FIXED64", wireType)
 			}
-			m.FIXED64 = 0
+			x.FIXED64 = 0
 			if (iNdEx + 8) > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.FIXED64 = uint64(binary.LittleEndian.Uint64(dAtA[iNdEx:]))
+			x.FIXED64 = uint64(binary.LittleEndian.Uint64(dAtA[iNdEx:]))
 			iNdEx += 8
 		case 14:
 			if wireType != 1 {
@@ -2448,7 +2448,7 @@ func (m *A) Unmarshal(dAtA []byte) error {
 			}
 			v = uint64(binary.LittleEndian.Uint64(dAtA[iNdEx:]))
 			iNdEx += 8
-			m.DOUBLE = float64(math.Float64frombits(v))
+			x.DOUBLE = float64(math.Float64frombits(v))
 		case 15:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field STRING", wireType)
@@ -2479,7 +2479,7 @@ func (m *A) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.STRING = string(dAtA[iNdEx:postIndex])
+			x.STRING = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 16:
 			if wireType != 2 {
@@ -2510,9 +2510,9 @@ func (m *A) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.BYTES = append(m.BYTES[:0], dAtA[iNdEx:postIndex]...)
-			if m.BYTES == nil {
-				m.BYTES = []byte{}
+			x.BYTES = append(x.BYTES[:0], dAtA[iNdEx:postIndex]...)
+			if x.BYTES == nil {
+				x.BYTES = []byte{}
 			}
 			iNdEx = postIndex
 		case 17:
@@ -2544,10 +2544,10 @@ func (m *A) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.MESSAGE == nil {
-				m.MESSAGE = &B{}
+			if x.MESSAGE == nil {
+				x.MESSAGE = &B{}
 			}
-			if err := m.MESSAGE.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := x.MESSAGE.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2580,8 +2580,8 @@ func (m *A) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.MAP == nil {
-				m.MAP = make(map[string]*B)
+			if x.MAP == nil {
+				x.MAP = make(map[string]*B)
 			}
 			var mapkey string
 			var mapvalue *B
@@ -2678,7 +2678,7 @@ func (m *A) Unmarshal(dAtA []byte) error {
 					iNdEx += skippy
 				}
 			}
-			m.MAP[mapkey] = mapvalue
+			x.MAP[mapkey] = mapvalue
 			iNdEx = postIndex
 		case 19:
 			if wireType != 2 {
@@ -2709,8 +2709,8 @@ func (m *A) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.LIST = append(m.LIST, &B{})
-			if err := m.LIST[len(m.LIST)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			x.LIST = append(x.LIST, &B{})
+			if err := x.LIST[len(x.LIST)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2743,7 +2743,7 @@ func (m *A) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if oneof, ok := m.ONEOF.(*A_ONEOF_B); ok {
+			if oneof, ok := x.ONEOF.(*A_ONEOF_B); ok {
 				if err := oneof.ONEOF_B.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 					return err
 				}
@@ -2752,7 +2752,7 @@ func (m *A) Unmarshal(dAtA []byte) error {
 				if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 					return err
 				}
-				m.ONEOF = &A_ONEOF_B{v}
+				x.ONEOF = &A_ONEOF_B{v}
 			}
 			iNdEx = postIndex
 		case 21:
@@ -2785,7 +2785,7 @@ func (m *A) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ONEOF = &A_ONEOF_STRING{string(dAtA[iNdEx:postIndex])}
+			x.ONEOF = &A_ONEOF_STRING{string(dAtA[iNdEx:postIndex])}
 			iNdEx = postIndex
 		case 22:
 			if wireType == 0 {
@@ -2804,7 +2804,7 @@ func (m *A) Unmarshal(dAtA []byte) error {
 						break
 					}
 				}
-				m.LIST_ENUM = append(m.LIST_ENUM, v)
+				x.LIST_ENUM = append(x.LIST_ENUM, v)
 			} else if wireType == 2 {
 				var packedLen int
 				for shift := uint(0); ; shift += 7 {
@@ -2832,8 +2832,8 @@ func (m *A) Unmarshal(dAtA []byte) error {
 					return io.ErrUnexpectedEOF
 				}
 				var elementCount int
-				if elementCount != 0 && len(m.LIST_ENUM) == 0 {
-					m.LIST_ENUM = make([]Enumeration, 0, elementCount)
+				if elementCount != 0 && len(x.LIST_ENUM) == 0 {
+					x.LIST_ENUM = make([]Enumeration, 0, elementCount)
 				}
 				for iNdEx < postIndex {
 					var v Enumeration
@@ -2851,7 +2851,7 @@ func (m *A) Unmarshal(dAtA []byte) error {
 							break
 						}
 					}
-					m.LIST_ENUM = append(m.LIST_ENUM, v)
+					x.LIST_ENUM = append(x.LIST_ENUM, v)
 				}
 			} else {
 				return fmt.Errorf("proto: wrong wireType = %d for field LIST_ENUM", wireType)
@@ -2868,7 +2868,7 @@ func (m *A) Unmarshal(dAtA []byte) error {
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.unknownFields = append(m.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+			x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
 			iNdEx += skippy
 		}
 	}
@@ -2878,7 +2878,7 @@ func (m *A) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *B) Unmarshal(dAtA []byte) error {
+func (x *B) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2937,7 +2937,7 @@ func (m *B) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.X = string(dAtA[iNdEx:postIndex])
+			x.X = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2951,7 +2951,7 @@ func (m *B) Unmarshal(dAtA []byte) error {
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.unknownFields = append(m.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+			x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
 			iNdEx += skippy
 		}
 	}
