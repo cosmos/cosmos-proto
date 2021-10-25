@@ -13,10 +13,6 @@ import (
 	sync "sync"
 )
 
-func (x *fastReflection_A) Unwrap() *A {
-	return (*A)(x)
-}
-
 var _ protoreflect.Map = (*_A_18_map)(nil)
 
 type _A_18_map struct {
@@ -984,14 +980,14 @@ func (x *fastReflection_A) IsValid() bool {
 // Consult the protoiface package documentation for details.
 func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		s := input.Message.(*fastReflection_A).Unwrap().Size()
+		s := input.Message.Interface().(*A).Size()
 		return protoiface.SizeOutput{
 			NoUnkeyedLiterals: struct{}{},
 			Size:              s,
 		}
 	}
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		bz, err := input.Message.(*fastReflection_A).Unwrap().Marshal()
+		bz, err := input.Message.Interface().(*A).Marshal()
 		if err != nil {
 			return protoiface.MarshalOutput{}, err
 		}
@@ -1006,7 +1002,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		err := input.Message.(*fastReflection_A).Unwrap().Unmarshal(input.Buf)
+		err := input.Message.Interface().(*A).Unmarshal(input.Buf)
 		if err != nil {
 			return protoiface.UnmarshalOutput{}, err
 		}
@@ -1021,9 +1017,6 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 		Merge:             nil,
 		CheckInitialized:  nil,
 	}
-}
-func (x *fastReflection_B) Unwrap() *B {
-	return (*B)(x)
 }
 
 var (
@@ -1278,14 +1271,14 @@ func (x *fastReflection_B) IsValid() bool {
 // Consult the protoiface package documentation for details.
 func (x *fastReflection_B) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		s := input.Message.(*fastReflection_B).Unwrap().Size()
+		s := input.Message.Interface().(*B).Size()
 		return protoiface.SizeOutput{
 			NoUnkeyedLiterals: struct{}{},
 			Size:              s,
 		}
 	}
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		bz, err := input.Message.(*fastReflection_B).Unwrap().Marshal()
+		bz, err := input.Message.Interface().(*B).Marshal()
 		if err != nil {
 			return protoiface.MarshalOutput{}, err
 		}
@@ -1300,7 +1293,7 @@ func (x *fastReflection_B) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		err := input.Message.(*fastReflection_B).Unwrap().Unmarshal(input.Buf)
+		err := input.Message.Interface().(*B).Unmarshal(input.Buf)
 		if err != nil {
 			return protoiface.UnmarshalOutput{}, err
 		}

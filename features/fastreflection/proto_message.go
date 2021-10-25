@@ -19,7 +19,6 @@ const (
 
 func GenProtoMessage(f *protogen.File, g *generator.GeneratedFile, message *protogen.Message) {
 	gen := newGenerator(f, g, message)
-	gen.genUnwrap()
 	gen.generateExtraTypes()
 	gen.generateReflectionType()
 	gen.genMessageType()
@@ -43,14 +42,6 @@ func GenProtoMessage(f *protogen.File, g *generator.GeneratedFile, message *prot
 
 func fastReflectionTypeName(message *protogen.Message) string {
 	return fmt.Sprintf("fastReflection_%s", message.GoIdent.GoName)
-}
-
-// generates a method to unwrap a fast-wrapped message into its parent type
-// this makes it easier to use proto methods.
-func (g *fastGenerator) genUnwrap() {
-	g.P(`func (x *`, fastReflectionTypeName(g.message), `) Unwrap() *`, g.message.GoIdent, ` {`)
-	g.P(`		return (*`, g.message.GoIdent, `)(x)`)
-	g.P(`}`)
 }
 
 // generateExtraTypes generates the protoreflect.List and protoreflect.Map types required.
@@ -292,7 +283,7 @@ func (g *fastGenerator) genProtoMethods() {
 
 	// SIZE METHOD
 	g.P(`size := func(input `, protoifacePkg.Ident("SizeInput"), ") ", protoifacePkg.Ident("SizeOutput"), " {")
-	g.P("s := input.Message.(*", fastReflectionTypeName(g.message), ").Unwrap().Size()")
+	g.P("s := input.Message.Interface().(*", g.message.GoIdent, ").Size()")
 	g.P("return ", protoifacePkg.Ident("SizeOutput"), "{")
 	g.P("NoUnkeyedLiterals: struct{}{},")
 	g.P("Size: s,")
@@ -301,7 +292,7 @@ func (g *fastGenerator) genProtoMethods() {
 
 	// MARSHAL METHOD
 	g.P(`marshal := func(input `, protoifacePkg.Ident("MarshalInput"), `) (`, protoifacePkg.Ident("MarshalOutput"), `, error) {`)
-	g.P(`bz, err := input.Message.(*`, fastReflectionTypeName(g.message), `).Unwrap().Marshal()`)
+	g.P(`bz, err := input.Message.Interface().(*`, g.message.GoIdent, `).Marshal()`)
 	g.P(`if err != nil {`)
 	g.P(`		return `, protoifacePkg.Ident("MarshalOutput"), `{}, err`)
 	g.P(`}`)
@@ -318,7 +309,7 @@ func (g *fastGenerator) genProtoMethods() {
 
 	// UNMARSHAL METHOD
 	g.P(`unmarshal := func(input `, protoifacePkg.Ident("UnmarshalInput"), `) (`, protoifacePkg.Ident("UnmarshalOutput"), `, error) {`)
-	g.P(`err := input.Message.(*`, fastReflectionTypeName(g.message), `).Unwrap().Unmarshal(input.Buf)`)
+	g.P(`err := input.Message.Interface().(*`, g.message.GoIdent, `).Unmarshal(input.Buf)`)
 	g.P(`if err != nil {`)
 	g.P(`return `, protoifacePkg.Ident("UnmarshalOutput"), `{}, err`)
 	g.P("}")
