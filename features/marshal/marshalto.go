@@ -567,6 +567,8 @@ func (p *marshal) message(message *protogen.Message) {
 	p.P(`copy(dAtA[i:], x.unknownFields)`)
 	p.P(`}`)
 
+	// here we deep copy the message.Fields slice, since it can corrupt the order of fields
+	// causing issues for plugins that depend on the order
 	messageFields := make([]*protogen.Field, len(message.Fields))
 	for i := range message.Fields {
 		messageFields[i] = message.Fields[i]
