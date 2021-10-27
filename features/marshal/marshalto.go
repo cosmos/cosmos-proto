@@ -567,8 +567,12 @@ func (p *marshal) message(message *protogen.Message) {
 	p.P(`copy(dAtA[i:], x.unknownFields)`)
 	p.P(`}`)
 
-	sort.Slice(message.Fields, func(i, j int) bool {
-		return message.Fields[i].Desc.Number() < message.Fields[j].Desc.Number()
+	messageFields := make([]*protogen.Field, len(message.Fields))
+	for i := range message.Fields {
+		messageFields[i] = message.Fields[i]
+	}
+	sort.Slice(messageFields, func(i, j int) bool {
+		return messageFields[i].Desc.Number() < messageFields[j].Desc.Number()
 	})
 
 	oneofs := make(map[string]struct{})
@@ -585,8 +589,8 @@ func (p *marshal) message(message *protogen.Message) {
 			p.P(`}`)
 		}
 	}
-	for i := len(message.Fields) - 1; i >= 0; i-- {
-		field := message.Fields[i]
+	for i := len(messageFields) - 1; i >= 0; i-- {
+		field := messageFields[i]
 		oneof := field.Oneof != nil && !field.Oneof.Desc.IsSynthetic()
 		if !oneof {
 			p.field(true, &numGen, field)
@@ -597,7 +601,7 @@ func (p *marshal) message(message *protogen.Message) {
 	p.P()
 
 	//Generate MarshalTo methods for oneof fields
-	for _, field := range message.Fields {
+	for _, field := range messageFields {
 		if field.Oneof == nil || field.Oneof.Desc.IsSynthetic() {
 			continue
 		}
