@@ -70,6 +70,8 @@ func (g *mapGen) genRange() {
 	switch g.field.Message.Fields[1].Desc.Kind() {
 	case protoreflect.MessageKind:
 		g.P("mapValue := ", kindToValueConstructor(g.field.Message.Fields[1].Desc.Kind()), "(v.ProtoReflect())")
+	case protoreflect.EnumKind:
+		g.P("mapValue := ", kindToValueConstructor(g.field.Message.Fields[1].Desc.Kind()), "(v.Number())")
 	default:
 		g.P("mapValue := ", kindToValueConstructor(g.field.Message.Fields[1].Desc.Kind()), "(v)")
 	}
