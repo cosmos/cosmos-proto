@@ -2,6 +2,8 @@ syntax="proto3";
 
 option go_package = "github.com/cosmos/cosmos-proto/testpb";
 
+import "cosmos.proto";
+
 enum Enumeration {
   One = 0;
   Two = 1;
@@ -32,6 +34,8 @@ message A {
     string ONEOF_STRING = 21;
   };
   repeated Enumeration LIST_ENUM = 22;
+
+  string custom_string = 23 [(cosmos_proto.custom_type).go_import_path = "github.com/cosmos/cosmos-proto/testpb/customtype.AccAddress"];
 }
 
 message B {

@@ -7,18 +7,20 @@ package protoc
 
 import (
 	"fmt"
-	"github.com/cosmos/cosmos-proto/features/protoc/genid"
-	"github.com/cosmos/cosmos-proto/generator"
 	"go/ast"
 	"go/parser"
 	"go/token"
-	"google.golang.org/protobuf/encoding/protowire"
-	"google.golang.org/protobuf/proto"
 	"math"
 	"strconv"
 	"strings"
 	"unicode"
 	"unicode/utf8"
+
+	cosmos_proto "github.com/cosmos/cosmos-proto"
+	"github.com/cosmos/cosmos-proto/features/protoc/genid"
+	"github.com/cosmos/cosmos-proto/generator"
+	"google.golang.org/protobuf/encoding/protowire"
+	"google.golang.org/protobuf/proto"
 
 	pref "google.golang.org/protobuf/reflect/protoreflect"
 
@@ -175,7 +177,6 @@ func genFileDescriptor(gen *protogen.Plugin, g *generator.GeneratedFile, f *file
 		g.P()
 	}
 }
-
 
 func genReflectFileDescriptor(gen *protogen.Plugin, g *generator.GeneratedFile, f *fileInfo) {
 	g.P("var ", f.GoDescriptorIdent, " ", protoreflectPackage.Ident("FileDescriptor"))
@@ -1689,6 +1690,16 @@ func fieldGoType(g *generator.GeneratedFile, f *fileInfo, field *protogen.Field)
 		return "struct{}", false
 	}
 
+	// check if custom type
+	customType, err := customType(g, field)
+	if err != nil {
+		panic(err)
+	}
+
+	if customType != "" {
+		return customType, false
+	}
+
 	pointer = field.Desc.HasPresence()
 	switch field.Desc.Kind() {
 	case protoreflect.BoolKind:
@@ -1725,6 +1736,22 @@ func fieldGoType(g *generator.GeneratedFile, f *fileInfo, field *protogen.Field)
 		return fmt.Sprintf("map[%v]%v", keyType, valType), false
 	}
 	return goType, pointer
+}
+
+func customType(g *generator.GeneratedFile, field *protogen.Field) (string, error) {
+	xt := proto.GetExtension(field.Desc.Options(), cosmos_proto.E_CustomType).(*cosmos_proto.CustomType)
+	if xt == nil {
+		return "", nil
+	}
+	if !strings.Contains(xt.GoImportPath, ".") {
+		return "", fmt.Errorf("incorrect import path format")
+	}
+	split := strings.LastIndex(xt.GoImportPath, ".")
+	goMod := protogen.GoImportPath(xt.GoImportPath[:split])
+	g.Import(goMod)
+
+	goType := xt.GoImportPath[split+1:]
+	return g.QualifiedGoIdent(goMod.Ident(goType)), nil
 }
 
 func fieldProtobufTagValue(field *protogen.Field) string {
@@ -2137,14 +2164,12 @@ type goImportPath interface {
 	Ident(string) protogen.GoIdent
 }
 
-
 type enumInfo struct {
 	*protogen.Enum
 
 	genJSONMethod    bool
 	genRawDescMethod bool
 }
-
 
 func newEnumInfo(f *fileInfo, enum *protogen.Enum) *enumInfo {
 	e := &enumInfo{Enum: enum}
@@ -2193,7 +2218,6 @@ func newMessageInfo(f *fileInfo, message *protogen.Message) *messageInfo {
 	}
 	return m
 }
-
 
 type extensionInfo struct {
 	*protogen.Extension
