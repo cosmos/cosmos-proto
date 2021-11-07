@@ -148,8 +148,8 @@ func getRapidMsg(t *rapid.T) A {
 		MESSAGE:     genMessageB.Draw(t, "MESSAGE").(*B),
 		LIST:        rapid.SliceOf(genMessageB).Draw(t, "LIST").([]*B),
 		ONEOF:       genOneOf.Draw(t, "one of").(isA_ONEOF),
-		// MAP:   rapid.MapOf(rapid.String(), genMessageB).Draw(t, "map[string]*B").(map[string]*B),
-		LIST_ENUM: rapid.SliceOf(genEnumSlice).Draw(t, "slice enum").([]Enumeration),
+		MAP:         rapid.MapOf(rapid.String(), genMessageB).Draw(t, "map[string]*B").(map[string]*B),
+		LIST_ENUM:   rapid.SliceOf(genEnumSlice).Draw(t, "slice enum").([]Enumeration),
 	}
 }
 

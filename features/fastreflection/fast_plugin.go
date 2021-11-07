@@ -35,7 +35,7 @@ func newGenerator(f *protogen.File, g *generator.GeneratedFile, message *protoge
 		GeneratedFile: g,
 		file:          f,
 		message:       message,
-		Stable:        false,
+		Stable:        true,
 		typeName:      fastReflectionTypeName(message),
 		err:           nil,
 	}

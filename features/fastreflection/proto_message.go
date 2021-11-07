@@ -13,6 +13,7 @@ const (
 	protoimplPkg    = protogen.GoImportPath("google.golang.org/protobuf/runtime/protoimpl")
 	protoPkg        = protogen.GoImportPath("google.golang.org/protobuf/proto")
 
+	sortPkg     = protogen.GoImportPath("sort")
 	fmtPkg      = protogen.GoImportPath("fmt")
 	mathPackage = protogen.GoImportPath("math")
 

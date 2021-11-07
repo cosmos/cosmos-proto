@@ -10,6 +10,25 @@ import (
 	"strings"
 )
 
+var kindToGoType = map[protoreflect.Kind]string{
+	protoreflect.BoolKind:     "bool",
+	protoreflect.EnumKind:     "Enumeration",
+	protoreflect.Int32Kind:    "int32",
+	protoreflect.Sint32Kind:   "int32",
+	protoreflect.Uint32Kind:   "uint32",
+	protoreflect.Int64Kind:    "int64",
+	protoreflect.Sint64Kind:   "int64",
+	protoreflect.Uint64Kind:   "uint64",
+	protoreflect.Sfixed32Kind: "int32",
+	protoreflect.Fixed32Kind:  "uint32",
+	protoreflect.FloatKind:    "float32",
+	protoreflect.Sfixed64Kind: "int64",
+	protoreflect.Fixed64Kind:  "uint64",
+	protoreflect.DoubleKind:   "float64",
+	protoreflect.StringKind:   "string",
+	protoreflect.BytesKind:    "byte",
+}
+
 func (g *fastGenerator) genSizeMethod() {
 
 	g.P(`size := func(input `, protoifacePkg.Ident("SizeInput"), ") ", protoifacePkg.Ident("SizeOutput"), " {")
@@ -182,12 +201,33 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 			fieldKeySize := generator.KeySize(field.Desc.Number(), generator.ProtoWireType(field.Desc.Kind()))
 			keyKeySize := generator.KeySize(1, generator.ProtoWireType(field.Message.Fields[0].Desc.Kind()))
 			valueKeySize := generator.KeySize(2, generator.ProtoWireType(field.Message.Fields[1].Desc.Kind()))
-			g.P(`for k, v := range x.`, fieldname, ` { `)
+
+			// first we have to sort the key
+			typ, ok := kindToGoType[field.Desc.MapKey().Kind()]
+			if !ok {
+				panic(fmt.Sprintf("pulsar does not support %s types as map keys", field.Desc.MapKey().Kind().String()))
+			}
+
+			g.P("sortme := make([]", typ, ", 0, len(x.", field.GoName, "))")
+			g.P("for k := range x.", fieldname, " {")
+			g.P("sortme = append(sortme, k)")
+			g.P("}")
+			switch field.Desc.MapKey().Kind() {
+			case protoreflect.StringKind:
+				g.P(sortPkg.Ident("Strings"), "(sortme)")
+			default:
+				g.P(sortPkg.Ident("Slice"), "(sortme, func(i, j int) bool {")
+				g.P("return sortme[i] < sortme[j]")
+				g.P("})")
+			}
+
+			g.P(`for _, k := range sortme {`)
+			g.P("v := x.", fieldname, "[k]")
 			g.P(`_ = k`)
 			g.P(`_ = v`)
 			sum := []string{strconv.Itoa(keyKeySize)}
 
-			switch field.Message.Fields[0].Desc.Kind() {
+			switch field.Desc.MapKey().Kind() {
 			case protoreflect.DoubleKind, protoreflect.Fixed64Kind, protoreflect.Sfixed64Kind:
 				sum = append(sum, `8`)
 			case protoreflect.FloatKind, protoreflect.Fixed32Kind, protoreflect.Sfixed32Kind:
@@ -202,7 +242,7 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 				sum = append(sum, fmt.Sprintf("%s%s", g.QualifiedGoIdent(runtimePackage.Ident("Soz")), `(uint64(k))`))
 			}
 
-			switch field.Message.Fields[1].Desc.Kind() {
+			switch field.Desc.MapValue().Kind() {
 			case protoreflect.DoubleKind, protoreflect.Fixed64Kind, protoreflect.Sfixed64Kind:
 				sum = append(sum, strconv.Itoa(valueKeySize))
 				sum = append(sum, strconv.Itoa(8))
