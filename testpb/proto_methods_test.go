@@ -13,36 +13,6 @@ import (
 	"testing"
 )
 
-func TestTemp(t *testing.T) {
-	msgB := B{X: "hello world!"}
-
-	bz, err := proto.MarshalOptions{Deterministic: true}.Marshal(msgB.ProtoReflect().Interface())
-	require.NoError(t, err)
-
-	marshal := msgB.ProtoReflect().ProtoMethods().Marshal
-
-	out, err := marshal(protoiface.MarshalInput{
-		NoUnkeyedLiterals: struct{}{},
-		Message:           msgB.ProtoReflect(),
-		Buf:               nil,
-		Flags:             0,
-	})
-	require.NoError(t, err)
-	fmt.Println(out.Buf)
-
-	dyn := dynamicpb.NewMessage(md_B)
-	populateDynamicMsg(dyn, msgB.ProtoReflect())
-
-	dynBz, err := proto.MarshalOptions{Deterministic: true}.Marshal(dyn)
-	require.NoError(t, err)
-
-	fmt.Println(bz)
-	fmt.Println(dynBz)
-
-	require.Equal(t, bz, dynBz)
-	require.Equal(t, bz, out.Buf)
-}
-
 func TestNegativeZero(t *testing.T) {
 
 	testCases := []struct {
