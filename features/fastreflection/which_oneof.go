@@ -22,10 +22,6 @@ func (g *whichOneofGen) genComment() {
 	g.P("// It panics if the oneof descriptor does not belong to this message.")
 }
 
-func (g *whichOneofGen) genImpl() {
-
-}
-
 func (g *whichOneofGen) genFunc() {
 	g.P("func (x *", g.typeName, ") WhichOneof(d ", protoreflectPkg.Ident("OneofDescriptor"), ") ", protoreflectPkg.Ident("FieldDescriptor"), " {")
 	g.P("switch d.FullName() {")

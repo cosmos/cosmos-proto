@@ -149,7 +149,7 @@ func (g *mapGen) genMutable() {
 	// if it's not a message value type, we construct a panic function
 	g.P("func (x *", g.typeName, ") Mutable(key ", protoreflectPkg.Ident("MapKey"), ") ", protoreflectPkg.Ident("Value"), " {")
 	if g.field.Message.Fields[1].Desc.Kind() != protoreflect.MessageKind {
-		panicMsg := fmt.Sprintf("should not call Mutable on protoreflect.Map whose value is not of type protoreflect.Message")
+		panicMsg := "should not call Mutable on protoreflect.Map whose value is not of type protoreflect.Message"
 		g.P("panic(\"", panicMsg, "\")")
 		g.P("}")
 		g.P()

@@ -25,6 +25,7 @@ type fastGenerator struct {
 	file    *protogen.File
 	message *protogen.Message
 
+	Stable   bool
 	typeName string
 	err      error
 }
@@ -34,6 +35,7 @@ func newGenerator(f *protogen.File, g *generator.GeneratedFile, message *protoge
 		GeneratedFile: g,
 		file:          f,
 		message:       message,
+		Stable:        false,
 		typeName:      fastReflectionTypeName(message),
 		err:           nil,
 	}

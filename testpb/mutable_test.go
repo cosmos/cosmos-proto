@@ -10,7 +10,7 @@ import (
 func TestMutable(t *testing.T) {
 	panics := func(f func()) (panics bool) {
 		panics = true
-		defer func() { recover() }()
+		defer func() { _ = recover() }()
 		f()
 		return false
 	}

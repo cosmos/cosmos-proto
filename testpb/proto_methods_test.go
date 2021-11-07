@@ -13,6 +13,36 @@ import (
 	"testing"
 )
 
+func TestTemp(t *testing.T) {
+	msgB := B{X: "hello world!"}
+
+	bz, err := proto.MarshalOptions{Deterministic: true}.Marshal(msgB.ProtoReflect().Interface())
+	require.NoError(t, err)
+
+	marshal := msgB.ProtoReflect().ProtoMethods().Marshal
+
+	out, err := marshal(protoiface.MarshalInput{
+		NoUnkeyedLiterals: struct{}{},
+		Message:           msgB.ProtoReflect(),
+		Buf:               nil,
+		Flags:             0,
+	})
+	require.NoError(t, err)
+	fmt.Println(out.Buf)
+
+	dyn := dynamicpb.NewMessage(md_B)
+	populateDynamicMsg(dyn, msgB.ProtoReflect())
+
+	dynBz, err := proto.MarshalOptions{Deterministic: true}.Marshal(dyn)
+	require.NoError(t, err)
+
+	fmt.Println(bz)
+	fmt.Println(dynBz)
+
+	require.Equal(t, bz, dynBz)
+	require.Equal(t, bz, out.Buf)
+}
+
 func TestNegativeZero(t *testing.T) {
 
 	testCases := []struct {
@@ -147,8 +177,8 @@ func getRapidMsg(t *rapid.T) A {
 		BYTES:       rapid.SliceOf(rapid.Byte()).Draw(t, "byte slice").([]byte),
 		MESSAGE:     genMessageB.Draw(t, "MESSAGE").(*B),
 		LIST:        rapid.SliceOf(genMessageB).Draw(t, "LIST").([]*B),
-		// ONEOF:       genOneOf.Draw(t, "one of").(isA_ONEOF),
-		MAP:       rapid.MapOf(rapid.String(), genMessageB).Draw(t, "map[string]*B").(map[string]*B),
+		ONEOF:       genOneOf.Draw(t, "one of").(isA_ONEOF),
+		// MAP:   rapid.MapOf(rapid.String(), genMessageB).Draw(t, "map[string]*B").(map[string]*B),
 		LIST_ENUM: rapid.SliceOf(genEnumSlice).Draw(t, "slice enum").([]Enumeration),
 	}
 }

@@ -2,10 +2,8 @@ package fastreflection
 
 import (
 	"fmt"
-	"github.com/cosmos/cosmos-proto/generator"
-	"strings"
-
 	"github.com/cosmos/cosmos-proto/features/fastreflection/copied"
+	"github.com/cosmos/cosmos-proto/generator"
 	"google.golang.org/protobuf/compiler/protogen"
 )
 
@@ -13,8 +11,12 @@ const (
 	protoreflectPkg = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 	protoifacePkg   = protogen.GoImportPath("google.golang.org/protobuf/runtime/protoiface")
 	protoimplPkg    = protogen.GoImportPath("google.golang.org/protobuf/runtime/protoimpl")
+	protoPkg        = protogen.GoImportPath("google.golang.org/protobuf/proto")
 
-	fmtPkg = protogen.GoImportPath("fmt")
+	fmtPkg      = protogen.GoImportPath("fmt")
+	mathPackage = protogen.GoImportPath("math")
+
+	runtimePackage = protogen.GoImportPath("github.com/cosmos/cosmos-proto/runtime")
 )
 
 func GenProtoMessage(f *protogen.File, g *generator.GeneratedFile, message *protogen.Message) {
@@ -281,44 +283,13 @@ func (g *fastGenerator) genProtoMethods() {
 	g.P("// Consult the protoiface package documentation for details.")
 	g.P("func (x *", g.typeName, ") ProtoMethods() *", protoifacePkg.Ident("Methods"), " {")
 
-	// SIZE METHOD
-	g.P(`size := func(input `, protoifacePkg.Ident("SizeInput"), ") ", protoifacePkg.Ident("SizeOutput"), " {")
-	g.P("s := input.Message.Interface().(*", g.message.GoIdent, ").Size()")
-	g.P("return ", protoifacePkg.Ident("SizeOutput"), "{")
-	g.P("NoUnkeyedLiterals: struct{}{},")
-	g.P("Size: s,")
-	g.P("}")
-	g.P("}")
-
-	// MARSHAL METHOD
-	g.P(`marshal := func(input `, protoifacePkg.Ident("MarshalInput"), `) (`, protoifacePkg.Ident("MarshalOutput"), `, error) {`)
-	g.P(`bz, err := input.Message.Interface().(*`, g.message.GoIdent, `).Marshal()`)
-	g.P(`if err != nil {`)
-	g.P(`		return `, protoifacePkg.Ident("MarshalOutput"), `{}, err`)
-	g.P(`}`)
-	g.P("if input.Buf != nil {")
-	g.P(`input.Buf = append(input.Buf, bz...)`)
-	g.P("} else {")
-	g.P("input.Buf = bz")
-	g.P("}")
-	g.P(`return `, protoifacePkg.Ident("MarshalOutput"), `{`)
-	g.P(`		NoUnkeyedLiterals: struct{}{},`)
-	g.P(`		Buf: input.Buf,`)
-	g.P("}, nil")
-	g.P("}")
-
-	// UNMARSHAL METHOD
-	g.P(`unmarshal := func(input `, protoifacePkg.Ident("UnmarshalInput"), `) (`, protoifacePkg.Ident("UnmarshalOutput"), `, error) {`)
-	g.P(`err := input.Message.Interface().(*`, g.message.GoIdent, `).Unmarshal(input.Buf)`)
-	g.P(`if err != nil {`)
-	g.P(`return `, protoifacePkg.Ident("UnmarshalOutput"), `{}, err`)
-	g.P("}")
-	g.P("return ", protoifacePkg.Ident("UnmarshalOutput"), "{}, nil")
-	g.P("}")
+	g.genSizeMethod()
+	g.genMarshalMethod()
+	g.genUnmarshalMethod()
 
 	g.P("return &", protoifacePkg.Ident("Methods"), "{ ")
 	g.P("NoUnkeyedLiterals: struct{}{},")
-	g.P("Flags: 0,")
+	g.P("Flags: ", protoifacePkg.Ident("SupportMarshalDeterministic"), ",")
 	g.P("Size: size,")
 	g.P("Marshal: marshal,")
 	g.P("Unmarshal: unmarshal,")
@@ -326,14 +297,4 @@ func (g *fastGenerator) genProtoMethods() {
 	g.P("CheckInitialized: nil,")
 	g.P("}")
 	g.P("}")
-}
-
-// slowReflectionFallBack can be used to fallback on slow reflection methods
-func slowReflectionFallBack(g *generator.GeneratedFile, msg *protogen.Message, returns bool, method string, args ...string) {
-	switch returns {
-	case true:
-		g.P("return (*", msg.GoIdent.GoName, ")(x).slowProtoReflect().", method, "(", strings.Join(args, ","), ")")
-	case false:
-		g.P("(*", msg.GoIdent.GoName, ")(x).slowProtoReflect().", method, "(", strings.Join(args, ","), ")")
-	}
 }

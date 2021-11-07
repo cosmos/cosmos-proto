@@ -56,7 +56,6 @@ const (
 // on the dependencies of generated source code.
 var (
 	protoPackage         goImportPath = protogen.GoImportPath("google.golang.org/protobuf/proto")
-	protoifacePackage    goImportPath = protogen.GoImportPath("google.golang.org/protobuf/runtime/protoiface")
 	protoimplPackage     goImportPath = protogen.GoImportPath("google.golang.org/protobuf/runtime/protoimpl")
 	protojsonPackage     goImportPath = protogen.GoImportPath("google.golang.org/protobuf/encoding/protojson")
 	protoreflectPackage  goImportPath = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
@@ -175,7 +174,6 @@ func genFileDescriptor(gen *protogen.Plugin, g *generator.GeneratedFile, f *file
 		g.P()
 	}
 }
-
 
 func genReflectFileDescriptor(gen *protogen.Plugin, g *generator.GeneratedFile, f *fileInfo) {
 	g.P("var ", f.GoDescriptorIdent, " ", protoreflectPackage.Ident("FileDescriptor"))
@@ -2137,14 +2135,12 @@ type goImportPath interface {
 	Ident(string) protogen.GoIdent
 }
 
-
 type enumInfo struct {
 	*protogen.Enum
 
 	genJSONMethod    bool
 	genRawDescMethod bool
 }
-
 
 func newEnumInfo(f *fileInfo, enum *protogen.Enum) *enumInfo {
 	e := &enumInfo{Enum: enum}
@@ -2193,7 +2189,6 @@ func newMessageInfo(f *fileInfo, message *protogen.Message) *messageInfo {
 	}
 	return m
 }
-
 
 type extensionInfo struct {
 	*protogen.Extension

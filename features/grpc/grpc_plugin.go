@@ -9,8 +9,6 @@ import (
 	"google.golang.org/protobuf/compiler/protogen"
 )
 
-const version = "1.1.0-vtproto"
-
 var requireUnimplementedAlways = true
 var requireUnimplemented = &requireUnimplementedAlways
 

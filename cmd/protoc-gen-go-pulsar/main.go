@@ -7,11 +7,8 @@ import (
 
 	_ "github.com/cosmos/cosmos-proto/features/fastreflection"
 	_ "github.com/cosmos/cosmos-proto/features/grpc"
-	_ "github.com/cosmos/cosmos-proto/features/marshal"
 	_ "github.com/cosmos/cosmos-proto/features/pool"
 	_ "github.com/cosmos/cosmos-proto/features/protoc"
-	_ "github.com/cosmos/cosmos-proto/features/size"
-	_ "github.com/cosmos/cosmos-proto/features/unmarshal"
 	"github.com/cosmos/cosmos-proto/generator"
 
 	"google.golang.org/protobuf/compiler/protogen"
