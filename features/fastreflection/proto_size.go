@@ -328,5 +328,6 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 }
 
 func (g *fastGenerator) messageSize(varName string, message *protogen.Message) {
-	g.P(`l = `, protoPkg.Ident("Size"), "(", varName, ")")
+	g.P(`l = `, runtimePackage.Ident("MarshalFlagsToOptions"), "(input.Flags).Size(", varName, ")")
+	//g.P(`l = `, protoPkg.Ident("Size"), "(", varName, ")")
 }

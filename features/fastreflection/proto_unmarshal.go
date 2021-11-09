@@ -620,7 +620,8 @@ func (g *fastGenerator) decodeMessage(varName, buf string, message *protogen.Mes
 
 	if local {
 		//g.P(`if err := `, varName, `.Unmarshal(`, buf, `); err != nil {`)
-		g.P(`if err := `, protoPkg.Ident("Unmarshal"), `(`, buf, `, `, varName, `); err != nil {`)
+		// g.P(`if err := `, protoPkg.Ident("Unmarshal"), `(`, buf, `, `, varName, `); err != nil {`)
+		g.P("if err := ", runtimePackage.Ident("UnmarshalInputToOptions"), "(input).Unmarshal(", buf, ", ", varName, "); err != nil {")
 		g.P(`return `, protoifacePkg.Ident("UnmarshalOutput"), "{Flags: input.Flags},", `err`)
 		g.P(`}`)
 	} else {

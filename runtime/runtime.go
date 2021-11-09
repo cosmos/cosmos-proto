@@ -2,6 +2,8 @@ package runtime
 
 import (
 	"fmt"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/runtime/protoiface"
 	"io"
 	"math/bits"
 )
@@ -102,6 +104,25 @@ func Skip(dAtA []byte) (n int, err error) {
 		}
 	}
 	return 0, io.ErrUnexpectedEOF
+}
+
+func MarshalFlagsToOptions(flags protoiface.MarshalInputFlags) proto.MarshalOptions {
+	return proto.MarshalOptions{
+		NoUnkeyedLiterals: struct{}{},
+		AllowPartial:      false,
+		Deterministic:     true,
+		UseCachedSize:     flags == protoiface.MarshalUseCachedSize,
+	}
+}
+
+func UnmarshalInputToOptions(input protoiface.UnmarshalInput) proto.UnmarshalOptions {
+	return proto.UnmarshalOptions{
+		NoUnkeyedLiterals: struct{}{},
+		Merge:             false,
+		AllowPartial:      false,
+		DiscardUnknown:    input.Flags == protoiface.UnmarshalDiscardUnknown,
+		Resolver:          input.Resolver,
+	}
 }
 
 var (

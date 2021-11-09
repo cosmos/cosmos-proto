@@ -1069,7 +1069,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			n += 2 + l + runtime.Sov(uint64(l))
 		}
 		if x.MESSAGE != nil {
-			l = proto.Size(x.MESSAGE)
+			l = runtime.MarshalFlagsToOptions(input.Flags).Size(x.MESSAGE)
 			n += 2 + l + runtime.Sov(uint64(l))
 		}
 		if len(x.MAP) > 0 {
@@ -1084,7 +1084,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				_ = v
 				l = 0
 				if v != nil {
-					l = proto.Size(v)
+					l = runtime.MarshalFlagsToOptions(input.Flags).Size(v)
 				}
 				l += 1 + runtime.Sov(uint64(l))
 				mapEntrySize := 1 + len(k) + runtime.Sov(uint64(len(k))) + l
@@ -1093,7 +1093,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 		}
 		if len(x.LIST) > 0 {
 			for _, e := range x.LIST {
-				l = proto.Size(e)
+				l = runtime.MarshalFlagsToOptions(input.Flags).Size(e)
 				n += 2 + l + runtime.Sov(uint64(l))
 			}
 		}
@@ -1103,7 +1103,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				break
 			}
 			if x.ONEOF_B != nil {
-				l = proto.Size(x.ONEOF_B)
+				l = runtime.MarshalFlagsToOptions(input.Flags).Size(x.ONEOF_B)
 				n += 2 + l + runtime.Sov(uint64(l))
 			}
 		case *A_ONEOF_STRING:
@@ -1123,7 +1123,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			n += 2 + runtime.Sov(uint64(l)) + l
 		}
 		if x.Imported != nil {
-			l = proto.Size(x.Imported)
+			l = runtime.MarshalFlagsToOptions(input.Flags).Size(x.Imported)
 			n += 2 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
@@ -1143,7 +1143,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				Buf:               input.Buf,
 			}, nil
 		}
-		size := proto.Size(x)
+		size := runtime.MarshalFlagsToOptions(input.Flags).Size(x)
 		dAtA := make([]byte, size)
 		i := len(dAtA)
 		_ = i
@@ -1156,7 +1156,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 		switch x := x.ONEOF.(type) {
 		case *A_ONEOF_B:
 			if x.ONEOF_B != nil {
-				encoded, err := proto.MarshalOptions{Deterministic: true}.Marshal(x.ONEOF_B)
+				encoded, err := runtime.MarshalFlagsToOptions(input.Flags).Marshal(x.ONEOF_B)
 				if err != nil {
 					return protoiface.MarshalOutput{
 						NoUnkeyedLiterals: struct{}{},
@@ -1183,7 +1183,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			}
 		}
 		if x.Imported != nil {
-			encoded, err := proto.MarshalOptions{Deterministic: true}.Marshal(x.Imported)
+			encoded, err := runtime.MarshalFlagsToOptions(input.Flags).Marshal(x.Imported)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: struct{}{},
@@ -1223,7 +1223,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 		}
 		if len(x.LIST) > 0 {
 			for iNdEx := len(x.LIST) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := proto.MarshalOptions{Deterministic: true}.Marshal(x.LIST[iNdEx])
+				encoded, err := runtime.MarshalFlagsToOptions(input.Flags).Marshal(x.LIST[iNdEx])
 				if err != nil {
 					return protoiface.MarshalOutput{
 						NoUnkeyedLiterals: struct{}{},
@@ -1250,7 +1250,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			for iNdEx := len(keysForMAP) - 1; iNdEx >= 0; iNdEx-- {
 				v := x.MAP[string(keysForMAP[iNdEx])]
 				baseI := i
-				encoded, err := proto.MarshalOptions{Deterministic: true}.Marshal(v)
+				encoded, err := runtime.MarshalFlagsToOptions(input.Flags).Marshal(v)
 				if err != nil {
 					return protoiface.MarshalOutput{
 						NoUnkeyedLiterals: struct{}{},
@@ -1275,7 +1275,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			}
 		}
 		if x.MESSAGE != nil {
-			encoded, err := proto.MarshalOptions{Deterministic: true}.Marshal(x.MESSAGE)
+			encoded, err := runtime.MarshalFlagsToOptions(input.Flags).Marshal(x.MESSAGE)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: struct{}{},
@@ -1745,7 +1745,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				if x.MESSAGE == nil {
 					x.MESSAGE = &B{}
 				}
-				if err := proto.Unmarshal(dAtA[iNdEx:postIndex], x.MESSAGE); err != nil {
+				if err := runtime.UnmarshalInputToOptions(input).Unmarshal(dAtA[iNdEx:postIndex], x.MESSAGE); err != nil {
 					return protoiface.UnmarshalOutput{Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -1857,7 +1857,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 							return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
 						}
 						mapvalue = &B{}
-						if err := proto.Unmarshal(dAtA[iNdEx:postmsgIndex], mapvalue); err != nil {
+						if err := runtime.UnmarshalInputToOptions(input).Unmarshal(dAtA[iNdEx:postmsgIndex], mapvalue); err != nil {
 							return protoiface.UnmarshalOutput{Flags: input.Flags}, err
 						}
 						iNdEx = postmsgIndex
@@ -1908,7 +1908,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.LIST = append(x.LIST, &B{})
-				if err := proto.Unmarshal(dAtA[iNdEx:postIndex], x.LIST[len(x.LIST)-1]); err != nil {
+				if err := runtime.UnmarshalInputToOptions(input).Unmarshal(dAtA[iNdEx:postIndex], x.LIST[len(x.LIST)-1]); err != nil {
 					return protoiface.UnmarshalOutput{Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -1942,7 +1942,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				v := &B{}
-				if err := proto.Unmarshal(dAtA[iNdEx:postIndex], v); err != nil {
+				if err := runtime.UnmarshalInputToOptions(input).Unmarshal(dAtA[iNdEx:postIndex], v); err != nil {
 					return protoiface.UnmarshalOutput{Flags: input.Flags}, err
 				}
 				x.ONEOF = &A_ONEOF_B{v}
@@ -2408,7 +2408,7 @@ func (x *fastReflection_B) ProtoMethods() *protoiface.Methods {
 				Buf:               input.Buf,
 			}, nil
 		}
-		size := proto.Size(x)
+		size := runtime.MarshalFlagsToOptions(input.Flags).Size(x)
 		dAtA := make([]byte, size)
 		i := len(dAtA)
 		_ = i
