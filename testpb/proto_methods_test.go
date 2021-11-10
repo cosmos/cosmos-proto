@@ -96,8 +96,13 @@ func testUnmarshal(t *rapid.T) {
 
 	aa := A{}
 	fastaa := aa.ProtoReflect()
-	unmarshal := fastaa.ProtoMethods().Unmarshal
-	_, err = unmarshal(protoiface.UnmarshalInput{Message: fastaa, Buf: bz})
+	err = proto.UnmarshalOptions{
+		NoUnkeyedLiterals: struct{}{},
+		Merge:             false,
+		AllowPartial:      false,
+		DiscardUnknown:    false,
+		Resolver:          nil,
+	}.Unmarshal(bz, fastaa.Interface())
 	require.NoError(t, err)
 
 	require.True(t, proto.Equal(fastMsg.Interface(), fastaa.Interface()), fmt.Sprintf("left: %+v\nright:%+v", fastMsg, fastaa))

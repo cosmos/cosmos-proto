@@ -32,14 +32,15 @@ func (g *fastGenerator) genMarshalMethod() {
 	g.P(`x := input.Message.Interface().(*`, g.message.GoIdent, `)`)
 	g.P("if x == nil {")
 	g.P(`return `, protoifacePkg.Ident("MarshalOutput"), `{`)
-	g.P(`		NoUnkeyedLiterals: struct{}{},`)
+	g.P(`		NoUnkeyedLiterals: input.NoUnkeyedLiterals,`)
 	g.P(`		Buf: input.Buf,`)
 	g.P("}, nil")
 	g.P("}")
 
 	// core
-	g.P("size := ", runtimePackage.Ident("MarshalFlagsToOptions"), "(input.Flags).Size(x)")
-	// g.P("size := ", protoPkg.Ident("Size"), "(x)")
+	g.P("options := ", runtimePackage.Ident("MarshalInputToOptions"), "(input)")
+	g.P("_ = options")
+	g.P("size := options.Size(x)")
 	g.P(`dAtA := make([]byte, size)`)
 
 	// from here we need to do what MarshalToSizedBuffer was doing
@@ -93,7 +94,7 @@ func (g *fastGenerator) genMarshalMethod() {
 	g.P("input.Buf = dAtA")
 	g.P("}")
 	g.P(`return `, protoifacePkg.Ident("MarshalOutput"), `{`)
-	g.P(`		NoUnkeyedLiterals: struct{}{},`)
+	g.P(`		NoUnkeyedLiterals: input.NoUnkeyedLiterals,`)
 	g.P(`		Buf: input.Buf,`)
 	g.P("}, nil")
 	g.P("}")
@@ -504,11 +505,10 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 }
 
 func (g *fastGenerator) marshalBackward(varName string, varInt bool, message *protogen.Message) {
-	g.P(`encoded, err := `, runtimePackage.Ident("MarshalFlagsToOptions"), "(input.Flags).Marshal(", varName, ")")
-	// g.P(`encoded, err := `, protoPkg.Ident("MarshalOptions"), "{Deterministic: true}.Marshal", `(`, varName, `)`)
+	g.P(`encoded, err := `, "options.Marshal(", varName, ")")
 	g.P(`if err != nil {`)
 	g.P(`return `, protoifacePkg.Ident("MarshalOutput"), " {")
-	g.P("NoUnkeyedLiterals: struct{}{},")
+	g.P("NoUnkeyedLiterals: input.NoUnkeyedLiterals,")
 	g.P("Buf: input.Buf,")
 	g.P("}, err")
 	g.P(`}`)

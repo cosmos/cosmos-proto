@@ -106,21 +106,30 @@ func Skip(dAtA []byte) (n int, err error) {
 	return 0, io.ErrUnexpectedEOF
 }
 
-func MarshalFlagsToOptions(flags protoiface.MarshalInputFlags) proto.MarshalOptions {
+func SizeInputToOptions(input protoiface.SizeInput) proto.MarshalOptions {
 	return proto.MarshalOptions{
-		NoUnkeyedLiterals: struct{}{},
+		NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 		AllowPartial:      false,
-		Deterministic:     true,
-		UseCachedSize:     flags == protoiface.MarshalUseCachedSize,
+		Deterministic:     input.Flags&protoiface.MarshalDeterministic == 0,
+		UseCachedSize:     input.Flags&protoiface.MarshalUseCachedSize == 0,
+	}
+}
+
+func MarshalInputToOptions(input protoiface.MarshalInput) proto.MarshalOptions {
+	return proto.MarshalOptions{
+		NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+		AllowPartial:      false,
+		Deterministic:     input.Flags&protoiface.MarshalDeterministic == 0,
+		UseCachedSize:     input.Flags&protoiface.MarshalUseCachedSize == 0,
 	}
 }
 
 func UnmarshalInputToOptions(input protoiface.UnmarshalInput) proto.UnmarshalOptions {
 	return proto.UnmarshalOptions{
-		NoUnkeyedLiterals: struct{}{},
+		NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 		Merge:             false,
 		AllowPartial:      false,
-		DiscardUnknown:    input.Flags == protoiface.UnmarshalDiscardUnknown,
+		DiscardUnknown:    input.Flags&protoiface.UnmarshalDiscardUnknown == 0,
 		Resolver:          input.Resolver,
 	}
 }

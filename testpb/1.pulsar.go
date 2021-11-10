@@ -4,7 +4,6 @@ import (
 	binary "encoding/binary"
 	fmt "fmt"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
-	proto "google.golang.org/protobuf/proto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -1011,10 +1010,12 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 		x := input.Message.Interface().(*A)
 		if x == nil {
 			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: struct{}{},
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 				Size:              0,
 			}
 		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
 		var n int
 		var l int
 		_ = l
@@ -1069,7 +1070,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			n += 2 + l + runtime.Sov(uint64(l))
 		}
 		if x.MESSAGE != nil {
-			l = runtime.MarshalFlagsToOptions(input.Flags).Size(x.MESSAGE)
+			l = options.Size(x.MESSAGE)
 			n += 2 + l + runtime.Sov(uint64(l))
 		}
 		if len(x.MAP) > 0 {
@@ -1084,7 +1085,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				_ = v
 				l = 0
 				if v != nil {
-					l = runtime.MarshalFlagsToOptions(input.Flags).Size(v)
+					l = options.Size(v)
 				}
 				l += 1 + runtime.Sov(uint64(l))
 				mapEntrySize := 1 + len(k) + runtime.Sov(uint64(len(k))) + l
@@ -1093,7 +1094,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 		}
 		if len(x.LIST) > 0 {
 			for _, e := range x.LIST {
-				l = runtime.MarshalFlagsToOptions(input.Flags).Size(e)
+				l = options.Size(e)
 				n += 2 + l + runtime.Sov(uint64(l))
 			}
 		}
@@ -1103,7 +1104,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				break
 			}
 			if x.ONEOF_B != nil {
-				l = runtime.MarshalFlagsToOptions(input.Flags).Size(x.ONEOF_B)
+				l = options.Size(x.ONEOF_B)
 				n += 2 + l + runtime.Sov(uint64(l))
 			}
 		case *A_ONEOF_STRING:
@@ -1123,14 +1124,14 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			n += 2 + runtime.Sov(uint64(l)) + l
 		}
 		if x.Imported != nil {
-			l = runtime.MarshalFlagsToOptions(input.Flags).Size(x.Imported)
+			l = options.Size(x.Imported)
 			n += 2 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
 		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: struct{}{},
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 			Size:              n,
 		}
 	}
@@ -1139,11 +1140,13 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 		x := input.Message.Interface().(*A)
 		if x == nil {
 			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: struct{}{},
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 				Buf:               input.Buf,
 			}, nil
 		}
-		size := runtime.MarshalFlagsToOptions(input.Flags).Size(x)
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
 		dAtA := make([]byte, size)
 		i := len(dAtA)
 		_ = i
@@ -1156,10 +1159,10 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 		switch x := x.ONEOF.(type) {
 		case *A_ONEOF_B:
 			if x.ONEOF_B != nil {
-				encoded, err := runtime.MarshalFlagsToOptions(input.Flags).Marshal(x.ONEOF_B)
+				encoded, err := options.Marshal(x.ONEOF_B)
 				if err != nil {
 					return protoiface.MarshalOutput{
-						NoUnkeyedLiterals: struct{}{},
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 						Buf:               input.Buf,
 					}, err
 				}
@@ -1183,10 +1186,10 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			}
 		}
 		if x.Imported != nil {
-			encoded, err := runtime.MarshalFlagsToOptions(input.Flags).Marshal(x.Imported)
+			encoded, err := options.Marshal(x.Imported)
 			if err != nil {
 				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: struct{}{},
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 					Buf:               input.Buf,
 				}, err
 			}
@@ -1223,10 +1226,10 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 		}
 		if len(x.LIST) > 0 {
 			for iNdEx := len(x.LIST) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := runtime.MarshalFlagsToOptions(input.Flags).Marshal(x.LIST[iNdEx])
+				encoded, err := options.Marshal(x.LIST[iNdEx])
 				if err != nil {
 					return protoiface.MarshalOutput{
-						NoUnkeyedLiterals: struct{}{},
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 						Buf:               input.Buf,
 					}, err
 				}
@@ -1250,10 +1253,10 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			for iNdEx := len(keysForMAP) - 1; iNdEx >= 0; iNdEx-- {
 				v := x.MAP[string(keysForMAP[iNdEx])]
 				baseI := i
-				encoded, err := runtime.MarshalFlagsToOptions(input.Flags).Marshal(v)
+				encoded, err := options.Marshal(v)
 				if err != nil {
 					return protoiface.MarshalOutput{
-						NoUnkeyedLiterals: struct{}{},
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 						Buf:               input.Buf,
 					}, err
 				}
@@ -1275,10 +1278,10 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			}
 		}
 		if x.MESSAGE != nil {
-			encoded, err := runtime.MarshalFlagsToOptions(input.Flags).Marshal(x.MESSAGE)
+			encoded, err := options.Marshal(x.MESSAGE)
 			if err != nil {
 				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: struct{}{},
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 					Buf:               input.Buf,
 				}, err
 			}
@@ -1393,12 +1396,20 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			input.Buf = dAtA
 		}
 		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: struct{}{},
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 			Buf:               input.Buf,
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
 		x := input.Message.Interface().(*A)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
 		dAtA := input.Buf
 		l := len(dAtA)
 		iNdEx := 0
@@ -1407,10 +1418,10 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			var wire uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 				}
 				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
@@ -1422,23 +1433,23 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: A: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: A: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: A: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: A: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Enum", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Enum", wireType)
 				}
 				x.Enum = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 					}
 					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
@@ -1449,15 +1460,15 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				}
 			case 2:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SomeBoolean", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SomeBoolean", wireType)
 				}
 				var v int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 					}
 					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
@@ -1469,15 +1480,15 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				x.SomeBoolean = bool(v != 0)
 			case 3:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field INT32", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field INT32", wireType)
 				}
 				x.INT32 = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 					}
 					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
@@ -1488,15 +1499,15 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				}
 			case 4:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SINT32", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SINT32", wireType)
 				}
 				var v int32
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 					}
 					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
@@ -1509,15 +1520,15 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				x.SINT32 = v
 			case 5:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UINT32", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UINT32", wireType)
 				}
 				x.UINT32 = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 					}
 					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
@@ -1528,15 +1539,15 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				}
 			case 6:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field INT64", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field INT64", wireType)
 				}
 				x.INT64 = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 					}
 					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
@@ -1547,15 +1558,15 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				}
 			case 7:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SING64", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SING64", wireType)
 				}
 				var v uint64
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 					}
 					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
@@ -1568,15 +1579,15 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				x.SING64 = int64(v)
 			case 8:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UINT64", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UINT64", wireType)
 				}
 				x.UINT64 = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 					}
 					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
@@ -1587,77 +1598,77 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				}
 			case 9:
 				if wireType != 5 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SFIXED32", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SFIXED32", wireType)
 				}
 				x.SFIXED32 = 0
 				if (iNdEx + 4) > l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.SFIXED32 = int32(binary.LittleEndian.Uint32(dAtA[iNdEx:]))
 				iNdEx += 4
 			case 10:
 				if wireType != 5 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field FIXED32", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field FIXED32", wireType)
 				}
 				x.FIXED32 = 0
 				if (iNdEx + 4) > l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.FIXED32 = uint32(binary.LittleEndian.Uint32(dAtA[iNdEx:]))
 				iNdEx += 4
 			case 11:
 				if wireType != 5 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field FLOAT", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field FLOAT", wireType)
 				}
 				var v uint32
 				if (iNdEx + 4) > l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				v = uint32(binary.LittleEndian.Uint32(dAtA[iNdEx:]))
 				iNdEx += 4
 				x.FLOAT = float32(math.Float32frombits(v))
 			case 12:
 				if wireType != 1 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SFIXED64", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SFIXED64", wireType)
 				}
 				x.SFIXED64 = 0
 				if (iNdEx + 8) > l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.SFIXED64 = int64(binary.LittleEndian.Uint64(dAtA[iNdEx:]))
 				iNdEx += 8
 			case 13:
 				if wireType != 1 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field FIXED64", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field FIXED64", wireType)
 				}
 				x.FIXED64 = 0
 				if (iNdEx + 8) > l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.FIXED64 = uint64(binary.LittleEndian.Uint64(dAtA[iNdEx:]))
 				iNdEx += 8
 			case 14:
 				if wireType != 1 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DOUBLE", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DOUBLE", wireType)
 				}
 				var v uint64
 				if (iNdEx + 8) > l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				v = uint64(binary.LittleEndian.Uint64(dAtA[iNdEx:]))
 				iNdEx += 8
 				x.DOUBLE = float64(math.Float64frombits(v))
 			case 15:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field STRING", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field STRING", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 					}
 					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
@@ -1668,28 +1679,28 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				}
 				intStringLen := int(stringLen)
 				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				postIndex := iNdEx + intStringLen
 				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if postIndex > l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.STRING = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 16:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BYTES", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field BYTES", wireType)
 				}
 				var byteLen int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 					}
 					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
@@ -1699,14 +1710,14 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 					}
 				}
 				if byteLen < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				postIndex := iNdEx + byteLen
 				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if postIndex > l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.BYTES = append(x.BYTES[:0], dAtA[iNdEx:postIndex]...)
 				if x.BYTES == nil {
@@ -1715,15 +1726,15 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 17:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MESSAGE", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MESSAGE", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 					}
 					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
@@ -1733,33 +1744,33 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 					}
 				}
 				if msglen < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				postIndex := iNdEx + msglen
 				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if postIndex > l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				if x.MESSAGE == nil {
 					x.MESSAGE = &B{}
 				}
-				if err := runtime.UnmarshalInputToOptions(input).Unmarshal(dAtA[iNdEx:postIndex], x.MESSAGE); err != nil {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, err
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.MESSAGE); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
 			case 18:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MAP", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field MAP", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 					}
 					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
@@ -1769,14 +1780,14 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 					}
 				}
 				if msglen < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				postIndex := iNdEx + msglen
 				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if postIndex > l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				if x.MAP == nil {
 					x.MAP = make(map[string]*B)
@@ -1788,10 +1799,10 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 					var wire uint64
 					for shift := uint(0); ; shift += 7 {
 						if shift >= 64 {
-							return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 						}
 						if iNdEx >= l {
-							return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
@@ -1805,10 +1816,10 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 						var stringLenmapkey uint64
 						for shift := uint(0); ; shift += 7 {
 							if shift >= 64 {
-								return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 							}
 							if iNdEx >= l {
-								return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 							}
 							b := dAtA[iNdEx]
 							iNdEx++
@@ -1819,14 +1830,14 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 						}
 						intStringLenmapkey := int(stringLenmapkey)
 						if intStringLenmapkey < 0 {
-							return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 						}
 						postStringIndexmapkey := iNdEx + intStringLenmapkey
 						if postStringIndexmapkey < 0 {
-							return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 						}
 						if postStringIndexmapkey > l {
-							return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 						}
 						mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
 						iNdEx = postStringIndexmapkey
@@ -1834,10 +1845,10 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 						var mapmsglen int
 						for shift := uint(0); ; shift += 7 {
 							if shift >= 64 {
-								return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 							}
 							if iNdEx >= l {
-								return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 							}
 							b := dAtA[iNdEx]
 							iNdEx++
@@ -1847,31 +1858,31 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 							}
 						}
 						if mapmsglen < 0 {
-							return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 						}
 						postmsgIndex := iNdEx + mapmsglen
 						if postmsgIndex < 0 {
-							return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 						}
 						if postmsgIndex > l {
-							return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 						}
 						mapvalue = &B{}
-						if err := runtime.UnmarshalInputToOptions(input).Unmarshal(dAtA[iNdEx:postmsgIndex], mapvalue); err != nil {
-							return protoiface.UnmarshalOutput{Flags: input.Flags}, err
+						if err := options.Unmarshal(dAtA[iNdEx:postmsgIndex], mapvalue); err != nil {
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 						}
 						iNdEx = postmsgIndex
 					} else {
 						iNdEx = entryPreIndex
 						skippy, err := runtime.Skip(dAtA[iNdEx:])
 						if err != nil {
-							return protoiface.UnmarshalOutput{Flags: input.Flags}, err
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 						}
 						if (skippy < 0) || (iNdEx+skippy) < 0 {
-							return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 						}
 						if (iNdEx + skippy) > postIndex {
-							return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 						}
 						iNdEx += skippy
 					}
@@ -1880,15 +1891,15 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 19:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LIST", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LIST", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 					}
 					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
@@ -1898,31 +1909,31 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 					}
 				}
 				if msglen < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				postIndex := iNdEx + msglen
 				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if postIndex > l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.LIST = append(x.LIST, &B{})
-				if err := runtime.UnmarshalInputToOptions(input).Unmarshal(dAtA[iNdEx:postIndex], x.LIST[len(x.LIST)-1]); err != nil {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, err
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.LIST[len(x.LIST)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
 			case 20:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ONEOF_B", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ONEOF_B", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 					}
 					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
@@ -1932,32 +1943,32 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 					}
 				}
 				if msglen < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				postIndex := iNdEx + msglen
 				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if postIndex > l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				v := &B{}
-				if err := runtime.UnmarshalInputToOptions(input).Unmarshal(dAtA[iNdEx:postIndex], v); err != nil {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, err
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], v); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				x.ONEOF = &A_ONEOF_B{v}
 				iNdEx = postIndex
 			case 21:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ONEOF_STRING", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ONEOF_STRING", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 					}
 					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
@@ -1968,14 +1979,14 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				}
 				intStringLen := int(stringLen)
 				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				postIndex := iNdEx + intStringLen
 				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if postIndex > l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.ONEOF = &A_ONEOF_STRING{string(dAtA[iNdEx:postIndex])}
 				iNdEx = postIndex
@@ -1984,10 +1995,10 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 					var v Enumeration
 					for shift := uint(0); ; shift += 7 {
 						if shift >= 64 {
-							return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 						}
 						if iNdEx >= l {
-							return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
@@ -2001,10 +2012,10 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 					var packedLen int
 					for shift := uint(0); ; shift += 7 {
 						if shift >= 64 {
-							return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 						}
 						if iNdEx >= l {
-							return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
@@ -2014,14 +2025,14 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 						}
 					}
 					if packedLen < 0 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 					}
 					postIndex := iNdEx + packedLen
 					if postIndex < 0 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 					}
 					if postIndex > l {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
 					var elementCount int
 					if elementCount != 0 && len(x.LIST_ENUM) == 0 {
@@ -2031,10 +2042,10 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 						var v Enumeration
 						for shift := uint(0); ; shift += 7 {
 							if shift >= 64 {
-								return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 							}
 							if iNdEx >= l {
-								return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 							}
 							b := dAtA[iNdEx]
 							iNdEx++
@@ -2046,19 +2057,19 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 						x.LIST_ENUM = append(x.LIST_ENUM, v)
 					}
 				} else {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LIST_ENUM", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LIST_ENUM", wireType)
 				}
 			case 23:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Imported", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Imported", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 					}
 					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
@@ -2068,51 +2079,45 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 					}
 				}
 				if msglen < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				postIndex := iNdEx + msglen
 				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if postIndex > l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				if x.Imported == nil {
 					x.Imported = &descriptorpb.FileDescriptorProto{}
 				}
-				if unmarshal, ok := interface{}(x.Imported).(interface {
-					Unmarshal([]byte) error
-				}); ok {
-					if err := unmarshal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, err
-					}
-				} else {
-					if err := proto.Unmarshal(dAtA[iNdEx:postIndex], x.Imported); err != nil {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, err
-					}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Imported); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
 				if err != nil {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, err
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
 				iNdEx += skippy
 			}
 		}
 
 		if iNdEx > l {
-			return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 		}
-		return protoiface.UnmarshalOutput{Flags: input.Flags}, nil
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
 	}
 	return &protoiface.Methods{
 		NoUnkeyedLiterals: struct{}{},
@@ -2380,10 +2385,12 @@ func (x *fastReflection_B) ProtoMethods() *protoiface.Methods {
 		x := input.Message.Interface().(*B)
 		if x == nil {
 			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: struct{}{},
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 				Size:              0,
 			}
 		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
 		var n int
 		var l int
 		_ = l
@@ -2395,7 +2402,7 @@ func (x *fastReflection_B) ProtoMethods() *protoiface.Methods {
 			n += len(x.unknownFields)
 		}
 		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: struct{}{},
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 			Size:              n,
 		}
 	}
@@ -2404,11 +2411,13 @@ func (x *fastReflection_B) ProtoMethods() *protoiface.Methods {
 		x := input.Message.Interface().(*B)
 		if x == nil {
 			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: struct{}{},
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 				Buf:               input.Buf,
 			}, nil
 		}
-		size := runtime.MarshalFlagsToOptions(input.Flags).Size(x)
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
 		dAtA := make([]byte, size)
 		i := len(dAtA)
 		_ = i
@@ -2431,12 +2440,20 @@ func (x *fastReflection_B) ProtoMethods() *protoiface.Methods {
 			input.Buf = dAtA
 		}
 		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: struct{}{},
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 			Buf:               input.Buf,
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
 		x := input.Message.Interface().(*B)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
 		dAtA := input.Buf
 		l := len(dAtA)
 		iNdEx := 0
@@ -2445,10 +2462,10 @@ func (x *fastReflection_B) ProtoMethods() *protoiface.Methods {
 			var wire uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 				}
 				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
@@ -2460,23 +2477,23 @@ func (x *fastReflection_B) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: B: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: B: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: B: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: B: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field X", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field X", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrIntOverflow
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
 					}
 					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
@@ -2487,14 +2504,14 @@ func (x *fastReflection_B) ProtoMethods() *protoiface.Methods {
 				}
 				intStringLen := int(stringLen)
 				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				postIndex := iNdEx + intStringLen
 				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if postIndex > l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				x.X = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
@@ -2502,23 +2519,25 @@ func (x *fastReflection_B) ProtoMethods() *protoiface.Methods {
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
 				if err != nil {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, err
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, runtime.ErrInvalidLength
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
 				iNdEx += skippy
 			}
 		}
 
 		if iNdEx > l {
-			return protoiface.UnmarshalOutput{Flags: input.Flags}, io.ErrUnexpectedEOF
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 		}
-		return protoiface.UnmarshalOutput{Flags: input.Flags}, nil
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
 	}
 	return &protoiface.Methods{
 		NoUnkeyedLiterals: struct{}{},

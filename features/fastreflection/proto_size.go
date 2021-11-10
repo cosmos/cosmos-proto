@@ -35,10 +35,12 @@ func (g *fastGenerator) genSizeMethod() {
 	g.P("x := input.Message.Interface().(*", g.message.GoIdent, ")")
 	g.P(`if x == nil {`)
 	g.P(`return `, protoifacePkg.Ident("SizeOutput"), "{ ")
-	g.P("NoUnkeyedLiterals: struct{}{},")
+	g.P("NoUnkeyedLiterals: input.NoUnkeyedLiterals,")
 	g.P("Size: 0,")
 	g.P("}")
 	g.P(`}`)
+	g.P("options := ", runtimePackage.Ident("SizeInputToOptions"), "(input)")
+	g.P("_ = options")
 	g.P(`var n int`)
 	g.P(`var l int`)
 	g.P(`_ = l`)
@@ -71,7 +73,7 @@ func (g *fastGenerator) genSizeMethod() {
 	g.P(`n+=len(x.unknownFields)`)
 	g.P(`}`)
 	g.P(`return `, protoifacePkg.Ident("SizeOutput"), "{ ")
-	g.P("NoUnkeyedLiterals: struct{}{},")
+	g.P("NoUnkeyedLiterals: input.NoUnkeyedLiterals,")
 	g.P("Size: n,")
 	g.P("}") // TODO: return sizeinput not n
 	g.P(`}`)
@@ -328,6 +330,5 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 }
 
 func (g *fastGenerator) messageSize(varName string, message *protogen.Message) {
-	g.P(`l = `, runtimePackage.Ident("MarshalFlagsToOptions"), "(input.Flags).Size(", varName, ")")
-	//g.P(`l = `, protoPkg.Ident("Size"), "(", varName, ")")
+	g.P(`l = options.Size(`, varName, `)`)
 }
