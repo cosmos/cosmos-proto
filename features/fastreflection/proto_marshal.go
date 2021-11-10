@@ -351,6 +351,11 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 			keyKind := field.Message.Fields[0].Desc.Kind()
 			valKind := field.Message.Fields[1].Desc.Kind()
 
+			_, ok := kindToGoType[keyKind]
+			if !ok {
+				panic(fmt.Sprintf("pulsar does not support %s types as map keys", field.Desc.MapKey().Kind().String()))
+			}
+
 			g.P("MaRsHaLmAp := func(k ", goTypK, ", v ", goTypV, ") (", protoifacePkg.Ident("MarshalOutput"), ", error) {")
 			g.P(`baseI := i`)
 			accessor := `v`

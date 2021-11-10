@@ -52,7 +52,6 @@ func (g *fastGenerator) genSizeMethod() {
 		} else {
 			fieldName := field.Oneof.GoName
 			if _, ok := oneofs[fieldName]; !ok {
-				// TODO: here we usually cast to the vtprotobuf oneof interface, but we'll unroll manually instead.
 				oneofs[fieldName] = struct{}{}
 				g.P("switch x := x.", fieldName, ".(type) {")
 				for _, ooField := range field.Oneof.Fields {
@@ -75,7 +74,7 @@ func (g *fastGenerator) genSizeMethod() {
 	g.P(`return `, protoifacePkg.Ident("SizeOutput"), "{ ")
 	g.P("NoUnkeyedLiterals: input.NoUnkeyedLiterals,")
 	g.P("Size: n,")
-	g.P("}") // TODO: return sizeinput not n
+	g.P("}")
 	g.P(`}`)
 	g.P()
 }
@@ -208,9 +207,6 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 			}
 			keyKeySize := generator.KeySize(1, generator.ProtoWireType(field.Message.Fields[0].Desc.Kind()))
 			valueKeySize := generator.KeySize(2, generator.ProtoWireType(field.Message.Fields[1].Desc.Kind()))
-
-			//g.P(`_ = k`)
-			//g.P(`_ = v`)
 
 			sum := []string{strconv.Itoa(keyKeySize)}
 			g.P("SiZeMaP := func(k ", goTypeK, ", v ", goTypeV, ") {")
