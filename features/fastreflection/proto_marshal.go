@@ -344,40 +344,54 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 	case protoreflect.MessageKind:
 		if field.Desc.IsMap() {
 			goTypK, _ := g.FieldGoType(field.Message.Fields[0])
+			goTypV, ptr := g.FieldGoType(field.Message.Fields[1])
+			if ptr {
+				goTypV = "*" + goTypV
+			}
 			keyKind := field.Message.Fields[0].Desc.Kind()
 			valKind := field.Message.Fields[1].Desc.Kind()
 
-			var val string
-			if g.Stable && keyKind != protoreflect.BoolKind {
-				keysName := `keysFor` + fieldname
-				g.P(keysName, ` := make([]`, goTypK, `, 0, len(x.`, fieldname, `))`)
-				g.P(`for k := range x.`, fieldname, ` {`)
-				g.P(keysName, ` = append(`, keysName, `, `, goTypK, `(k))`)
-				g.P(`}`)
-				g.P(g.Ident("sort", "Slice"), `(`, keysName, `, func(i, j int) bool {`)
-				g.P(`return `, keysName, `[i] < `, keysName, `[j]`)
-				g.P(`})`)
-				val = g.reverseListRange(keysName)
-			} else {
-				g.P(`for k := range x.`, fieldname, ` {`)
-				val = "k"
-			}
-			if g.Stable {
-				g.P(`v := x.`, fieldname, `[`, goTypK, `(`, val, `)]`)
-			} else {
-				g.P(`v := x.`, fieldname, `[`, val, `]`)
-			}
+			g.P("MaRsHaLmAp := func(k ", goTypK, ", v ", goTypV, ") (", protoifacePkg.Ident("MarshalOutput"), ", error) {")
 			g.P(`baseI := i`)
-
 			accessor := `v`
 			g.mapField(field.Message.Fields[1], accessor)
 			g.encodeKey(2, generator.ProtoWireType(valKind))
 
-			g.mapField(field.Message.Fields[0], val)
+			g.mapField(field.Message.Fields[0], "k")
 			g.encodeKey(1, generator.ProtoWireType(keyKind))
 			g.encodeVarint(`baseI - i`)
 			g.encodeKey(fieldNumber, wireType)
+			g.P("return ", protoifacePkg.Ident("MarshalOutput"), "{}, nil")
+			g.P("}")
+
+			var val string
+			g.P("if options.Deterministic {")
+			keysName := `keysFor` + fieldname
+			g.P(keysName, ` := make([]`, goTypK, `, 0, len(x.`, fieldname, `))`)
+			g.P(`for k := range x.`, fieldname, ` {`)
+			g.P(keysName, ` = append(`, keysName, `, `, goTypK, `(k))`)
 			g.P(`}`)
+			g.P(g.Ident("sort", "Slice"), `(`, keysName, `, func(i, j int) bool {`)
+			g.P(`return `, keysName, `[i] < `, keysName, `[j]`)
+			g.P(`})`)
+			val = g.reverseListRange(keysName)
+			g.P(`v := x.`, fieldname, `[`, goTypK, `(`, val, `)]`)
+			g.P("out, err := MaRsHaLmAp(", val, ", v)")
+			g.P("if err != nil {")
+			g.P("return out, err")
+			g.P("}")
+			g.P("}")
+			g.P("} else {")
+
+			g.P(`for k := range x.`, fieldname, ` {`)
+			val = "k"
+			g.P(`v := x.`, fieldname, `[`, val, `]`)
+			g.P("out, err := MaRsHaLmAp(k,v)")
+			g.P("if err != nil {")
+			g.P("return out, err")
+			g.P("}")
+			g.P("}")
+			g.P("}")
 		} else if repeated {
 			val := g.reverseListRange(`x.`, fieldname)
 			g.marshalBackward(val, true, field.Message)

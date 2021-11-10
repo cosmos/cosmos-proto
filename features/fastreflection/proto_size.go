@@ -201,34 +201,19 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 	case protoreflect.MessageKind:
 		if field.Desc.IsMap() {
 			fieldKeySize := generator.KeySize(field.Desc.Number(), generator.ProtoWireType(field.Desc.Kind()))
+			goTypeK, _ := g.FieldGoType(field.Message.Fields[0])
+			goTypeV, ptr := g.FieldGoType(field.Message.Fields[1])
+			if ptr {
+				goTypeV = "*" + goTypeV
+			}
 			keyKeySize := generator.KeySize(1, generator.ProtoWireType(field.Message.Fields[0].Desc.Kind()))
 			valueKeySize := generator.KeySize(2, generator.ProtoWireType(field.Message.Fields[1].Desc.Kind()))
 
-			// first we have to sort the key
-			typ, ok := kindToGoType[field.Desc.MapKey().Kind()]
-			if !ok {
-				panic(fmt.Sprintf("pulsar does not support %s types as map keys", field.Desc.MapKey().Kind().String()))
-			}
+			//g.P(`_ = k`)
+			//g.P(`_ = v`)
 
-			g.P("sortme := make([]", typ, ", 0, len(x.", field.GoName, "))")
-			g.P("for k := range x.", fieldname, " {")
-			g.P("sortme = append(sortme, k)")
-			g.P("}")
-			switch field.Desc.MapKey().Kind() {
-			case protoreflect.StringKind:
-				g.P(sortPkg.Ident("Strings"), "(sortme)")
-			default:
-				g.P(sortPkg.Ident("Slice"), "(sortme, func(i, j int) bool {")
-				g.P("return sortme[i] < sortme[j]")
-				g.P("})")
-			}
-
-			g.P(`for _, k := range sortme {`)
-			g.P("v := x.", fieldname, "[k]")
-			g.P(`_ = k`)
-			g.P(`_ = v`)
 			sum := []string{strconv.Itoa(keyKeySize)}
-
+			g.P("SiZeMaP := func(k ", goTypeK, ", v ", goTypeV, ") {")
 			switch field.Desc.MapKey().Kind() {
 			case protoreflect.DoubleKind, protoreflect.Fixed64Kind, protoreflect.Sfixed64Kind:
 				sum = append(sum, `8`)
@@ -267,7 +252,7 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 				sum = append(sum, strconv.Itoa(valueKeySize))
 				sum = append(sum, fmt.Sprintf("%s%s", g.QualifiedGoIdent(runtimePackage.Ident("Soz")), `(uint64(v))`))
 			case protoreflect.MessageKind:
-				g.P(`l = 0`)
+				g.P(`l := 0`)
 				g.P(`if v != nil {`)
 				g.messageSize("v", field.Message.Fields[1].Message)
 				g.P(`}`)
@@ -276,7 +261,35 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 			}
 			g.P(`mapEntrySize := `, strings.Join(sum, "+"))
 			g.P(`n+=mapEntrySize+`, fieldKeySize, `+`, runtimePackage.Ident("Sov"), `(uint64(mapEntrySize))`)
+			g.P("}")
+			// first we have to sort the key
+			typ, ok := kindToGoType[field.Desc.MapKey().Kind()]
+			if !ok {
+				panic(fmt.Sprintf("pulsar does not support %s types as map keys", field.Desc.MapKey().Kind().String()))
+			}
+			g.P("if options.Deterministic {")
+			g.P("sortme := make([]", typ, ", 0, len(x.", field.GoName, "))")
+			g.P("for k := range x.", fieldname, " {")
+			g.P("sortme = append(sortme, k)")
+			g.P("}")
+			switch field.Desc.MapKey().Kind() {
+			case protoreflect.StringKind:
+				g.P(sortPkg.Ident("Strings"), "(sortme)")
+			default:
+				g.P(sortPkg.Ident("Slice"), "(sortme, func(i, j int) bool {")
+				g.P("return sortme[i] < sortme[j]")
+				g.P("})")
+			}
+
+			g.P(`for _, k := range sortme {`)
+			g.P("v := x.", fieldname, "[k]")
+			g.P("SiZeMaP(k,v)")
 			g.P(`}`)
+			g.P("} else {")
+			g.P("for k,v := range x.", fieldname, " {")
+			g.P("SiZeMaP(k,v)")
+			g.P("}")
+			g.P("}")
 		} else if field.Desc.IsList() {
 			g.P(`for _, e := range x.`, fieldname, ` { `)
 			g.messageSize("e", field.Message)

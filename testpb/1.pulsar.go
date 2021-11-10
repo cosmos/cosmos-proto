@@ -1074,22 +1074,29 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			n += 2 + l + runtime.Sov(uint64(l))
 		}
 		if len(x.MAP) > 0 {
-			sortme := make([]string, 0, len(x.MAP))
-			for k := range x.MAP {
-				sortme = append(sortme, k)
-			}
-			sort.Strings(sortme)
-			for _, k := range sortme {
-				v := x.MAP[k]
-				_ = k
-				_ = v
-				l = 0
+			SiZeMaP := func(k string, v *B) {
+				l := 0
 				if v != nil {
 					l = options.Size(v)
 				}
 				l += 1 + runtime.Sov(uint64(l))
 				mapEntrySize := 1 + len(k) + runtime.Sov(uint64(len(k))) + l
 				n += mapEntrySize + 2 + runtime.Sov(uint64(mapEntrySize))
+			}
+			if options.Deterministic {
+				sortme := make([]string, 0, len(x.MAP))
+				for k := range x.MAP {
+					sortme = append(sortme, k)
+				}
+				sort.Strings(sortme)
+				for _, k := range sortme {
+					v := x.MAP[k]
+					SiZeMaP(k, v)
+				}
+			} else {
+				for k, v := range x.MAP {
+					SiZeMaP(k, v)
+				}
 			}
 		}
 		if len(x.LIST) > 0 {
@@ -1243,15 +1250,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			}
 		}
 		if len(x.MAP) > 0 {
-			keysForMAP := make([]string, 0, len(x.MAP))
-			for k := range x.MAP {
-				keysForMAP = append(keysForMAP, string(k))
-			}
-			sort.Slice(keysForMAP, func(i, j int) bool {
-				return keysForMAP[i] < keysForMAP[j]
-			})
-			for iNdEx := len(keysForMAP) - 1; iNdEx >= 0; iNdEx-- {
-				v := x.MAP[string(keysForMAP[iNdEx])]
+			MaRsHaLmAp := func(k string, v *B) (protoiface.MarshalOutput, error) {
 				baseI := i
 				encoded, err := options.Marshal(v)
 				if err != nil {
@@ -1265,9 +1264,9 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 				i--
 				dAtA[i] = 0x12
-				i -= len(keysForMAP[iNdEx])
-				copy(dAtA[i:], keysForMAP[iNdEx])
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(keysForMAP[iNdEx])))
+				i -= len(k)
+				copy(dAtA[i:], k)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(k)))
 				i--
 				dAtA[i] = 0xa
 				i = runtime.EncodeVarint(dAtA, i, uint64(baseI-i))
@@ -1275,6 +1274,31 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				dAtA[i] = 0x1
 				i--
 				dAtA[i] = 0x92
+				return protoiface.MarshalOutput{}, nil
+			}
+			if options.Deterministic {
+				keysForMAP := make([]string, 0, len(x.MAP))
+				for k := range x.MAP {
+					keysForMAP = append(keysForMAP, string(k))
+				}
+				sort.Slice(keysForMAP, func(i, j int) bool {
+					return keysForMAP[i] < keysForMAP[j]
+				})
+				for iNdEx := len(keysForMAP) - 1; iNdEx >= 0; iNdEx-- {
+					v := x.MAP[string(keysForMAP[iNdEx])]
+					out, err := MaRsHaLmAp(keysForMAP[iNdEx], v)
+					if err != nil {
+						return out, err
+					}
+				}
+			} else {
+				for k := range x.MAP {
+					v := x.MAP[k]
+					out, err := MaRsHaLmAp(k, v)
+					if err != nil {
+						return out, err
+					}
+				}
 			}
 		}
 		if x.MESSAGE != nil {
