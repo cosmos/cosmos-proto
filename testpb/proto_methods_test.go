@@ -13,45 +13,6 @@ import (
 	"testing"
 )
 
-func TestNegativeZero(t *testing.T) {
-
-	testCases := []struct {
-		name  string
-		value float64
-	}{
-		{
-			name:  "negative 0",
-			value: math.Copysign(0, -1),
-		},
-		{
-			name:  "negative float",
-			value: -0.420,
-		},
-		{
-			name:  "regular zero",
-			value: 0,
-		},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			a := A{}
-			a.DOUBLE = tc.value
-
-			dyn := dynamicpb.NewMessage(md_A)
-			dyn.Set(fd_A_DOUBLE, protoreflect.ValueOfFloat64(tc.value))
-
-			bz, err := proto.MarshalOptions{Deterministic: true}.Marshal(dyn)
-			require.NoError(t, err)
-
-			bz2, err := proto.Marshal(a.ProtoReflect().Interface())
-			require.NoError(t, err)
-
-			require.Equal(t, bz, bz2)
-		})
-	}
-}
-
 func TestProtoMethods(t *testing.T) {
 	t.Run("testSize", rapid.MakeCheck(testSize))
 	t.Run("testMarshal", rapid.MakeCheck(testMarshal))
@@ -106,6 +67,45 @@ func testUnmarshal(t *rapid.T) {
 	require.NoError(t, err)
 
 	require.True(t, proto.Equal(fastMsg.Interface(), fastaa.Interface()), fmt.Sprintf("left: %+v\nright:%+v", fastMsg, fastaa))
+}
+
+func TestNegativeZero(t *testing.T) {
+
+	testCases := []struct {
+		name  string
+		value float64
+	}{
+		{
+			name:  "negative 0",
+			value: math.Copysign(0, -1),
+		},
+		{
+			name:  "negative float",
+			value: -0.420,
+		},
+		{
+			name:  "regular zero",
+			value: 0,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			a := A{}
+			a.DOUBLE = tc.value
+
+			dyn := dynamicpb.NewMessage(md_A)
+			dyn.Set(fd_A_DOUBLE, protoreflect.ValueOfFloat64(tc.value))
+
+			bz, err := proto.MarshalOptions{Deterministic: true}.Marshal(dyn)
+			require.NoError(t, err)
+
+			bz2, err := proto.Marshal(a.ProtoReflect().Interface())
+			require.NoError(t, err)
+
+			require.Equal(t, bz, bz2)
+		})
+	}
 }
 
 func populateDynamicMsg(dyn *dynamicpb.Message, msg protoreflect.Message) {

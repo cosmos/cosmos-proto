@@ -110,8 +110,8 @@ func SizeInputToOptions(input protoiface.SizeInput) proto.MarshalOptions {
 	return proto.MarshalOptions{
 		NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 		AllowPartial:      false,
-		Deterministic:     input.Flags&protoiface.MarshalDeterministic == 0,
-		UseCachedSize:     input.Flags&protoiface.MarshalUseCachedSize == 0,
+		Deterministic:     input.Flags&protoiface.MarshalDeterministic != 0,
+		UseCachedSize:     input.Flags&protoiface.MarshalUseCachedSize != 0,
 	}
 }
 
@@ -119,8 +119,8 @@ func MarshalInputToOptions(input protoiface.MarshalInput) proto.MarshalOptions {
 	return proto.MarshalOptions{
 		NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 		AllowPartial:      false,
-		Deterministic:     input.Flags&protoiface.MarshalDeterministic == 0,
-		UseCachedSize:     input.Flags&protoiface.MarshalUseCachedSize == 0,
+		Deterministic:     input.Flags&protoiface.MarshalDeterministic != 0,
+		UseCachedSize:     input.Flags&protoiface.MarshalUseCachedSize != 0,
 	}
 }
 
@@ -129,7 +129,7 @@ func UnmarshalInputToOptions(input protoiface.UnmarshalInput) proto.UnmarshalOpt
 		NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 		Merge:             false,
 		AllowPartial:      false,
-		DiscardUnknown:    input.Flags&protoiface.UnmarshalDiscardUnknown == 0,
+		DiscardUnknown:    input.Flags&protoiface.UnmarshalDiscardUnknown != 0,
 		Resolver:          input.Resolver,
 	}
 }
