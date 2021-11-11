@@ -2,10 +2,8 @@ package fastreflection
 
 import (
 	"fmt"
-	"github.com/cosmos/cosmos-proto/generator"
-	"strings"
-
 	"github.com/cosmos/cosmos-proto/features/fastreflection/copied"
+	"github.com/cosmos/cosmos-proto/generator"
 	"google.golang.org/protobuf/compiler/protogen"
 )
 
@@ -13,8 +11,13 @@ const (
 	protoreflectPkg = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 	protoifacePkg   = protogen.GoImportPath("google.golang.org/protobuf/runtime/protoiface")
 	protoimplPkg    = protogen.GoImportPath("google.golang.org/protobuf/runtime/protoimpl")
+	protoPkg        = protogen.GoImportPath("google.golang.org/protobuf/proto")
 
-	fmtPkg = protogen.GoImportPath("fmt")
+	sortPkg     = protogen.GoImportPath("sort")
+	fmtPkg      = protogen.GoImportPath("fmt")
+	mathPackage = protogen.GoImportPath("math")
+
+	runtimePackage = protogen.GoImportPath("github.com/cosmos/cosmos-proto/runtime")
 )
 
 func GenProtoMessage(f *protogen.File, g *generator.GeneratedFile, message *protogen.Message) {
@@ -280,16 +283,19 @@ func (g *fastGenerator) genProtoMethods() {
 	g.P(`// "google.golang.org/protobuf/runtime/protoiface".Methods.`)
 	g.P("// Consult the protoiface package documentation for details.")
 	g.P("func (x *", g.typeName, ") ProtoMethods() *", protoifacePkg.Ident("Methods"), " {")
-	g.P("return nil")
-	g.P("}")
-}
 
-// slowReflectionFallBack can be used to fallback on slow reflection methods
-func slowReflectionFallBack(g *generator.GeneratedFile, msg *protogen.Message, returns bool, method string, args ...string) {
-	switch returns {
-	case true:
-		g.P("return (*", msg.GoIdent.GoName, ")(x).slowProtoReflect().", method, "(", strings.Join(args, ","), ")")
-	case false:
-		g.P("(*", msg.GoIdent.GoName, ")(x).slowProtoReflect().", method, "(", strings.Join(args, ","), ")")
-	}
+	g.genSizeMethod()
+	g.genMarshalMethod()
+	g.genUnmarshalMethod()
+
+	g.P("return &", protoifacePkg.Ident("Methods"), "{ ")
+	g.P("NoUnkeyedLiterals: struct{}{},")
+	g.P("Flags: ", protoifacePkg.Ident("SupportMarshalDeterministic"), "|", protoifacePkg.Ident("SupportUnmarshalDiscardUnknown"), ",")
+	g.P("Size: size,")
+	g.P("Marshal: marshal,")
+	g.P("Unmarshal: unmarshal,")
+	g.P("Merge: nil,")
+	g.P("CheckInitialized: nil,")
+	g.P("}")
+	g.P("}")
 }

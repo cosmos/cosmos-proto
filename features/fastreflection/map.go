@@ -70,6 +70,8 @@ func (g *mapGen) genRange() {
 	switch g.field.Message.Fields[1].Desc.Kind() {
 	case protoreflect.MessageKind:
 		g.P("mapValue := ", kindToValueConstructor(g.field.Message.Fields[1].Desc.Kind()), "(v.ProtoReflect())")
+	case protoreflect.EnumKind:
+		g.P("mapValue := ", kindToValueConstructor(g.field.Message.Fields[1].Desc.Kind()), "(v.Number())")
 	default:
 		g.P("mapValue := ", kindToValueConstructor(g.field.Message.Fields[1].Desc.Kind()), "(v)")
 	}
@@ -147,7 +149,7 @@ func (g *mapGen) genMutable() {
 	// if it's not a message value type, we construct a panic function
 	g.P("func (x *", g.typeName, ") Mutable(key ", protoreflectPkg.Ident("MapKey"), ") ", protoreflectPkg.Ident("Value"), " {")
 	if g.field.Message.Fields[1].Desc.Kind() != protoreflect.MessageKind {
-		panicMsg := fmt.Sprintf("should not call Mutable on protoreflect.Map whose value is not of type protoreflect.Message")
+		panicMsg := "should not call Mutable on protoreflect.Map whose value is not of type protoreflect.Message"
 		g.P("panic(\"", panicMsg, "\")")
 		g.P("}")
 		g.P()

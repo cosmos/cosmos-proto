@@ -6,6 +6,10 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
+const (
+	mathPkg = protogen.GoImportPath("math")
+)
+
 // fields are not populated if
 // if scalar: value != zero value
 // if msg value != nil
@@ -56,7 +60,15 @@ func (g *hasGen) genField(field *protogen.Field) {
 		return
 	}
 
-	g.P("return x.", field.GoName, " != ", zeroValueForField(nil, field))
+	switch field.Desc.Kind() {
+	case protoreflect.FloatKind:
+		g.P("return x.", field.GoName, " != ", zeroValueForField(nil, field), " || ", mathPkg.Ident("Signbit"), "(float64(x.", field.GoName, "))")
+	case protoreflect.DoubleKind:
+		g.P("return x.", field.GoName, " != ", zeroValueForField(nil, field), " || ", mathPkg.Ident("Signbit"), "(x.", field.GoName, ")")
+	default:
+		g.P("return x.", field.GoName, " != ", zeroValueForField(nil, field))
+	}
+
 }
 
 func (g *hasGen) genNullable(field *protogen.Field) {
