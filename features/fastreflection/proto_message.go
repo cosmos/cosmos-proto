@@ -290,7 +290,7 @@ func (g *fastGenerator) genProtoMethods() {
 
 	g.P("return &", protoifacePkg.Ident("Methods"), "{ ")
 	g.P("NoUnkeyedLiterals: struct{}{},")
-	g.P("Flags: ", protoifacePkg.Ident("SupportMarshalDeterministic"), ",")
+	g.P("Flags: ", protoifacePkg.Ident("SupportMarshalDeterministic"), "|", protoifacePkg.Ident("SupportUnmarshalDiscardUnknown"), ",")
 	g.P("Size: size,")
 	g.P("Marshal: marshal,")
 	g.P("Unmarshal: unmarshal,")

@@ -2145,7 +2145,7 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 	}
 	return &protoiface.Methods{
 		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic,
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
 		Size:              size,
 		Marshal:           marshal,
 		Unmarshal:         unmarshal,
@@ -2565,7 +2565,7 @@ func (x *fastReflection_B) ProtoMethods() *protoiface.Methods {
 	}
 	return &protoiface.Methods{
 		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic,
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
 		Size:              size,
 		Marshal:           marshal,
 		Unmarshal:         unmarshal,

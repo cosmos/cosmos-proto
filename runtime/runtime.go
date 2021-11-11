@@ -109,7 +109,7 @@ func Skip(dAtA []byte) (n int, err error) {
 func SizeInputToOptions(input protoiface.SizeInput) proto.MarshalOptions {
 	return proto.MarshalOptions{
 		NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-		AllowPartial:      false,
+		AllowPartial:      true,
 		Deterministic:     input.Flags&protoiface.MarshalDeterministic != 0,
 		UseCachedSize:     input.Flags&protoiface.MarshalUseCachedSize != 0,
 	}
@@ -118,7 +118,7 @@ func SizeInputToOptions(input protoiface.SizeInput) proto.MarshalOptions {
 func MarshalInputToOptions(input protoiface.MarshalInput) proto.MarshalOptions {
 	return proto.MarshalOptions{
 		NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-		AllowPartial:      false,
+		AllowPartial:      true, // defaults to true as the required fields check is done after the marshalling
 		Deterministic:     input.Flags&protoiface.MarshalDeterministic != 0,
 		UseCachedSize:     input.Flags&protoiface.MarshalUseCachedSize != 0,
 	}
@@ -128,7 +128,7 @@ func UnmarshalInputToOptions(input protoiface.UnmarshalInput) proto.UnmarshalOpt
 	return proto.UnmarshalOptions{
 		NoUnkeyedLiterals: input.NoUnkeyedLiterals,
 		Merge:             false,
-		AllowPartial:      false,
+		AllowPartial:      true, // defaults to true as the required fields check is done after the unmarshalling
 		DiscardUnknown:    input.Flags&protoiface.UnmarshalDiscardUnknown != 0,
 		Resolver:          input.Resolver,
 	}
