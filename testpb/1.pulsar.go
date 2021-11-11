@@ -752,7 +752,7 @@ func (x *fastReflection_A) Set(fd protoreflect.FieldDescriptor, value protorefle
 	case "A.DOUBLE":
 		x.DOUBLE = value.Float()
 	case "A.STRING":
-		x.STRING = value.String()
+		x.STRING = value.Interface().(string)
 	case "A.BYTES":
 		x.BYTES = value.Bytes()
 	case "A.MESSAGE":
@@ -769,7 +769,7 @@ func (x *fastReflection_A) Set(fd protoreflect.FieldDescriptor, value protorefle
 		cv := value.Message().Interface().(*B)
 		x.ONEOF = &A_ONEOF_B{ONEOF_B: cv}
 	case "A.ONEOF_STRING":
-		cv := value.String()
+		cv := value.Interface().(string)
 		x.ONEOF = &A_ONEOF_STRING{ONEOF_STRING: cv}
 	case "A.LIST_ENUM":
 		lv := value.List()
@@ -2311,7 +2311,7 @@ func (x *fastReflection_B) Get(descriptor protoreflect.FieldDescriptor) protoref
 func (x *fastReflection_B) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	case "B.x":
-		x.X = value.String()
+		x.X = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: B"))
@@ -2818,9 +2818,9 @@ func (x *A) GetLIST() []*B {
 	return nil
 }
 
-func (m *A) GetONEOF() isA_ONEOF {
-	if m != nil {
-		return m.ONEOF
+func (x *A) GetONEOF() isA_ONEOF {
+	if x != nil {
+		return x.ONEOF
 	}
 	return nil
 }

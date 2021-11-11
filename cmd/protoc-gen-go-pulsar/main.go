@@ -69,6 +69,6 @@ func generateAllFiles(plugin *protogen.Plugin, featureNames []string, poolable O
 		}
 	}
 
-	plugin.SupportedFeatures = SupportedFeatures
+	// plugin.SupportedFeatures = SupportedFeatures
 	return nil
 }

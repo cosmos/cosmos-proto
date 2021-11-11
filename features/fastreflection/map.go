@@ -171,7 +171,12 @@ func (g *mapGen) genMutable() {
 func (g *mapGen) genNewValue() {
 	g.P("func (x *", g.typeName, ") NewValue() ", protoreflectPkg.Ident("Value"), " {")
 	valueField := g.field.Message.Fields[1]
-	g.P("v := ", zeroValueForField(g.GeneratedFile, valueField))
+	switch {
+	case valueField.Desc.Kind() == protoreflect.BytesKind:
+		g.P("var v []byte")
+	default:
+		g.P("v := ", zeroValueForField(g.GeneratedFile, valueField))
+	}
 	switch valueField.Desc.Kind() {
 	case protoreflect.MessageKind:
 		g.P("return ", kindToValueConstructor(valueField.Desc.Kind()), "(v.ProtoReflect())")

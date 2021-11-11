@@ -377,7 +377,12 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 			g.P(keysName, ` = append(`, keysName, `, `, goTypK, `(k))`)
 			g.P(`}`)
 			g.P(g.Ident("sort", "Slice"), `(`, keysName, `, func(i, j int) bool {`)
-			g.P(`return `, keysName, `[i] < `, keysName, `[j]`)
+			switch keyKind {
+			case protoreflect.BoolKind:
+				g.P("return !", keysName, "[i] && ", keysName, "[j]")
+			default:
+				g.P(`return `, keysName, `[i] < `, keysName, `[j]`)
+			}
 			g.P(`})`)
 			val = g.reverseListRange(keysName)
 			g.P(`v := x.`, fieldname, `[`, goTypK, `(`, val, `)]`)
@@ -478,7 +483,7 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 
 			g.P(`var `, total, ` int`)
 			g.P(`for _, num := range x.`, fieldname, ` {`)
-			g.P(total, ` += soz(uint64(num))`)
+			g.P(total, ` += `, runtimePackage.Ident("Soz"), `(uint64(num))`)
 			g.P(`}`)
 			g.P(`i -= `, total)
 			g.P(jvar, `:= i`)

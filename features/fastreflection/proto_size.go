@@ -273,8 +273,14 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 				g.P(sortPkg.Ident("Strings"), "(sortme)")
 			default:
 				g.P(sortPkg.Ident("Slice"), "(sortme, func(i, j int) bool {")
-				g.P("return sortme[i] < sortme[j]")
+				switch field.Desc.MapKey().Kind() {
+				case protoreflect.BoolKind:
+					g.P("return !sortme[i] && sortme[j]")
+				default:
+					g.P("return sortme[i] < sortme[j]")
+				}
 				g.P("})")
+
 			}
 
 			g.P(`for _, k := range sortme {`)

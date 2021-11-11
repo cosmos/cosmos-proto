@@ -112,7 +112,7 @@ func (g *rangeGen) genOneof(field *protogen.Field) {
 		case protoreflect.MessageKind:
 			g.P("value := ", kindToValueConstructor(oneofField.Desc.Kind()), "(v.ProtoReflect())")
 		case protoreflect.EnumKind:
-			g.P("value :=", kindToValueConstructor(oneofField.Desc.Kind()), "((", protoreflectPkg.Ident("EnumNumber"), ")(v.ProtoReflect())")
+			g.P("value :=", kindToValueConstructor(oneofField.Desc.Kind()), "((", protoreflectPkg.Ident("EnumNumber"), ")(v))")
 		default:
 			g.P("value := ", kindToValueConstructor(oneofField.Desc.Kind()), "(v)")
 
