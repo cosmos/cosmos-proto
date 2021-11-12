@@ -5,10 +5,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/testing/protocmp"
-	"google.golang.org/protobuf/types/dynamicpb"
-	"log"
 	"pgregory.net/rapid"
 	"testing"
 )
@@ -16,7 +13,7 @@ import (
 func TestMarshalUnmarshal(t *testing.T) {
 	t.Run("marshal unmarshal", rapid.MakeCheck(func(t *rapid.T) {
 		mType := (&TestAllTypes{}).ProtoReflect().Type()
-		msg := fuzz.Message(t, mType, true, false)
+		msg := fuzz.Message(t, mType)
 
 		msgBytes, err := proto.MarshalOptions{Deterministic: true}.Marshal(msg.Interface())
 		require.NoError(t, err)
@@ -30,26 +27,14 @@ func TestMarshalUnmarshal(t *testing.T) {
 	}))
 }
 
-func TestOneofMarshalUnmarshal(t *testing.T) {
+// TestZeroValueOneofIsMarshalled tests that zero values in oneofs are marshalled
+func TestZeroValueOneofIsMarshalled(t *testing.T) {
 	msg1 := &TestAllTypes{OneofField: &TestAllTypes_OneofEnum{OneofEnum: NestedEnum_FOO}}
 	b, err := proto.Marshal(msg1)
 	require.NoError(t, err)
 
 	msg2 := &TestAllTypes{}
 	require.NoError(t, proto.Unmarshal(b, msg2))
-	log.Printf("%s %s", msg2, msg1)
 
-	dynMsg := dynamicpb.NewMessage(md_TestAllTypes)
-	dynEnum := dynamicpb.NewEnumType(NestedEnum_FOO.Descriptor())
-
-	dynMsg.Set(fd_TestAllTypes_oneof_enum, protoreflect.ValueOfEnum(dynEnum.New(NestedEnum_FOO.Number()).Number()))
-
-	dynB, err := proto.Marshal(dynMsg)
-	require.NoError(t, err)
-	t.Logf("%s", dynMsg)
-
-	dynMsg2 := dynamicpb.NewMessage(md_TestAllTypes)
-	require.NoError(t, proto.Unmarshal(dynB, dynMsg2))
-
-	t.Logf("%v", proto.Equal(dynMsg, dynMsg2))
+	require.True(t, msg2.ProtoReflect().Has(fd_TestAllTypes_oneof_enum))
 }
