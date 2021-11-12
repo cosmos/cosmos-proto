@@ -5670,68 +5670,50 @@ func (x *fastReflection_TestAllTypes) ProtoMethods() *protoiface.Methods {
 			if x == nil {
 				break
 			}
-			if x.OneofUint32 != 0 {
-				n += 2 + runtime.Sov(uint64(x.OneofUint32))
-			}
+			n += 2 + runtime.Sov(uint64(x.OneofUint32))
 		case *TestAllTypes_OneofNestedMessage:
 			if x == nil {
 				break
 			}
-			if x.OneofNestedMessage != nil {
-				l = options.Size(x.OneofNestedMessage)
-				n += 2 + l + runtime.Sov(uint64(l))
-			}
+			l = options.Size(x.OneofNestedMessage)
+			n += 2 + l + runtime.Sov(uint64(l))
 		case *TestAllTypes_OneofString:
 			if x == nil {
 				break
 			}
 			l = len(x.OneofString)
-			if l > 0 {
-				n += 2 + l + runtime.Sov(uint64(l))
-			}
+			n += 2 + l + runtime.Sov(uint64(l))
 		case *TestAllTypes_OneofBytes:
 			if x == nil {
 				break
 			}
 			l = len(x.OneofBytes)
-			if l > 0 {
-				n += 2 + l + runtime.Sov(uint64(l))
-			}
+			n += 2 + l + runtime.Sov(uint64(l))
 		case *TestAllTypes_OneofBool:
 			if x == nil {
 				break
 			}
-			if x.OneofBool {
-				n += 3
-			}
+			n += 3
 		case *TestAllTypes_OneofUint64:
 			if x == nil {
 				break
 			}
-			if x.OneofUint64 != 0 {
-				n += 2 + runtime.Sov(uint64(x.OneofUint64))
-			}
+			n += 2 + runtime.Sov(uint64(x.OneofUint64))
 		case *TestAllTypes_OneofFloat:
 			if x == nil {
 				break
 			}
-			if x.OneofFloat != 0 || math.Signbit(float64(x.OneofFloat)) {
-				n += 6
-			}
+			n += 6
 		case *TestAllTypes_OneofDouble:
 			if x == nil {
 				break
 			}
-			if x.OneofDouble != 0 || math.Signbit(x.OneofDouble) {
-				n += 10
-			}
+			n += 10
 		case *TestAllTypes_OneofEnum:
 			if x == nil {
 				break
 			}
-			if x.OneofEnum != 0 {
-				n += 2 + runtime.Sov(uint64(x.OneofEnum))
-			}
+			n += 2 + runtime.Sov(uint64(x.OneofEnum))
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -5764,97 +5746,79 @@ func (x *fastReflection_TestAllTypes) ProtoMethods() *protoiface.Methods {
 		}
 		switch x := x.OneofField.(type) {
 		case *TestAllTypes_OneofUint32:
-			if x.OneofUint32 != 0 {
-				i = runtime.EncodeVarint(dAtA, i, uint64(x.OneofUint32))
-				i--
-				dAtA[i] = 0x6
-				i--
-				dAtA[i] = 0xf8
-			}
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.OneofUint32))
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xf8
 		case *TestAllTypes_OneofNestedMessage:
-			if x.OneofNestedMessage != nil {
-				encoded, err := options.Marshal(x.OneofNestedMessage)
-				if err != nil {
-					return protoiface.MarshalOutput{
-						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-						Buf:               input.Buf,
-					}, err
-				}
-				i -= len(encoded)
-				copy(dAtA[i:], encoded)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-				i--
-				dAtA[i] = 0x7
-				i--
-				dAtA[i] = 0x82
+			encoded, err := options.Marshal(x.OneofNestedMessage)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
 			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x7
+			i--
+			dAtA[i] = 0x82
 		case *TestAllTypes_OneofString:
-			if len(x.OneofString) > 0 {
-				i -= len(x.OneofString)
-				copy(dAtA[i:], x.OneofString)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.OneofString)))
-				i--
-				dAtA[i] = 0x7
-				i--
-				dAtA[i] = 0x8a
-			}
+			i -= len(x.OneofString)
+			copy(dAtA[i:], x.OneofString)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.OneofString)))
+			i--
+			dAtA[i] = 0x7
+			i--
+			dAtA[i] = 0x8a
 		case *TestAllTypes_OneofBytes:
-			if len(x.OneofBytes) > 0 {
-				i -= len(x.OneofBytes)
-				copy(dAtA[i:], x.OneofBytes)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.OneofBytes)))
-				i--
-				dAtA[i] = 0x7
-				i--
-				dAtA[i] = 0x92
-			}
+			i -= len(x.OneofBytes)
+			copy(dAtA[i:], x.OneofBytes)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.OneofBytes)))
+			i--
+			dAtA[i] = 0x7
+			i--
+			dAtA[i] = 0x92
 		case *TestAllTypes_OneofBool:
+			i--
 			if x.OneofBool {
-				i--
-				if x.OneofBool {
-					dAtA[i] = 1
-				} else {
-					dAtA[i] = 0
-				}
-				i--
-				dAtA[i] = 0x7
-				i--
-				dAtA[i] = 0x98
+				dAtA[i] = 1
+			} else {
+				dAtA[i] = 0
 			}
+			i--
+			dAtA[i] = 0x7
+			i--
+			dAtA[i] = 0x98
 		case *TestAllTypes_OneofUint64:
-			if x.OneofUint64 != 0 {
-				i = runtime.EncodeVarint(dAtA, i, uint64(x.OneofUint64))
-				i--
-				dAtA[i] = 0x7
-				i--
-				dAtA[i] = 0xa0
-			}
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.OneofUint64))
+			i--
+			dAtA[i] = 0x7
+			i--
+			dAtA[i] = 0xa0
 		case *TestAllTypes_OneofFloat:
-			if x.OneofFloat != 0 || math.Signbit(float64(x.OneofFloat)) {
-				i -= 4
-				binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(x.OneofFloat))))
-				i--
-				dAtA[i] = 0x7
-				i--
-				dAtA[i] = 0xad
-			}
+			i -= 4
+			binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(x.OneofFloat))))
+			i--
+			dAtA[i] = 0x7
+			i--
+			dAtA[i] = 0xad
 		case *TestAllTypes_OneofDouble:
-			if x.OneofDouble != 0 || math.Signbit(x.OneofDouble) {
-				i -= 8
-				binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(x.OneofDouble))))
-				i--
-				dAtA[i] = 0x7
-				i--
-				dAtA[i] = 0xb1
-			}
+			i -= 8
+			binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(x.OneofDouble))))
+			i--
+			dAtA[i] = 0x7
+			i--
+			dAtA[i] = 0xb1
 		case *TestAllTypes_OneofEnum:
-			if x.OneofEnum != 0 {
-				i = runtime.EncodeVarint(dAtA, i, uint64(x.OneofEnum))
-				i--
-				dAtA[i] = 0x7
-				i--
-				dAtA[i] = 0xb8
-			}
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.OneofEnum))
+			i--
+			dAtA[i] = 0x7
+			i--
+			dAtA[i] = 0xb8
 		}
 		if x.SingularImportEnum != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.SingularImportEnum))

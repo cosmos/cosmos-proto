@@ -1110,18 +1110,14 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			if x == nil {
 				break
 			}
-			if x.ONEOF_B != nil {
-				l = options.Size(x.ONEOF_B)
-				n += 2 + l + runtime.Sov(uint64(l))
-			}
+			l = options.Size(x.ONEOF_B)
+			n += 2 + l + runtime.Sov(uint64(l))
 		case *A_ONEOF_STRING:
 			if x == nil {
 				break
 			}
 			l = len(x.ONEOF_STRING)
-			if l > 0 {
-				n += 2 + l + runtime.Sov(uint64(l))
-			}
+			n += 2 + l + runtime.Sov(uint64(l))
 		}
 		if len(x.LIST_ENUM) > 0 {
 			l = 0
@@ -1165,32 +1161,28 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 		}
 		switch x := x.ONEOF.(type) {
 		case *A_ONEOF_B:
-			if x.ONEOF_B != nil {
-				encoded, err := options.Marshal(x.ONEOF_B)
-				if err != nil {
-					return protoiface.MarshalOutput{
-						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-						Buf:               input.Buf,
-					}, err
-				}
-				i -= len(encoded)
-				copy(dAtA[i:], encoded)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-				i--
-				dAtA[i] = 0x1
-				i--
-				dAtA[i] = 0xa2
+			encoded, err := options.Marshal(x.ONEOF_B)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
 			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xa2
 		case *A_ONEOF_STRING:
-			if len(x.ONEOF_STRING) > 0 {
-				i -= len(x.ONEOF_STRING)
-				copy(dAtA[i:], x.ONEOF_STRING)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ONEOF_STRING)))
-				i--
-				dAtA[i] = 0x1
-				i--
-				dAtA[i] = 0xaa
-			}
+			i -= len(x.ONEOF_STRING)
+			copy(dAtA[i:], x.ONEOF_STRING)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.ONEOF_STRING)))
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xaa
 		}
 		if x.Imported != nil {
 			encoded, err := options.Marshal(x.Imported)

@@ -48,7 +48,7 @@ func (g *fastGenerator) genSizeMethod() {
 	for _, field := range g.message.Fields {
 		oneof := field.Oneof != nil && !field.Oneof.Desc.IsSynthetic()
 		if !oneof {
-			g.field(true, field)
+			g.field(true, field, false)
 		} else {
 			fieldName := field.Oneof.GoName
 			if _, ok := oneofs[fieldName]; !ok {
@@ -60,7 +60,7 @@ func (g *fastGenerator) genSizeMethod() {
 					g.P("if x == nil {")
 					g.P("break")
 					g.P("}")
-					g.field(true, ooField)
+					g.field(true, ooField, true)
 				}
 				g.P("}")
 			}
@@ -79,13 +79,13 @@ func (g *fastGenerator) genSizeMethod() {
 	g.P()
 }
 
-func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
+func (g *fastGenerator) field(proto3 bool, field *protogen.Field, oneof bool) {
 	fieldname := field.GoName
 	nullable := field.Message != nil || (field.Oneof != nil && field.Oneof.Desc.IsSynthetic())
 	repeated := field.Desc.Cardinality() == protoreflect.Repeated
-	if repeated {
+	if repeated && !oneof {
 		g.P(`if len(x.`, fieldname, `) > 0 {`)
-	} else if nullable {
+	} else if nullable && !oneof {
 		g.P(`if x.`, fieldname, ` != nil {`)
 	}
 
@@ -103,9 +103,13 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 		} else if repeated {
 			g.P(`n+=`, strconv.Itoa(key+8), `*len(x.`, fieldname, `)`)
 		} else if proto3 && !nullable {
-			g.P(`if x.`, fieldname, ` != 0 {`)
+			if !oneof {
+				g.P(`if x.`, fieldname, ` != 0 {`)
+			}
 			g.P(`n+=`, strconv.Itoa(key+8))
-			g.P(`}`)
+			if !oneof {
+				g.P(`}`)
+			}
 		} else {
 			g.P(`n+=`, strconv.Itoa(key+8))
 		}
@@ -115,9 +119,13 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 		} else if repeated {
 			g.P(`n+=`, strconv.Itoa(key+8), `*len(x.`, fieldname, `)`)
 		} else if proto3 && !nullable {
-			g.P(`if x.`, fieldname, ` != 0 || `, mathPackage.Ident("Signbit"), `(x.`, fieldname, `) {`)
+			if !oneof {
+				g.P(`if x.`, fieldname, ` != 0 || `, mathPackage.Ident("Signbit"), `(x.`, fieldname, `) {`)
+			}
 			g.P(`n+=`, strconv.Itoa(key+8))
-			g.P(`}`)
+			if !oneof {
+				g.P(`}`)
+			}
 		} else {
 			g.P(`n+=`, strconv.Itoa(key+8))
 		}
@@ -127,9 +135,13 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 		} else if repeated {
 			g.P(`n+=`, strconv.Itoa(key+4), `*len(x.`, fieldname, `)`)
 		} else if proto3 && !nullable {
-			g.P(`if x.`, fieldname, ` != 0 {`)
+			if !oneof {
+				g.P(`if x.`, fieldname, ` != 0 {`)
+			}
 			g.P(`n+=`, strconv.Itoa(key+4))
-			g.P(`}`)
+			if !oneof {
+				g.P(`}`)
+			}
 		} else {
 			g.P(`n+=`, strconv.Itoa(key+4))
 		}
@@ -139,9 +151,13 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 		} else if repeated {
 			g.P(`n+=`, strconv.Itoa(key+4), `*len(x.`, fieldname, `)`)
 		} else if proto3 && !nullable {
-			g.P(`if x.`, fieldname, ` != 0 || `, mathPackage.Ident("Signbit"), `(float64(x.`, fieldname, `)) {`)
+			if !oneof {
+				g.P(`if x.`, fieldname, ` != 0 || `, mathPackage.Ident("Signbit"), `(float64(x.`, fieldname, `)) {`)
+			}
 			g.P(`n+=`, strconv.Itoa(key+4))
-			g.P(`}`)
+			if !oneof {
+				g.P(`}`)
+			}
 		} else {
 			g.P(`n+=`, strconv.Itoa(key+4))
 		}
@@ -159,9 +175,13 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 		} else if nullable {
 			g.P(`n+=`, strconv.Itoa(key), `+`, runtimePackage.Ident("Sov"), `(uint64(*x.`, fieldname, `))`)
 		} else if proto3 {
-			g.P(`if x.`, fieldname, ` != 0 {`)
+			if !oneof {
+				g.P(`if x.`, fieldname, ` != 0 {`)
+			}
 			g.P(`n+=`, strconv.Itoa(key), `+`, runtimePackage.Ident("Sov"), `(uint64(x.`, fieldname, `))`)
-			g.P(`}`)
+			if !oneof {
+				g.P(`}`)
+			}
 		} else {
 			g.P(`n+=`, strconv.Itoa(key), `+`, runtimePackage.Ident("Sov"), `(uint64(x.`, fieldname, `))`)
 		}
@@ -171,9 +191,13 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 		} else if repeated {
 			g.P(`n+=`, strconv.Itoa(key+1), `*len(x.`, fieldname, `)`)
 		} else if proto3 && !nullable {
-			g.P(`if x.`, fieldname, ` {`)
+			if !oneof {
+				g.P(`if x.`, fieldname, ` {`)
+			}
 			g.P(`n+=`, strconv.Itoa(key+1))
-			g.P(`}`)
+			if !oneof {
+				g.P(`}`)
+			}
 		} else {
 			g.P(`n+=`, strconv.Itoa(key+1))
 		}
@@ -188,9 +212,13 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 			g.P(`n+=`, strconv.Itoa(key), `+l+`, runtimePackage.Ident("Sov"), `(uint64(l))`)
 		} else if proto3 {
 			g.P(`l=len(x.`, fieldname, `)`)
-			g.P(`if l > 0 {`)
+			if !oneof {
+				g.P(`if l > 0 {`)
+			}
 			g.P(`n+=`, strconv.Itoa(key), `+l+`, runtimePackage.Ident("Sov"), `(uint64(l))`)
-			g.P(`}`)
+			if !oneof {
+				g.P(`}`)
+			}
 		} else {
 			g.P(`l=len(x.`, fieldname, `)`)
 			g.P(`n+=`, strconv.Itoa(key), `+l+`, runtimePackage.Ident("Sov"), `(uint64(l))`)
@@ -309,9 +337,13 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 			g.P(`}`)
 		} else if proto3 {
 			g.P(`l=len(x.`, fieldname, `)`)
-			g.P(`if l > 0 {`)
+			if !oneof {
+				g.P(`if l > 0 {`)
+			}
 			g.P(`n+=`, strconv.Itoa(key), `+l+`, runtimePackage.Ident("Sov"), `(uint64(l))`)
-			g.P(`}`)
+			if !oneof {
+				g.P(`}`)
+			}
 		} else {
 			g.P(`l=len(x.`, fieldname, `)`)
 			g.P(`n+=`, strconv.Itoa(key), `+l+`, runtimePackage.Ident("Sov"), `(uint64(l))`)
@@ -330,7 +362,9 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 		} else if nullable {
 			g.P(`n+=`, strconv.Itoa(key), `+`, runtimePackage.Ident("Soz"), `(uint64(*x.`, fieldname, `))`)
 		} else if proto3 {
-			g.P(`if x.`, fieldname, ` != 0 {`)
+			if !oneof {
+				g.P(`if x.`, fieldname, ` != 0 {`)
+			}
 			g.P(`n+=`, strconv.Itoa(key), `+`, runtimePackage.Ident("Soz"), `(uint64(x.`, fieldname, `))`)
 			g.P(`}`)
 		} else {
@@ -339,7 +373,7 @@ func (g *fastGenerator) field(proto3 bool, field *protogen.Field) {
 	default:
 		panic("not implemented")
 	}
-	if repeated || nullable {
+	if (repeated || nullable) && !oneof {
 		g.P(`}`)
 	}
 }
