@@ -63,7 +63,7 @@ func (g *fastGenerator) genMarshalMethod() {
 			g.P("switch x := x.", fieldname, ".(type) {")
 			for _, ooField := range field.Fields {
 				g.P("case *", ooField.GoIdent, ": ")
-				g.marshalField(true, &numGen, ooField)
+				g.marshalField(true, &numGen, ooField, true)
 			}
 			g.P("}")
 		}
@@ -84,7 +84,7 @@ func (g *fastGenerator) genMarshalMethod() {
 		field := messageFields[i]
 		isOneof := field.Oneof != nil && !field.Oneof.Desc.IsSynthetic()
 		if !isOneof {
-			g.marshalField(true, &numGen, field)
+			g.marshalField(true, &numGen, field, false)
 		}
 	}
 
@@ -100,13 +100,13 @@ func (g *fastGenerator) genMarshalMethod() {
 	g.P("}")
 }
 
-func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protogen.Field) {
+func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protogen.Field, oneof bool) {
 	fieldname := field.GoName
 	nullable := field.Message != nil || (field.Oneof != nil && field.Oneof.Desc.IsSynthetic())
 	repeated := field.Desc.Cardinality() == protoreflect.Repeated
-	if repeated {
+	if repeated && !oneof {
 		g.P(`if len(x.`, fieldname, `) > 0 {`)
-	} else if nullable {
+	} else if nullable && !oneof {
 		g.P(`if x.`, fieldname, ` != nil {`)
 	}
 	packed := field.Desc.IsPacked()
@@ -134,10 +134,14 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 			g.encodeFixed64(g.Ident("math", "Float64bits"), `(float64(*x.`+fieldname, `))`)
 			g.encodeKey(fieldNumber, wireType)
 		} else if proto3 {
-			g.P(`if x.`, fieldname, ` != 0 || `, mathPackage.Ident("Signbit"), `(x.`, fieldname, `) {`)
+			if !oneof {
+				g.P(`if x.`, fieldname, ` != 0 || `, mathPackage.Ident("Signbit"), `(x.`, fieldname, `) {`)
+			}
 			g.encodeFixed64(g.Ident("math", "Float64bits"), `(float64(x.`, fieldname, `))`)
 			g.encodeKey(fieldNumber, wireType)
-			g.P(`}`)
+			if !oneof {
+				g.P(`}`)
+			}
 		} else {
 			g.encodeFixed64(g.Ident("math", "Float64bits"), `(float64(x.`+fieldname, `))`)
 			g.encodeKey(fieldNumber, wireType)
@@ -160,10 +164,14 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 			g.encodeFixed32(g.Ident("math", "Float32bits"), `(float32(*x.`+fieldname, `))`)
 			g.encodeKey(fieldNumber, wireType)
 		} else if proto3 {
-			g.P(`if x.`, fieldname, ` != 0 || `, mathPackage.Ident("Signbit"), `(float64(x.`, fieldname, `)) {`)
+			if !oneof {
+				g.P(`if x.`, fieldname, ` != 0 || `, mathPackage.Ident("Signbit"), `(float64(x.`, fieldname, `)) {`)
+			}
 			g.encodeFixed32(g.Ident("math", "Float32bits"), `(float32(x.`+fieldname, `))`)
 			g.encodeKey(fieldNumber, wireType)
-			g.P(`}`)
+			if !oneof {
+				g.P(`}`)
+			}
 		} else {
 			g.encodeFixed32(g.Ident("math", "Float32bits"), `(float32(x.`+fieldname, `))`)
 			g.encodeKey(fieldNumber, wireType)
@@ -208,10 +216,14 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 			g.encodeVarint(`*x.`, fieldname)
 			g.encodeKey(fieldNumber, wireType)
 		} else if proto3 {
-			g.P(`if x.`, fieldname, ` != 0 {`)
+			if !oneof {
+				g.P(`if x.`, fieldname, ` != 0 {`)
+			}
 			g.encodeVarint(`x.`, fieldname)
 			g.encodeKey(fieldNumber, wireType)
-			g.P(`}`)
+			if !oneof {
+				g.P(`}`)
+			}
 		} else {
 			g.encodeVarint(`x.`, fieldname)
 			g.encodeKey(fieldNumber, wireType)
@@ -232,10 +244,14 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 			g.encodeFixed64("*x.", fieldname)
 			g.encodeKey(fieldNumber, wireType)
 		} else if proto3 {
-			g.P(`if x.`, fieldname, ` != 0 {`)
+			if !oneof {
+				g.P(`if x.`, fieldname, ` != 0 {`)
+			}
 			g.encodeFixed64("x.", fieldname)
 			g.encodeKey(fieldNumber, wireType)
-			g.P(`}`)
+			if !oneof {
+				g.P(`}`)
+			}
 		} else {
 			g.encodeFixed64("x.", fieldname)
 			g.encodeKey(fieldNumber, wireType)
@@ -256,10 +272,14 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 			g.encodeFixed32("*x." + fieldname)
 			g.encodeKey(fieldNumber, wireType)
 		} else if proto3 {
-			g.P(`if x.`, fieldname, ` != 0 {`)
+			if !oneof {
+				g.P(`if x.`, fieldname, ` != 0 {`)
+			}
 			g.encodeFixed32("x." + fieldname)
 			g.encodeKey(fieldNumber, wireType)
-			g.P(`}`)
+			if !oneof {
+				g.P(`}`)
+			}
 		} else {
 			g.encodeFixed32("x." + fieldname)
 			g.encodeKey(fieldNumber, wireType)
@@ -295,7 +315,9 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 			g.P(`}`)
 			g.encodeKey(fieldNumber, wireType)
 		} else if proto3 {
-			g.P(`if x.`, fieldname, ` {`)
+			if !oneof {
+				g.P(`if x.`, fieldname, ` {`)
+			}
 			g.P(`i--`)
 			g.P(`if x.`, fieldname, ` {`)
 			g.P(`dAtA[i] = 1`)
@@ -303,7 +325,9 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 			g.P(`dAtA[i] = 0`)
 			g.P(`}`)
 			g.encodeKey(fieldNumber, wireType)
-			g.P(`}`)
+			if !oneof {
+				g.P(`}`)
+			}
 		} else {
 			g.P(`i--`)
 			g.P(`if x.`, fieldname, ` {`)
@@ -327,12 +351,16 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 			g.encodeVarint(`len(*x.`, fieldname, `)`)
 			g.encodeKey(fieldNumber, wireType)
 		} else if proto3 {
-			g.P(`if len(x.`, fieldname, `) > 0 {`)
+			if !oneof {
+				g.P(`if len(x.`, fieldname, `) > 0 {`)
+			}
 			g.P(`i -= len(x.`, fieldname, `)`)
 			g.P(`copy(dAtA[i:], x.`, fieldname, `)`)
 			g.encodeVarint(`len(x.`, fieldname, `)`)
 			g.encodeKey(fieldNumber, wireType)
-			g.P(`}`)
+			if !oneof {
+				g.P(`}`)
+			}
 		} else {
 			g.P(`i -= len(x.`, fieldname, `)`)
 			g.P(`copy(dAtA[i:], x.`, fieldname, `)`)
@@ -377,7 +405,12 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 			g.P(keysName, ` = append(`, keysName, `, `, goTypK, `(k))`)
 			g.P(`}`)
 			g.P(g.Ident("sort", "Slice"), `(`, keysName, `, func(i, j int) bool {`)
-			g.P(`return `, keysName, `[i] < `, keysName, `[j]`)
+			switch keyKind {
+			case protoreflect.BoolKind:
+				g.P("return !", keysName, "[i] && ", keysName, "[j]")
+			default:
+				g.P(`return `, keysName, `[i] < `, keysName, `[j]`)
+			}
 			g.P(`})`)
 			val = g.reverseListRange(keysName)
 			g.P(`v := x.`, fieldname, `[`, goTypK, `(`, val, `)]`)
@@ -415,12 +448,16 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 			g.encodeKey(fieldNumber, wireType)
 			g.P(`}`)
 		} else if proto3 {
-			g.P(`if len(x.`, fieldname, `) > 0 {`)
+			if !oneof {
+				g.P(`if len(x.`, fieldname, `) > 0 {`)
+			}
 			g.P(`i -= len(x.`, fieldname, `)`)
 			g.P(`copy(dAtA[i:], x.`, fieldname, `)`)
 			g.encodeVarint(`len(x.`, fieldname, `)`)
 			g.encodeKey(fieldNumber, wireType)
-			g.P(`}`)
+			if !oneof {
+				g.P(`}`)
+			}
 		} else {
 			g.P(`i -= len(x.`, fieldname, `)`)
 			g.P(`copy(dAtA[i:], x.`, fieldname, `)`)
@@ -463,10 +500,14 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 			g.encodeVarint(`(uint32(*x.`, fieldname, `) << 1) ^ uint32((*x.`, fieldname, ` >> 31))`)
 			g.encodeKey(fieldNumber, wireType)
 		} else if proto3 {
-			g.P(`if x.`, fieldname, ` != 0 {`)
+			if !oneof {
+				g.P(`if x.`, fieldname, ` != 0 {`)
+			}
 			g.encodeVarint(`(uint32(x.`, fieldname, `) << 1) ^ uint32((x.`, fieldname, ` >> 31))`)
 			g.encodeKey(fieldNumber, wireType)
-			g.P(`}`)
+			if !oneof {
+				g.P(`}`)
+			}
 		} else {
 			g.encodeVarint(`(uint32(x.`, fieldname, `) << 1) ^ uint32((x.`, fieldname, ` >> 31))`)
 			g.encodeKey(fieldNumber, wireType)
@@ -478,7 +519,7 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 
 			g.P(`var `, total, ` int`)
 			g.P(`for _, num := range x.`, fieldname, ` {`)
-			g.P(total, ` += soz(uint64(num))`)
+			g.P(total, ` += `, runtimePackage.Ident("Soz"), `(uint64(num))`)
 			g.P(`}`)
 			g.P(`i -= `, total)
 			g.P(jvar, `:= i`)
@@ -507,10 +548,14 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 			g.encodeVarint(`(uint64(*x.`, fieldname, `) << 1) ^ uint64((*x.`, fieldname, ` >> 63))`)
 			g.encodeKey(fieldNumber, wireType)
 		} else if proto3 {
-			g.P(`if x.`, fieldname, ` != 0 {`)
+			if !oneof {
+				g.P(`if x.`, fieldname, ` != 0 {`)
+			}
 			g.encodeVarint(`(uint64(x.`, fieldname, `) << 1) ^ uint64((x.`, fieldname, ` >> 63))`)
 			g.encodeKey(fieldNumber, wireType)
-			g.P(`}`)
+			if !oneof {
+				g.P(`}`)
+			}
 		} else {
 			g.encodeVarint(`(uint64(x.`, fieldname, `) << 1) ^ uint64((x.`, fieldname, ` >> 63))`)
 			g.encodeKey(fieldNumber, wireType)
@@ -518,7 +563,7 @@ func (g *fastGenerator) marshalField(proto3 bool, numGen *counter, field *protog
 	default:
 		panic("not implemented")
 	}
-	if repeated || nullable {
+	if (repeated || nullable) && !oneof {
 		g.P(`}`)
 	}
 }

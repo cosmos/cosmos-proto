@@ -124,8 +124,13 @@ func (g *listGen) genTruncate() {
 // genNewElement generates the protoreflect.List.NewElement implementation
 func (g *listGen) genNewElement() {
 	g.P("func (x *", g.typeName, ") NewElement() ", protoreflectPkg.Ident("Value"), "{")
-	zeroValue := zeroValueForField(g.GeneratedFile, g.field)
-	g.P("v := ", zeroValue)
+	switch g.field.Desc.Kind() {
+	case protoreflect.BytesKind:
+		g.P("var v []byte")
+	default:
+		zeroValue := zeroValueForField(g.GeneratedFile, g.field)
+		g.P("v := ", zeroValue)
+	}
 	switch g.field.Desc.Kind() {
 	case protoreflect.MessageKind:
 		g.P("return ", kindToValueConstructor(g.field.Desc.Kind()), "(v.ProtoReflect())")

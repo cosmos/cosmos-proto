@@ -48,7 +48,7 @@ func (p *pool) message(message *protogen.Message) {
 	p.P(`},`)
 	p.P(`}`)
 
-	p.P(`func (m *`, ccTypeName, `) ResetVT() {`)
+	p.P(`func (x *`, ccTypeName, `) ResetVT() {`)
 	var saved []*protogen.Field
 	for _, field := range message.Fields {
 		fieldName := field.GoName
@@ -57,35 +57,35 @@ func (p *pool) message(message *protogen.Message) {
 			switch field.Desc.Kind() {
 			case protoreflect.MessageKind, protoreflect.GroupKind:
 				if p.ShouldPool(field.Message) {
-					p.P(`for _, mm := range m.`, fieldName, `{`)
+					p.P(`for _, mm := range x.`, fieldName, `{`)
 					p.P(`mm.ResetVT()`)
 					p.P(`}`)
 				}
 			}
-			p.P(fmt.Sprintf("f%d", len(saved)), ` := m.`, fieldName, `[:0]`)
+			p.P(fmt.Sprintf("f%d", len(saved)), ` := x.`, fieldName, `[:0]`)
 			saved = append(saved, field)
 		} else {
 			switch field.Desc.Kind() {
 			case protoreflect.MessageKind, protoreflect.GroupKind:
 				if p.ShouldPool(field.Message) {
-					p.P(`m.`, fieldName, `.ReturnToVTPool()`)
+					p.P(`x.`, fieldName, `.ReturnToVTPool()`)
 				}
 			case protoreflect.BytesKind:
-				p.P(fmt.Sprintf("f%d", len(saved)), ` := m.`, fieldName, `[:0]`)
+				p.P(fmt.Sprintf("f%d", len(saved)), ` := x.`, fieldName, `[:0]`)
 				saved = append(saved, field)
 			}
 		}
 	}
 
-	p.P(`m.Reset()`)
+	p.P(`x.Reset()`)
 	for i, field := range saved {
-		p.P(`m.`, field.GoName, ` = `, fmt.Sprintf("f%d", i))
+		p.P(`x.`, field.GoName, ` = `, fmt.Sprintf("f%d", i))
 	}
 	p.P(`}`)
 
-	p.P(`func (m *`, ccTypeName, `) ReturnToVTPool() {`)
-	p.P(`if m != nil {`)
-	p.P(`m.ResetVT()`)
+	p.P(`func (x *`, ccTypeName, `) ReturnToVTPool() {`)
+	p.P(`if x != nil {`)
+	p.P(`x.ResetVT()`)
 	p.P(`vtprotoPool_`, ccTypeName, `.Put(m)`)
 	p.P(`}`)
 	p.P(`}`)

@@ -1600,9 +1600,9 @@ func genMessageGetterMethods(g *generator.GeneratedFile, f *fileInfo, m *message
 		// Getter for parent oneof.
 		if oneof := field.Oneof; oneof != nil && oneof.Fields[0] == field && !oneof.Desc.IsSynthetic() {
 			g.Annotate(m.GoIdent.GoName+".Get"+oneof.GoName, oneof.Location)
-			g.P("func (m *", m.GoIdent.GoName, ") Get", oneof.GoName, "() ", oneofInterfaceName(oneof), " {")
-			g.P("if m != nil {")
-			g.P("return m.", oneof.GoName)
+			g.P("func (x *", m.GoIdent.GoName, ") Get", oneof.GoName, "() ", oneofInterfaceName(oneof), " {")
+			g.P("if x != nil {")
+			g.P("return x.", oneof.GoName)
 			g.P("}")
 			g.P("return nil")
 			g.P("}")
