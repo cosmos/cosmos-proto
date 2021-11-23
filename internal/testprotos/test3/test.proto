@@ -10,21 +10,22 @@ import "internal/testprotos/test3/test_import.proto";
 
 option go_package = "github.com/cosmos/cosmos-proto/internal/testprotos/test3";
 
-// NestedMessage should eventually become nested when fast-reflection supports it
-message NestedMessage {
-  int32 a = 1;
-  TestAllTypes corecursive = 2;
-}
-
-// NestedEnum should eventually become nested when fast-reflection supports it.
-enum NestedEnum {
-  FOO = 0;
-  BAR = 1;
-  BAZ = 2;
-  NEG = -1;  // Intentionally negative.
-}
-
 message TestAllTypes {
+
+  // NestedMessage should eventually become nested when fast-reflection supports it
+  message NestedMessage {
+    int32 a = 1;
+    TestAllTypes corecursive = 2;
+  }
+
+  // NestedEnum should eventually become nested when fast-reflection supports it.
+  enum NestedEnum {
+    FOO = 0;
+    BAR = 1;
+    BAZ = 2;
+    NEG = -1;  // Intentionally negative.
+  }
+
 
   int32         singular_int32    = 81;
   int64         singular_int64    = 82;

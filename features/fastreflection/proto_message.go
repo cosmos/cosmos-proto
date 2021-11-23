@@ -21,6 +21,18 @@ const (
 )
 
 func GenProtoMessage(f *protogen.File, g *generator.GeneratedFile, message *protogen.Message) {
+	genMessage(f, g, message)
+	// check for message declarations within a message declaration
+	for _, nested := range message.Messages {
+		// map entries are defines as messages, but we don't want to generate those.
+		if nested.Desc.IsMapEntry() {
+			continue
+		}
+		genMessage(f, g, nested)
+	}
+}
+
+func genMessage(f *protogen.File, g *generator.GeneratedFile, message *protogen.Message) {
 	gen := newGenerator(f, g, message)
 	gen.generateExtraTypes()
 	gen.generateReflectionType()
