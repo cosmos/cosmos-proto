@@ -3,6 +3,7 @@ package fastreflection
 import (
 	"fmt"
 	"github.com/cosmos/cosmos-proto/generator"
+	"google.golang.org/protobuf/reflect/protoreflect"
 
 	"github.com/cosmos/cosmos-proto/features/fastreflection/copied"
 	"google.golang.org/protobuf/compiler/protogen"
@@ -24,7 +25,14 @@ func (g *descGen) generate() {
 	g.P(")")
 	g.P("func init() {")
 	g.P(copied.InitFunctionName(g.file), "()")
-	g.P(messageDescriptorName(g.message), " = ", g.file.GoDescriptorIdent.GoName, ".Messages().ByName(\"", g.message.Desc.Name(), "\")")
+	parentMd, ok := g.message.Desc.Parent().(protoreflect.MessageDescriptor)
+	switch ok {
+	// case embedded
+	case true:
+		g.P(messageDescriptorName(g.message), " = ", g.file.GoDescriptorIdent.GoName, ".Messages().ByName(\"", parentMd.Name(), "\").Messages().ByName(\"", g.message.Desc.Name(), "\")")
+	default:
+		g.P(messageDescriptorName(g.message), " = ", g.file.GoDescriptorIdent.GoName, ".Messages().ByName(\"", g.message.Desc.Name(), "\")")
+	}
 	for _, field := range g.message.Fields {
 		g.P(fieldDescriptorName(field), " = ", messageDescriptorName(g.message), ".Fields().ByName(\"", field.Desc.Name(), "\")")
 	}

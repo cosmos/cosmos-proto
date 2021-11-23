@@ -29,7 +29,7 @@ func TestMarshalUnmarshal(t *testing.T) {
 
 // TestZeroValueOneofIsMarshalled tests that zero values in oneofs are marshalled
 func TestZeroValueOneofIsMarshalled(t *testing.T) {
-	msg1 := &TestAllTypes{OneofField: &TestAllTypes_OneofEnum{OneofEnum: NestedEnum_FOO}}
+	msg1 := &TestAllTypes{OneofField: &TestAllTypes_OneofEnum{OneofEnum: TestAllTypes_FOO}}
 	b, err := proto.Marshal(msg1)
 	require.NoError(t, err)
 

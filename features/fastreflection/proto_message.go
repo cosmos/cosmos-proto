@@ -21,6 +21,16 @@ const (
 )
 
 func GenProtoMessage(f *protogen.File, g *generator.GeneratedFile, message *protogen.Message) {
+	genMessage(f, g, message)
+	for _, embedded := range message.Messages {
+		if embedded.Desc.IsMapEntry() {
+			continue
+		}
+		genMessage(f, g, embedded)
+	}
+}
+
+func genMessage(f *protogen.File, g *generator.GeneratedFile, message *protogen.Message) {
 	gen := newGenerator(f, g, message)
 	gen.generateExtraTypes()
 	gen.generateReflectionType()
