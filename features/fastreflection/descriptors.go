@@ -27,7 +27,7 @@ func (g *descGen) generate() {
 	g.P(copied.InitFunctionName(g.file), "()")
 	parentMd, ok := g.message.Desc.Parent().(protoreflect.MessageDescriptor)
 	switch ok {
-	// case embedded
+	// case nested message 
 	case true:
 		g.P(messageDescriptorName(g.message), " = ", g.file.GoDescriptorIdent.GoName, ".Messages().ByName(\"", parentMd.Name(), "\").Messages().ByName(\"", g.message.Desc.Name(), "\")")
 	default:
