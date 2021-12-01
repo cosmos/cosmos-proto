@@ -14,4 +14,4 @@ NAME_OF_FILE.proto
 
 ## Acknowledgements
 
-[planetscale/vtprotobuf](https://github.com/planetscale/vtprotobuf)
+Code for marshal, unmarshal, and size implemented by [planetscale/vtprotobuf](https://github.com/planetscale/vtprotobuf) used in our `ProtoMethods` implementation. 
