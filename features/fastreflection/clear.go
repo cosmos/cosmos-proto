@@ -51,7 +51,12 @@ func (g *clearGen) genField(field *protogen.Field) {
 		return
 	}
 
-	g.P("x.", field.GoName, " = ", zeroValueForField(nil, field))
+	switch {
+	case isCustomType(field):
+		g.P("x.", field.GoName, ".Clear()")
+	default:
+		g.P("x.", field.GoName, " = ", zeroValueForField(nil, field))
+	}
 }
 
 func (g *clearGen) genNullable(field *protogen.Field) {

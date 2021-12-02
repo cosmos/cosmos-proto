@@ -53,6 +53,11 @@ func (g *getGen) genFieldGetter(field *protogen.Field) {
 		return
 	}
 
+	if isCustomType(field) {
+		g.P("return x.", field.GoName, ".Get()")
+		return
+	}
+
 	fieldRef := "x." + field.GoName
 	g.P("value := ", fieldRef)
 	switch field.Desc.Kind() {

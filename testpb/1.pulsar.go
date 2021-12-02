@@ -3,7 +3,6 @@ package testpb
 import (
 	binary "encoding/binary"
 	fmt "fmt"
-	_ "github.com/cosmos/cosmos-proto"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
@@ -547,7 +546,7 @@ func (x *fastReflection_A) Has(fd protoreflect.FieldDescriptor) bool {
 	case "A.imported":
 		return x.Imported != nil
 	case "A.custom_type":
-		return x.CustomType != ""
+		return x.CustomType.IsSet()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -611,7 +610,7 @@ func (x *fastReflection_A) Clear(fd protoreflect.FieldDescriptor) {
 	case "A.imported":
 		x.Imported = nil
 	case "A.custom_type":
-		x.CustomType = ""
+		x.CustomType.Clear()
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -717,8 +716,7 @@ func (x *fastReflection_A) Get(descriptor protoreflect.FieldDescriptor) protoref
 		value := x.Imported
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "A.custom_type":
-		value := x.CustomType
-		return protoreflect.ValueOfString(value)
+		return x.CustomType.Get()
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -794,7 +792,7 @@ func (x *fastReflection_A) Set(fd protoreflect.FieldDescriptor, value protorefle
 	case "A.imported":
 		x.Imported = value.Message().Interface().(*descriptorpb.FileDescriptorProto)
 	case "A.custom_type":
-		x.CustomType = value.Interface().(string)
+		x.CustomType.Set(value)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -2917,7 +2915,7 @@ func (x *A) GetCustomType() *Int {
 	if x != nil {
 		return x.CustomType
 	}
-	return ""
+	return nil
 }
 
 type isA_ONEOF interface {

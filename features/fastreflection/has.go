@@ -60,6 +60,11 @@ func (g *hasGen) genField(field *protogen.Field) {
 		return
 	}
 
+	if isCustomType(field) {
+		g.P("return x.", field.GoName, ".IsSet()")
+		return
+	}
+
 	switch field.Desc.Kind() {
 	case protoreflect.FloatKind:
 		g.P("return x.", field.GoName, " != ", zeroValueForField(nil, field), " || ", mathPkg.Ident("Signbit"), "(float64(x.", field.GoName, "))")

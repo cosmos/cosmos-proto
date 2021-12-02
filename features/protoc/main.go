@@ -1749,6 +1749,9 @@ func fieldDefaultValue(g *generator.GeneratedFile, f *fileInfo, m *messageInfo, 
 		}
 		return defVarName
 	}
+	if isCustomType(field) {
+		return "nil"
+	}
 	switch field.Desc.Kind() {
 	case protoreflect.BoolKind:
 		return "false"

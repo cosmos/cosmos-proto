@@ -41,17 +41,19 @@ func (g *setGen) genComment() {
 }
 
 func (g *setGen) genField(field *protogen.Field) {
-	if field.Oneof != nil {
-		g.genOneof(field)
-		return
-	}
 
 	switch {
+	case field.Oneof != nil:
+		g.genOneof(field)
+		return
 	case field.Desc.IsMap():
 		g.genMap(field)
 		return
 	case field.Desc.IsList():
 		g.genList(field)
+		return
+	case isCustomType(field):
+		g.P("x.", field.GoName, ".Set(value)")
 		return
 	}
 
