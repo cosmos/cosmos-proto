@@ -12,7 +12,7 @@ import (
 type CustomType interface {
 	UnmarshalBytes(in protoiface.UnmarshalInput, b []byte) (out protoiface.UnmarshalOutput, err error)
 	MarshalBytes(in protoiface.MarshalOutput) (out protoiface.MarshalOutput, err error)
-	Size(in protoiface.SizeInput) (out protoiface.SizeOutput, err error)
+	Size(in protoiface.SizeInput) (out protoiface.SizeOutput)
 	Set(value protoreflect.Value)
 	Get(value protoreflect.Value)
 	Clear()
