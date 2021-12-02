@@ -5,5 +5,5 @@ managed:
     default: github.com/cosmos/cosmos-proto
 plugins:
   - name: go-pulsar
-    out: ..
+    out: .
     opt: paths=source_relative
