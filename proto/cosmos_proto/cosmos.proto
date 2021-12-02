@@ -22,7 +22,10 @@ extend google.protobuf.FieldOptions {
     // Interfaces should be declared using a declare_interface file option.
     optional string accepts_interface = 93001;
 
-    // scalar indicates the cosmos scalar type representing the field.
+    // scalar is used to indicate that this field follows the formatting defined
+    // by the named scalar which should be declared with declare_scalar. Code
+    // generators may choose to use this information to map this field to a
+    // language-specific type representing the scalar.
     optional string scalar = 93002;
 }
 
