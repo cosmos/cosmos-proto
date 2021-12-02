@@ -37,7 +37,7 @@ message A {
   repeated Enumeration LIST_ENUM = 22;
   google.protobuf.FileDescriptorProto imported = 23;
 
-  string custom_type = 24 [(cosmos_proto.go_type) = "CustomType"];
+  string custom_type = 24 [(cosmos_proto.go_type) = "Int"];
 }
 
 message B {

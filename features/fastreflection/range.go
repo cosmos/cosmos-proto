@@ -1,8 +1,10 @@
 package fastreflection
 
 import (
+	"github.com/cosmos/cosmos-proto/cosmos_proto"
 	"github.com/cosmos/cosmos-proto/generator"
 	"google.golang.org/protobuf/compiler/protogen"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
@@ -40,6 +42,13 @@ func (g *rangeGen) genField(field *protogen.Field) {
 	}
 
 	switch {
+	case isCustomType(field):
+		g.P("if x.", field.GoName, ".IsSet() {")
+		g.P("value := x.", field.GoName, ".Get()")
+		g.P("if !f(", fieldDescriptorName(field), ", value) {")
+		g.P("return")
+		g.P("}")
+		g.P("}")
 	case field.Desc.IsMap():
 		g.P("if len(x.", field.GoName, ") != 0 {")
 		g.P("value := ", protoreflectPkg.Ident("ValueOfMap"), "(&", mapTypeName(field), "{m: &x.", field.GoName, "})")
@@ -95,6 +104,10 @@ func (g *rangeGen) genField(field *protogen.Field) {
 		g.P("}")
 		g.P("}")
 	}
+}
+
+func isCustomType(field *protogen.Field) bool {
+	return proto.GetExtension(field.Desc.Options(), cosmos_proto.E_GoType).(string) != ""
 }
 
 func (g *rangeGen) genOneof(field *protogen.Field) {

@@ -14,7 +14,7 @@ type CustomType interface {
 	MarshalBytes(in protoiface.MarshalOutput) (out protoiface.MarshalOutput, err error)
 	Size(in protoiface.SizeInput) (out protoiface.SizeOutput)
 	Set(value protoreflect.Value)
-	Get(value protoreflect.Value)
+	Get() protoreflect.Value
 	Clear()
 	IsSet() bool
 	Mutable() protoreflect.Value
