@@ -5,5 +5,5 @@ managed:
     default: github.com/cosmos/cosmos-proto/proto
 plugins:
   - name: go
-    out: ..
+    out: .
     opt: paths=source_relative
