@@ -22,7 +22,7 @@ extend google.protobuf.FieldOptions {
     // Interfaces should be declared using a declare_interface file option.
     optional string accepts_interface = 93001;
 
-    // scalar indicates the
+    // scalar indicates the cosmos scalar type representing the field.
     optional string scalar = 93002;
 }
 
