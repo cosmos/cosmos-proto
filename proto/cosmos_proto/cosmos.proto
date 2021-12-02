@@ -15,4 +15,8 @@ extend google.protobuf.FieldOptions {
     string accepts_interface = 93001;
     // scalar is used to define scalar types
     string scalar = 93002;
+
+    // go_type defines a custom go type for the field.
+    // NOTE: it is not valid for repeated and map fields.
+    string go_type = 93003;
 }

@@ -1688,6 +1688,11 @@ func fieldGoType(g *generator.GeneratedFile, f *fileInfo, field *protogen.Field)
 	}
 
 	pointer = field.Desc.HasPresence()
+	if isCustomType(field) {
+		goType = customFieldType(g, field)
+		return
+	}
+
 	switch field.Desc.Kind() {
 	case protoreflect.BoolKind:
 		goType = "bool"

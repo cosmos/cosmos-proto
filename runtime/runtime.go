@@ -3,10 +3,22 @@ package runtime
 import (
 	"fmt"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/runtime/protoiface"
 	"io"
 	"math/bits"
 )
+
+type CustomType interface {
+	UnmarshalBytes(in protoiface.UnmarshalInput, b []byte) (out protoiface.UnmarshalOutput, err error)
+	MarshalBytes(in protoiface.MarshalOutput) (out protoiface.MarshalOutput, err error)
+	Size(in protoiface.SizeInput) (out protoiface.SizeOutput, err error)
+	Set(value protoreflect.Value)
+	Get(value protoreflect.Value)
+	Clear()
+	IsSet() bool
+	Mutable() protoreflect.Value
+}
 
 func Sov(x uint64) (n int) {
 	return (bits.Len64(x|1) + 6) / 7
