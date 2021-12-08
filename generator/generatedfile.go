@@ -6,9 +6,7 @@ package generator
 
 import (
 	"fmt"
-	vtproto "github.com/cosmos/cosmos-proto/pulsarproto"
 	"google.golang.org/protobuf/compiler/protogen"
-	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
@@ -20,28 +18,6 @@ type GeneratedFile struct {
 
 func (p *GeneratedFile) Ident(path, ident string) string {
 	return p.QualifiedGoIdent(protogen.GoImportPath(path).Ident(ident))
-}
-
-func (b *GeneratedFile) ShouldPool(message *protogen.Message) bool {
-	if message == nil {
-		return false
-	}
-	if b.Ext.Poolable[message.GoIdent] {
-		return true
-	}
-	ext := proto.GetExtension(message.Desc.Options(), vtproto.E_Mempool)
-	if mempool, ok := ext.(bool); ok {
-		return mempool
-	}
-	return false
-}
-
-func (b *GeneratedFile) Alloc(vname string, message *protogen.Message) {
-	if b.ShouldPool(message) {
-		b.P(vname, " := ", message.GoIdent, `FromVTPool()`)
-	} else {
-		b.P(vname, " := new(", message.GoIdent, `)`)
-	}
 }
 
 func (p *GeneratedFile) FieldGoType(field *protogen.Field) (goType string, pointer bool) {
