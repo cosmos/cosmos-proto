@@ -3,14 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
+	generator2 "github.com/cosmos/cosmos-proto/internal/generator"
 	"strings"
 
-	_ "github.com/cosmos/cosmos-proto/features/fastreflection"
-	_ "github.com/cosmos/cosmos-proto/features/grpc"
-	_ "github.com/cosmos/cosmos-proto/features/pool"
-	_ "github.com/cosmos/cosmos-proto/features/protoc"
-	"github.com/cosmos/cosmos-proto/generator"
-
+	_ "github.com/cosmos/cosmos-proto/internal/features/fastreflection"
+	_ "github.com/cosmos/cosmos-proto/internal/features/protoc"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/types/pluginpb"
 )
@@ -51,8 +48,8 @@ func main() {
 var SupportedFeatures = uint64(pluginpb.CodeGeneratorResponse_FEATURE_PROTO3_OPTIONAL)
 
 func generateAllFiles(plugin *protogen.Plugin, featureNames []string, poolable ObjectSet) error {
-	ext := &generator.Extensions{Poolable: poolable}
-	gen, err := generator.NewGenerator(plugin.Files, featureNames, ext)
+	ext := &generator2.Extensions{Poolable: poolable}
+	gen, err := generator2.NewGenerator(plugin.Files, featureNames, ext)
 	if err != nil {
 		return err
 	}

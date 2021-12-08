@@ -1,4 +1,4 @@
-DIRECTORIES_TO_BUILD := "./testpb ./internal/testprotos/test3"
+DIRECTORIES_TO_BUILD := "./internal/testpb ./internal/testprotos/test3"
 
 pulsar:
 	docker build -t dev:proto-build -f Dockerfile .
