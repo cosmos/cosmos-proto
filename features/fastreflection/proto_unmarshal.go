@@ -187,11 +187,7 @@ func (g *fastGenerator) unmarshalField(field *protogen.Field, message *protogen.
 			g.P(`elementCount = packedLen`)
 		}
 
-		if g.ShouldPool(message) {
-			g.P(`if elementCount != 0 && len(x.`, fieldname, `) == 0 && cap(x.`, fieldname, `) < elementCount {`)
-		} else {
-			g.P(`if elementCount != 0 && len(x.`, fieldname, `) == 0 {`)
-		}
+		g.P(`if elementCount != 0 && len(x.`, fieldname, `) == 0 {`)
 
 		fieldtyp, _ := g.FieldGoType(field)
 		g.P(`x.`, fieldname, ` = make(`, fieldtyp, `, 0, elementCount)`)
@@ -444,28 +440,14 @@ func (g *fastGenerator) fieldItem(field *protogen.Field, fieldname string, messa
 			g.P(`}`)
 			g.P(`x.`, fieldname, `[mapkey] = mapvalue`)
 		} else if repeated {
-			if g.ShouldPool(message) {
-				g.P(`if len(x.`, fieldname, `) == cap(x.`, fieldname, `) {`)
-				g.P(`x.`, fieldname, ` = append(x.`, fieldname, `, &`, field.Message.GoIdent, `{})`)
-				g.P(`} else {`)
-				g.P(`x.`, fieldname, ` = x.`, fieldname, `[:len(x.`, fieldname, `) + 1]`)
-				g.P(`if x.`, fieldname, `[len(x.`, fieldname, `) - 1] == nil {`)
-				g.P(`x.`, fieldname, `[len(x.`, fieldname, `) - 1] = &`, field.Message.GoIdent, `{}`)
-				g.P(`}`)
-				g.P(`}`)
-			} else {
-				g.P(`x.`, fieldname, ` = append(x.`, fieldname, `, &`, field.Message.GoIdent, `{})`)
-			}
+			g.P(`x.`, fieldname, ` = append(x.`, fieldname, `, &`, field.Message.GoIdent, `{})`)
+
 			varname := fmt.Sprintf("x.%s[len(x.%s) - 1]", fieldname, fieldname)
 			buf := `dAtA[iNdEx:postIndex]`
 			g.decodeMessage(varname, buf, field.Message)
 		} else {
 			g.P(`if x.`, fieldname, ` == nil {`)
-			if g.ShouldPool(message) && g.ShouldPool(field.Message) {
-				g.P(`x.`, fieldname, ` = `, field.Message.GoIdent, `FromVTPool()`)
-			} else {
-				g.P(`x.`, fieldname, ` = &`, field.Message.GoIdent, `{}`)
-			}
+			g.P(`x.`, fieldname, ` = &`, field.Message.GoIdent, `{}`)
 			g.P(`}`)
 			g.decodeMessage("x."+fieldname, "dAtA[iNdEx:postIndex]", field.Message)
 		}
