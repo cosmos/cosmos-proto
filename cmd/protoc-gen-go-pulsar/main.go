@@ -118,7 +118,7 @@ func rewriteMessageField(message *protogen.Message, processed map[protoreflect.F
 		if !reserved {
 			continue
 		}
-		log.Printf("Message %s contains the reserved field name %s which conflicts with protoreflect.Message interface implementation.\nThis field will be suffixed with an underscore '_'.\nIf you can change the message field name, please do so.\nIn a future iteration of pulsar we will make a breaking change to this practice in order to be compliant with field naming of the original golang protobuf implementation.", message.Desc.FullName(), field.Desc.FullName())
+		log.Printf("Message %s contains the reserved field name %s which conflicts with protoreflect.Message interface implementation.\nThis field will be suffixed with an underscore '_'.\nIf you can change the message field name, please do so.\nIn a future iteration of pulsar we may make a breaking change to this practice in order to be compliant with field naming of the original golang protobuf implementation.", message.Desc.FullName(), field.Desc.FullName())
 		field.GoName = field.GoName + "_"
 	}
 	processed[message.Desc.FullName()] = struct{}{}
