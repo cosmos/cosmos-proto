@@ -1,8 +1,8 @@
 syntax="proto3";
 
-option go_package = "github.com/cosmos/cosmos-proto/testpb";
+import "testpb/2.proto";
 
-import "google/protobuf/descriptor.proto";
+option go_package = "github.com/cosmos/cosmos-proto/testpb";
 
 enum Enumeration {
   One = 0;
@@ -34,7 +34,8 @@ message A {
     string ONEOF_STRING = 21;
   };
   repeated Enumeration LIST_ENUM = 22;
-  google.protobuf.FileDescriptorProto imported = 23;
+  ImportedMessage imported = 23;
+  string type = 24;
 }
 
 message B {
