@@ -28,7 +28,7 @@ func GenProtoMessage(f *protogen.File, g *generator.GeneratedFile, message *prot
 		if nested.Desc.IsMapEntry() {
 			continue
 		}
-		genMessage(f, g, nested)
+		GenProtoMessage(f, g, nested)
 	}
 }
 
