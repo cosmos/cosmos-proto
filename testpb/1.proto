@@ -1,5 +1,7 @@
 syntax="proto3";
 
+import "testpb/2.proto";
+
 option go_package = "github.com/cosmos/cosmos-proto/testpb";
 
 enum Enumeration {
@@ -32,6 +34,8 @@ message A {
     string ONEOF_STRING = 21;
   };
   repeated Enumeration LIST_ENUM = 22;
+  ImportedMessage imported = 23;
+  string type = 24;
 }
 
 message B {

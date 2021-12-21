@@ -225,6 +225,8 @@ var (
 	fd_A_ONEOF_B      protoreflect.FieldDescriptor
 	fd_A_ONEOF_STRING protoreflect.FieldDescriptor
 	fd_A_LIST_ENUM    protoreflect.FieldDescriptor
+	fd_A_imported     protoreflect.FieldDescriptor
+	fd_A_type         protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -252,6 +254,8 @@ func init() {
 	fd_A_ONEOF_B = md_A.Fields().ByName("ONEOF_B")
 	fd_A_ONEOF_STRING = md_A.Fields().ByName("ONEOF_STRING")
 	fd_A_LIST_ENUM = md_A.Fields().ByName("LIST_ENUM")
+	fd_A_imported = md_A.Fields().ByName("imported")
+	fd_A_type = md_A.Fields().ByName("type")
 }
 
 var _ protoreflect.Message = (*fastReflection_A)(nil)
@@ -455,6 +459,18 @@ func (x *fastReflection_A) Range(f func(protoreflect.FieldDescriptor, protorefle
 			return
 		}
 	}
+	if x.Imported != nil {
+		value := protoreflect.ValueOfMessage(x.Imported.ProtoReflect())
+		if !f(fd_A_imported, value) {
+			return
+		}
+	}
+	if x.Type_ != "" {
+		value := protoreflect.ValueOfString(x.Type_)
+		if !f(fd_A_type, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -526,6 +542,10 @@ func (x *fastReflection_A) Has(fd protoreflect.FieldDescriptor) bool {
 		}
 	case "A.LIST_ENUM":
 		return len(x.LIST_ENUM) != 0
+	case "A.imported":
+		return x.Imported != nil
+	case "A.type":
+		return x.Type_ != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -586,6 +606,10 @@ func (x *fastReflection_A) Clear(fd protoreflect.FieldDescriptor) {
 		x.ONEOF = nil
 	case "A.LIST_ENUM":
 		x.LIST_ENUM = nil
+	case "A.imported":
+		x.Imported = nil
+	case "A.type":
+		x.Type_ = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -687,6 +711,12 @@ func (x *fastReflection_A) Get(descriptor protoreflect.FieldDescriptor) protoref
 		}
 		listValue := &_A_22_list{list: &x.LIST_ENUM}
 		return protoreflect.ValueOfList(listValue)
+	case "A.imported":
+		value := x.Imported
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "A.type":
+		value := x.Type_
+		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -759,6 +789,10 @@ func (x *fastReflection_A) Set(fd protoreflect.FieldDescriptor, value protorefle
 		lv := value.List()
 		clv := lv.(*_A_22_list)
 		x.LIST_ENUM = *clv.list
+	case "A.imported":
+		x.Imported = value.Message().Interface().(*ImportedMessage)
+	case "A.type":
+		x.Type_ = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -818,6 +852,11 @@ func (x *fastReflection_A) Mutable(fd protoreflect.FieldDescriptor) protoreflect
 		}
 		value := &_A_22_list{list: &x.LIST_ENUM}
 		return protoreflect.ValueOfList(value)
+	case "A.imported":
+		if x.Imported == nil {
+			x.Imported = new(ImportedMessage)
+		}
+		return protoreflect.ValueOfMessage(x.Imported.ProtoReflect())
 	case "A.enum":
 		panic(fmt.Errorf("field enum of message A is not mutable"))
 	case "A.some_boolean":
@@ -852,6 +891,8 @@ func (x *fastReflection_A) Mutable(fd protoreflect.FieldDescriptor) protoreflect
 		panic(fmt.Errorf("field BYTES of message A is not mutable"))
 	case "A.ONEOF_STRING":
 		panic(fmt.Errorf("field ONEOF_STRING of message A is not mutable"))
+	case "A.type":
+		panic(fmt.Errorf("field type of message A is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -914,6 +955,11 @@ func (x *fastReflection_A) NewField(fd protoreflect.FieldDescriptor) protoreflec
 	case "A.LIST_ENUM":
 		list := []Enumeration{}
 		return protoreflect.ValueOfList(&_A_22_list{list: &list})
+	case "A.imported":
+		m := new(ImportedMessage)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "A.type":
+		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -1100,6 +1146,14 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			}
 			n += 2 + runtime.Sov(uint64(l)) + l
 		}
+		if x.Imported != nil {
+			l = options.Size(x.Imported)
+			n += 2 + l + runtime.Sov(uint64(l))
+		}
+		l = len(x.Type_)
+		if l > 0 {
+			n += 2 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -1153,6 +1207,31 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			dAtA[i] = 0x1
 			i--
 			dAtA[i] = 0xaa
+		}
+		if len(x.Type_) > 0 {
+			i -= len(x.Type_)
+			copy(dAtA[i:], x.Type_)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Type_)))
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xc2
+		}
+		if x.Imported != nil {
+			encoded, err := options.Marshal(x.Imported)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xba
 		}
 		if len(x.LIST_ENUM) > 0 {
 			var pksize2 int
@@ -2029,6 +2108,74 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				} else {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field LIST_ENUM", wireType)
 				}
+			case 23:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Imported", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Imported == nil {
+					x.Imported = &ImportedMessage{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Imported); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 24:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Type_", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Type_ = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -2570,8 +2717,10 @@ type A struct {
 	// Types that are assignable to ONEOF:
 	//	*A_ONEOF_B
 	//	*A_ONEOF_STRING
-	ONEOF     isA_ONEOF     `protobuf_oneof:"ONEOF"`
-	LIST_ENUM []Enumeration `protobuf:"varint,22,rep,packed,name=LIST_ENUM,json=LISTENUM,proto3,enum=Enumeration" json:"LIST_ENUM,omitempty"`
+	ONEOF     isA_ONEOF        `protobuf_oneof:"ONEOF"`
+	LIST_ENUM []Enumeration    `protobuf:"varint,22,rep,packed,name=LIST_ENUM,json=LISTENUM,proto3,enum=Enumeration" json:"LIST_ENUM,omitempty"`
+	Imported  *ImportedMessage `protobuf:"bytes,23,opt,name=imported,proto3" json:"imported,omitempty"`
+	Type_     string           `protobuf:"bytes,24,opt,name=type,proto3" json:"type,omitempty"`
 }
 
 func (x *A) Reset() {
@@ -2755,6 +2904,20 @@ func (x *A) GetLIST_ENUM() []Enumeration {
 	return nil
 }
 
+func (x *A) GetImported() *ImportedMessage {
+	if x != nil {
+		return x.Imported
+	}
+	return nil
+}
+
+func (x *A) GetType_() string {
+	if x != nil {
+		return x.Type_
+	}
+	return ""
+}
+
 type isA_ONEOF interface {
 	isA_ONEOF()
 }
@@ -2810,7 +2973,8 @@ var File_testpb_1_proto protoreflect.FileDescriptor
 
 var file_testpb_1_proto_rawDesc = []byte{
 	0x0a, 0x0e, 0x74, 0x65, 0x73, 0x74, 0x70, 0x62, 0x2f, 0x31, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x22, 0xa5, 0x05, 0x0a, 0x01, 0x41, 0x12, 0x20, 0x0a, 0x04, 0x65, 0x6e, 0x75, 0x6d, 0x18, 0x01,
+	0x1a, 0x0e, 0x74, 0x65, 0x73, 0x74, 0x70, 0x62, 0x2f, 0x32, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x22, 0xe7, 0x05, 0x0a, 0x01, 0x41, 0x12, 0x20, 0x0a, 0x04, 0x65, 0x6e, 0x75, 0x6d, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x0e, 0x32, 0x0c, 0x2e, 0x45, 0x6e, 0x75, 0x6d, 0x65, 0x72, 0x61, 0x74, 0x69,
 	0x6f, 0x6e, 0x52, 0x04, 0x65, 0x6e, 0x75, 0x6d, 0x12, 0x21, 0x0a, 0x0c, 0x73, 0x6f, 0x6d, 0x65,
 	0x5f, 0x62, 0x6f, 0x6f, 0x6c, 0x65, 0x61, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0b,
@@ -2848,17 +3012,21 @@ var file_testpb_1_proto_rawDesc = []byte{
 	0x4f, 0x46, 0x53, 0x54, 0x52, 0x49, 0x4e, 0x47, 0x12, 0x29, 0x0a, 0x09, 0x4c, 0x49, 0x53, 0x54,
 	0x5f, 0x45, 0x4e, 0x55, 0x4d, 0x18, 0x16, 0x20, 0x03, 0x28, 0x0e, 0x32, 0x0c, 0x2e, 0x45, 0x6e,
 	0x75, 0x6d, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x08, 0x4c, 0x49, 0x53, 0x54, 0x45,
-	0x4e, 0x55, 0x4d, 0x1a, 0x3a, 0x0a, 0x08, 0x4d, 0x41, 0x50, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12,
-	0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65,
-	0x79, 0x12, 0x18, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x02, 0x2e, 0x42, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x42,
-	0x07, 0x0a, 0x05, 0x4f, 0x4e, 0x45, 0x4f, 0x46, 0x22, 0x11, 0x0a, 0x01, 0x42, 0x12, 0x0c, 0x0a,
-	0x01, 0x78, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x01, 0x78, 0x2a, 0x1f, 0x0a, 0x0b, 0x45,
-	0x6e, 0x75, 0x6d, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x07, 0x0a, 0x03, 0x4f, 0x6e,
-	0x65, 0x10, 0x00, 0x12, 0x07, 0x0a, 0x03, 0x54, 0x77, 0x6f, 0x10, 0x01, 0x42, 0x27, 0x5a, 0x25,
-	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x74,
-	0x65, 0x73, 0x74, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x4e, 0x55, 0x4d, 0x12, 0x2c, 0x0a, 0x08, 0x69, 0x6d, 0x70, 0x6f, 0x72, 0x74, 0x65, 0x64, 0x18,
+	0x17, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x49, 0x6d, 0x70, 0x6f, 0x72, 0x74, 0x65, 0x64,
+	0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x52, 0x08, 0x69, 0x6d, 0x70, 0x6f, 0x72, 0x74, 0x65,
+	0x64, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x18, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x04, 0x74, 0x79, 0x70, 0x65, 0x1a, 0x3a, 0x0a, 0x08, 0x4d, 0x41, 0x50, 0x45, 0x6e, 0x74, 0x72,
+	0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03,
+	0x6b, 0x65, 0x79, 0x12, 0x18, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x02, 0x2e, 0x42, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38,
+	0x01, 0x42, 0x07, 0x0a, 0x05, 0x4f, 0x4e, 0x45, 0x4f, 0x46, 0x22, 0x11, 0x0a, 0x01, 0x42, 0x12,
+	0x0c, 0x0a, 0x01, 0x78, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x01, 0x78, 0x2a, 0x1f, 0x0a,
+	0x0b, 0x45, 0x6e, 0x75, 0x6d, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x07, 0x0a, 0x03,
+	0x4f, 0x6e, 0x65, 0x10, 0x00, 0x12, 0x07, 0x0a, 0x03, 0x54, 0x77, 0x6f, 0x10, 0x01, 0x42, 0x27,
+	0x5a, 0x25, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x2f, 0x74, 0x65, 0x73, 0x74, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -2876,10 +3044,11 @@ func file_testpb_1_proto_rawDescGZIP() []byte {
 var file_testpb_1_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_testpb_1_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_testpb_1_proto_goTypes = []interface{}{
-	(Enumeration)(0), // 0: Enumeration
-	(*A)(nil),        // 1: A
-	(*B)(nil),        // 2: B
-	nil,              // 3: A.MAPEntry
+	(Enumeration)(0),        // 0: Enumeration
+	(*A)(nil),               // 1: A
+	(*B)(nil),               // 2: B
+	nil,                     // 3: A.MAPEntry
+	(*ImportedMessage)(nil), // 4: ImportedMessage
 }
 var file_testpb_1_proto_depIdxs = []int32{
 	0, // 0: A.enum:type_name -> Enumeration
@@ -2888,12 +3057,13 @@ var file_testpb_1_proto_depIdxs = []int32{
 	2, // 3: A.LIST:type_name -> B
 	2, // 4: A.ONEOF_B:type_name -> B
 	0, // 5: A.LIST_ENUM:type_name -> Enumeration
-	2, // 6: A.MAPEntry.value:type_name -> B
-	7, // [7:7] is the sub-list for method output_type
-	7, // [7:7] is the sub-list for method input_type
-	7, // [7:7] is the sub-list for extension type_name
-	7, // [7:7] is the sub-list for extension extendee
-	0, // [0:7] is the sub-list for field type_name
+	4, // 6: A.imported:type_name -> ImportedMessage
+	2, // 7: A.MAPEntry.value:type_name -> B
+	8, // [8:8] is the sub-list for method output_type
+	8, // [8:8] is the sub-list for method input_type
+	8, // [8:8] is the sub-list for extension type_name
+	8, // [8:8] is the sub-list for extension extendee
+	0, // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_testpb_1_proto_init() }
@@ -2901,6 +3071,7 @@ func file_testpb_1_proto_init() {
 	if File_testpb_1_proto != nil {
 		return
 	}
+	file_testpb_2_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_testpb_1_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*A); i {
