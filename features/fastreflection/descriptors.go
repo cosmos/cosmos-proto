@@ -25,14 +25,13 @@ func (g *descGen) generate() {
 	g.P(")")
 	g.P("func init() {")
 	g.P(copied.InitFunctionName(g.file), "()")
-	parentMd, ok := g.message.Desc.Parent().(protoreflect.MessageDescriptor)
-	switch ok {
-	// case nested message 
-	case true:
-		g.P(messageDescriptorName(g.message), " = ", g.file.GoDescriptorIdent.GoName, ".Messages().ByName(\"", parentMd.Name(), "\").Messages().ByName(\"", g.message.Desc.Name(), "\")")
-	default:
-		g.P(messageDescriptorName(g.message), " = ", g.file.GoDescriptorIdent.GoName, ".Messages().ByName(\"", g.message.Desc.Name(), "\")")
+	// we need to consider nested messages. so we try to recreate the hierarchy
+	// ex messageA contains messageB contains messageC
+	args := []interface{}{messageDescriptorName(g.message), " = ", g.file.GoDescriptorIdent.GoName}
+	for _, md := range findParents(g.message.Desc) {
+		args = append(args, ".Messages().ByName(\"", md.Name(), "\")")
 	}
+	g.P(args...)
 	for _, field := range g.message.Fields {
 		g.P(fieldDescriptorName(field), " = ", messageDescriptorName(g.message), ".Fields().ByName(\"", field.Desc.Name(), "\")")
 	}
@@ -41,4 +40,13 @@ func (g *descGen) generate() {
 
 func fieldDescriptorName(field *protogen.Field) string {
 	return fmt.Sprintf("fd_%s_%s", field.Parent.GoIdent.GoName, field.Desc.Name())
+}
+
+func findParents(message protoreflect.MessageDescriptor) []protoreflect.MessageDescriptor {
+	parent, ok := message.Parent().(protoreflect.MessageDescriptor)
+	if !ok {
+		return []protoreflect.MessageDescriptor{message}
+	}
+
+	return append(findParents(parent), message)
 }
