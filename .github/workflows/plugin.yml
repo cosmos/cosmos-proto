@@ -47,6 +47,6 @@ jobs:
         with:
           file: ./plugin.dockerfile
           platforms: linux/amd64
-          build-args: VERSION=${GITHUB_REF#refs/tags/}
+          build-args: VERSION=${{GITHUB_REF#refs/tags/}}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.prep.outputs.tags }}
