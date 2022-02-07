@@ -2,13 +2,13 @@ package timepb
 
 import (
 	"math"
-	"math/rand"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/require"
 	durpb "google.golang.org/protobuf/types/known/durationpb"
 	tspb "google.golang.org/protobuf/types/known/timestamppb"
+	"pgregory.net/rapid"
 )
 
 func new(s int64, n int32) *tspb.Timestamp {
@@ -74,28 +74,30 @@ func TestCompare(t *testing.T) {
 }
 
 func TestAddFuzzy(t *testing.T) {
-	requier := require.New(t)
-	check := func(s, n int64, d time.Duration) {
-		t := time.Unix(s, n)
-		t_expected := tspb.New(t.Add(d))
-		tb := tspb.New(t)
+	check := func(t require.TestingT, s, n int64, d time.Duration) {
+		t_in := time.Unix(s, n)
+		t_expected := tspb.New(t_in.Add(d))
+		tb := tspb.New(t_in)
 		tbPb := Add(tb, durpb.New(d))
 		tbStd := AddStd(tb, d)
-		requier.Equal(*t_expected, *tbStd, "checking pb add")
-		requier.Equal(*t_expected, *tbPb, "checking stdlib add")
+		require.Equal(t, *t_expected, *tbStd, "checking pb add")
+		require.Equal(t, *t_expected, *tbPb, "checking stdlib add")
 	}
-	rInt := func() int64 { return rand.Int63() / 2 }
+	gen := rapid.Int64Range(0, 1<<62)
+	genNano := rapid.Int64Range(0, 1e9-1)
+	rInt := func(t *rapid.T, label string) int64 { return gen.Draw(t, label).(int64) }
 
-	for i := 0; i < 2000; i++ {
-		s, n, d := rInt(), rand.Int63n(1e9), time.Duration(rInt())
-		check(s, n, d)
-	}
-	check(0, 0, 0)
-	check(1, 2, 0)
-	check(-1, -1, 1)
+	rapid.Check(t, func(t *rapid.T) {
+		s, n, d := rInt(t, "sec"), genNano.Draw(t, "nanos").(int64), time.Duration(rInt(t, "dur"))
+		check(t, s, n, d)
+	})
 
-	requier.Nil(Add(nil, &durpb.Duration{Seconds: 1}), "Pb works with nil values")
-	requier.Nil(AddStd(nil, time.Second), "Std works with nil values")
+	check(t, 0, 0, 0)
+	check(t, 1, 2, 0)
+	check(t, -1, -1, 1)
+
+	require.Nil(t, Add(nil, &durpb.Duration{Seconds: 1}), "Pb works with nil values")
+	require.Nil(t, AddStd(nil, time.Second), "Std works with nil values")
 }
 
 func TestAddOverflow(t *testing.T) {
