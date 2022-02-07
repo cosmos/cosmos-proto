@@ -79,7 +79,7 @@ func TestAddFuzzy(t *testing.T) {
 		t := time.Unix(s, n)
 		t_expected := tspb.New(t.Add(d))
 		tb := tspb.New(t)
-		tbPb := Add(tb, *durpb.New(d))
+		tbPb := Add(tb, durpb.New(d))
 		tbStd := AddStd(tb, d)
 		requier.Equal(*t_expected, *tbStd, "checking pb add")
 		requier.Equal(*t_expected, *tbPb, "checking stdlib add")
@@ -94,7 +94,7 @@ func TestAddFuzzy(t *testing.T) {
 	check(1, 2, 0)
 	check(-1, -1, 1)
 
-	requier.Nil(Add(nil, durpb.Duration{Seconds: 1}), "Pb works with nil values")
+	requier.Nil(Add(nil, &durpb.Duration{Seconds: 1}), "Pb works with nil values")
 	requier.Nil(AddStd(nil, time.Second), "Std works with nil values")
 }
 
@@ -109,7 +109,7 @@ func TestAddOverflow(t *testing.T) {
 	}, "AddStd should panic on overflow")
 
 	require.Panics(func() {
-		Add(&tb, durpb.Duration{Nanos: second - 1})
+		Add(&tb, &durpb.Duration{Nanos: second - 1})
 	}, "Add should panic on overflow")
 
 	// should panic on underflow
@@ -125,7 +125,7 @@ func TestAddOverflow(t *testing.T) {
 	}, "AddStd should panic on underflow")
 
 	require.Panics(func() {
-		tt := Add(&tb, durpb.Duration{Nanos: -second + 1})
+		tt := Add(&tb, &durpb.Duration{Nanos: -second + 1})
 		t.Log(tt)
 	}, "Add should panic on underflow")
 

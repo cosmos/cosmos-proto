@@ -28,13 +28,15 @@ func Compare(t1, t2 *tspb.Timestamp) int {
 	return 1
 }
 
-func DurationIsNegative(d durpb.Duration) bool {
+// DurationIsNegative returns true if the duration is negative. It assumes that d is valid
+// (d..CheckValid() is nil).
+func DurationIsNegative(d *durpb.Duration) bool {
 	return d.Seconds < 0 || d.Seconds == 0 && d.Nanos < 0
 }
 
-// AddStd returns a new timestamp with value t + d, where d is stdlib Duration
-// If t is nil then nil is returned
-// Panics on overflow
+// AddStd returns a new timestamp with value t + d, where d is stdlib Duration.
+// If t is nil then nil is returned.
+// Panics on overflow.
 func AddStd(t *tspb.Timestamp, d time.Duration) *tspb.Timestamp {
 	if t == nil {
 		return nil
@@ -65,8 +67,8 @@ const second = int32(time.Second)
 
 // Add returns a new timestamp with value t + d, where d is protobuf Duration
 // If t is nil then nil is returned. Panics on overflow.
-// Note: d must be a valid PB Duration.
-func Add(t *tspb.Timestamp, d durpb.Duration) *tspb.Timestamp {
+// Note: d must be a valid PB Duration (d..CheckValid() is nil).
+func Add(t *tspb.Timestamp, d *durpb.Duration) *tspb.Timestamp {
 	if t == nil {
 		return nil
 	}
