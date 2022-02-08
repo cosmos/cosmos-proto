@@ -8,9 +8,9 @@ import (
 	tspb "google.golang.org/protobuf/types/known/timestamppb"
 )
 
-// IsZero returns true when t is nil or is zero unix timestamp (1970-01-01)
+// IsZero returns true only when t is nil
 func IsZero(t *tspb.Timestamp) bool {
-	return t == nil || t.Nanos == 0 && t.Seconds == 0
+	return t == nil
 }
 
 // Commpare t1 and t2 and returns -1 when t1 < t2, 0 when t1 == t2 and 1 otherwise.

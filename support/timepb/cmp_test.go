@@ -21,9 +21,9 @@ func TestIsZero(t *testing.T) {
 		expected bool
 	}{
 		{nil, true},
-		{&tspb.Timestamp{}, true},
-		{new(0, 0), true},
 
+		{&tspb.Timestamp{}, false},
+		{new(0, 0), false},
 		{new(1, 0), false},
 		{new(0, 1), false},
 		{tspb.New(time.Time{}), false},
