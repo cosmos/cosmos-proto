@@ -132,3 +132,13 @@ func TestAddOverflow(t *testing.T) {
 	}, "Add should panic on underflow")
 
 }
+
+func TestExample(t *testing.T) {
+	require := require.New(t)
+	t1 := &tspb.Timestamp{Seconds: 10, Nanos: 1}
+	d := &durpb.Duration{Seconds: 1, Nanos: 1e9 - 1}
+	t2 := Add(t1, d)
+
+	require.Equal(0, Compare(&tspb.Timestamp{Seconds: 12, Nanos: 0}, t2))
+	require.Equal(0, Compare(&tspb.Timestamp{Seconds: 10, Nanos: 1}, t1), "t1 didn't change")
+}
