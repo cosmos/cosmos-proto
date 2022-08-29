@@ -1,6 +1,6 @@
-FROM golang:1.16-alpine
+FROM golang:1.18-alpine
 
-ARG PROTOC_VERSION="3.12.2"
+ARG PROTOC_VERSION="3.20.0"
 RUN apk add g++
 # add make
 RUN apk add make
