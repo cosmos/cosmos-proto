@@ -2,15 +2,16 @@ package testpb
 
 import (
 	"fmt"
+	"math"
+	"testing"
+
 	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/runtime/protoiface"
 	"google.golang.org/protobuf/runtime/protoimpl"
 	"google.golang.org/protobuf/types/dynamicpb"
-	"math"
 	"pgregory.net/rapid"
-	"testing"
 )
 
 func TestProtoMethods(t *testing.T) {
