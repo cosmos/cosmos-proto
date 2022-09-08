@@ -12605,11 +12605,13 @@ func file_internal_testprotos_test3_test_proto_init() {
 			NumMessages:   20,
 			NumExtensions: 0,
 			NumServices:   0,
+			FileRegistry:  runtime.NullRegistry{},
 		},
 		GoTypes:           file_internal_testprotos_test3_test_proto_goTypes,
 		DependencyIndexes: file_internal_testprotos_test3_test_proto_depIdxs,
 		EnumInfos:         file_internal_testprotos_test3_test_proto_enumTypes,
 		MessageInfos:      file_internal_testprotos_test3_test_proto_msgTypes,
+		TypeRegistry:      runtime.NullRegistry{},
 	}.Build()
 	File_internal_testprotos_test3_test_proto = out.File
 	file_internal_testprotos_test3_test_proto_rawDesc = nil
