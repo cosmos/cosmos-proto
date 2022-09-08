@@ -3,7 +3,7 @@ module github.com/cosmos/cosmos-proto
 go 1.18
 
 require (
-	github.com/google/go-cmp v0.5.8
+	github.com/google/go-cmp v0.5.9
 	github.com/stretchr/testify v1.8.0
 	google.golang.org/protobuf v1.28.1
 	pgregory.net/rapid v0.5.2
