@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/durationpb"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -13,9 +14,11 @@ import (
 	"google.golang.org/protobuf/types/known/wrapperspb"
 	"gotest.tools/v3/assert"
 	"gotest.tools/v3/golden"
+	"pgregory.net/rapid"
 
 	"github.com/cosmos/cosmos-proto/stablejson"
 	"github.com/cosmos/cosmos-proto/stablejson/internal/testpb"
+	"github.com/cosmos/cosmos-proto/testing/rapidproto"
 )
 
 func TestStableJSON(t *testing.T) {
@@ -100,4 +103,44 @@ func TestStableJSON(t *testing.T) {
 	bz, err := stablejson.Marshal(msg)
 	assert.NilError(t, err)
 	golden.Assert(t, string(bz), "example1.json")
+}
+
+func TestRapid(t *testing.T) {
+	gen := rapidproto.MessageGenerator(&testpb.ABitOfEverything{}, rapidproto.GeneratorOptions{})
+	rapid.Check(t, func(t *rapid.T) {
+		msg := gen.Draw(t, "msg")
+		bz, err := stablejson.Marshal(msg)
+		assert.NilError(t, err)
+		checkInvariants(t, msg, bz)
+	})
+}
+
+func checkInvariants(t *testing.T, message proto.Message, marshaledBytes []byte) {
+	checkRoundTrip(t, message, marshaledBytes)
+	checkJsonNoWhitespace(t, marshaledBytes)
+}
+
+func checkRoundTrip(t *testing.T, message proto.Message, marshaledBytes []byte) {
+
+}
+
+func checkJsonInvariants(t *testing.T, message proto.Message, unmarshaledJson map[string]interface{}) {
+}
+
+func checkJsonNoWhitespace(t *testing.T, marshaledBytes []byte) {
+}
+
+func checkJsonFieldsOrdered(t *testing.T, message proto.Message, unmarshaledJson map[string]interface{}) {
+}
+
+func checkJsonMapsOrdered(t *testing.T, message proto.Message, unmarshaledJson map[string]interface{}) {
+}
+
+func checkJsonStringMapsOrdered(t *testing.T, message proto.Message, unmarshaledJson map[string]interface{}) {
+}
+
+func checkJsonNumericMapsOrdered(t *testing.T, message proto.Message, unmarshaledJson map[string]interface{}) {
+}
+
+func checkJsonBoolMapsOrdered(t *testing.T, message proto.Message, unmarshaledJson map[string]interface{}) {
 }

@@ -32,19 +32,14 @@ type MarshalOptions struct {
 // proto3 JSON with the following restrictions which ensure a deterministic encoding:
 // - fields are ordered based on field number
 // - map fields are ordered
-//
 //   - alphabetically for string keys
-//
 //   - in numeric order for numeric keys
-//
 //   - false first for boolean keys
-//
 //   - durations have either 0 or 9 fractional digits depending on whether any fractional digits are needed
-//
 //   - timestamps have either 0 or 9 fractional digits depending on whether any fractional digits are needed
-//
 //   - floats and doubles always have the minimum number of trailing digits possible, although these types should
 //     generally be avoided in deterministic applications
+//   - there is no whitespace outside of string literals
 func (opts MarshalOptions) Marshal(message proto.Message, writer io.Writer) error {
 	return opts.marshalMessage(message.ProtoReflect(), writer)
 }
