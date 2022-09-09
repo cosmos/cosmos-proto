@@ -12,6 +12,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 	"gotest.tools/v3/assert"
+	"gotest.tools/v3/golden"
 
 	"github.com/cosmos/cosmos-proto/stablejson"
 	"github.com/cosmos/cosmos-proto/stablejson/internal/testpb"
@@ -75,6 +76,7 @@ func TestStableJSON(t *testing.T) {
 					structpb.NewBoolValue(false),
 					structpb.NewNumberValue(-9),
 				}}),
+				"empty": {},
 			},
 		},
 		BoolValue:   &wrapperspb.BoolValue{Value: true},
@@ -91,13 +93,11 @@ func TestStableJSON(t *testing.T) {
 			structpb.NewNumberValue(1.1),
 			structpb.NewStringValue("qrs"),
 		}},
-		Value:     &structpb.Value{},
+		Value:     structpb.NewStringValue("a value"),
 		NullValue: structpb.NullValue_NULL_VALUE,
 		Empty:     &emptypb.Empty{},
 	}
 	bz, err := stablejson.Marshal(msg)
 	assert.NilError(t, err)
-	assert.Equal(t,
-		`{"message":{"foo":"test"},"enum":"ONE","str_map":,"int32_map":,"bool_map":,"repeated":[3,-7,2,6,4],"str":"abcxyz\"foo\"def","bool":true,"bytes":"AAECAw==","i32":-15,"f32":1001,"u32":1200,"si32":-376,"sf32":-1000,"i64":"14578294827584932","f64":"9572348124213523654","u64":"4759492485","si64":"-59268425823934","sf64":"-659101379604211154","float":1,"double":5235.2941,"any":{"@type_url":"type.googleapis.com/testpb.ABitOfEverything","str":"abc","i32":10},"timestamp":,"duration":,"struct":{"bool":true,"nested struct":{"a":"abc"},"null":null,"num":3.76,"str":"abc","struct list":["xyz",false,-9]},"bool_value":true,"bytes_value":"AAECAw==","double_value":1.324,"float_value":-1,"int32_value":10,"int64_value":"-376923457","string_value":"gfedcba","uint32_value":37492,"uint64_value":"1892409137358391","field_mask":"a.b,a.c,b","list_value":[1.1,"qrs"],"value":,"empty":{}}`,
-		string(bz))
+	golden.Assert(t, string(bz), "example1.json")
 }

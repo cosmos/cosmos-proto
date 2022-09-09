@@ -93,7 +93,8 @@ func marshalListValue(writer io.Writer, value protoreflect.Message) error {
 func marshalStructValue(writer io.Writer, value protoreflect.Message) error {
 	field := value.WhichOneof(value.Descriptor().Oneofs().ByName(kindOneOf))
 	if field == nil {
-		return nil
+		_, err := writer.Write([]byte("null"))
+		return err
 	}
 
 	var err error

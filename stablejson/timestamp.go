@@ -43,6 +43,6 @@ func marshalTimestamp(writer io.Writer, message protoreflect.Message) error {
 		str = t.Format(time.RFC3339Nano)
 	}
 
-	_, err := writer.Write([]byte(str))
+	_, err := fmt.Fprintf(writer, `"%s"`, str)
 	return err
 }

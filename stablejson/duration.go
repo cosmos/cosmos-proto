@@ -20,7 +20,7 @@ func marshalDuration(writer io.Writer, message protoreflect.Message) error {
 	}
 
 	seconds := message.Get(secondsField).Int()
-	_, err := fmt.Fprintf(writer, "%d", seconds)
+	_, err := fmt.Fprintf(writer, `"%d`, seconds)
 	if err != nil {
 		return err
 	}
@@ -37,7 +37,7 @@ func marshalDuration(writer io.Writer, message protoreflect.Message) error {
 				return fmt.Errorf("seconds and nanos must be of the same sign for duration %v", message)
 			}
 
-			_, err := fmt.Fprintf(writer, ".%d", nanos)
+			_, err := fmt.Fprintf(writer, `.%d`, nanos)
 			if err != nil {
 				return err
 			}
@@ -53,6 +53,6 @@ func marshalDuration(writer io.Writer, message protoreflect.Message) error {
 		}
 	}
 
-	_, err = writer.Write([]byte("s"))
+	_, err = writer.Write([]byte(`s"`))
 	return err
 }
