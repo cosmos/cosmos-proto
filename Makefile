@@ -7,5 +7,7 @@ pulsar:
 proto-gen:
 	(cd proto; buf generate)
 	mv proto/cosmos_proto/cosmos.pb.go .
+	(cd internal; buf generate)
+
 
 .PHONY: proto_gen pulsar

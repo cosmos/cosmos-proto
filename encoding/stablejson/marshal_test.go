@@ -4,7 +4,9 @@ import (
 	"testing"
 	"time"
 
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/testing/protocmp"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/durationpb"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -16,8 +18,8 @@ import (
 	"gotest.tools/v3/golden"
 	"pgregory.net/rapid"
 
-	"github.com/cosmos/cosmos-proto/stablejson"
-	"github.com/cosmos/cosmos-proto/stablejson/internal/testpb"
+	"github.com/cosmos/cosmos-proto/encoding/stablejson"
+	"github.com/cosmos/cosmos-proto/encoding/stablejson/internal/testpb"
 	"github.com/cosmos/cosmos-proto/testing/rapidproto"
 )
 
@@ -115,19 +117,21 @@ func TestRapid(t *testing.T) {
 	})
 }
 
-func checkInvariants(t *testing.T, message proto.Message, marshaledBytes []byte) {
+func checkInvariants(t *rapid.T, message proto.Message, marshaledBytes []byte) {
 	checkRoundTrip(t, message, marshaledBytes)
 	checkJsonNoWhitespace(t, marshaledBytes)
 }
 
-func checkRoundTrip(t *testing.T, message proto.Message, marshaledBytes []byte) {
-
+func checkRoundTrip(t *rapid.T, message proto.Message, marshaledBytes []byte) {
+	message2 := message.ProtoReflect().New().Interface()
+	assert.NilError(t, protojson.UnmarshalOptions{}.Unmarshal(marshaledBytes, message2))
+	assert.DeepEqual(t, message, message2, protocmp.Transform())
 }
 
 func checkJsonInvariants(t *testing.T, message proto.Message, unmarshaledJson map[string]interface{}) {
 }
 
-func checkJsonNoWhitespace(t *testing.T, marshaledBytes []byte) {
+func checkJsonNoWhitespace(t *rapid.T, marshaledBytes []byte) {
 }
 
 func checkJsonFieldsOrdered(t *testing.T, message proto.Message, unmarshaledJson map[string]interface{}) {
