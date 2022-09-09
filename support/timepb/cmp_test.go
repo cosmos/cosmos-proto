@@ -85,10 +85,10 @@ func TestAddFuzzy(t *testing.T) {
 	}
 	gen := rapid.Int64Range(0, 1<<62)
 	genNano := rapid.Int64Range(0, 1e9-1)
-	rInt := func(t *rapid.T, label string) int64 { return gen.Draw(t, label).(int64) }
+	rInt := func(t *rapid.T, label string) int64 { return gen.Draw(t, label) }
 
 	rapid.Check(t, func(t *rapid.T) {
-		s, n, d := rInt(t, "sec"), genNano.Draw(t, "nanos").(int64), time.Duration(rInt(t, "dur"))
+		s, n, d := rInt(t, "sec"), genNano.Draw(t, "nanos"), time.Duration(rInt(t, "dur"))
 		check(t, s, n, d)
 	})
 
