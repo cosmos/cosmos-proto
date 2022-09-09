@@ -135,46 +135,46 @@ func populateDynamicMsg(dyn *dynamicpb.Message, msg protoreflect.Message) {
 
 func getRapidMsg(t *rapid.T) A {
 	return A{
-		Enum:        Enumeration(rapid.IntRange(0, 1).Draw(t, "enum").(int)),
-		SomeBoolean: rapid.Bool().Draw(t, "SomeBool").(bool),
-		INT32:       rapid.Int32().Draw(t, "INT32").(int32),
-		SINT32:      rapid.Int32().Draw(t, "SINT32").(int32),
-		UINT32:      rapid.Uint32().Draw(t, "UINT32").(uint32),
-		INT64:       rapid.Int64().Draw(t, "INT64").(int64),
-		SING64:      rapid.Int64().Draw(t, "SING64").(int64),
-		UINT64:      rapid.Uint64().Draw(t, "UINT64").(uint64),
-		SFIXED32:    rapid.Int32().Draw(t, "SFIXED32").(int32),
-		FIXED32:     rapid.Uint32().Draw(t, "FIXED32").(uint32),
-		FLOAT:       rapid.Float32().Draw(t, "FLOAT").(float32),
-		SFIXED64:    rapid.Int64().Draw(t, "SFIXED64").(int64),
-		FIXED64:     rapid.Uint64().Draw(t, "FIXED64").(uint64),
-		DOUBLE:      rapid.Float64().Draw(t, "DOUBLE").(float64),
-		STRING:      rapid.String().Draw(t, "STRING").(string),
-		BYTES:       rapid.SliceOf(rapid.Byte()).Draw(t, "byte slice").([]byte),
-		MESSAGE:     genMessageB.Draw(t, "MESSAGE").(*B),
-		LIST:        rapid.SliceOf(genMessageB).Draw(t, "LIST").([]*B),
-		ONEOF:       genOneOf.Draw(t, "one of").(isA_ONEOF),
-		MAP:         rapid.MapOf(rapid.String(), genMessageB).Draw(t, "map[string]*B").(map[string]*B),
-		LIST_ENUM:   rapid.SliceOf(genEnumSlice).Draw(t, "slice enum").([]Enumeration),
+		Enum:        Enumeration(rapid.IntRange(0, 1).Draw(t, "enum")),
+		SomeBoolean: rapid.Bool().Draw(t, "SomeBool"),
+		INT32:       rapid.Int32().Draw(t, "INT32"),
+		SINT32:      rapid.Int32().Draw(t, "SINT32"),
+		UINT32:      rapid.Uint32().Draw(t, "UINT32"),
+		INT64:       rapid.Int64().Draw(t, "INT64"),
+		SING64:      rapid.Int64().Draw(t, "SING64"),
+		UINT64:      rapid.Uint64().Draw(t, "UINT64"),
+		SFIXED32:    rapid.Int32().Draw(t, "SFIXED32"),
+		FIXED32:     rapid.Uint32().Draw(t, "FIXED32"),
+		FLOAT:       rapid.Float32().Draw(t, "FLOAT"),
+		SFIXED64:    rapid.Int64().Draw(t, "SFIXED64"),
+		FIXED64:     rapid.Uint64().Draw(t, "FIXED64"),
+		DOUBLE:      rapid.Float64().Draw(t, "DOUBLE"),
+		STRING:      rapid.String().Draw(t, "STRING"),
+		BYTES:       rapid.SliceOf(rapid.Byte()).Draw(t, "byte slice"),
+		MESSAGE:     genMessageB.Draw(t, "MESSAGE"),
+		LIST:        rapid.SliceOf(genMessageB).Draw(t, "LIST"),
+		ONEOF:       genOneOf.Draw(t, "one of"),
+		MAP:         rapid.MapOf(rapid.String(), genMessageB).Draw(t, "map[string]*B"),
+		LIST_ENUM:   rapid.SliceOf(genEnumSlice).Draw(t, "slice enum"),
 	}
 }
 
 var genEnumSlice = rapid.Custom(func(t *rapid.T) Enumeration {
-	n := rapid.Int32Range(0, 1).Draw(t, "int32").(int32)
+	n := rapid.Int32Range(0, 1).Draw(t, "int32")
 	return Enumeration(n)
 })
 
 var genOneOf = rapid.Custom(func(t *rapid.T) isA_ONEOF {
-	oneof := rapid.OneOf(genOneOfB, genOneOfString).Draw(t, "oneof").(isA_ONEOF)
+	oneof := rapid.OneOf(genOneOfB, genOneOfString).Draw(t, "oneof")
 	return oneof
 })
 
-var genOneOfB = rapid.Custom(func(t *rapid.T) *A_ONEOF_B {
-	return &A_ONEOF_B{ONEOF_B: genMessageB.Draw(t, "message B in one of").(*B)}
+var genOneOfB = rapid.Custom(func(t *rapid.T) isA_ONEOF {
+	return &A_ONEOF_B{ONEOF_B: genMessageB.Draw(t, "message B in one of")}
 })
 
-var genOneOfString = rapid.Custom(func(t *rapid.T) *A_ONEOF_STRING {
-	return &A_ONEOF_STRING{ONEOF_STRING: rapid.StringN(1, -1, -1).Draw(t, "string in one of").(string)}
+var genOneOfString = rapid.Custom(func(t *rapid.T) isA_ONEOF {
+	return &A_ONEOF_STRING{ONEOF_STRING: rapid.StringN(1, -1, -1).Draw(t, "string in one of")}
 })
 
 var genMessageB = rapid.Custom(func(t *rapid.T) *B {
@@ -182,7 +182,7 @@ var genMessageB = rapid.Custom(func(t *rapid.T) *B {
 		state:         protoimpl.MessageState{},
 		sizeCache:     0,
 		unknownFields: nil,
-		X:             rapid.String().Draw(t, "X").(string),
+		X:             rapid.String().Draw(t, "X"),
 	}
 	return &msg
 })
