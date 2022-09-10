@@ -5,6 +5,7 @@ import (
 
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
+	"google.golang.org/protobuf/reflect/protoregistry"
 	"gotest.tools/v3/assert"
 	"pgregory.net/rapid"
 )
@@ -21,14 +22,16 @@ func MessageGenerator[T proto.Message](x T, options GeneratorOptions) *rapid.Gen
 }
 
 type GeneratorOptions struct {
+	AnyTypeURLs []string
+	Resolver    protoregistry.MessageTypeResolver
 }
 
 const depthLimit = 10
 
-func (opts GeneratorOptions) setFields(t *rapid.T, msg protoreflect.Message, depth int) {
+func (opts GeneratorOptions) setFields(t *rapid.T, msg protoreflect.Message, depth int) bool {
 	// to avoid stack overflow we limit the depth of nested messages
 	if depth > depthLimit {
-		return
+		return false
 	}
 
 	descriptor := msg.Descriptor()
@@ -36,8 +39,15 @@ func (opts GeneratorOptions) setFields(t *rapid.T, msg protoreflect.Message, dep
 	switch fullName {
 	case timestampFullName:
 		opts.genTimestamp(t, msg)
+		return true
 	case durationFullName:
 		opts.genDuration(t, msg)
+		return true
+	case anyFullName:
+		return opts.genAny(t, msg, depth)
+	case fieldMaskFullName:
+		opts.genFieldMask(t, msg)
+		return true
 	default:
 		fields := descriptor.Fields()
 		n := fields.Len()
@@ -49,12 +59,15 @@ func (opts GeneratorOptions) setFields(t *rapid.T, msg protoreflect.Message, dep
 
 			opts.setFieldValue(t, msg, field, depth)
 		}
+		return true
 	}
 }
 
 const (
 	timestampFullName protoreflect.FullName = "google.protobuf.Timestamp"
 	durationFullName                        = "google.protobuf.Duration"
+	anyFullName                             = "google.protobuf.Any"
+	fieldMaskFullName                       = "google.protobuf.FieldMask"
 )
 
 func (opts GeneratorOptions) setFieldValue(t *rapid.T, msg protoreflect.Message, field protoreflect.FieldDescriptor, depth int) {
@@ -67,7 +80,9 @@ func (opts GeneratorOptions) setFieldValue(t *rapid.T, msg protoreflect.Message,
 		n := rapid.IntRange(0, 10).Draw(t, fmt.Sprintf("%sN", name))
 		for i := 0; i < n; i++ {
 			if kind == protoreflect.MessageKind || kind == protoreflect.GroupKind {
-				opts.setFields(t, list.AppendMutable().Message(), depth+1)
+				if !opts.setFields(t, list.AppendMutable().Message(), depth+1) {
+					list.Truncate(i)
+				}
 			} else {
 				list.Append(opts.genScalarFieldValue(t, field, fmt.Sprintf("%s%d", name, i)))
 			}
@@ -83,7 +98,9 @@ func (opts GeneratorOptions) setFieldValue(t *rapid.T, msg protoreflect.Message,
 			valueKind := valueField.Kind()
 			key := opts.genScalarFieldValue(t, keyField, fmt.Sprintf("%s%d-key", name, i))
 			if valueKind == protoreflect.MessageKind || valueKind == protoreflect.GroupKind {
-				opts.setFields(t, m.Mutable(key.MapKey()).Message(), depth+1)
+				if !opts.setFields(t, m.Mutable(key.MapKey()).Message(), depth+1) {
+					m.Clear(key.MapKey())
+				}
 			} else {
 				value := opts.genScalarFieldValue(t, valueField, fmt.Sprintf("%s%d-key", name, i))
 				m.Set(key.MapKey(), value)
@@ -93,7 +110,9 @@ func (opts GeneratorOptions) setFieldValue(t *rapid.T, msg protoreflect.Message,
 	} else {
 
 		if kind == protoreflect.MessageKind || kind == protoreflect.GroupKind {
-			opts.setFields(t, msg.Mutable(field).Message(), depth+1)
+			if !opts.setFields(t, msg.Mutable(field).Message(), depth+1) {
+				msg.Clear(field)
+			}
 		} else {
 			msg.Set(field, opts.genScalarFieldValue(t, field, name))
 		}
@@ -160,4 +179,50 @@ func setSecondsNanosFields(t *rapid.T, message protoreflect.Message, seconds int
 	message.Set(nanosField, protoreflect.ValueOfInt32(nanos))
 
 	return
+}
+
+const (
+	typeUrlName = "type_url"
+	valueName   = "value"
+)
+
+func (opts GeneratorOptions) genAny(t *rapid.T, msg protoreflect.Message, depth int) bool {
+	if len(opts.AnyTypeURLs) == 0 {
+		return false
+	}
+
+	fields := msg.Descriptor().Fields()
+
+	typeUrl := rapid.SampledFrom(opts.AnyTypeURLs).Draw(t, "type_url")
+	typ, err := opts.Resolver.FindMessageByURL(typeUrl)
+	assert.NilError(t, err)
+
+	typeUrlField := fields.ByName(typeUrlName)
+	assert.Assert(t, typeUrlField != nil)
+	msg.Set(typeUrlField, protoreflect.ValueOfString(typeUrl))
+
+	valueMsg := typ.New()
+	opts.setFields(t, valueMsg, depth+1)
+	valueBz, err := proto.Marshal(valueMsg.Interface())
+	assert.NilError(t, err)
+
+	valueField := fields.ByName(valueName)
+	assert.Assert(t, valueField != nil)
+	msg.Set(valueField, protoreflect.ValueOfBytes(valueBz))
+
+	return true
+}
+
+const (
+	pathsName = "paths"
+)
+
+func (opts GeneratorOptions) genFieldMask(t *rapid.T, msg protoreflect.Message) {
+	paths := rapid.SliceOfN(rapid.StringMatching("[a-z]+([.][a-z]+){0,2}"), 1, 5).Draw(t, "paths")
+	pathsField := msg.Descriptor().Fields().ByName(pathsName)
+	assert.Assert(t, pathsField != nil)
+	pathsList := msg.NewField(pathsField).List()
+	for _, path := range paths {
+		pathsList.Append(protoreflect.ValueOfString(path))
+	}
 }

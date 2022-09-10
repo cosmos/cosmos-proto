@@ -2,6 +2,7 @@ package stablejson
 
 import (
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"io"
 
@@ -34,7 +35,7 @@ func (opts MarshalOptions) marshalPrimitive(writer io.Writer, value interface{})
 	var err error
 	switch value := value.(type) {
 	case string:
-		_, err = fmt.Fprintf(writer, "%q", value)
+		return json.NewEncoder(writer).Encode(value)
 	case []byte:
 		_, err = writer.Write([]byte(`"`))
 		if err != nil {

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/reflect/protoregistry"
@@ -31,9 +32,10 @@ func (opts MarshalOptions) marshalAny(message protoreflect.Message, writer io.Wr
 	if resolver == nil {
 		resolver = protoregistry.GlobalTypes
 	}
+
 	typ, err := resolver.FindMessageByURL(typeUrl)
 	if err != nil {
-		return err
+		return errors.Wrapf(err, "can't resolve type URL %s", typeUrl)
 	}
 
 	_, err = fmt.Fprintf(writer, `"@type_url":%q`, typeUrl)
