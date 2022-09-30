@@ -123,7 +123,9 @@ func checkInvariants(t *rapid.T, message proto.Message, marshaledBytes []byte) {
 
 func checkRoundTrip(t *rapid.T, message proto.Message, marshaledBytes []byte) {
 	message2 := message.ProtoReflect().New().Interface()
-	assert.NilError(t, protojson.UnmarshalOptions{}.Unmarshal(marshaledBytes, message2), string(marshaledBytes))
+	goProtoJson, err := protojson.Marshal(message)
+	assert.NilError(t, err)
+	assert.NilError(t, protojson.UnmarshalOptions{}.Unmarshal(marshaledBytes, message2), "%s vs %s", string(marshaledBytes), string(goProtoJson))
 	// TODO: assert.DeepEqual(t, message, message2, protocmp.Transform())
 }
 
