@@ -16,20 +16,18 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/cosmos/cosmos-proto/features/protoc/genid"
-	"github.com/cosmos/cosmos-proto/generator"
+	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/encoding/protowire"
 	"google.golang.org/protobuf/proto"
-
-	pref "google.golang.org/protobuf/reflect/protoreflect"
-
-	"github.com/cosmos/cosmos-proto/features/protoc/version"
-	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
+	pref "google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/runtime/protoimpl"
-
 	"google.golang.org/protobuf/types/descriptorpb"
 	"google.golang.org/protobuf/types/pluginpb"
+
+	"github.com/cosmos/cosmos-proto/features/protoc/genid"
+	"github.com/cosmos/cosmos-proto/features/protoc/version"
+	"github.com/cosmos/cosmos-proto/generator"
 )
 
 // SupportedFeatures reports the set of supported protobuf language features.
