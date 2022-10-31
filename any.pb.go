@@ -1,7 +1,7 @@
 // This file is copy-pasted from:
 // https://github.com/protocolbuffers/protobuf-go/blob/7a48e2b66218ba306ed801e42126b374aefce255/types/known/anypb/any.pb.go
 // The only modification is the removal of the "type.googleapis.com/"
-// urlPrefix.
+// urlPrefix, see https://github.com/cosmos/cosmos-sdk/issues/13669.
 //
 // License is stated below.
 
