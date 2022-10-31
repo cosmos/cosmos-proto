@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"google.golang.org/protobuf/proto"
+	_ "google.golang.org/protobuf/types/known/anypb"
 
 	cosmos_proto "github.com/cosmos/cosmos-proto"
 	"github.com/cosmos/cosmos-proto/testpb"
