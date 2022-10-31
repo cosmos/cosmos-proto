@@ -7,18 +7,19 @@ package protoc
 
 import (
 	"fmt"
-	"github.com/cosmos/cosmos-proto/features/protoc/genid"
-	"github.com/cosmos/cosmos-proto/generator"
 	"go/ast"
 	"go/parser"
 	"go/token"
-	"google.golang.org/protobuf/encoding/protowire"
-	"google.golang.org/protobuf/proto"
 	"math"
 	"strconv"
 	"strings"
 	"unicode"
 	"unicode/utf8"
+
+	"github.com/cosmos/cosmos-proto/features/protoc/genid"
+	"github.com/cosmos/cosmos-proto/generator"
+	"google.golang.org/protobuf/encoding/protowire"
+	"google.golang.org/protobuf/proto"
 
 	pref "google.golang.org/protobuf/reflect/protoreflect"
 
@@ -662,7 +663,6 @@ func genMessageKnownFunctions(g *generator.GeneratedFile, f *fileInfo, m *messag
 		g.P("//")
 		g.P("// If no options are specified, call dst.MarshalFrom instead.")
 		g.P("func MarshalFrom(dst *Any, src ", protoPackage.Ident("Message"), ", opts ", protoPackage.Ident("MarshalOptions"), ") error {")
-		g.P("	const urlPrefix = \"type.googleapis.com/\"")
 		g.P("	if src == nil {")
 		g.P("		return ", protoimplPackage.Ident("X"), ".NewError(\"invalid nil source message\")")
 		g.P("	}")
@@ -670,7 +670,7 @@ func genMessageKnownFunctions(g *generator.GeneratedFile, f *fileInfo, m *messag
 		g.P("	if err != nil {")
 		g.P("		return err")
 		g.P("	}")
-		g.P("	dst.TypeUrl = urlPrefix + string(src.ProtoReflect().Descriptor().FullName())")
+		g.P("	dst.TypeUrl = string(src.ProtoReflect().Descriptor().FullName())")
 		g.P("	dst.Value = b")
 		g.P("	return nil")
 		g.P("}")

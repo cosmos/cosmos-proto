@@ -1,6 +1,7 @@
 syntax="proto3";
 
 import "testpb/2.proto";
+import "google/protobuf/any.proto";
 
 option go_package = "github.com/cosmos/cosmos-proto/testpb";
 
@@ -40,4 +41,8 @@ message A {
 
 message B {
   string x = 1;
+}
+
+message C {
+  google.protobuf.Any ANY = 1;
 }
