@@ -57,7 +57,7 @@ func MarshalFrom(dst *anypb.Any, src proto.Message, opts proto.MarshalOptions) e
 	if err != nil {
 		return err
 	}
-	dst.TypeUrl = string(src.ProtoReflect().Descriptor().FullName())
+	dst.TypeUrl = "/" + string(src.ProtoReflect().Descriptor().FullName())
 	dst.Value = b
 	return nil
 }

@@ -19,11 +19,11 @@ func TestAny(t *testing.T) {
 	dst1 := &anypb.Any{}
 	err := any.MarshalFrom(dst1, value, proto.MarshalOptions{})
 	require.NoError(t, err)
-	require.Equal(t, "A", dst1.TypeUrl) // Make sure there's no "type.googleapis.com/" prefix.
+	require.Equal(t, "/A", dst1.TypeUrl) // Make sure there's no "type.googleapis.com/" prefix.
 
 	dst2, err := any.New(value)
 	require.NoError(t, err)
-	require.Equal(t, "A", dst2.TypeUrl) // Make sure there's no "type.googleapis.com/" prefix.
+	require.Equal(t, "/A", dst2.TypeUrl) // Make sure there's no "type.googleapis.com/" prefix.
 
 	// Round trip.
 	newValue, err := anypb.UnmarshalNew(dst2, proto.UnmarshalOptions{})
