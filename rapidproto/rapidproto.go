@@ -1,7 +1,6 @@
 package rapidproto
 
 import (
-	"cosmossdk.io/api/amino"
 	"fmt"
 	"math"
 
@@ -40,7 +39,14 @@ type GeneratorOptions struct {
 	// GogoUnmarshalCompatibleDecimal will cause the generator to generate decimal values which, when serialized as
 	// either bytes or a string, are compatible with gogo's unmarshaler.  These fields are identified by the presence
 	// of (amino.encoding = "cosmos_dec_bytes") or (cosmos_proto.scalar = "cosmos.Dec") annotations.
+	// If this option is set, the AminoEncodingExtension must also be set.
 	GogoUnmarshalCompatibleDecimal bool
+
+	// AminoEncodingExtension is the amino encoding extension query for when identifying cosmos.Dec fields encoded as
+	// a byte slice.  It must be set if GogoUnmarshalCompatibleDecimal is set.  This field must set as an option
+	// on the generator in order to prevent the cyclic dependency between the `cosmos-proto` and `cosmossdk.io/api`
+	// modules.
+	AminoEncodingExtension protoreflect.ExtensionType
 }
 
 const depthLimit = 10
@@ -64,6 +70,13 @@ func (opts GeneratorOptions) WithInterfaceHint(i string, impl proto.Message) Gen
 	}
 	opts.InterfaceHints[i] = string(impl.ProtoReflect().Descriptor().FullName())
 	return opts
+}
+
+func (opts GeneratorOptions) WithGogoUnmarshalCompatibleDecimals(aminoExtension protoreflect.ExtensionType) GeneratorOptions {
+	o := &opts
+	o.GogoUnmarshalCompatibleDecimal = true
+	o.AminoEncodingExtension = aminoExtension
+	return *o
 }
 
 func (opts GeneratorOptions) setFields(
@@ -198,10 +211,16 @@ func (opts GeneratorOptions) genScalarFieldValue(t *rapid.T, field protoreflect.
 	case protoreflect.BoolKind:
 		return protoreflect.ValueOfBool(rapid.Bool().Draw(t, name))
 	case protoreflect.BytesKind:
-		if proto.HasExtension(fopts, amino.E_Encoding) {
-			encoding := proto.GetExtension(fopts, amino.E_Encoding).(string)
-			if encoding == "cosmos_dec_bytes" && opts.GogoUnmarshalCompatibleDecimal {
-				return protoreflect.ValueOfBytes([]byte{})
+		if opts.GogoUnmarshalCompatibleDecimal {
+			if opts.AminoEncodingExtension == nil {
+				t.Fatalf("GogoUnmarshalCompatibleDecimal is set but AminoEncodingExtension is nil")
+				return protoreflect.Value{}
+			}
+			if proto.HasExtension(fopts, opts.AminoEncodingExtension) {
+				encoding := proto.GetExtension(fopts, opts.AminoEncodingExtension).(string)
+				if encoding == "cosmos_dec_bytes" && opts.GogoUnmarshalCompatibleDecimal {
+					return protoreflect.ValueOfBytes([]byte{})
+				}
 			}
 		}
 		return protoreflect.ValueOfBytes(rapid.SliceOf(rapid.Byte()).Draw(t, name))

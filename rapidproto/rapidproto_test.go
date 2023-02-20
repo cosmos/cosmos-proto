@@ -10,9 +10,8 @@ import (
 	"gotest.tools/v3/golden"
 	"pgregory.net/rapid"
 
+	"github.com/cosmos/cosmos-proto/rapidproto"
 	"github.com/cosmos/cosmos-proto/testpb"
-
-	"cosmossdk.io/x/tx/rapidproto"
 )
 
 // TestRegression checks that the generator still produces the same output
