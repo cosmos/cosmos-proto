@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/cosmos/cosmos-proto/rapidproto"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"gotest.tools/v3/assert"
@@ -12,6 +11,8 @@ import (
 	"pgregory.net/rapid"
 
 	"github.com/cosmos/cosmos-proto/testpb"
+
+	"cosmossdk.io/x/tx/rapidproto"
 )
 
 // TestRegression checks that the generator still produces the same output
