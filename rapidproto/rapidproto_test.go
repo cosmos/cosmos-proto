@@ -19,7 +19,7 @@ import (
 // to generally look good.
 func TestRegression(t *testing.T) {
 	gen := rapidproto.MessageGenerator(&testpb.A{}, rapidproto.GeneratorOptions{})
-	for i := 0; i < 5; i++ {
+	for i := 1000; i < 1005; i++ {
 		testRegressionSeed(t, i, gen)
 	}
 }
