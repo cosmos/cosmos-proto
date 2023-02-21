@@ -23,6 +23,11 @@ func MessageGenerator[T proto.Message](x T, options GeneratorOptions) *rapid.Gen
 	})
 }
 
+// FieldMapper is a function that can be used to override the default behavior of the generator for a specific field.
+// The first argument is the rapid.T, the second is the field descriptor, and the third is the field name.
+// If the function returns nil, the default behavior will be used.
+type FieldMapper func(*rapid.T, protoreflect.FieldDescriptor, string) (protoreflect.Value, bool)
+
 type GeneratorOptions struct {
 	AnyTypeURLs    []string
 	InterfaceHints map[string]string
@@ -36,17 +41,9 @@ type GeneratorOptions struct {
 	// DisallowNilMessages will cause the generator to not generate nil messages to protoreflect.MessageKind fields
 	DisallowNilMessages bool
 
-	// GogoUnmarshalCompatibleDecimal will cause the generator to generate decimal values which, when serialized as
-	// either bytes or a string, are compatible with gogo's unmarshaler.  These fields are identified by the presence
-	// of (amino.encoding = "cosmos_dec_bytes") or (cosmos_proto.scalar = "cosmos.Dec") annotations.
-	// If this option is set, the AminoEncodingExtension must also be set.
-	GogoUnmarshalCompatibleDecimal bool
-
-	// AminoEncodingExtension is the amino encoding extension query for when identifying cosmos.Dec fields encoded as
-	// a byte slice.  It must be set if GogoUnmarshalCompatibleDecimal is set.  This field must set as an option
-	// on the generator in order to prevent the cyclic dependency between the `cosmos-proto` and `cosmossdk.io/api`
-	// modules.
-	AminoEncodingExtension protoreflect.ExtensionType
+	// FieldMaps is a list of FieldMapper functions that can be used to override the default behavior of the generator
+	// for a specific field.
+	FieldMaps []FieldMapper
 }
 
 const depthLimit = 10
@@ -70,13 +67,6 @@ func (opts GeneratorOptions) WithInterfaceHint(i string, impl proto.Message) Gen
 	}
 	opts.InterfaceHints[i] = string(impl.ProtoReflect().Descriptor().FullName())
 	return opts
-}
-
-func (opts GeneratorOptions) WithGogoUnmarshalCompatibleDecimals(aminoExtension protoreflect.ExtensionType) GeneratorOptions {
-	o := &opts
-	o.GogoUnmarshalCompatibleDecimal = true
-	o.AminoEncodingExtension = aminoExtension
-	return *o
 }
 
 func (opts GeneratorOptions) setFields(
@@ -182,20 +172,9 @@ func (opts GeneratorOptions) setFieldValue(t *rapid.T, msg protoreflect.Message,
 }
 
 func (opts GeneratorOptions) genScalarFieldValue(t *rapid.T, field protoreflect.FieldDescriptor, name string) protoreflect.Value {
-	fopts := field.Options()
-	if proto.HasExtension(fopts, cosmos_proto.E_Scalar) {
-		scalar := proto.GetExtension(fopts, cosmos_proto.E_Scalar).(string)
-		switch scalar {
-		case "cosmos.Int":
-			i32 := rapid.Int32().Draw(t, name)
-			return protoreflect.ValueOfString(fmt.Sprintf("%d", i32))
-		case "cosmos.Dec":
-			if opts.GogoUnmarshalCompatibleDecimal {
-				return protoreflect.ValueOfString("")
-			}
-			x := rapid.Int16().Draw(t, name)
-			y := rapid.Uint8().Draw(t, name)
-			return protoreflect.ValueOfString(fmt.Sprintf("%d.%d", x, y))
+	for _, fm := range opts.FieldMaps {
+		if v, ok := fm(t, field, name); ok {
+			return v
 		}
 	}
 
@@ -211,18 +190,6 @@ func (opts GeneratorOptions) genScalarFieldValue(t *rapid.T, field protoreflect.
 	case protoreflect.BoolKind:
 		return protoreflect.ValueOfBool(rapid.Bool().Draw(t, name))
 	case protoreflect.BytesKind:
-		if opts.GogoUnmarshalCompatibleDecimal {
-			if opts.AminoEncodingExtension == nil {
-				t.Fatalf("GogoUnmarshalCompatibleDecimal is set but AminoEncodingExtension is nil")
-				return protoreflect.Value{}
-			}
-			if proto.HasExtension(fopts, opts.AminoEncodingExtension) {
-				encoding := proto.GetExtension(fopts, opts.AminoEncodingExtension).(string)
-				if encoding == "cosmos_dec_bytes" && opts.GogoUnmarshalCompatibleDecimal {
-					return protoreflect.ValueOfBytes([]byte{})
-				}
-			}
-		}
 		return protoreflect.ValueOfBytes(rapid.SliceOf(rapid.Byte()).Draw(t, name))
 	case protoreflect.FloatKind:
 		return protoreflect.ValueOfFloat32(rapid.Float32().Draw(t, name))
