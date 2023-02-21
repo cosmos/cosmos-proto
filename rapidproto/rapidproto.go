@@ -34,7 +34,7 @@ type GeneratorOptions struct {
 	Resolver       protoregistry.MessageTypeResolver
 
 	// NoEmptyLists will cause the generator to not generate empty lists
-	// Recall that an empty list will marshal (and unmarshal) to null.   Some encodings may treat these states
+	// Recall that an empty list will marshal (and unmarshal) to null. Some encodings may treat these states
 	// differently.  For example, in JSON, an empty list is encoded as [], while null is encoded as null.
 	NoEmptyLists bool
 
