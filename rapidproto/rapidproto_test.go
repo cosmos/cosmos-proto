@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/cosmos/cosmos-proto/rapidproto"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"gotest.tools/v3/assert"
 	"gotest.tools/v3/golden"
 	"pgregory.net/rapid"
 
+	"github.com/cosmos/cosmos-proto/rapidproto"
 	"github.com/cosmos/cosmos-proto/testpb"
 )
 
@@ -19,7 +19,7 @@ import (
 // to generally look good.
 func TestRegression(t *testing.T) {
 	gen := rapidproto.MessageGenerator(&testpb.A{}, rapidproto.GeneratorOptions{})
-	for i := 0; i < 5; i++ {
+	for i := 1000; i < 1005; i++ {
 		testRegressionSeed(t, i, gen)
 	}
 }
