@@ -98,7 +98,7 @@ func Unpack(any *anypb.Any, fileResolver protodesc.Resolver, typeResolver protor
 		typ = dynamicpb.NewMessageType(msgDesc.(protoreflect.MessageDescriptor))
 
 	} else if err != nil {
-		return nil, fmt.Errorf("error unmarshalling any %s: %w", any.TypeUrl, err)
+		return nil, err
 	}
 
 	packedMsg := typ.New().Interface()
