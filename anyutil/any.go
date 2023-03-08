@@ -92,7 +92,7 @@ func Unpack(any *anypb.Any, fileResolver protodesc.Resolver, typeResolver protor
 
 		msgDesc, err := fileResolver.FindDescriptorByName(protoreflect.FullName(typeURL))
 		if err != nil {
-			return nil, fmt.Errorf("textual protoFiles does not have descriptor %s: %w", any.TypeUrl, err)
+			return nil, fmt.Errorf("protoFiles does not have descriptor %s: %w", any.TypeUrl, err)
 		}
 
 		typ = dynamicpb.NewMessageType(msgDesc.(protoreflect.MessageDescriptor))
