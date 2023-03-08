@@ -1,4 +1,4 @@
-package any_test
+package anyutil_test
 
 import (
 	"testing"
@@ -9,7 +9,7 @@ import (
 	"google.golang.org/protobuf/testing/protocmp"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/cosmos/cosmos-proto/any"
+	"github.com/cosmos/cosmos-proto/anyutil"
 	"github.com/cosmos/cosmos-proto/testpb"
 )
 
@@ -17,11 +17,11 @@ func TestAny(t *testing.T) {
 	value := &testpb.A{SomeBoolean: true}
 
 	dst1 := &anypb.Any{}
-	err := any.MarshalFrom(dst1, value, proto.MarshalOptions{})
+	err := anyutil.MarshalFrom(dst1, value, proto.MarshalOptions{})
 	require.NoError(t, err)
 	require.Equal(t, "/A", dst1.TypeUrl) // Make sure there's no "type.googleapis.com/" prefix.
 
-	dst2, err := any.New(value)
+	dst2, err := anyutil.New(value)
 	require.NoError(t, err)
 	require.Equal(t, "/A", dst2.TypeUrl) // Make sure there's no "type.googleapis.com/" prefix.
 
@@ -30,4 +30,14 @@ func TestAny(t *testing.T) {
 	require.NoError(t, err)
 	diff := cmp.Diff(value, newValue, protocmp.Transform())
 	require.Empty(t, diff)
+}
+
+func TestUnpack(t *testing.T) {
+	value := &testpb.A{SomeBoolean: true}
+	any, err := anyutil.New(value)
+	require.NoError(t, err)
+
+	msg, err := anyutil.Unpack(any, nil)
+	require.NoError(t, err)
+	require.Equal(t, msg.ProtoReflect().Descriptor().FullName(), value.ProtoReflect().Descriptor().FullName())
 }

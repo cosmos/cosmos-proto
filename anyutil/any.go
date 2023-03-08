@@ -28,11 +28,17 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package any
+package anyutil
 
 import (
+	"fmt"
+	"strings"
+
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
+	"google.golang.org/protobuf/reflect/protoregistry"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	"google.golang.org/protobuf/types/dynamicpb"
 	"google.golang.org/protobuf/types/known/anypb"
 )
 
@@ -60,4 +66,41 @@ func MarshalFrom(dst *anypb.Any, src proto.Message, opts proto.MarshalOptions) e
 	dst.TypeUrl = "/" + string(src.ProtoReflect().Descriptor().FullName())
 	dst.Value = b
 	return nil
+}
+
+// Unpack unpacks the message inside an any. It tries first to unpack using
+// anypb.UnmarshalNew (which uses protoregistry.GlobalTypes under the hood).
+// If the message is not resolved in the proto v2 global registry, it tries to
+// unpack using dynamicpb and the given protoFiles.
+func Unpack(any *anypb.Any, protoFiles *protoregistry.Files) (proto.Message, error) {
+	if protoFiles == nil {
+		protoFiles = protoregistry.GlobalFiles
+	}
+
+	packedMsg, err := any.UnmarshalNew()
+	if err == protoregistry.NotFound {
+		// If the proto v2 registry doesn't have this message, then we use
+		// protoFiles (which can e.g. be initialized to gogo's MergedRegistry)
+		// to retrieve the message descriptor, and then use dynamicpb on that
+		// message descriptor to create a proto.Message
+		typeURL := strings.TrimPrefix(any.TypeUrl, "/")
+
+		msgDesc, err := protoFiles.FindDescriptorByName(protoreflect.FullName(typeURL))
+		if err != nil {
+			return nil, fmt.Errorf("textual protoFiles does not have descriptor %s: %w", any.TypeUrl, err)
+		}
+
+		typ := dynamicpb.NewMessageType(msgDesc.(protoreflect.MessageDescriptor))
+		msg := typ.New().Interface()
+		err = any.UnmarshalTo(msg)
+		if err != nil {
+			return nil, fmt.Errorf("cannot unmarshal msg %s into dynamicpb generated type: %w", any.TypeUrl, err)
+		}
+
+		return msg, nil
+	} else if err != nil {
+		return nil, fmt.Errorf("error unmarshalling any %s: %w", any.TypeUrl, err)
+	}
+
+	return packedMsg, nil
 }
