@@ -32,6 +32,7 @@ func TestAny(t *testing.T) {
 	require.Empty(t, diff)
 }
 
+// Note: this test doesn't test the path using dynamicpb.
 func TestUnpack(t *testing.T) {
 	value := &testpb.A{SomeBoolean: true}
 	any, err := anyutil.New(value)
