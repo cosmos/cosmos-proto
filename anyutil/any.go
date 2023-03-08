@@ -35,6 +35,7 @@ import (
 	"strings"
 
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protodesc"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/reflect/protoregistry"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -68,16 +69,20 @@ func MarshalFrom(dst *anypb.Any, src proto.Message, opts proto.MarshalOptions) e
 	return nil
 }
 
-// Unpack unpacks the message inside an any. It tries first to unpack using
-// anypb.UnmarshalNew (which uses protoregistry.GlobalTypes under the hood).
-// If the message is not resolved in the proto v2 global registry, it tries to
-// unpack using dynamicpb and the given protoFiles.
-func Unpack(any *anypb.Any, protoFiles *protoregistry.Files) (proto.Message, error) {
-	if protoFiles == nil {
-		protoFiles = protoregistry.GlobalFiles
+// Unpack unpacks the message inside an any, first using the provided
+// typeResolver (defaults to protoregistry.GlobalTypes), and if that fails,
+// then using the provided fileResolver (defaults to protoregistry.GlobalFiles)
+// with dynamicpb.
+func Unpack(any *anypb.Any, fileResolver protodesc.Resolver, typeResolver protoregistry.MessageTypeResolver) (proto.Message, error) {
+	if fileResolver == nil {
+		fileResolver = protoregistry.GlobalFiles
+	}
+	if typeResolver == nil {
+		typeResolver = protoregistry.GlobalTypes
 	}
 
-	packedMsg, err := any.UnmarshalNew()
+	url := any.TypeUrl
+	typ, err := typeResolver.FindMessageByURL(url)
 	if err == protoregistry.NotFound {
 		// If the proto v2 registry doesn't have this message, then we use
 		// protoFiles (which can e.g. be initialized to gogo's MergedRegistry)
@@ -85,21 +90,21 @@ func Unpack(any *anypb.Any, protoFiles *protoregistry.Files) (proto.Message, err
 		// message descriptor to create a proto.Message
 		typeURL := strings.TrimPrefix(any.TypeUrl, "/")
 
-		msgDesc, err := protoFiles.FindDescriptorByName(protoreflect.FullName(typeURL))
+		msgDesc, err := fileResolver.FindDescriptorByName(protoreflect.FullName(typeURL))
 		if err != nil {
 			return nil, fmt.Errorf("textual protoFiles does not have descriptor %s: %w", any.TypeUrl, err)
 		}
 
-		typ := dynamicpb.NewMessageType(msgDesc.(protoreflect.MessageDescriptor))
-		msg := typ.New().Interface()
-		err = any.UnmarshalTo(msg)
-		if err != nil {
-			return nil, fmt.Errorf("cannot unmarshal msg %s into dynamicpb generated type: %w", any.TypeUrl, err)
-		}
+		typ = dynamicpb.NewMessageType(msgDesc.(protoreflect.MessageDescriptor))
 
-		return msg, nil
 	} else if err != nil {
 		return nil, fmt.Errorf("error unmarshalling any %s: %w", any.TypeUrl, err)
+	}
+
+	packedMsg := typ.New().Interface()
+	err = any.UnmarshalTo(packedMsg)
+	if err != nil {
+		return nil, fmt.Errorf("cannot unmarshal msg %s into dynamicpb generated type: %w", any.TypeUrl, err)
 	}
 
 	return packedMsg, nil

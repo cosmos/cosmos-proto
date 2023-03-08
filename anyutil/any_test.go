@@ -6,6 +6,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoregistry"
 	"google.golang.org/protobuf/testing/protocmp"
 	"google.golang.org/protobuf/types/known/anypb"
 
@@ -32,13 +33,19 @@ func TestAny(t *testing.T) {
 	require.Empty(t, diff)
 }
 
-// Note: this test doesn't test the path using dynamicpb.
 func TestUnpack(t *testing.T) {
 	value := &testpb.A{SomeBoolean: true}
 	any, err := anyutil.New(value)
 	require.NoError(t, err)
 
-	msg, err := anyutil.Unpack(any, nil)
+	msg, err := anyutil.Unpack(any, nil, nil)
 	require.NoError(t, err)
-	require.Equal(t, msg.ProtoReflect().Descriptor().FullName(), value.ProtoReflect().Descriptor().FullName())
+	diff := cmp.Diff(value, msg, protocmp.Transform())
+	require.Empty(t, diff)
+
+	// Test the same thing with using the dynamicpb path.
+	msg, err = anyutil.Unpack(any, protoregistry.GlobalFiles, &protoregistry.Types{})
+	require.NoError(t, err)
+	diff = cmp.Diff(value, msg, protocmp.Transform())
+	require.Empty(t, diff)
 }
