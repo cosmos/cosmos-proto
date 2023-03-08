@@ -104,7 +104,7 @@ func Unpack(any *anypb.Any, fileResolver protodesc.Resolver, typeResolver protor
 	packedMsg := typ.New().Interface()
 	err = any.UnmarshalTo(packedMsg)
 	if err != nil {
-		return nil, fmt.Errorf("cannot unmarshal msg %s into dynamicpb generated type: %w", any.TypeUrl, err)
+		return nil, fmt.Errorf("cannot unmarshal msg %s: %w", any.TypeUrl, err)
 	}
 
 	return packedMsg, nil
