@@ -74,9 +74,6 @@ func MarshalFrom(dst *anypb.Any, src proto.Message, opts proto.MarshalOptions) e
 // then using the provided fileResolver (defaults to protoregistry.GlobalFiles)
 // with dynamicpb.
 func Unpack(any *anypb.Any, fileResolver protodesc.Resolver, typeResolver protoregistry.MessageTypeResolver) (proto.Message, error) {
-	if fileResolver == nil {
-		fileResolver = protoregistry.GlobalFiles
-	}
 	if typeResolver == nil {
 		typeResolver = protoregistry.GlobalTypes
 	}
@@ -84,6 +81,10 @@ func Unpack(any *anypb.Any, fileResolver protodesc.Resolver, typeResolver protor
 	url := any.TypeUrl
 	typ, err := typeResolver.FindMessageByURL(url)
 	if err == protoregistry.NotFound {
+		if fileResolver == nil {
+			fileResolver = protoregistry.GlobalFiles
+		}
+
 		// If the proto v2 registry doesn't have this message, then we use
 		// protoFiles (which can e.g. be initialized to gogo's MergedRegistry)
 		// to retrieve the message descriptor, and then use dynamicpb on that
