@@ -363,14 +363,17 @@ func init() {
 		}
 		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
 	}
+	checkInitialized := func(input protoiface.CheckInitializedInput) (protoiface.CheckInitializedOutput, error) {
+		return protoiface.CheckInitializedOutput{}, nil
+	}
 	fastReflection_ImportedMessageProtoMethods = &protoiface.Methods{
 		NoUnkeyedLiterals: struct{}{},
 		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
 		Size:              size,
 		Marshal:           marshal,
 		Unmarshal:         unmarshal,
+		CheckInitialized:  checkInitialized,
 		Merge:             nil,
-		CheckInitialized:  nil,
 	}
 }
 

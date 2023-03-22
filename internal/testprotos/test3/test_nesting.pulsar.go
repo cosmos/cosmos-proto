@@ -442,14 +442,17 @@ func init() {
 		}
 		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
 	}
+	checkInitialized := func(input protoiface.CheckInitializedInput) (protoiface.CheckInitializedOutput, error) {
+		return protoiface.CheckInitializedOutput{}, nil
+	}
 	fastReflection_MultiLayeredNestingProtoMethods = &protoiface.Methods{
 		NoUnkeyedLiterals: struct{}{},
 		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
 		Size:              size,
 		Marshal:           marshal,
 		Unmarshal:         unmarshal,
+		CheckInitialized:  checkInitialized,
 		Merge:             nil,
-		CheckInitialized:  nil,
 	}
 }
 
@@ -804,14 +807,17 @@ func init() {
 		}
 		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
 	}
+	checkInitialized := func(input protoiface.CheckInitializedInput) (protoiface.CheckInitializedOutput, error) {
+		return protoiface.CheckInitializedOutput{}, nil
+	}
 	fastReflection_MultiLayeredNesting_Nested1ProtoMethods = &protoiface.Methods{
 		NoUnkeyedLiterals: struct{}{},
 		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
 		Size:              size,
 		Marshal:           marshal,
 		Unmarshal:         unmarshal,
+		CheckInitialized:  checkInitialized,
 		Merge:             nil,
-		CheckInitialized:  nil,
 	}
 }
 
@@ -1245,14 +1251,17 @@ func init() {
 		}
 		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
 	}
+	checkInitialized := func(input protoiface.CheckInitializedInput) (protoiface.CheckInitializedOutput, error) {
+		return protoiface.CheckInitializedOutput{}, nil
+	}
 	fastReflection_MultiLayeredNesting_Nested1_Nested2ProtoMethods = &protoiface.Methods{
 		NoUnkeyedLiterals: struct{}{},
 		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
 		Size:              size,
 		Marshal:           marshal,
 		Unmarshal:         unmarshal,
+		CheckInitialized:  checkInitialized,
 		Merge:             nil,
-		CheckInitialized:  nil,
 	}
 }
 
@@ -1764,14 +1773,17 @@ func init() {
 		}
 		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
 	}
+	checkInitialized := func(input protoiface.CheckInitializedInput) (protoiface.CheckInitializedOutput, error) {
+		return protoiface.CheckInitializedOutput{}, nil
+	}
 	fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3ProtoMethods = &protoiface.Methods{
 		NoUnkeyedLiterals: struct{}{},
 		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
 		Size:              size,
 		Marshal:           marshal,
 		Unmarshal:         unmarshal,
+		CheckInitialized:  checkInitialized,
 		Merge:             nil,
-		CheckInitialized:  nil,
 	}
 }
 

@@ -306,6 +306,7 @@ func (g *fastGenerator) genProtoMethods() {
 	g.genSizeMethod()
 	g.genMarshalMethod()
 	g.genUnmarshalMethod()
+	g.genCheckInitializedMethod()
 
 	g.P(varName, " = &", protoifacePkg.Ident("Methods"), "{ ")
 	g.P("NoUnkeyedLiterals: struct{}{},")
@@ -313,8 +314,8 @@ func (g *fastGenerator) genProtoMethods() {
 	g.P("Size: size,")
 	g.P("Marshal: marshal,")
 	g.P("Unmarshal: unmarshal,")
+	g.P("CheckInitialized: checkInitialized,")
 	g.P("Merge: nil,")
-	g.P("CheckInitialized: nil,")
 	g.P("}")
 	g.P("}")
 }
