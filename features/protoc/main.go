@@ -8,7 +8,7 @@ package protoc
 import (
 	"fmt"
 	"github.com/cosmos/cosmos-proto/features/protoc/genid"
-	"github.com/cosmos/cosmos-proto/generator"
+	"github.com/cosmos/cosmos-proto/internal/generator"
 	"go/ast"
 	"go/parser"
 	"go/token"

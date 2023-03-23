@@ -3,7 +3,7 @@ package fastreflection
 import (
 	"fmt"
 	"github.com/cosmos/cosmos-proto/features/fastreflection/copied"
-	"github.com/cosmos/cosmos-proto/generator"
+	"github.com/cosmos/cosmos-proto/internal/generator"
 	"google.golang.org/protobuf/compiler/protogen"
 )
 
