@@ -5,7 +5,7 @@ import (
 	"github.com/cosmos/cosmos-proto/internal/generator"
 	"google.golang.org/protobuf/reflect/protoreflect"
 
-	"github.com/cosmos/cosmos-proto/features/fastreflection/copied"
+	"github.com/cosmos/cosmos-proto/internal/features/fastreflection/copied"
 	"google.golang.org/protobuf/compiler/protogen"
 )
 

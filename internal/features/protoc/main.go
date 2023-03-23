@@ -7,7 +7,7 @@ package protoc
 
 import (
 	"fmt"
-	"github.com/cosmos/cosmos-proto/features/protoc/genid"
+	"github.com/cosmos/cosmos-proto/internal/features/protoc/genid"
 	"github.com/cosmos/cosmos-proto/internal/generator"
 	"go/ast"
 	"go/parser"
@@ -22,7 +22,7 @@ import (
 
 	pref "google.golang.org/protobuf/reflect/protoreflect"
 
-	"github.com/cosmos/cosmos-proto/features/protoc/version"
+	"github.com/cosmos/cosmos-proto/internal/features/protoc/version"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/runtime/protoimpl"
