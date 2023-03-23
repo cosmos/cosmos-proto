@@ -11,7 +11,7 @@ import (
 	"google.golang.org/protobuf/types/known/anypb"
 
 	"github.com/cosmos/cosmos-proto/anyutil"
-	"github.com/cosmos/cosmos-proto/testpb"
+	"github.com/cosmos/cosmos-proto/internal/testpb"
 )
 
 func TestAny(t *testing.T) {

@@ -1,8 +1,8 @@
 syntax="proto3";
 
-import "testpb/2.proto";
+import "internal/testpb/2.proto";
 
-option go_package = "github.com/cosmos/cosmos-proto/testpb";
+option go_package = "github.com/cosmos/cosmos-proto/internal/testpb";
 
 enum Enumeration {
   One = 0;
