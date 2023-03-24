@@ -2543,12 +2543,14 @@ func init() {
 	fd_TestAllTypes_oneof_enum = md_TestAllTypes.Fields().ByName("oneof_enum")
 }
 
-var _ protoreflect.Message = (*fastReflection_TestAllTypes)(nil)
+var _ protoreflect.Message = fastReflection_TestAllTypes{}
 
-type fastReflection_TestAllTypes TestAllTypes
+type fastReflection_TestAllTypes struct {
+	x *TestAllTypes
+}
 
 func (x *TestAllTypes) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_TestAllTypes)(x)
+	return fastReflection_TestAllTypes{x: x}
 }
 
 func (x *TestAllTypes) slowProtoReflect() protoreflect.Message {
@@ -2569,10 +2571,10 @@ var _ protoreflect.MessageType = fastReflection_TestAllTypes_messageType{}
 type fastReflection_TestAllTypes_messageType struct{}
 
 func (x fastReflection_TestAllTypes_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_TestAllTypes)(nil)
+	return fastReflection_TestAllTypes{x: nil}
 }
 func (x fastReflection_TestAllTypes_messageType) New() protoreflect.Message {
-	return new(fastReflection_TestAllTypes)
+	return fastReflection_TestAllTypes{x: new(TestAllTypes)}
 }
 func (x fastReflection_TestAllTypes_messageType) Descriptor() protoreflect.MessageDescriptor {
 	return md_TestAllTypes
@@ -2580,26 +2582,26 @@ func (x fastReflection_TestAllTypes_messageType) Descriptor() protoreflect.Messa
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_TestAllTypes) Descriptor() protoreflect.MessageDescriptor {
+func (x fastReflection_TestAllTypes) Descriptor() protoreflect.MessageDescriptor {
 	return md_TestAllTypes
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_TestAllTypes) Type() protoreflect.MessageType {
+func (x fastReflection_TestAllTypes) Type() protoreflect.MessageType {
 	return _fastReflection_TestAllTypes_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_TestAllTypes) New() protoreflect.Message {
-	return new(fastReflection_TestAllTypes)
+func (x fastReflection_TestAllTypes) New() protoreflect.Message {
+	return fastReflection_TestAllTypes{x: new(TestAllTypes)}
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_TestAllTypes) Interface() protoreflect.ProtoMessage {
-	return (*TestAllTypes)(x)
+func (x fastReflection_TestAllTypes) Interface() protoreflect.ProtoMessage {
+	return x.x
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -2607,363 +2609,363 @@ func (x *fastReflection_TestAllTypes) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_TestAllTypes) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.SingularInt32 != int32(0) {
-		value := protoreflect.ValueOfInt32(x.SingularInt32)
+func (x fastReflection_TestAllTypes) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.x.SingularInt32 != int32(0) {
+		value := protoreflect.ValueOfInt32(x.x.SingularInt32)
 		if !f(fd_TestAllTypes_singular_int32, value) {
 			return
 		}
 	}
-	if x.SingularInt64 != int64(0) {
-		value := protoreflect.ValueOfInt64(x.SingularInt64)
+	if x.x.SingularInt64 != int64(0) {
+		value := protoreflect.ValueOfInt64(x.x.SingularInt64)
 		if !f(fd_TestAllTypes_singular_int64, value) {
 			return
 		}
 	}
-	if x.SingularUint32 != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.SingularUint32)
+	if x.x.SingularUint32 != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.x.SingularUint32)
 		if !f(fd_TestAllTypes_singular_uint32, value) {
 			return
 		}
 	}
-	if x.SingularUint64 != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.SingularUint64)
+	if x.x.SingularUint64 != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.x.SingularUint64)
 		if !f(fd_TestAllTypes_singular_uint64, value) {
 			return
 		}
 	}
-	if x.SingularSint32 != int32(0) {
-		value := protoreflect.ValueOfInt32(x.SingularSint32)
+	if x.x.SingularSint32 != int32(0) {
+		value := protoreflect.ValueOfInt32(x.x.SingularSint32)
 		if !f(fd_TestAllTypes_singular_sint32, value) {
 			return
 		}
 	}
-	if x.SingularSint64 != int64(0) {
-		value := protoreflect.ValueOfInt64(x.SingularSint64)
+	if x.x.SingularSint64 != int64(0) {
+		value := protoreflect.ValueOfInt64(x.x.SingularSint64)
 		if !f(fd_TestAllTypes_singular_sint64, value) {
 			return
 		}
 	}
-	if x.SingularFixed32 != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.SingularFixed32)
+	if x.x.SingularFixed32 != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.x.SingularFixed32)
 		if !f(fd_TestAllTypes_singular_fixed32, value) {
 			return
 		}
 	}
-	if x.SingularFixed64 != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.SingularFixed64)
+	if x.x.SingularFixed64 != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.x.SingularFixed64)
 		if !f(fd_TestAllTypes_singular_fixed64, value) {
 			return
 		}
 	}
-	if x.SingularSfixed32 != int32(0) {
-		value := protoreflect.ValueOfInt32(x.SingularSfixed32)
+	if x.x.SingularSfixed32 != int32(0) {
+		value := protoreflect.ValueOfInt32(x.x.SingularSfixed32)
 		if !f(fd_TestAllTypes_singular_sfixed32, value) {
 			return
 		}
 	}
-	if x.SingularSfixed64 != int64(0) {
-		value := protoreflect.ValueOfInt64(x.SingularSfixed64)
+	if x.x.SingularSfixed64 != int64(0) {
+		value := protoreflect.ValueOfInt64(x.x.SingularSfixed64)
 		if !f(fd_TestAllTypes_singular_sfixed64, value) {
 			return
 		}
 	}
-	if x.SingularFloat != float32(0) || math.Signbit(float64(x.SingularFloat)) {
-		value := protoreflect.ValueOfFloat32(x.SingularFloat)
+	if x.x.SingularFloat != float32(0) || math.Signbit(float64(x.x.SingularFloat)) {
+		value := protoreflect.ValueOfFloat32(x.x.SingularFloat)
 		if !f(fd_TestAllTypes_singular_float, value) {
 			return
 		}
 	}
-	if x.SingularDouble != float64(0) || math.Signbit(x.SingularDouble) {
-		value := protoreflect.ValueOfFloat64(x.SingularDouble)
+	if x.x.SingularDouble != float64(0) || math.Signbit(x.x.SingularDouble) {
+		value := protoreflect.ValueOfFloat64(x.x.SingularDouble)
 		if !f(fd_TestAllTypes_singular_double, value) {
 			return
 		}
 	}
-	if x.SingularBool != false {
-		value := protoreflect.ValueOfBool(x.SingularBool)
+	if x.x.SingularBool != false {
+		value := protoreflect.ValueOfBool(x.x.SingularBool)
 		if !f(fd_TestAllTypes_singular_bool, value) {
 			return
 		}
 	}
-	if x.SingularString != "" {
-		value := protoreflect.ValueOfString(x.SingularString)
+	if x.x.SingularString != "" {
+		value := protoreflect.ValueOfString(x.x.SingularString)
 		if !f(fd_TestAllTypes_singular_string, value) {
 			return
 		}
 	}
-	if len(x.SingularBytes) != 0 {
-		value := protoreflect.ValueOfBytes(x.SingularBytes)
+	if len(x.x.SingularBytes) != 0 {
+		value := protoreflect.ValueOfBytes(x.x.SingularBytes)
 		if !f(fd_TestAllTypes_singular_bytes, value) {
 			return
 		}
 	}
-	if x.SingularNestedMessage != nil {
-		value := protoreflect.ValueOfMessage(x.SingularNestedMessage.ProtoReflect())
+	if x.x.SingularNestedMessage != nil {
+		value := protoreflect.ValueOfMessage(x.x.SingularNestedMessage.ProtoReflect())
 		if !f(fd_TestAllTypes_singular_nested_message, value) {
 			return
 		}
 	}
-	if x.SingularForeignMessage != nil {
-		value := protoreflect.ValueOfMessage(x.SingularForeignMessage.ProtoReflect())
+	if x.x.SingularForeignMessage != nil {
+		value := protoreflect.ValueOfMessage(x.x.SingularForeignMessage.ProtoReflect())
 		if !f(fd_TestAllTypes_singular_foreign_message, value) {
 			return
 		}
 	}
-	if x.SingularImportMessage != nil {
-		value := protoreflect.ValueOfMessage(x.SingularImportMessage.ProtoReflect())
+	if x.x.SingularImportMessage != nil {
+		value := protoreflect.ValueOfMessage(x.x.SingularImportMessage.ProtoReflect())
 		if !f(fd_TestAllTypes_singular_import_message, value) {
 			return
 		}
 	}
-	if x.SingularNestedEnum != 0 {
-		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.SingularNestedEnum))
+	if x.x.SingularNestedEnum != 0 {
+		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.x.SingularNestedEnum))
 		if !f(fd_TestAllTypes_singular_nested_enum, value) {
 			return
 		}
 	}
-	if x.SingularForeignEnum != 0 {
-		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.SingularForeignEnum))
+	if x.x.SingularForeignEnum != 0 {
+		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.x.SingularForeignEnum))
 		if !f(fd_TestAllTypes_singular_foreign_enum, value) {
 			return
 		}
 	}
-	if x.SingularImportEnum != 0 {
-		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.SingularImportEnum))
+	if x.x.SingularImportEnum != 0 {
+		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.x.SingularImportEnum))
 		if !f(fd_TestAllTypes_singular_import_enum, value) {
 			return
 		}
 	}
-	if len(x.RepeatedInt32) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_31_list{list: &x.RepeatedInt32})
+	if len(x.x.RepeatedInt32) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_31_list{list: &x.x.RepeatedInt32})
 		if !f(fd_TestAllTypes_repeated_int32, value) {
 			return
 		}
 	}
-	if len(x.RepeatedInt64) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_32_list{list: &x.RepeatedInt64})
+	if len(x.x.RepeatedInt64) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_32_list{list: &x.x.RepeatedInt64})
 		if !f(fd_TestAllTypes_repeated_int64, value) {
 			return
 		}
 	}
-	if len(x.RepeatedUint32) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_33_list{list: &x.RepeatedUint32})
+	if len(x.x.RepeatedUint32) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_33_list{list: &x.x.RepeatedUint32})
 		if !f(fd_TestAllTypes_repeated_uint32, value) {
 			return
 		}
 	}
-	if len(x.RepeatedUint64) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_34_list{list: &x.RepeatedUint64})
+	if len(x.x.RepeatedUint64) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_34_list{list: &x.x.RepeatedUint64})
 		if !f(fd_TestAllTypes_repeated_uint64, value) {
 			return
 		}
 	}
-	if len(x.RepeatedSint32) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_35_list{list: &x.RepeatedSint32})
+	if len(x.x.RepeatedSint32) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_35_list{list: &x.x.RepeatedSint32})
 		if !f(fd_TestAllTypes_repeated_sint32, value) {
 			return
 		}
 	}
-	if len(x.RepeatedSint64) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_36_list{list: &x.RepeatedSint64})
+	if len(x.x.RepeatedSint64) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_36_list{list: &x.x.RepeatedSint64})
 		if !f(fd_TestAllTypes_repeated_sint64, value) {
 			return
 		}
 	}
-	if len(x.RepeatedFixed32) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_37_list{list: &x.RepeatedFixed32})
+	if len(x.x.RepeatedFixed32) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_37_list{list: &x.x.RepeatedFixed32})
 		if !f(fd_TestAllTypes_repeated_fixed32, value) {
 			return
 		}
 	}
-	if len(x.RepeatedFixed64) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_38_list{list: &x.RepeatedFixed64})
+	if len(x.x.RepeatedFixed64) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_38_list{list: &x.x.RepeatedFixed64})
 		if !f(fd_TestAllTypes_repeated_fixed64, value) {
 			return
 		}
 	}
-	if len(x.RepeatedSfixed32) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_39_list{list: &x.RepeatedSfixed32})
+	if len(x.x.RepeatedSfixed32) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_39_list{list: &x.x.RepeatedSfixed32})
 		if !f(fd_TestAllTypes_repeated_sfixed32, value) {
 			return
 		}
 	}
-	if len(x.RepeatedSfixed64) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_40_list{list: &x.RepeatedSfixed64})
+	if len(x.x.RepeatedSfixed64) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_40_list{list: &x.x.RepeatedSfixed64})
 		if !f(fd_TestAllTypes_repeated_sfixed64, value) {
 			return
 		}
 	}
-	if len(x.RepeatedFloat) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_41_list{list: &x.RepeatedFloat})
+	if len(x.x.RepeatedFloat) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_41_list{list: &x.x.RepeatedFloat})
 		if !f(fd_TestAllTypes_repeated_float, value) {
 			return
 		}
 	}
-	if len(x.RepeatedDouble) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_42_list{list: &x.RepeatedDouble})
+	if len(x.x.RepeatedDouble) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_42_list{list: &x.x.RepeatedDouble})
 		if !f(fd_TestAllTypes_repeated_double, value) {
 			return
 		}
 	}
-	if len(x.RepeatedBool) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_43_list{list: &x.RepeatedBool})
+	if len(x.x.RepeatedBool) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_43_list{list: &x.x.RepeatedBool})
 		if !f(fd_TestAllTypes_repeated_bool, value) {
 			return
 		}
 	}
-	if len(x.RepeatedString) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_44_list{list: &x.RepeatedString})
+	if len(x.x.RepeatedString) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_44_list{list: &x.x.RepeatedString})
 		if !f(fd_TestAllTypes_repeated_string, value) {
 			return
 		}
 	}
-	if len(x.RepeatedBytes) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_45_list{list: &x.RepeatedBytes})
+	if len(x.x.RepeatedBytes) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_45_list{list: &x.x.RepeatedBytes})
 		if !f(fd_TestAllTypes_repeated_bytes, value) {
 			return
 		}
 	}
-	if len(x.RepeatedNestedMessage) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_48_list{list: &x.RepeatedNestedMessage})
+	if len(x.x.RepeatedNestedMessage) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_48_list{list: &x.x.RepeatedNestedMessage})
 		if !f(fd_TestAllTypes_repeated_nested_message, value) {
 			return
 		}
 	}
-	if len(x.RepeatedForeignMessage) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_49_list{list: &x.RepeatedForeignMessage})
+	if len(x.x.RepeatedForeignMessage) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_49_list{list: &x.x.RepeatedForeignMessage})
 		if !f(fd_TestAllTypes_repeated_foreign_message, value) {
 			return
 		}
 	}
-	if len(x.RepeatedImportmessage) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_50_list{list: &x.RepeatedImportmessage})
+	if len(x.x.RepeatedImportmessage) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_50_list{list: &x.x.RepeatedImportmessage})
 		if !f(fd_TestAllTypes_repeated_importmessage, value) {
 			return
 		}
 	}
-	if len(x.RepeatedNestedEnum) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_51_list{list: &x.RepeatedNestedEnum})
+	if len(x.x.RepeatedNestedEnum) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_51_list{list: &x.x.RepeatedNestedEnum})
 		if !f(fd_TestAllTypes_repeated_nested_enum, value) {
 			return
 		}
 	}
-	if len(x.RepeatedForeignEnum) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_52_list{list: &x.RepeatedForeignEnum})
+	if len(x.x.RepeatedForeignEnum) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_52_list{list: &x.x.RepeatedForeignEnum})
 		if !f(fd_TestAllTypes_repeated_foreign_enum, value) {
 			return
 		}
 	}
-	if len(x.RepeatedImportenum) != 0 {
-		value := protoreflect.ValueOfList(&_TestAllTypes_53_list{list: &x.RepeatedImportenum})
+	if len(x.x.RepeatedImportenum) != 0 {
+		value := protoreflect.ValueOfList(&_TestAllTypes_53_list{list: &x.x.RepeatedImportenum})
 		if !f(fd_TestAllTypes_repeated_importenum, value) {
 			return
 		}
 	}
-	if len(x.MapInt32Int32) != 0 {
-		value := protoreflect.ValueOfMap(&_TestAllTypes_56_map{m: &x.MapInt32Int32})
+	if len(x.x.MapInt32Int32) != 0 {
+		value := protoreflect.ValueOfMap(&_TestAllTypes_56_map{m: &x.x.MapInt32Int32})
 		if !f(fd_TestAllTypes_map_int32_int32, value) {
 			return
 		}
 	}
-	if len(x.MapInt64Int64) != 0 {
-		value := protoreflect.ValueOfMap(&_TestAllTypes_57_map{m: &x.MapInt64Int64})
+	if len(x.x.MapInt64Int64) != 0 {
+		value := protoreflect.ValueOfMap(&_TestAllTypes_57_map{m: &x.x.MapInt64Int64})
 		if !f(fd_TestAllTypes_map_int64_int64, value) {
 			return
 		}
 	}
-	if len(x.MapUint32Uint32) != 0 {
-		value := protoreflect.ValueOfMap(&_TestAllTypes_58_map{m: &x.MapUint32Uint32})
+	if len(x.x.MapUint32Uint32) != 0 {
+		value := protoreflect.ValueOfMap(&_TestAllTypes_58_map{m: &x.x.MapUint32Uint32})
 		if !f(fd_TestAllTypes_map_uint32_uint32, value) {
 			return
 		}
 	}
-	if len(x.MapUint64Uint64) != 0 {
-		value := protoreflect.ValueOfMap(&_TestAllTypes_59_map{m: &x.MapUint64Uint64})
+	if len(x.x.MapUint64Uint64) != 0 {
+		value := protoreflect.ValueOfMap(&_TestAllTypes_59_map{m: &x.x.MapUint64Uint64})
 		if !f(fd_TestAllTypes_map_uint64_uint64, value) {
 			return
 		}
 	}
-	if len(x.MapSint32Sint32) != 0 {
-		value := protoreflect.ValueOfMap(&_TestAllTypes_60_map{m: &x.MapSint32Sint32})
+	if len(x.x.MapSint32Sint32) != 0 {
+		value := protoreflect.ValueOfMap(&_TestAllTypes_60_map{m: &x.x.MapSint32Sint32})
 		if !f(fd_TestAllTypes_map_sint32_sint32, value) {
 			return
 		}
 	}
-	if len(x.MapSint64Sint64) != 0 {
-		value := protoreflect.ValueOfMap(&_TestAllTypes_61_map{m: &x.MapSint64Sint64})
+	if len(x.x.MapSint64Sint64) != 0 {
+		value := protoreflect.ValueOfMap(&_TestAllTypes_61_map{m: &x.x.MapSint64Sint64})
 		if !f(fd_TestAllTypes_map_sint64_sint64, value) {
 			return
 		}
 	}
-	if len(x.MapFixed32Fixed32) != 0 {
-		value := protoreflect.ValueOfMap(&_TestAllTypes_62_map{m: &x.MapFixed32Fixed32})
+	if len(x.x.MapFixed32Fixed32) != 0 {
+		value := protoreflect.ValueOfMap(&_TestAllTypes_62_map{m: &x.x.MapFixed32Fixed32})
 		if !f(fd_TestAllTypes_map_fixed32_fixed32, value) {
 			return
 		}
 	}
-	if len(x.MapFixed64Fixed64) != 0 {
-		value := protoreflect.ValueOfMap(&_TestAllTypes_63_map{m: &x.MapFixed64Fixed64})
+	if len(x.x.MapFixed64Fixed64) != 0 {
+		value := protoreflect.ValueOfMap(&_TestAllTypes_63_map{m: &x.x.MapFixed64Fixed64})
 		if !f(fd_TestAllTypes_map_fixed64_fixed64, value) {
 			return
 		}
 	}
-	if len(x.MapSfixed32Sfixed32) != 0 {
-		value := protoreflect.ValueOfMap(&_TestAllTypes_64_map{m: &x.MapSfixed32Sfixed32})
+	if len(x.x.MapSfixed32Sfixed32) != 0 {
+		value := protoreflect.ValueOfMap(&_TestAllTypes_64_map{m: &x.x.MapSfixed32Sfixed32})
 		if !f(fd_TestAllTypes_map_sfixed32_sfixed32, value) {
 			return
 		}
 	}
-	if len(x.MapSfixed64Sfixed64) != 0 {
-		value := protoreflect.ValueOfMap(&_TestAllTypes_65_map{m: &x.MapSfixed64Sfixed64})
+	if len(x.x.MapSfixed64Sfixed64) != 0 {
+		value := protoreflect.ValueOfMap(&_TestAllTypes_65_map{m: &x.x.MapSfixed64Sfixed64})
 		if !f(fd_TestAllTypes_map_sfixed64_sfixed64, value) {
 			return
 		}
 	}
-	if len(x.MapInt32Float) != 0 {
-		value := protoreflect.ValueOfMap(&_TestAllTypes_66_map{m: &x.MapInt32Float})
+	if len(x.x.MapInt32Float) != 0 {
+		value := protoreflect.ValueOfMap(&_TestAllTypes_66_map{m: &x.x.MapInt32Float})
 		if !f(fd_TestAllTypes_map_int32_float, value) {
 			return
 		}
 	}
-	if len(x.MapInt32Double) != 0 {
-		value := protoreflect.ValueOfMap(&_TestAllTypes_67_map{m: &x.MapInt32Double})
+	if len(x.x.MapInt32Double) != 0 {
+		value := protoreflect.ValueOfMap(&_TestAllTypes_67_map{m: &x.x.MapInt32Double})
 		if !f(fd_TestAllTypes_map_int32_double, value) {
 			return
 		}
 	}
-	if len(x.MapBoolBool) != 0 {
-		value := protoreflect.ValueOfMap(&_TestAllTypes_68_map{m: &x.MapBoolBool})
+	if len(x.x.MapBoolBool) != 0 {
+		value := protoreflect.ValueOfMap(&_TestAllTypes_68_map{m: &x.x.MapBoolBool})
 		if !f(fd_TestAllTypes_map_bool_bool, value) {
 			return
 		}
 	}
-	if len(x.MapStringString) != 0 {
-		value := protoreflect.ValueOfMap(&_TestAllTypes_69_map{m: &x.MapStringString})
+	if len(x.x.MapStringString) != 0 {
+		value := protoreflect.ValueOfMap(&_TestAllTypes_69_map{m: &x.x.MapStringString})
 		if !f(fd_TestAllTypes_map_string_string, value) {
 			return
 		}
 	}
-	if len(x.MapStringBytes) != 0 {
-		value := protoreflect.ValueOfMap(&_TestAllTypes_70_map{m: &x.MapStringBytes})
+	if len(x.x.MapStringBytes) != 0 {
+		value := protoreflect.ValueOfMap(&_TestAllTypes_70_map{m: &x.x.MapStringBytes})
 		if !f(fd_TestAllTypes_map_string_bytes, value) {
 			return
 		}
 	}
-	if len(x.MapStringNestedMessage) != 0 {
-		value := protoreflect.ValueOfMap(&_TestAllTypes_71_map{m: &x.MapStringNestedMessage})
+	if len(x.x.MapStringNestedMessage) != 0 {
+		value := protoreflect.ValueOfMap(&_TestAllTypes_71_map{m: &x.x.MapStringNestedMessage})
 		if !f(fd_TestAllTypes_map_string_nested_message, value) {
 			return
 		}
 	}
-	if len(x.MapStringNestedEnum) != 0 {
-		value := protoreflect.ValueOfMap(&_TestAllTypes_73_map{m: &x.MapStringNestedEnum})
+	if len(x.x.MapStringNestedEnum) != 0 {
+		value := protoreflect.ValueOfMap(&_TestAllTypes_73_map{m: &x.x.MapStringNestedEnum})
 		if !f(fd_TestAllTypes_map_string_nested_enum, value) {
 			return
 		}
 	}
-	if x.OneofField != nil {
-		switch o := x.OneofField.(type) {
+	if x.x.OneofField != nil {
+		switch o := x.x.OneofField.(type) {
 		case *TestAllTypes_OneofUint32:
 			v := o.OneofUint32
 			value := protoreflect.ValueOfUint32(v)
@@ -3033,194 +3035,194 @@ func (x *fastReflection_TestAllTypes) Range(f func(protoreflect.FieldDescriptor,
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_TestAllTypes) Has(fd protoreflect.FieldDescriptor) bool {
+func (x fastReflection_TestAllTypes) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "goproto.proto.test3.TestAllTypes.singular_int32":
-		return x.SingularInt32 != int32(0)
+		return x.x.SingularInt32 != int32(0)
 	case "goproto.proto.test3.TestAllTypes.singular_int64":
-		return x.SingularInt64 != int64(0)
+		return x.x.SingularInt64 != int64(0)
 	case "goproto.proto.test3.TestAllTypes.singular_uint32":
-		return x.SingularUint32 != uint32(0)
+		return x.x.SingularUint32 != uint32(0)
 	case "goproto.proto.test3.TestAllTypes.singular_uint64":
-		return x.SingularUint64 != uint64(0)
+		return x.x.SingularUint64 != uint64(0)
 	case "goproto.proto.test3.TestAllTypes.singular_sint32":
-		return x.SingularSint32 != int32(0)
+		return x.x.SingularSint32 != int32(0)
 	case "goproto.proto.test3.TestAllTypes.singular_sint64":
-		return x.SingularSint64 != int64(0)
+		return x.x.SingularSint64 != int64(0)
 	case "goproto.proto.test3.TestAllTypes.singular_fixed32":
-		return x.SingularFixed32 != uint32(0)
+		return x.x.SingularFixed32 != uint32(0)
 	case "goproto.proto.test3.TestAllTypes.singular_fixed64":
-		return x.SingularFixed64 != uint64(0)
+		return x.x.SingularFixed64 != uint64(0)
 	case "goproto.proto.test3.TestAllTypes.singular_sfixed32":
-		return x.SingularSfixed32 != int32(0)
+		return x.x.SingularSfixed32 != int32(0)
 	case "goproto.proto.test3.TestAllTypes.singular_sfixed64":
-		return x.SingularSfixed64 != int64(0)
+		return x.x.SingularSfixed64 != int64(0)
 	case "goproto.proto.test3.TestAllTypes.singular_float":
-		return x.SingularFloat != float32(0) || math.Signbit(float64(x.SingularFloat))
+		return x.x.SingularFloat != float32(0) || math.Signbit(float64(x.x.SingularFloat))
 	case "goproto.proto.test3.TestAllTypes.singular_double":
-		return x.SingularDouble != float64(0) || math.Signbit(x.SingularDouble)
+		return x.x.SingularDouble != float64(0) || math.Signbit(x.x.SingularDouble)
 	case "goproto.proto.test3.TestAllTypes.singular_bool":
-		return x.SingularBool != false
+		return x.x.SingularBool != false
 	case "goproto.proto.test3.TestAllTypes.singular_string":
-		return x.SingularString != ""
+		return x.x.SingularString != ""
 	case "goproto.proto.test3.TestAllTypes.singular_bytes":
-		return len(x.SingularBytes) != 0
+		return len(x.x.SingularBytes) != 0
 	case "goproto.proto.test3.TestAllTypes.singular_nested_message":
-		return x.SingularNestedMessage != nil
+		return x.x.SingularNestedMessage != nil
 	case "goproto.proto.test3.TestAllTypes.singular_foreign_message":
-		return x.SingularForeignMessage != nil
+		return x.x.SingularForeignMessage != nil
 	case "goproto.proto.test3.TestAllTypes.singular_import_message":
-		return x.SingularImportMessage != nil
+		return x.x.SingularImportMessage != nil
 	case "goproto.proto.test3.TestAllTypes.singular_nested_enum":
-		return x.SingularNestedEnum != 0
+		return x.x.SingularNestedEnum != 0
 	case "goproto.proto.test3.TestAllTypes.singular_foreign_enum":
-		return x.SingularForeignEnum != 0
+		return x.x.SingularForeignEnum != 0
 	case "goproto.proto.test3.TestAllTypes.singular_import_enum":
-		return x.SingularImportEnum != 0
+		return x.x.SingularImportEnum != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_int32":
-		return len(x.RepeatedInt32) != 0
+		return len(x.x.RepeatedInt32) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_int64":
-		return len(x.RepeatedInt64) != 0
+		return len(x.x.RepeatedInt64) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_uint32":
-		return len(x.RepeatedUint32) != 0
+		return len(x.x.RepeatedUint32) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_uint64":
-		return len(x.RepeatedUint64) != 0
+		return len(x.x.RepeatedUint64) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_sint32":
-		return len(x.RepeatedSint32) != 0
+		return len(x.x.RepeatedSint32) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_sint64":
-		return len(x.RepeatedSint64) != 0
+		return len(x.x.RepeatedSint64) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_fixed32":
-		return len(x.RepeatedFixed32) != 0
+		return len(x.x.RepeatedFixed32) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_fixed64":
-		return len(x.RepeatedFixed64) != 0
+		return len(x.x.RepeatedFixed64) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_sfixed32":
-		return len(x.RepeatedSfixed32) != 0
+		return len(x.x.RepeatedSfixed32) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_sfixed64":
-		return len(x.RepeatedSfixed64) != 0
+		return len(x.x.RepeatedSfixed64) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_float":
-		return len(x.RepeatedFloat) != 0
+		return len(x.x.RepeatedFloat) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_double":
-		return len(x.RepeatedDouble) != 0
+		return len(x.x.RepeatedDouble) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_bool":
-		return len(x.RepeatedBool) != 0
+		return len(x.x.RepeatedBool) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_string":
-		return len(x.RepeatedString) != 0
+		return len(x.x.RepeatedString) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_bytes":
-		return len(x.RepeatedBytes) != 0
+		return len(x.x.RepeatedBytes) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_nested_message":
-		return len(x.RepeatedNestedMessage) != 0
+		return len(x.x.RepeatedNestedMessage) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_foreign_message":
-		return len(x.RepeatedForeignMessage) != 0
+		return len(x.x.RepeatedForeignMessage) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_importmessage":
-		return len(x.RepeatedImportmessage) != 0
+		return len(x.x.RepeatedImportmessage) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_nested_enum":
-		return len(x.RepeatedNestedEnum) != 0
+		return len(x.x.RepeatedNestedEnum) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_foreign_enum":
-		return len(x.RepeatedForeignEnum) != 0
+		return len(x.x.RepeatedForeignEnum) != 0
 	case "goproto.proto.test3.TestAllTypes.repeated_importenum":
-		return len(x.RepeatedImportenum) != 0
+		return len(x.x.RepeatedImportenum) != 0
 	case "goproto.proto.test3.TestAllTypes.map_int32_int32":
-		return len(x.MapInt32Int32) != 0
+		return len(x.x.MapInt32Int32) != 0
 	case "goproto.proto.test3.TestAllTypes.map_int64_int64":
-		return len(x.MapInt64Int64) != 0
+		return len(x.x.MapInt64Int64) != 0
 	case "goproto.proto.test3.TestAllTypes.map_uint32_uint32":
-		return len(x.MapUint32Uint32) != 0
+		return len(x.x.MapUint32Uint32) != 0
 	case "goproto.proto.test3.TestAllTypes.map_uint64_uint64":
-		return len(x.MapUint64Uint64) != 0
+		return len(x.x.MapUint64Uint64) != 0
 	case "goproto.proto.test3.TestAllTypes.map_sint32_sint32":
-		return len(x.MapSint32Sint32) != 0
+		return len(x.x.MapSint32Sint32) != 0
 	case "goproto.proto.test3.TestAllTypes.map_sint64_sint64":
-		return len(x.MapSint64Sint64) != 0
+		return len(x.x.MapSint64Sint64) != 0
 	case "goproto.proto.test3.TestAllTypes.map_fixed32_fixed32":
-		return len(x.MapFixed32Fixed32) != 0
+		return len(x.x.MapFixed32Fixed32) != 0
 	case "goproto.proto.test3.TestAllTypes.map_fixed64_fixed64":
-		return len(x.MapFixed64Fixed64) != 0
+		return len(x.x.MapFixed64Fixed64) != 0
 	case "goproto.proto.test3.TestAllTypes.map_sfixed32_sfixed32":
-		return len(x.MapSfixed32Sfixed32) != 0
+		return len(x.x.MapSfixed32Sfixed32) != 0
 	case "goproto.proto.test3.TestAllTypes.map_sfixed64_sfixed64":
-		return len(x.MapSfixed64Sfixed64) != 0
+		return len(x.x.MapSfixed64Sfixed64) != 0
 	case "goproto.proto.test3.TestAllTypes.map_int32_float":
-		return len(x.MapInt32Float) != 0
+		return len(x.x.MapInt32Float) != 0
 	case "goproto.proto.test3.TestAllTypes.map_int32_double":
-		return len(x.MapInt32Double) != 0
+		return len(x.x.MapInt32Double) != 0
 	case "goproto.proto.test3.TestAllTypes.map_bool_bool":
-		return len(x.MapBoolBool) != 0
+		return len(x.x.MapBoolBool) != 0
 	case "goproto.proto.test3.TestAllTypes.map_string_string":
-		return len(x.MapStringString) != 0
+		return len(x.x.MapStringString) != 0
 	case "goproto.proto.test3.TestAllTypes.map_string_bytes":
-		return len(x.MapStringBytes) != 0
+		return len(x.x.MapStringBytes) != 0
 	case "goproto.proto.test3.TestAllTypes.map_string_nested_message":
-		return len(x.MapStringNestedMessage) != 0
+		return len(x.x.MapStringNestedMessage) != 0
 	case "goproto.proto.test3.TestAllTypes.map_string_nested_enum":
-		return len(x.MapStringNestedEnum) != 0
+		return len(x.x.MapStringNestedEnum) != 0
 	case "goproto.proto.test3.TestAllTypes.oneof_uint32":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return false
-		} else if _, ok := x.OneofField.(*TestAllTypes_OneofUint32); ok {
+		} else if _, ok := x.x.OneofField.(*TestAllTypes_OneofUint32); ok {
 			return true
 		} else {
 			return false
 		}
 	case "goproto.proto.test3.TestAllTypes.oneof_nested_message":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return false
-		} else if _, ok := x.OneofField.(*TestAllTypes_OneofNestedMessage); ok {
+		} else if _, ok := x.x.OneofField.(*TestAllTypes_OneofNestedMessage); ok {
 			return true
 		} else {
 			return false
 		}
 	case "goproto.proto.test3.TestAllTypes.oneof_string":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return false
-		} else if _, ok := x.OneofField.(*TestAllTypes_OneofString); ok {
+		} else if _, ok := x.x.OneofField.(*TestAllTypes_OneofString); ok {
 			return true
 		} else {
 			return false
 		}
 	case "goproto.proto.test3.TestAllTypes.oneof_bytes":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return false
-		} else if _, ok := x.OneofField.(*TestAllTypes_OneofBytes); ok {
+		} else if _, ok := x.x.OneofField.(*TestAllTypes_OneofBytes); ok {
 			return true
 		} else {
 			return false
 		}
 	case "goproto.proto.test3.TestAllTypes.oneof_bool":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return false
-		} else if _, ok := x.OneofField.(*TestAllTypes_OneofBool); ok {
+		} else if _, ok := x.x.OneofField.(*TestAllTypes_OneofBool); ok {
 			return true
 		} else {
 			return false
 		}
 	case "goproto.proto.test3.TestAllTypes.oneof_uint64":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return false
-		} else if _, ok := x.OneofField.(*TestAllTypes_OneofUint64); ok {
+		} else if _, ok := x.x.OneofField.(*TestAllTypes_OneofUint64); ok {
 			return true
 		} else {
 			return false
 		}
 	case "goproto.proto.test3.TestAllTypes.oneof_float":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return false
-		} else if _, ok := x.OneofField.(*TestAllTypes_OneofFloat); ok {
+		} else if _, ok := x.x.OneofField.(*TestAllTypes_OneofFloat); ok {
 			return true
 		} else {
 			return false
 		}
 	case "goproto.proto.test3.TestAllTypes.oneof_double":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return false
-		} else if _, ok := x.OneofField.(*TestAllTypes_OneofDouble); ok {
+		} else if _, ok := x.x.OneofField.(*TestAllTypes_OneofDouble); ok {
 			return true
 		} else {
 			return false
 		}
 	case "goproto.proto.test3.TestAllTypes.oneof_enum":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return false
-		} else if _, ok := x.OneofField.(*TestAllTypes_OneofEnum); ok {
+		} else if _, ok := x.x.OneofField.(*TestAllTypes_OneofEnum); ok {
 			return true
 		} else {
 			return false
@@ -3239,144 +3241,144 @@ func (x *fastReflection_TestAllTypes) Has(fd protoreflect.FieldDescriptor) bool 
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_TestAllTypes) Clear(fd protoreflect.FieldDescriptor) {
+func (x fastReflection_TestAllTypes) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "goproto.proto.test3.TestAllTypes.singular_int32":
-		x.SingularInt32 = int32(0)
+		x.x.SingularInt32 = int32(0)
 	case "goproto.proto.test3.TestAllTypes.singular_int64":
-		x.SingularInt64 = int64(0)
+		x.x.SingularInt64 = int64(0)
 	case "goproto.proto.test3.TestAllTypes.singular_uint32":
-		x.SingularUint32 = uint32(0)
+		x.x.SingularUint32 = uint32(0)
 	case "goproto.proto.test3.TestAllTypes.singular_uint64":
-		x.SingularUint64 = uint64(0)
+		x.x.SingularUint64 = uint64(0)
 	case "goproto.proto.test3.TestAllTypes.singular_sint32":
-		x.SingularSint32 = int32(0)
+		x.x.SingularSint32 = int32(0)
 	case "goproto.proto.test3.TestAllTypes.singular_sint64":
-		x.SingularSint64 = int64(0)
+		x.x.SingularSint64 = int64(0)
 	case "goproto.proto.test3.TestAllTypes.singular_fixed32":
-		x.SingularFixed32 = uint32(0)
+		x.x.SingularFixed32 = uint32(0)
 	case "goproto.proto.test3.TestAllTypes.singular_fixed64":
-		x.SingularFixed64 = uint64(0)
+		x.x.SingularFixed64 = uint64(0)
 	case "goproto.proto.test3.TestAllTypes.singular_sfixed32":
-		x.SingularSfixed32 = int32(0)
+		x.x.SingularSfixed32 = int32(0)
 	case "goproto.proto.test3.TestAllTypes.singular_sfixed64":
-		x.SingularSfixed64 = int64(0)
+		x.x.SingularSfixed64 = int64(0)
 	case "goproto.proto.test3.TestAllTypes.singular_float":
-		x.SingularFloat = float32(0)
+		x.x.SingularFloat = float32(0)
 	case "goproto.proto.test3.TestAllTypes.singular_double":
-		x.SingularDouble = float64(0)
+		x.x.SingularDouble = float64(0)
 	case "goproto.proto.test3.TestAllTypes.singular_bool":
-		x.SingularBool = false
+		x.x.SingularBool = false
 	case "goproto.proto.test3.TestAllTypes.singular_string":
-		x.SingularString = ""
+		x.x.SingularString = ""
 	case "goproto.proto.test3.TestAllTypes.singular_bytes":
-		x.SingularBytes = nil
+		x.x.SingularBytes = nil
 	case "goproto.proto.test3.TestAllTypes.singular_nested_message":
-		x.SingularNestedMessage = nil
+		x.x.SingularNestedMessage = nil
 	case "goproto.proto.test3.TestAllTypes.singular_foreign_message":
-		x.SingularForeignMessage = nil
+		x.x.SingularForeignMessage = nil
 	case "goproto.proto.test3.TestAllTypes.singular_import_message":
-		x.SingularImportMessage = nil
+		x.x.SingularImportMessage = nil
 	case "goproto.proto.test3.TestAllTypes.singular_nested_enum":
-		x.SingularNestedEnum = 0
+		x.x.SingularNestedEnum = 0
 	case "goproto.proto.test3.TestAllTypes.singular_foreign_enum":
-		x.SingularForeignEnum = 0
+		x.x.SingularForeignEnum = 0
 	case "goproto.proto.test3.TestAllTypes.singular_import_enum":
-		x.SingularImportEnum = 0
+		x.x.SingularImportEnum = 0
 	case "goproto.proto.test3.TestAllTypes.repeated_int32":
-		x.RepeatedInt32 = nil
+		x.x.RepeatedInt32 = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_int64":
-		x.RepeatedInt64 = nil
+		x.x.RepeatedInt64 = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_uint32":
-		x.RepeatedUint32 = nil
+		x.x.RepeatedUint32 = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_uint64":
-		x.RepeatedUint64 = nil
+		x.x.RepeatedUint64 = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_sint32":
-		x.RepeatedSint32 = nil
+		x.x.RepeatedSint32 = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_sint64":
-		x.RepeatedSint64 = nil
+		x.x.RepeatedSint64 = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_fixed32":
-		x.RepeatedFixed32 = nil
+		x.x.RepeatedFixed32 = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_fixed64":
-		x.RepeatedFixed64 = nil
+		x.x.RepeatedFixed64 = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_sfixed32":
-		x.RepeatedSfixed32 = nil
+		x.x.RepeatedSfixed32 = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_sfixed64":
-		x.RepeatedSfixed64 = nil
+		x.x.RepeatedSfixed64 = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_float":
-		x.RepeatedFloat = nil
+		x.x.RepeatedFloat = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_double":
-		x.RepeatedDouble = nil
+		x.x.RepeatedDouble = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_bool":
-		x.RepeatedBool = nil
+		x.x.RepeatedBool = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_string":
-		x.RepeatedString = nil
+		x.x.RepeatedString = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_bytes":
-		x.RepeatedBytes = nil
+		x.x.RepeatedBytes = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_nested_message":
-		x.RepeatedNestedMessage = nil
+		x.x.RepeatedNestedMessage = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_foreign_message":
-		x.RepeatedForeignMessage = nil
+		x.x.RepeatedForeignMessage = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_importmessage":
-		x.RepeatedImportmessage = nil
+		x.x.RepeatedImportmessage = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_nested_enum":
-		x.RepeatedNestedEnum = nil
+		x.x.RepeatedNestedEnum = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_foreign_enum":
-		x.RepeatedForeignEnum = nil
+		x.x.RepeatedForeignEnum = nil
 	case "goproto.proto.test3.TestAllTypes.repeated_importenum":
-		x.RepeatedImportenum = nil
+		x.x.RepeatedImportenum = nil
 	case "goproto.proto.test3.TestAllTypes.map_int32_int32":
-		x.MapInt32Int32 = nil
+		x.x.MapInt32Int32 = nil
 	case "goproto.proto.test3.TestAllTypes.map_int64_int64":
-		x.MapInt64Int64 = nil
+		x.x.MapInt64Int64 = nil
 	case "goproto.proto.test3.TestAllTypes.map_uint32_uint32":
-		x.MapUint32Uint32 = nil
+		x.x.MapUint32Uint32 = nil
 	case "goproto.proto.test3.TestAllTypes.map_uint64_uint64":
-		x.MapUint64Uint64 = nil
+		x.x.MapUint64Uint64 = nil
 	case "goproto.proto.test3.TestAllTypes.map_sint32_sint32":
-		x.MapSint32Sint32 = nil
+		x.x.MapSint32Sint32 = nil
 	case "goproto.proto.test3.TestAllTypes.map_sint64_sint64":
-		x.MapSint64Sint64 = nil
+		x.x.MapSint64Sint64 = nil
 	case "goproto.proto.test3.TestAllTypes.map_fixed32_fixed32":
-		x.MapFixed32Fixed32 = nil
+		x.x.MapFixed32Fixed32 = nil
 	case "goproto.proto.test3.TestAllTypes.map_fixed64_fixed64":
-		x.MapFixed64Fixed64 = nil
+		x.x.MapFixed64Fixed64 = nil
 	case "goproto.proto.test3.TestAllTypes.map_sfixed32_sfixed32":
-		x.MapSfixed32Sfixed32 = nil
+		x.x.MapSfixed32Sfixed32 = nil
 	case "goproto.proto.test3.TestAllTypes.map_sfixed64_sfixed64":
-		x.MapSfixed64Sfixed64 = nil
+		x.x.MapSfixed64Sfixed64 = nil
 	case "goproto.proto.test3.TestAllTypes.map_int32_float":
-		x.MapInt32Float = nil
+		x.x.MapInt32Float = nil
 	case "goproto.proto.test3.TestAllTypes.map_int32_double":
-		x.MapInt32Double = nil
+		x.x.MapInt32Double = nil
 	case "goproto.proto.test3.TestAllTypes.map_bool_bool":
-		x.MapBoolBool = nil
+		x.x.MapBoolBool = nil
 	case "goproto.proto.test3.TestAllTypes.map_string_string":
-		x.MapStringString = nil
+		x.x.MapStringString = nil
 	case "goproto.proto.test3.TestAllTypes.map_string_bytes":
-		x.MapStringBytes = nil
+		x.x.MapStringBytes = nil
 	case "goproto.proto.test3.TestAllTypes.map_string_nested_message":
-		x.MapStringNestedMessage = nil
+		x.x.MapStringNestedMessage = nil
 	case "goproto.proto.test3.TestAllTypes.map_string_nested_enum":
-		x.MapStringNestedEnum = nil
+		x.x.MapStringNestedEnum = nil
 	case "goproto.proto.test3.TestAllTypes.oneof_uint32":
-		x.OneofField = nil
+		x.x.OneofField = nil
 	case "goproto.proto.test3.TestAllTypes.oneof_nested_message":
-		x.OneofField = nil
+		x.x.OneofField = nil
 	case "goproto.proto.test3.TestAllTypes.oneof_string":
-		x.OneofField = nil
+		x.x.OneofField = nil
 	case "goproto.proto.test3.TestAllTypes.oneof_bytes":
-		x.OneofField = nil
+		x.x.OneofField = nil
 	case "goproto.proto.test3.TestAllTypes.oneof_bool":
-		x.OneofField = nil
+		x.x.OneofField = nil
 	case "goproto.proto.test3.TestAllTypes.oneof_uint64":
-		x.OneofField = nil
+		x.x.OneofField = nil
 	case "goproto.proto.test3.TestAllTypes.oneof_float":
-		x.OneofField = nil
+		x.x.OneofField = nil
 	case "goproto.proto.test3.TestAllTypes.oneof_double":
-		x.OneofField = nil
+		x.x.OneofField = nil
 	case "goproto.proto.test3.TestAllTypes.oneof_enum":
-		x.OneofField = nil
+		x.x.OneofField = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goproto.proto.test3.TestAllTypes"))
@@ -3391,367 +3393,367 @@ func (x *fastReflection_TestAllTypes) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_TestAllTypes) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_TestAllTypes) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	case "goproto.proto.test3.TestAllTypes.singular_int32":
-		value := x.SingularInt32
+		value := x.x.SingularInt32
 		return protoreflect.ValueOfInt32(value)
 	case "goproto.proto.test3.TestAllTypes.singular_int64":
-		value := x.SingularInt64
+		value := x.x.SingularInt64
 		return protoreflect.ValueOfInt64(value)
 	case "goproto.proto.test3.TestAllTypes.singular_uint32":
-		value := x.SingularUint32
+		value := x.x.SingularUint32
 		return protoreflect.ValueOfUint32(value)
 	case "goproto.proto.test3.TestAllTypes.singular_uint64":
-		value := x.SingularUint64
+		value := x.x.SingularUint64
 		return protoreflect.ValueOfUint64(value)
 	case "goproto.proto.test3.TestAllTypes.singular_sint32":
-		value := x.SingularSint32
+		value := x.x.SingularSint32
 		return protoreflect.ValueOfInt32(value)
 	case "goproto.proto.test3.TestAllTypes.singular_sint64":
-		value := x.SingularSint64
+		value := x.x.SingularSint64
 		return protoreflect.ValueOfInt64(value)
 	case "goproto.proto.test3.TestAllTypes.singular_fixed32":
-		value := x.SingularFixed32
+		value := x.x.SingularFixed32
 		return protoreflect.ValueOfUint32(value)
 	case "goproto.proto.test3.TestAllTypes.singular_fixed64":
-		value := x.SingularFixed64
+		value := x.x.SingularFixed64
 		return protoreflect.ValueOfUint64(value)
 	case "goproto.proto.test3.TestAllTypes.singular_sfixed32":
-		value := x.SingularSfixed32
+		value := x.x.SingularSfixed32
 		return protoreflect.ValueOfInt32(value)
 	case "goproto.proto.test3.TestAllTypes.singular_sfixed64":
-		value := x.SingularSfixed64
+		value := x.x.SingularSfixed64
 		return protoreflect.ValueOfInt64(value)
 	case "goproto.proto.test3.TestAllTypes.singular_float":
-		value := x.SingularFloat
+		value := x.x.SingularFloat
 		return protoreflect.ValueOfFloat32(value)
 	case "goproto.proto.test3.TestAllTypes.singular_double":
-		value := x.SingularDouble
+		value := x.x.SingularDouble
 		return protoreflect.ValueOfFloat64(value)
 	case "goproto.proto.test3.TestAllTypes.singular_bool":
-		value := x.SingularBool
+		value := x.x.SingularBool
 		return protoreflect.ValueOfBool(value)
 	case "goproto.proto.test3.TestAllTypes.singular_string":
-		value := x.SingularString
+		value := x.x.SingularString
 		return protoreflect.ValueOfString(value)
 	case "goproto.proto.test3.TestAllTypes.singular_bytes":
-		value := x.SingularBytes
+		value := x.x.SingularBytes
 		return protoreflect.ValueOfBytes(value)
 	case "goproto.proto.test3.TestAllTypes.singular_nested_message":
-		value := x.SingularNestedMessage
+		value := x.x.SingularNestedMessage
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "goproto.proto.test3.TestAllTypes.singular_foreign_message":
-		value := x.SingularForeignMessage
+		value := x.x.SingularForeignMessage
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "goproto.proto.test3.TestAllTypes.singular_import_message":
-		value := x.SingularImportMessage
+		value := x.x.SingularImportMessage
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "goproto.proto.test3.TestAllTypes.singular_nested_enum":
-		value := x.SingularNestedEnum
+		value := x.x.SingularNestedEnum
 		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
 	case "goproto.proto.test3.TestAllTypes.singular_foreign_enum":
-		value := x.SingularForeignEnum
+		value := x.x.SingularForeignEnum
 		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
 	case "goproto.proto.test3.TestAllTypes.singular_import_enum":
-		value := x.SingularImportEnum
+		value := x.x.SingularImportEnum
 		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
 	case "goproto.proto.test3.TestAllTypes.repeated_int32":
-		if len(x.RepeatedInt32) == 0 {
+		if len(x.x.RepeatedInt32) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_31_list{})
 		}
-		listValue := &_TestAllTypes_31_list{list: &x.RepeatedInt32}
+		listValue := &_TestAllTypes_31_list{list: &x.x.RepeatedInt32}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_int64":
-		if len(x.RepeatedInt64) == 0 {
+		if len(x.x.RepeatedInt64) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_32_list{})
 		}
-		listValue := &_TestAllTypes_32_list{list: &x.RepeatedInt64}
+		listValue := &_TestAllTypes_32_list{list: &x.x.RepeatedInt64}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_uint32":
-		if len(x.RepeatedUint32) == 0 {
+		if len(x.x.RepeatedUint32) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_33_list{})
 		}
-		listValue := &_TestAllTypes_33_list{list: &x.RepeatedUint32}
+		listValue := &_TestAllTypes_33_list{list: &x.x.RepeatedUint32}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_uint64":
-		if len(x.RepeatedUint64) == 0 {
+		if len(x.x.RepeatedUint64) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_34_list{})
 		}
-		listValue := &_TestAllTypes_34_list{list: &x.RepeatedUint64}
+		listValue := &_TestAllTypes_34_list{list: &x.x.RepeatedUint64}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_sint32":
-		if len(x.RepeatedSint32) == 0 {
+		if len(x.x.RepeatedSint32) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_35_list{})
 		}
-		listValue := &_TestAllTypes_35_list{list: &x.RepeatedSint32}
+		listValue := &_TestAllTypes_35_list{list: &x.x.RepeatedSint32}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_sint64":
-		if len(x.RepeatedSint64) == 0 {
+		if len(x.x.RepeatedSint64) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_36_list{})
 		}
-		listValue := &_TestAllTypes_36_list{list: &x.RepeatedSint64}
+		listValue := &_TestAllTypes_36_list{list: &x.x.RepeatedSint64}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_fixed32":
-		if len(x.RepeatedFixed32) == 0 {
+		if len(x.x.RepeatedFixed32) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_37_list{})
 		}
-		listValue := &_TestAllTypes_37_list{list: &x.RepeatedFixed32}
+		listValue := &_TestAllTypes_37_list{list: &x.x.RepeatedFixed32}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_fixed64":
-		if len(x.RepeatedFixed64) == 0 {
+		if len(x.x.RepeatedFixed64) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_38_list{})
 		}
-		listValue := &_TestAllTypes_38_list{list: &x.RepeatedFixed64}
+		listValue := &_TestAllTypes_38_list{list: &x.x.RepeatedFixed64}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_sfixed32":
-		if len(x.RepeatedSfixed32) == 0 {
+		if len(x.x.RepeatedSfixed32) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_39_list{})
 		}
-		listValue := &_TestAllTypes_39_list{list: &x.RepeatedSfixed32}
+		listValue := &_TestAllTypes_39_list{list: &x.x.RepeatedSfixed32}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_sfixed64":
-		if len(x.RepeatedSfixed64) == 0 {
+		if len(x.x.RepeatedSfixed64) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_40_list{})
 		}
-		listValue := &_TestAllTypes_40_list{list: &x.RepeatedSfixed64}
+		listValue := &_TestAllTypes_40_list{list: &x.x.RepeatedSfixed64}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_float":
-		if len(x.RepeatedFloat) == 0 {
+		if len(x.x.RepeatedFloat) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_41_list{})
 		}
-		listValue := &_TestAllTypes_41_list{list: &x.RepeatedFloat}
+		listValue := &_TestAllTypes_41_list{list: &x.x.RepeatedFloat}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_double":
-		if len(x.RepeatedDouble) == 0 {
+		if len(x.x.RepeatedDouble) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_42_list{})
 		}
-		listValue := &_TestAllTypes_42_list{list: &x.RepeatedDouble}
+		listValue := &_TestAllTypes_42_list{list: &x.x.RepeatedDouble}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_bool":
-		if len(x.RepeatedBool) == 0 {
+		if len(x.x.RepeatedBool) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_43_list{})
 		}
-		listValue := &_TestAllTypes_43_list{list: &x.RepeatedBool}
+		listValue := &_TestAllTypes_43_list{list: &x.x.RepeatedBool}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_string":
-		if len(x.RepeatedString) == 0 {
+		if len(x.x.RepeatedString) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_44_list{})
 		}
-		listValue := &_TestAllTypes_44_list{list: &x.RepeatedString}
+		listValue := &_TestAllTypes_44_list{list: &x.x.RepeatedString}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_bytes":
-		if len(x.RepeatedBytes) == 0 {
+		if len(x.x.RepeatedBytes) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_45_list{})
 		}
-		listValue := &_TestAllTypes_45_list{list: &x.RepeatedBytes}
+		listValue := &_TestAllTypes_45_list{list: &x.x.RepeatedBytes}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_nested_message":
-		if len(x.RepeatedNestedMessage) == 0 {
+		if len(x.x.RepeatedNestedMessage) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_48_list{})
 		}
-		listValue := &_TestAllTypes_48_list{list: &x.RepeatedNestedMessage}
+		listValue := &_TestAllTypes_48_list{list: &x.x.RepeatedNestedMessage}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_foreign_message":
-		if len(x.RepeatedForeignMessage) == 0 {
+		if len(x.x.RepeatedForeignMessage) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_49_list{})
 		}
-		listValue := &_TestAllTypes_49_list{list: &x.RepeatedForeignMessage}
+		listValue := &_TestAllTypes_49_list{list: &x.x.RepeatedForeignMessage}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_importmessage":
-		if len(x.RepeatedImportmessage) == 0 {
+		if len(x.x.RepeatedImportmessage) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_50_list{})
 		}
-		listValue := &_TestAllTypes_50_list{list: &x.RepeatedImportmessage}
+		listValue := &_TestAllTypes_50_list{list: &x.x.RepeatedImportmessage}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_nested_enum":
-		if len(x.RepeatedNestedEnum) == 0 {
+		if len(x.x.RepeatedNestedEnum) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_51_list{})
 		}
-		listValue := &_TestAllTypes_51_list{list: &x.RepeatedNestedEnum}
+		listValue := &_TestAllTypes_51_list{list: &x.x.RepeatedNestedEnum}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_foreign_enum":
-		if len(x.RepeatedForeignEnum) == 0 {
+		if len(x.x.RepeatedForeignEnum) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_52_list{})
 		}
-		listValue := &_TestAllTypes_52_list{list: &x.RepeatedForeignEnum}
+		listValue := &_TestAllTypes_52_list{list: &x.x.RepeatedForeignEnum}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.repeated_importenum":
-		if len(x.RepeatedImportenum) == 0 {
+		if len(x.x.RepeatedImportenum) == 0 {
 			return protoreflect.ValueOfList(&_TestAllTypes_53_list{})
 		}
-		listValue := &_TestAllTypes_53_list{list: &x.RepeatedImportenum}
+		listValue := &_TestAllTypes_53_list{list: &x.x.RepeatedImportenum}
 		return protoreflect.ValueOfList(listValue)
 	case "goproto.proto.test3.TestAllTypes.map_int32_int32":
-		if len(x.MapInt32Int32) == 0 {
+		if len(x.x.MapInt32Int32) == 0 {
 			return protoreflect.ValueOfMap(&_TestAllTypes_56_map{})
 		}
-		mapValue := &_TestAllTypes_56_map{m: &x.MapInt32Int32}
+		mapValue := &_TestAllTypes_56_map{m: &x.x.MapInt32Int32}
 		return protoreflect.ValueOfMap(mapValue)
 	case "goproto.proto.test3.TestAllTypes.map_int64_int64":
-		if len(x.MapInt64Int64) == 0 {
+		if len(x.x.MapInt64Int64) == 0 {
 			return protoreflect.ValueOfMap(&_TestAllTypes_57_map{})
 		}
-		mapValue := &_TestAllTypes_57_map{m: &x.MapInt64Int64}
+		mapValue := &_TestAllTypes_57_map{m: &x.x.MapInt64Int64}
 		return protoreflect.ValueOfMap(mapValue)
 	case "goproto.proto.test3.TestAllTypes.map_uint32_uint32":
-		if len(x.MapUint32Uint32) == 0 {
+		if len(x.x.MapUint32Uint32) == 0 {
 			return protoreflect.ValueOfMap(&_TestAllTypes_58_map{})
 		}
-		mapValue := &_TestAllTypes_58_map{m: &x.MapUint32Uint32}
+		mapValue := &_TestAllTypes_58_map{m: &x.x.MapUint32Uint32}
 		return protoreflect.ValueOfMap(mapValue)
 	case "goproto.proto.test3.TestAllTypes.map_uint64_uint64":
-		if len(x.MapUint64Uint64) == 0 {
+		if len(x.x.MapUint64Uint64) == 0 {
 			return protoreflect.ValueOfMap(&_TestAllTypes_59_map{})
 		}
-		mapValue := &_TestAllTypes_59_map{m: &x.MapUint64Uint64}
+		mapValue := &_TestAllTypes_59_map{m: &x.x.MapUint64Uint64}
 		return protoreflect.ValueOfMap(mapValue)
 	case "goproto.proto.test3.TestAllTypes.map_sint32_sint32":
-		if len(x.MapSint32Sint32) == 0 {
+		if len(x.x.MapSint32Sint32) == 0 {
 			return protoreflect.ValueOfMap(&_TestAllTypes_60_map{})
 		}
-		mapValue := &_TestAllTypes_60_map{m: &x.MapSint32Sint32}
+		mapValue := &_TestAllTypes_60_map{m: &x.x.MapSint32Sint32}
 		return protoreflect.ValueOfMap(mapValue)
 	case "goproto.proto.test3.TestAllTypes.map_sint64_sint64":
-		if len(x.MapSint64Sint64) == 0 {
+		if len(x.x.MapSint64Sint64) == 0 {
 			return protoreflect.ValueOfMap(&_TestAllTypes_61_map{})
 		}
-		mapValue := &_TestAllTypes_61_map{m: &x.MapSint64Sint64}
+		mapValue := &_TestAllTypes_61_map{m: &x.x.MapSint64Sint64}
 		return protoreflect.ValueOfMap(mapValue)
 	case "goproto.proto.test3.TestAllTypes.map_fixed32_fixed32":
-		if len(x.MapFixed32Fixed32) == 0 {
+		if len(x.x.MapFixed32Fixed32) == 0 {
 			return protoreflect.ValueOfMap(&_TestAllTypes_62_map{})
 		}
-		mapValue := &_TestAllTypes_62_map{m: &x.MapFixed32Fixed32}
+		mapValue := &_TestAllTypes_62_map{m: &x.x.MapFixed32Fixed32}
 		return protoreflect.ValueOfMap(mapValue)
 	case "goproto.proto.test3.TestAllTypes.map_fixed64_fixed64":
-		if len(x.MapFixed64Fixed64) == 0 {
+		if len(x.x.MapFixed64Fixed64) == 0 {
 			return protoreflect.ValueOfMap(&_TestAllTypes_63_map{})
 		}
-		mapValue := &_TestAllTypes_63_map{m: &x.MapFixed64Fixed64}
+		mapValue := &_TestAllTypes_63_map{m: &x.x.MapFixed64Fixed64}
 		return protoreflect.ValueOfMap(mapValue)
 	case "goproto.proto.test3.TestAllTypes.map_sfixed32_sfixed32":
-		if len(x.MapSfixed32Sfixed32) == 0 {
+		if len(x.x.MapSfixed32Sfixed32) == 0 {
 			return protoreflect.ValueOfMap(&_TestAllTypes_64_map{})
 		}
-		mapValue := &_TestAllTypes_64_map{m: &x.MapSfixed32Sfixed32}
+		mapValue := &_TestAllTypes_64_map{m: &x.x.MapSfixed32Sfixed32}
 		return protoreflect.ValueOfMap(mapValue)
 	case "goproto.proto.test3.TestAllTypes.map_sfixed64_sfixed64":
-		if len(x.MapSfixed64Sfixed64) == 0 {
+		if len(x.x.MapSfixed64Sfixed64) == 0 {
 			return protoreflect.ValueOfMap(&_TestAllTypes_65_map{})
 		}
-		mapValue := &_TestAllTypes_65_map{m: &x.MapSfixed64Sfixed64}
+		mapValue := &_TestAllTypes_65_map{m: &x.x.MapSfixed64Sfixed64}
 		return protoreflect.ValueOfMap(mapValue)
 	case "goproto.proto.test3.TestAllTypes.map_int32_float":
-		if len(x.MapInt32Float) == 0 {
+		if len(x.x.MapInt32Float) == 0 {
 			return protoreflect.ValueOfMap(&_TestAllTypes_66_map{})
 		}
-		mapValue := &_TestAllTypes_66_map{m: &x.MapInt32Float}
+		mapValue := &_TestAllTypes_66_map{m: &x.x.MapInt32Float}
 		return protoreflect.ValueOfMap(mapValue)
 	case "goproto.proto.test3.TestAllTypes.map_int32_double":
-		if len(x.MapInt32Double) == 0 {
+		if len(x.x.MapInt32Double) == 0 {
 			return protoreflect.ValueOfMap(&_TestAllTypes_67_map{})
 		}
-		mapValue := &_TestAllTypes_67_map{m: &x.MapInt32Double}
+		mapValue := &_TestAllTypes_67_map{m: &x.x.MapInt32Double}
 		return protoreflect.ValueOfMap(mapValue)
 	case "goproto.proto.test3.TestAllTypes.map_bool_bool":
-		if len(x.MapBoolBool) == 0 {
+		if len(x.x.MapBoolBool) == 0 {
 			return protoreflect.ValueOfMap(&_TestAllTypes_68_map{})
 		}
-		mapValue := &_TestAllTypes_68_map{m: &x.MapBoolBool}
+		mapValue := &_TestAllTypes_68_map{m: &x.x.MapBoolBool}
 		return protoreflect.ValueOfMap(mapValue)
 	case "goproto.proto.test3.TestAllTypes.map_string_string":
-		if len(x.MapStringString) == 0 {
+		if len(x.x.MapStringString) == 0 {
 			return protoreflect.ValueOfMap(&_TestAllTypes_69_map{})
 		}
-		mapValue := &_TestAllTypes_69_map{m: &x.MapStringString}
+		mapValue := &_TestAllTypes_69_map{m: &x.x.MapStringString}
 		return protoreflect.ValueOfMap(mapValue)
 	case "goproto.proto.test3.TestAllTypes.map_string_bytes":
-		if len(x.MapStringBytes) == 0 {
+		if len(x.x.MapStringBytes) == 0 {
 			return protoreflect.ValueOfMap(&_TestAllTypes_70_map{})
 		}
-		mapValue := &_TestAllTypes_70_map{m: &x.MapStringBytes}
+		mapValue := &_TestAllTypes_70_map{m: &x.x.MapStringBytes}
 		return protoreflect.ValueOfMap(mapValue)
 	case "goproto.proto.test3.TestAllTypes.map_string_nested_message":
-		if len(x.MapStringNestedMessage) == 0 {
+		if len(x.x.MapStringNestedMessage) == 0 {
 			return protoreflect.ValueOfMap(&_TestAllTypes_71_map{})
 		}
-		mapValue := &_TestAllTypes_71_map{m: &x.MapStringNestedMessage}
+		mapValue := &_TestAllTypes_71_map{m: &x.x.MapStringNestedMessage}
 		return protoreflect.ValueOfMap(mapValue)
 	case "goproto.proto.test3.TestAllTypes.map_string_nested_enum":
-		if len(x.MapStringNestedEnum) == 0 {
+		if len(x.x.MapStringNestedEnum) == 0 {
 			return protoreflect.ValueOfMap(&_TestAllTypes_73_map{})
 		}
-		mapValue := &_TestAllTypes_73_map{m: &x.MapStringNestedEnum}
+		mapValue := &_TestAllTypes_73_map{m: &x.x.MapStringNestedEnum}
 		return protoreflect.ValueOfMap(mapValue)
 	case "goproto.proto.test3.TestAllTypes.oneof_uint32":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return protoreflect.ValueOfUint32(uint32(0))
-		} else if v, ok := x.OneofField.(*TestAllTypes_OneofUint32); ok {
+		} else if v, ok := x.x.OneofField.(*TestAllTypes_OneofUint32); ok {
 			return protoreflect.ValueOfUint32(v.OneofUint32)
 		} else {
 			return protoreflect.ValueOfUint32(uint32(0))
 		}
 	case "goproto.proto.test3.TestAllTypes.oneof_nested_message":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return protoreflect.ValueOfMessage((*TestAllTypes_NestedMessage)(nil).ProtoReflect())
-		} else if v, ok := x.OneofField.(*TestAllTypes_OneofNestedMessage); ok {
+		} else if v, ok := x.x.OneofField.(*TestAllTypes_OneofNestedMessage); ok {
 			return protoreflect.ValueOfMessage(v.OneofNestedMessage.ProtoReflect())
 		} else {
 			return protoreflect.ValueOfMessage((*TestAllTypes_NestedMessage)(nil).ProtoReflect())
 		}
 	case "goproto.proto.test3.TestAllTypes.oneof_string":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return protoreflect.ValueOfString("")
-		} else if v, ok := x.OneofField.(*TestAllTypes_OneofString); ok {
+		} else if v, ok := x.x.OneofField.(*TestAllTypes_OneofString); ok {
 			return protoreflect.ValueOfString(v.OneofString)
 		} else {
 			return protoreflect.ValueOfString("")
 		}
 	case "goproto.proto.test3.TestAllTypes.oneof_bytes":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return protoreflect.ValueOfBytes(nil)
-		} else if v, ok := x.OneofField.(*TestAllTypes_OneofBytes); ok {
+		} else if v, ok := x.x.OneofField.(*TestAllTypes_OneofBytes); ok {
 			return protoreflect.ValueOfBytes(v.OneofBytes)
 		} else {
 			return protoreflect.ValueOfBytes(nil)
 		}
 	case "goproto.proto.test3.TestAllTypes.oneof_bool":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return protoreflect.ValueOfBool(false)
-		} else if v, ok := x.OneofField.(*TestAllTypes_OneofBool); ok {
+		} else if v, ok := x.x.OneofField.(*TestAllTypes_OneofBool); ok {
 			return protoreflect.ValueOfBool(v.OneofBool)
 		} else {
 			return protoreflect.ValueOfBool(false)
 		}
 	case "goproto.proto.test3.TestAllTypes.oneof_uint64":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return protoreflect.ValueOfUint64(uint64(0))
-		} else if v, ok := x.OneofField.(*TestAllTypes_OneofUint64); ok {
+		} else if v, ok := x.x.OneofField.(*TestAllTypes_OneofUint64); ok {
 			return protoreflect.ValueOfUint64(v.OneofUint64)
 		} else {
 			return protoreflect.ValueOfUint64(uint64(0))
 		}
 	case "goproto.proto.test3.TestAllTypes.oneof_float":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return protoreflect.ValueOfFloat32(float32(0))
-		} else if v, ok := x.OneofField.(*TestAllTypes_OneofFloat); ok {
+		} else if v, ok := x.x.OneofField.(*TestAllTypes_OneofFloat); ok {
 			return protoreflect.ValueOfFloat32(v.OneofFloat)
 		} else {
 			return protoreflect.ValueOfFloat32(float32(0))
 		}
 	case "goproto.proto.test3.TestAllTypes.oneof_double":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return protoreflect.ValueOfFloat64(float64(0))
-		} else if v, ok := x.OneofField.(*TestAllTypes_OneofDouble); ok {
+		} else if v, ok := x.x.OneofField.(*TestAllTypes_OneofDouble); ok {
 			return protoreflect.ValueOfFloat64(v.OneofDouble)
 		} else {
 			return protoreflect.ValueOfFloat64(float64(0))
 		}
 	case "goproto.proto.test3.TestAllTypes.oneof_enum":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return protoreflect.ValueOfEnum(0)
-		} else if v, ok := x.OneofField.(*TestAllTypes_OneofEnum); ok {
+		} else if v, ok := x.x.OneofField.(*TestAllTypes_OneofEnum); ok {
 			return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(v.OneofEnum))
 		} else {
 			return protoreflect.ValueOfEnum(0)
@@ -3774,229 +3776,229 @@ func (x *fastReflection_TestAllTypes) Get(descriptor protoreflect.FieldDescripto
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_TestAllTypes) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x fastReflection_TestAllTypes) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	case "goproto.proto.test3.TestAllTypes.singular_int32":
-		x.SingularInt32 = int32(value.Int())
+		x.x.SingularInt32 = int32(value.Int())
 	case "goproto.proto.test3.TestAllTypes.singular_int64":
-		x.SingularInt64 = value.Int()
+		x.x.SingularInt64 = value.Int()
 	case "goproto.proto.test3.TestAllTypes.singular_uint32":
-		x.SingularUint32 = uint32(value.Uint())
+		x.x.SingularUint32 = uint32(value.Uint())
 	case "goproto.proto.test3.TestAllTypes.singular_uint64":
-		x.SingularUint64 = value.Uint()
+		x.x.SingularUint64 = value.Uint()
 	case "goproto.proto.test3.TestAllTypes.singular_sint32":
-		x.SingularSint32 = int32(value.Int())
+		x.x.SingularSint32 = int32(value.Int())
 	case "goproto.proto.test3.TestAllTypes.singular_sint64":
-		x.SingularSint64 = value.Int()
+		x.x.SingularSint64 = value.Int()
 	case "goproto.proto.test3.TestAllTypes.singular_fixed32":
-		x.SingularFixed32 = uint32(value.Uint())
+		x.x.SingularFixed32 = uint32(value.Uint())
 	case "goproto.proto.test3.TestAllTypes.singular_fixed64":
-		x.SingularFixed64 = value.Uint()
+		x.x.SingularFixed64 = value.Uint()
 	case "goproto.proto.test3.TestAllTypes.singular_sfixed32":
-		x.SingularSfixed32 = int32(value.Int())
+		x.x.SingularSfixed32 = int32(value.Int())
 	case "goproto.proto.test3.TestAllTypes.singular_sfixed64":
-		x.SingularSfixed64 = value.Int()
+		x.x.SingularSfixed64 = value.Int()
 	case "goproto.proto.test3.TestAllTypes.singular_float":
-		x.SingularFloat = float32(value.Float())
+		x.x.SingularFloat = float32(value.Float())
 	case "goproto.proto.test3.TestAllTypes.singular_double":
-		x.SingularDouble = value.Float()
+		x.x.SingularDouble = value.Float()
 	case "goproto.proto.test3.TestAllTypes.singular_bool":
-		x.SingularBool = value.Bool()
+		x.x.SingularBool = value.Bool()
 	case "goproto.proto.test3.TestAllTypes.singular_string":
-		x.SingularString = value.Interface().(string)
+		x.x.SingularString = value.Interface().(string)
 	case "goproto.proto.test3.TestAllTypes.singular_bytes":
-		x.SingularBytes = value.Bytes()
+		x.x.SingularBytes = value.Bytes()
 	case "goproto.proto.test3.TestAllTypes.singular_nested_message":
-		x.SingularNestedMessage = value.Message().Interface().(*TestAllTypes_NestedMessage)
+		x.x.SingularNestedMessage = value.Message().Interface().(*TestAllTypes_NestedMessage)
 	case "goproto.proto.test3.TestAllTypes.singular_foreign_message":
-		x.SingularForeignMessage = value.Message().Interface().(*ForeignMessage)
+		x.x.SingularForeignMessage = value.Message().Interface().(*ForeignMessage)
 	case "goproto.proto.test3.TestAllTypes.singular_import_message":
-		x.SingularImportMessage = value.Message().Interface().(*ImportMessage)
+		x.x.SingularImportMessage = value.Message().Interface().(*ImportMessage)
 	case "goproto.proto.test3.TestAllTypes.singular_nested_enum":
-		x.SingularNestedEnum = (TestAllTypes_NestedEnum)(value.Enum())
+		x.x.SingularNestedEnum = (TestAllTypes_NestedEnum)(value.Enum())
 	case "goproto.proto.test3.TestAllTypes.singular_foreign_enum":
-		x.SingularForeignEnum = (ForeignEnum)(value.Enum())
+		x.x.SingularForeignEnum = (ForeignEnum)(value.Enum())
 	case "goproto.proto.test3.TestAllTypes.singular_import_enum":
-		x.SingularImportEnum = (ImportEnum)(value.Enum())
+		x.x.SingularImportEnum = (ImportEnum)(value.Enum())
 	case "goproto.proto.test3.TestAllTypes.repeated_int32":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_31_list)
-		x.RepeatedInt32 = *clv.list
+		x.x.RepeatedInt32 = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_int64":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_32_list)
-		x.RepeatedInt64 = *clv.list
+		x.x.RepeatedInt64 = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_uint32":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_33_list)
-		x.RepeatedUint32 = *clv.list
+		x.x.RepeatedUint32 = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_uint64":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_34_list)
-		x.RepeatedUint64 = *clv.list
+		x.x.RepeatedUint64 = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_sint32":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_35_list)
-		x.RepeatedSint32 = *clv.list
+		x.x.RepeatedSint32 = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_sint64":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_36_list)
-		x.RepeatedSint64 = *clv.list
+		x.x.RepeatedSint64 = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_fixed32":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_37_list)
-		x.RepeatedFixed32 = *clv.list
+		x.x.RepeatedFixed32 = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_fixed64":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_38_list)
-		x.RepeatedFixed64 = *clv.list
+		x.x.RepeatedFixed64 = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_sfixed32":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_39_list)
-		x.RepeatedSfixed32 = *clv.list
+		x.x.RepeatedSfixed32 = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_sfixed64":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_40_list)
-		x.RepeatedSfixed64 = *clv.list
+		x.x.RepeatedSfixed64 = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_float":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_41_list)
-		x.RepeatedFloat = *clv.list
+		x.x.RepeatedFloat = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_double":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_42_list)
-		x.RepeatedDouble = *clv.list
+		x.x.RepeatedDouble = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_bool":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_43_list)
-		x.RepeatedBool = *clv.list
+		x.x.RepeatedBool = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_string":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_44_list)
-		x.RepeatedString = *clv.list
+		x.x.RepeatedString = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_bytes":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_45_list)
-		x.RepeatedBytes = *clv.list
+		x.x.RepeatedBytes = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_nested_message":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_48_list)
-		x.RepeatedNestedMessage = *clv.list
+		x.x.RepeatedNestedMessage = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_foreign_message":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_49_list)
-		x.RepeatedForeignMessage = *clv.list
+		x.x.RepeatedForeignMessage = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_importmessage":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_50_list)
-		x.RepeatedImportmessage = *clv.list
+		x.x.RepeatedImportmessage = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_nested_enum":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_51_list)
-		x.RepeatedNestedEnum = *clv.list
+		x.x.RepeatedNestedEnum = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_foreign_enum":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_52_list)
-		x.RepeatedForeignEnum = *clv.list
+		x.x.RepeatedForeignEnum = *clv.list
 	case "goproto.proto.test3.TestAllTypes.repeated_importenum":
 		lv := value.List()
 		clv := lv.(*_TestAllTypes_53_list)
-		x.RepeatedImportenum = *clv.list
+		x.x.RepeatedImportenum = *clv.list
 	case "goproto.proto.test3.TestAllTypes.map_int32_int32":
 		mv := value.Map()
 		cmv := mv.(*_TestAllTypes_56_map)
-		x.MapInt32Int32 = *cmv.m
+		x.x.MapInt32Int32 = *cmv.m
 	case "goproto.proto.test3.TestAllTypes.map_int64_int64":
 		mv := value.Map()
 		cmv := mv.(*_TestAllTypes_57_map)
-		x.MapInt64Int64 = *cmv.m
+		x.x.MapInt64Int64 = *cmv.m
 	case "goproto.proto.test3.TestAllTypes.map_uint32_uint32":
 		mv := value.Map()
 		cmv := mv.(*_TestAllTypes_58_map)
-		x.MapUint32Uint32 = *cmv.m
+		x.x.MapUint32Uint32 = *cmv.m
 	case "goproto.proto.test3.TestAllTypes.map_uint64_uint64":
 		mv := value.Map()
 		cmv := mv.(*_TestAllTypes_59_map)
-		x.MapUint64Uint64 = *cmv.m
+		x.x.MapUint64Uint64 = *cmv.m
 	case "goproto.proto.test3.TestAllTypes.map_sint32_sint32":
 		mv := value.Map()
 		cmv := mv.(*_TestAllTypes_60_map)
-		x.MapSint32Sint32 = *cmv.m
+		x.x.MapSint32Sint32 = *cmv.m
 	case "goproto.proto.test3.TestAllTypes.map_sint64_sint64":
 		mv := value.Map()
 		cmv := mv.(*_TestAllTypes_61_map)
-		x.MapSint64Sint64 = *cmv.m
+		x.x.MapSint64Sint64 = *cmv.m
 	case "goproto.proto.test3.TestAllTypes.map_fixed32_fixed32":
 		mv := value.Map()
 		cmv := mv.(*_TestAllTypes_62_map)
-		x.MapFixed32Fixed32 = *cmv.m
+		x.x.MapFixed32Fixed32 = *cmv.m
 	case "goproto.proto.test3.TestAllTypes.map_fixed64_fixed64":
 		mv := value.Map()
 		cmv := mv.(*_TestAllTypes_63_map)
-		x.MapFixed64Fixed64 = *cmv.m
+		x.x.MapFixed64Fixed64 = *cmv.m
 	case "goproto.proto.test3.TestAllTypes.map_sfixed32_sfixed32":
 		mv := value.Map()
 		cmv := mv.(*_TestAllTypes_64_map)
-		x.MapSfixed32Sfixed32 = *cmv.m
+		x.x.MapSfixed32Sfixed32 = *cmv.m
 	case "goproto.proto.test3.TestAllTypes.map_sfixed64_sfixed64":
 		mv := value.Map()
 		cmv := mv.(*_TestAllTypes_65_map)
-		x.MapSfixed64Sfixed64 = *cmv.m
+		x.x.MapSfixed64Sfixed64 = *cmv.m
 	case "goproto.proto.test3.TestAllTypes.map_int32_float":
 		mv := value.Map()
 		cmv := mv.(*_TestAllTypes_66_map)
-		x.MapInt32Float = *cmv.m
+		x.x.MapInt32Float = *cmv.m
 	case "goproto.proto.test3.TestAllTypes.map_int32_double":
 		mv := value.Map()
 		cmv := mv.(*_TestAllTypes_67_map)
-		x.MapInt32Double = *cmv.m
+		x.x.MapInt32Double = *cmv.m
 	case "goproto.proto.test3.TestAllTypes.map_bool_bool":
 		mv := value.Map()
 		cmv := mv.(*_TestAllTypes_68_map)
-		x.MapBoolBool = *cmv.m
+		x.x.MapBoolBool = *cmv.m
 	case "goproto.proto.test3.TestAllTypes.map_string_string":
 		mv := value.Map()
 		cmv := mv.(*_TestAllTypes_69_map)
-		x.MapStringString = *cmv.m
+		x.x.MapStringString = *cmv.m
 	case "goproto.proto.test3.TestAllTypes.map_string_bytes":
 		mv := value.Map()
 		cmv := mv.(*_TestAllTypes_70_map)
-		x.MapStringBytes = *cmv.m
+		x.x.MapStringBytes = *cmv.m
 	case "goproto.proto.test3.TestAllTypes.map_string_nested_message":
 		mv := value.Map()
 		cmv := mv.(*_TestAllTypes_71_map)
-		x.MapStringNestedMessage = *cmv.m
+		x.x.MapStringNestedMessage = *cmv.m
 	case "goproto.proto.test3.TestAllTypes.map_string_nested_enum":
 		mv := value.Map()
 		cmv := mv.(*_TestAllTypes_73_map)
-		x.MapStringNestedEnum = *cmv.m
+		x.x.MapStringNestedEnum = *cmv.m
 	case "goproto.proto.test3.TestAllTypes.oneof_uint32":
 		cv := uint32(value.Uint())
-		x.OneofField = &TestAllTypes_OneofUint32{OneofUint32: cv}
+		x.x.OneofField = &TestAllTypes_OneofUint32{OneofUint32: cv}
 	case "goproto.proto.test3.TestAllTypes.oneof_nested_message":
 		cv := value.Message().Interface().(*TestAllTypes_NestedMessage)
-		x.OneofField = &TestAllTypes_OneofNestedMessage{OneofNestedMessage: cv}
+		x.x.OneofField = &TestAllTypes_OneofNestedMessage{OneofNestedMessage: cv}
 	case "goproto.proto.test3.TestAllTypes.oneof_string":
 		cv := value.Interface().(string)
-		x.OneofField = &TestAllTypes_OneofString{OneofString: cv}
+		x.x.OneofField = &TestAllTypes_OneofString{OneofString: cv}
 	case "goproto.proto.test3.TestAllTypes.oneof_bytes":
 		cv := value.Bytes()
-		x.OneofField = &TestAllTypes_OneofBytes{OneofBytes: cv}
+		x.x.OneofField = &TestAllTypes_OneofBytes{OneofBytes: cv}
 	case "goproto.proto.test3.TestAllTypes.oneof_bool":
 		cv := value.Bool()
-		x.OneofField = &TestAllTypes_OneofBool{OneofBool: cv}
+		x.x.OneofField = &TestAllTypes_OneofBool{OneofBool: cv}
 	case "goproto.proto.test3.TestAllTypes.oneof_uint64":
 		cv := value.Uint()
-		x.OneofField = &TestAllTypes_OneofUint64{OneofUint64: cv}
+		x.x.OneofField = &TestAllTypes_OneofUint64{OneofUint64: cv}
 	case "goproto.proto.test3.TestAllTypes.oneof_float":
 		cv := float32(value.Float())
-		x.OneofField = &TestAllTypes_OneofFloat{OneofFloat: cv}
+		x.x.OneofField = &TestAllTypes_OneofFloat{OneofFloat: cv}
 	case "goproto.proto.test3.TestAllTypes.oneof_double":
 		cv := value.Float()
-		x.OneofField = &TestAllTypes_OneofDouble{OneofDouble: cv}
+		x.x.OneofField = &TestAllTypes_OneofDouble{OneofDouble: cv}
 	case "goproto.proto.test3.TestAllTypes.oneof_enum":
 		cv := (TestAllTypes_NestedEnum)(value.Enum())
-		x.OneofField = &TestAllTypes_OneofEnum{OneofEnum: cv}
+		x.x.OneofField = &TestAllTypes_OneofEnum{OneofEnum: cv}
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goproto.proto.test3.TestAllTypes"))
@@ -4015,265 +4017,265 @@ func (x *fastReflection_TestAllTypes) Set(fd protoreflect.FieldDescriptor, value
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_TestAllTypes) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_TestAllTypes) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "goproto.proto.test3.TestAllTypes.singular_nested_message":
-		if x.SingularNestedMessage == nil {
-			x.SingularNestedMessage = new(TestAllTypes_NestedMessage)
+		if x.x.SingularNestedMessage == nil {
+			x.x.SingularNestedMessage = new(TestAllTypes_NestedMessage)
 		}
-		return protoreflect.ValueOfMessage(x.SingularNestedMessage.ProtoReflect())
+		return protoreflect.ValueOfMessage(x.x.SingularNestedMessage.ProtoReflect())
 	case "goproto.proto.test3.TestAllTypes.singular_foreign_message":
-		if x.SingularForeignMessage == nil {
-			x.SingularForeignMessage = new(ForeignMessage)
+		if x.x.SingularForeignMessage == nil {
+			x.x.SingularForeignMessage = new(ForeignMessage)
 		}
-		return protoreflect.ValueOfMessage(x.SingularForeignMessage.ProtoReflect())
+		return protoreflect.ValueOfMessage(x.x.SingularForeignMessage.ProtoReflect())
 	case "goproto.proto.test3.TestAllTypes.singular_import_message":
-		if x.SingularImportMessage == nil {
-			x.SingularImportMessage = new(ImportMessage)
+		if x.x.SingularImportMessage == nil {
+			x.x.SingularImportMessage = new(ImportMessage)
 		}
-		return protoreflect.ValueOfMessage(x.SingularImportMessage.ProtoReflect())
+		return protoreflect.ValueOfMessage(x.x.SingularImportMessage.ProtoReflect())
 	case "goproto.proto.test3.TestAllTypes.repeated_int32":
-		if x.RepeatedInt32 == nil {
-			x.RepeatedInt32 = []int32{}
+		if x.x.RepeatedInt32 == nil {
+			x.x.RepeatedInt32 = []int32{}
 		}
-		value := &_TestAllTypes_31_list{list: &x.RepeatedInt32}
+		value := &_TestAllTypes_31_list{list: &x.x.RepeatedInt32}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_int64":
-		if x.RepeatedInt64 == nil {
-			x.RepeatedInt64 = []int64{}
+		if x.x.RepeatedInt64 == nil {
+			x.x.RepeatedInt64 = []int64{}
 		}
-		value := &_TestAllTypes_32_list{list: &x.RepeatedInt64}
+		value := &_TestAllTypes_32_list{list: &x.x.RepeatedInt64}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_uint32":
-		if x.RepeatedUint32 == nil {
-			x.RepeatedUint32 = []uint32{}
+		if x.x.RepeatedUint32 == nil {
+			x.x.RepeatedUint32 = []uint32{}
 		}
-		value := &_TestAllTypes_33_list{list: &x.RepeatedUint32}
+		value := &_TestAllTypes_33_list{list: &x.x.RepeatedUint32}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_uint64":
-		if x.RepeatedUint64 == nil {
-			x.RepeatedUint64 = []uint64{}
+		if x.x.RepeatedUint64 == nil {
+			x.x.RepeatedUint64 = []uint64{}
 		}
-		value := &_TestAllTypes_34_list{list: &x.RepeatedUint64}
+		value := &_TestAllTypes_34_list{list: &x.x.RepeatedUint64}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_sint32":
-		if x.RepeatedSint32 == nil {
-			x.RepeatedSint32 = []int32{}
+		if x.x.RepeatedSint32 == nil {
+			x.x.RepeatedSint32 = []int32{}
 		}
-		value := &_TestAllTypes_35_list{list: &x.RepeatedSint32}
+		value := &_TestAllTypes_35_list{list: &x.x.RepeatedSint32}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_sint64":
-		if x.RepeatedSint64 == nil {
-			x.RepeatedSint64 = []int64{}
+		if x.x.RepeatedSint64 == nil {
+			x.x.RepeatedSint64 = []int64{}
 		}
-		value := &_TestAllTypes_36_list{list: &x.RepeatedSint64}
+		value := &_TestAllTypes_36_list{list: &x.x.RepeatedSint64}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_fixed32":
-		if x.RepeatedFixed32 == nil {
-			x.RepeatedFixed32 = []uint32{}
+		if x.x.RepeatedFixed32 == nil {
+			x.x.RepeatedFixed32 = []uint32{}
 		}
-		value := &_TestAllTypes_37_list{list: &x.RepeatedFixed32}
+		value := &_TestAllTypes_37_list{list: &x.x.RepeatedFixed32}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_fixed64":
-		if x.RepeatedFixed64 == nil {
-			x.RepeatedFixed64 = []uint64{}
+		if x.x.RepeatedFixed64 == nil {
+			x.x.RepeatedFixed64 = []uint64{}
 		}
-		value := &_TestAllTypes_38_list{list: &x.RepeatedFixed64}
+		value := &_TestAllTypes_38_list{list: &x.x.RepeatedFixed64}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_sfixed32":
-		if x.RepeatedSfixed32 == nil {
-			x.RepeatedSfixed32 = []int32{}
+		if x.x.RepeatedSfixed32 == nil {
+			x.x.RepeatedSfixed32 = []int32{}
 		}
-		value := &_TestAllTypes_39_list{list: &x.RepeatedSfixed32}
+		value := &_TestAllTypes_39_list{list: &x.x.RepeatedSfixed32}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_sfixed64":
-		if x.RepeatedSfixed64 == nil {
-			x.RepeatedSfixed64 = []int64{}
+		if x.x.RepeatedSfixed64 == nil {
+			x.x.RepeatedSfixed64 = []int64{}
 		}
-		value := &_TestAllTypes_40_list{list: &x.RepeatedSfixed64}
+		value := &_TestAllTypes_40_list{list: &x.x.RepeatedSfixed64}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_float":
-		if x.RepeatedFloat == nil {
-			x.RepeatedFloat = []float32{}
+		if x.x.RepeatedFloat == nil {
+			x.x.RepeatedFloat = []float32{}
 		}
-		value := &_TestAllTypes_41_list{list: &x.RepeatedFloat}
+		value := &_TestAllTypes_41_list{list: &x.x.RepeatedFloat}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_double":
-		if x.RepeatedDouble == nil {
-			x.RepeatedDouble = []float64{}
+		if x.x.RepeatedDouble == nil {
+			x.x.RepeatedDouble = []float64{}
 		}
-		value := &_TestAllTypes_42_list{list: &x.RepeatedDouble}
+		value := &_TestAllTypes_42_list{list: &x.x.RepeatedDouble}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_bool":
-		if x.RepeatedBool == nil {
-			x.RepeatedBool = []bool{}
+		if x.x.RepeatedBool == nil {
+			x.x.RepeatedBool = []bool{}
 		}
-		value := &_TestAllTypes_43_list{list: &x.RepeatedBool}
+		value := &_TestAllTypes_43_list{list: &x.x.RepeatedBool}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_string":
-		if x.RepeatedString == nil {
-			x.RepeatedString = []string{}
+		if x.x.RepeatedString == nil {
+			x.x.RepeatedString = []string{}
 		}
-		value := &_TestAllTypes_44_list{list: &x.RepeatedString}
+		value := &_TestAllTypes_44_list{list: &x.x.RepeatedString}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_bytes":
-		if x.RepeatedBytes == nil {
-			x.RepeatedBytes = [][]byte{}
+		if x.x.RepeatedBytes == nil {
+			x.x.RepeatedBytes = [][]byte{}
 		}
-		value := &_TestAllTypes_45_list{list: &x.RepeatedBytes}
+		value := &_TestAllTypes_45_list{list: &x.x.RepeatedBytes}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_nested_message":
-		if x.RepeatedNestedMessage == nil {
-			x.RepeatedNestedMessage = []*TestAllTypes_NestedMessage{}
+		if x.x.RepeatedNestedMessage == nil {
+			x.x.RepeatedNestedMessage = []*TestAllTypes_NestedMessage{}
 		}
-		value := &_TestAllTypes_48_list{list: &x.RepeatedNestedMessage}
+		value := &_TestAllTypes_48_list{list: &x.x.RepeatedNestedMessage}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_foreign_message":
-		if x.RepeatedForeignMessage == nil {
-			x.RepeatedForeignMessage = []*ForeignMessage{}
+		if x.x.RepeatedForeignMessage == nil {
+			x.x.RepeatedForeignMessage = []*ForeignMessage{}
 		}
-		value := &_TestAllTypes_49_list{list: &x.RepeatedForeignMessage}
+		value := &_TestAllTypes_49_list{list: &x.x.RepeatedForeignMessage}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_importmessage":
-		if x.RepeatedImportmessage == nil {
-			x.RepeatedImportmessage = []*ImportMessage{}
+		if x.x.RepeatedImportmessage == nil {
+			x.x.RepeatedImportmessage = []*ImportMessage{}
 		}
-		value := &_TestAllTypes_50_list{list: &x.RepeatedImportmessage}
+		value := &_TestAllTypes_50_list{list: &x.x.RepeatedImportmessage}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_nested_enum":
-		if x.RepeatedNestedEnum == nil {
-			x.RepeatedNestedEnum = []TestAllTypes_NestedEnum{}
+		if x.x.RepeatedNestedEnum == nil {
+			x.x.RepeatedNestedEnum = []TestAllTypes_NestedEnum{}
 		}
-		value := &_TestAllTypes_51_list{list: &x.RepeatedNestedEnum}
+		value := &_TestAllTypes_51_list{list: &x.x.RepeatedNestedEnum}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_foreign_enum":
-		if x.RepeatedForeignEnum == nil {
-			x.RepeatedForeignEnum = []ForeignEnum{}
+		if x.x.RepeatedForeignEnum == nil {
+			x.x.RepeatedForeignEnum = []ForeignEnum{}
 		}
-		value := &_TestAllTypes_52_list{list: &x.RepeatedForeignEnum}
+		value := &_TestAllTypes_52_list{list: &x.x.RepeatedForeignEnum}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.repeated_importenum":
-		if x.RepeatedImportenum == nil {
-			x.RepeatedImportenum = []ImportEnum{}
+		if x.x.RepeatedImportenum == nil {
+			x.x.RepeatedImportenum = []ImportEnum{}
 		}
-		value := &_TestAllTypes_53_list{list: &x.RepeatedImportenum}
+		value := &_TestAllTypes_53_list{list: &x.x.RepeatedImportenum}
 		return protoreflect.ValueOfList(value)
 	case "goproto.proto.test3.TestAllTypes.map_int32_int32":
-		if x.MapInt32Int32 == nil {
-			x.MapInt32Int32 = make(map[int32]int32)
+		if x.x.MapInt32Int32 == nil {
+			x.x.MapInt32Int32 = make(map[int32]int32)
 		}
-		value := &_TestAllTypes_56_map{m: &x.MapInt32Int32}
+		value := &_TestAllTypes_56_map{m: &x.x.MapInt32Int32}
 		return protoreflect.ValueOfMap(value)
 	case "goproto.proto.test3.TestAllTypes.map_int64_int64":
-		if x.MapInt64Int64 == nil {
-			x.MapInt64Int64 = make(map[int64]int64)
+		if x.x.MapInt64Int64 == nil {
+			x.x.MapInt64Int64 = make(map[int64]int64)
 		}
-		value := &_TestAllTypes_57_map{m: &x.MapInt64Int64}
+		value := &_TestAllTypes_57_map{m: &x.x.MapInt64Int64}
 		return protoreflect.ValueOfMap(value)
 	case "goproto.proto.test3.TestAllTypes.map_uint32_uint32":
-		if x.MapUint32Uint32 == nil {
-			x.MapUint32Uint32 = make(map[uint32]uint32)
+		if x.x.MapUint32Uint32 == nil {
+			x.x.MapUint32Uint32 = make(map[uint32]uint32)
 		}
-		value := &_TestAllTypes_58_map{m: &x.MapUint32Uint32}
+		value := &_TestAllTypes_58_map{m: &x.x.MapUint32Uint32}
 		return protoreflect.ValueOfMap(value)
 	case "goproto.proto.test3.TestAllTypes.map_uint64_uint64":
-		if x.MapUint64Uint64 == nil {
-			x.MapUint64Uint64 = make(map[uint64]uint64)
+		if x.x.MapUint64Uint64 == nil {
+			x.x.MapUint64Uint64 = make(map[uint64]uint64)
 		}
-		value := &_TestAllTypes_59_map{m: &x.MapUint64Uint64}
+		value := &_TestAllTypes_59_map{m: &x.x.MapUint64Uint64}
 		return protoreflect.ValueOfMap(value)
 	case "goproto.proto.test3.TestAllTypes.map_sint32_sint32":
-		if x.MapSint32Sint32 == nil {
-			x.MapSint32Sint32 = make(map[int32]int32)
+		if x.x.MapSint32Sint32 == nil {
+			x.x.MapSint32Sint32 = make(map[int32]int32)
 		}
-		value := &_TestAllTypes_60_map{m: &x.MapSint32Sint32}
+		value := &_TestAllTypes_60_map{m: &x.x.MapSint32Sint32}
 		return protoreflect.ValueOfMap(value)
 	case "goproto.proto.test3.TestAllTypes.map_sint64_sint64":
-		if x.MapSint64Sint64 == nil {
-			x.MapSint64Sint64 = make(map[int64]int64)
+		if x.x.MapSint64Sint64 == nil {
+			x.x.MapSint64Sint64 = make(map[int64]int64)
 		}
-		value := &_TestAllTypes_61_map{m: &x.MapSint64Sint64}
+		value := &_TestAllTypes_61_map{m: &x.x.MapSint64Sint64}
 		return protoreflect.ValueOfMap(value)
 	case "goproto.proto.test3.TestAllTypes.map_fixed32_fixed32":
-		if x.MapFixed32Fixed32 == nil {
-			x.MapFixed32Fixed32 = make(map[uint32]uint32)
+		if x.x.MapFixed32Fixed32 == nil {
+			x.x.MapFixed32Fixed32 = make(map[uint32]uint32)
 		}
-		value := &_TestAllTypes_62_map{m: &x.MapFixed32Fixed32}
+		value := &_TestAllTypes_62_map{m: &x.x.MapFixed32Fixed32}
 		return protoreflect.ValueOfMap(value)
 	case "goproto.proto.test3.TestAllTypes.map_fixed64_fixed64":
-		if x.MapFixed64Fixed64 == nil {
-			x.MapFixed64Fixed64 = make(map[uint64]uint64)
+		if x.x.MapFixed64Fixed64 == nil {
+			x.x.MapFixed64Fixed64 = make(map[uint64]uint64)
 		}
-		value := &_TestAllTypes_63_map{m: &x.MapFixed64Fixed64}
+		value := &_TestAllTypes_63_map{m: &x.x.MapFixed64Fixed64}
 		return protoreflect.ValueOfMap(value)
 	case "goproto.proto.test3.TestAllTypes.map_sfixed32_sfixed32":
-		if x.MapSfixed32Sfixed32 == nil {
-			x.MapSfixed32Sfixed32 = make(map[int32]int32)
+		if x.x.MapSfixed32Sfixed32 == nil {
+			x.x.MapSfixed32Sfixed32 = make(map[int32]int32)
 		}
-		value := &_TestAllTypes_64_map{m: &x.MapSfixed32Sfixed32}
+		value := &_TestAllTypes_64_map{m: &x.x.MapSfixed32Sfixed32}
 		return protoreflect.ValueOfMap(value)
 	case "goproto.proto.test3.TestAllTypes.map_sfixed64_sfixed64":
-		if x.MapSfixed64Sfixed64 == nil {
-			x.MapSfixed64Sfixed64 = make(map[int64]int64)
+		if x.x.MapSfixed64Sfixed64 == nil {
+			x.x.MapSfixed64Sfixed64 = make(map[int64]int64)
 		}
-		value := &_TestAllTypes_65_map{m: &x.MapSfixed64Sfixed64}
+		value := &_TestAllTypes_65_map{m: &x.x.MapSfixed64Sfixed64}
 		return protoreflect.ValueOfMap(value)
 	case "goproto.proto.test3.TestAllTypes.map_int32_float":
-		if x.MapInt32Float == nil {
-			x.MapInt32Float = make(map[int32]float32)
+		if x.x.MapInt32Float == nil {
+			x.x.MapInt32Float = make(map[int32]float32)
 		}
-		value := &_TestAllTypes_66_map{m: &x.MapInt32Float}
+		value := &_TestAllTypes_66_map{m: &x.x.MapInt32Float}
 		return protoreflect.ValueOfMap(value)
 	case "goproto.proto.test3.TestAllTypes.map_int32_double":
-		if x.MapInt32Double == nil {
-			x.MapInt32Double = make(map[int32]float64)
+		if x.x.MapInt32Double == nil {
+			x.x.MapInt32Double = make(map[int32]float64)
 		}
-		value := &_TestAllTypes_67_map{m: &x.MapInt32Double}
+		value := &_TestAllTypes_67_map{m: &x.x.MapInt32Double}
 		return protoreflect.ValueOfMap(value)
 	case "goproto.proto.test3.TestAllTypes.map_bool_bool":
-		if x.MapBoolBool == nil {
-			x.MapBoolBool = make(map[bool]bool)
+		if x.x.MapBoolBool == nil {
+			x.x.MapBoolBool = make(map[bool]bool)
 		}
-		value := &_TestAllTypes_68_map{m: &x.MapBoolBool}
+		value := &_TestAllTypes_68_map{m: &x.x.MapBoolBool}
 		return protoreflect.ValueOfMap(value)
 	case "goproto.proto.test3.TestAllTypes.map_string_string":
-		if x.MapStringString == nil {
-			x.MapStringString = make(map[string]string)
+		if x.x.MapStringString == nil {
+			x.x.MapStringString = make(map[string]string)
 		}
-		value := &_TestAllTypes_69_map{m: &x.MapStringString}
+		value := &_TestAllTypes_69_map{m: &x.x.MapStringString}
 		return protoreflect.ValueOfMap(value)
 	case "goproto.proto.test3.TestAllTypes.map_string_bytes":
-		if x.MapStringBytes == nil {
-			x.MapStringBytes = make(map[string][]byte)
+		if x.x.MapStringBytes == nil {
+			x.x.MapStringBytes = make(map[string][]byte)
 		}
-		value := &_TestAllTypes_70_map{m: &x.MapStringBytes}
+		value := &_TestAllTypes_70_map{m: &x.x.MapStringBytes}
 		return protoreflect.ValueOfMap(value)
 	case "goproto.proto.test3.TestAllTypes.map_string_nested_message":
-		if x.MapStringNestedMessage == nil {
-			x.MapStringNestedMessage = make(map[string]*TestAllTypes_NestedMessage)
+		if x.x.MapStringNestedMessage == nil {
+			x.x.MapStringNestedMessage = make(map[string]*TestAllTypes_NestedMessage)
 		}
-		value := &_TestAllTypes_71_map{m: &x.MapStringNestedMessage}
+		value := &_TestAllTypes_71_map{m: &x.x.MapStringNestedMessage}
 		return protoreflect.ValueOfMap(value)
 	case "goproto.proto.test3.TestAllTypes.map_string_nested_enum":
-		if x.MapStringNestedEnum == nil {
-			x.MapStringNestedEnum = make(map[string]TestAllTypes_NestedEnum)
+		if x.x.MapStringNestedEnum == nil {
+			x.x.MapStringNestedEnum = make(map[string]TestAllTypes_NestedEnum)
 		}
-		value := &_TestAllTypes_73_map{m: &x.MapStringNestedEnum}
+		value := &_TestAllTypes_73_map{m: &x.x.MapStringNestedEnum}
 		return protoreflect.ValueOfMap(value)
 	case "goproto.proto.test3.TestAllTypes.oneof_nested_message":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			value := &TestAllTypes_NestedMessage{}
 			oneofValue := &TestAllTypes_OneofNestedMessage{OneofNestedMessage: value}
-			x.OneofField = oneofValue
+			x.x.OneofField = oneofValue
 			return protoreflect.ValueOfMessage(value.ProtoReflect())
 		}
-		switch m := x.OneofField.(type) {
+		switch m := x.x.OneofField.(type) {
 		case *TestAllTypes_OneofNestedMessage:
 			return protoreflect.ValueOfMessage(m.OneofNestedMessage.ProtoReflect())
 		default:
 			value := &TestAllTypes_NestedMessage{}
 			oneofValue := &TestAllTypes_OneofNestedMessage{OneofNestedMessage: value}
-			x.OneofField = oneofValue
+			x.x.OneofField = oneofValue
 			return protoreflect.ValueOfMessage(value.ProtoReflect())
 		}
 	case "goproto.proto.test3.TestAllTypes.singular_int32":
@@ -4339,7 +4341,7 @@ func (x *fastReflection_TestAllTypes) Mutable(fd protoreflect.FieldDescriptor) p
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_TestAllTypes) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_TestAllTypes) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "goproto.proto.test3.TestAllTypes.singular_int32":
 		return protoreflect.ValueOfInt32(int32(0))
@@ -4530,13 +4532,13 @@ func (x *fastReflection_TestAllTypes) NewField(fd protoreflect.FieldDescriptor) 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_TestAllTypes) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x fastReflection_TestAllTypes) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	case "goproto.proto.test3.TestAllTypes.oneof_field":
-		if x.OneofField == nil {
+		if x.x.OneofField == nil {
 			return nil
 		}
-		switch x.OneofField.(type) {
+		switch x.x.OneofField.(type) {
 		case *TestAllTypes_OneofUint32:
 			return x.Descriptor().Fields().ByName("oneof_uint32")
 		case *TestAllTypes_OneofNestedMessage:
@@ -4565,8 +4567,8 @@ func (x *fastReflection_TestAllTypes) WhichOneof(d protoreflect.OneofDescriptor)
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_TestAllTypes) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
+func (x fastReflection_TestAllTypes) GetUnknown() protoreflect.RawFields {
+	return x.x.unknownFields
 }
 
 // SetUnknown stores an entire list of unknown fields.
@@ -4576,8 +4578,8 @@ func (x *fastReflection_TestAllTypes) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_TestAllTypes) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
+func (x fastReflection_TestAllTypes) SetUnknown(fields protoreflect.RawFields) {
+	x.x.unknownFields = fields
 }
 
 // IsValid reports whether the message is valid.
@@ -4588,8 +4590,8 @@ func (x *fastReflection_TestAllTypes) SetUnknown(fields protoreflect.RawFields) 
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_TestAllTypes) IsValid() bool {
-	return x != nil
+func (x fastReflection_TestAllTypes) IsValid() bool {
+	return x.x != nil
 }
 
 // ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
@@ -4598,7 +4600,7 @@ func (x *fastReflection_TestAllTypes) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (*fastReflection_TestAllTypes) ProtoMethods() *protoiface.Methods {
+func (fastReflection_TestAllTypes) ProtoMethods() *protoiface.Methods {
 	return fastReflection_TestAllTypesProtoMethods
 }
 
@@ -10302,12 +10304,14 @@ func init() {
 	fd_TestAllTypes_NestedMessage_corecursive = md_TestAllTypes_NestedMessage.Fields().ByName("corecursive")
 }
 
-var _ protoreflect.Message = (*fastReflection_TestAllTypes_NestedMessage)(nil)
+var _ protoreflect.Message = fastReflection_TestAllTypes_NestedMessage{}
 
-type fastReflection_TestAllTypes_NestedMessage TestAllTypes_NestedMessage
+type fastReflection_TestAllTypes_NestedMessage struct {
+	x *TestAllTypes_NestedMessage
+}
 
 func (x *TestAllTypes_NestedMessage) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_TestAllTypes_NestedMessage)(x)
+	return fastReflection_TestAllTypes_NestedMessage{x: x}
 }
 
 func (x *TestAllTypes_NestedMessage) slowProtoReflect() protoreflect.Message {
@@ -10328,10 +10332,10 @@ var _ protoreflect.MessageType = fastReflection_TestAllTypes_NestedMessage_messa
 type fastReflection_TestAllTypes_NestedMessage_messageType struct{}
 
 func (x fastReflection_TestAllTypes_NestedMessage_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_TestAllTypes_NestedMessage)(nil)
+	return fastReflection_TestAllTypes_NestedMessage{x: nil}
 }
 func (x fastReflection_TestAllTypes_NestedMessage_messageType) New() protoreflect.Message {
-	return new(fastReflection_TestAllTypes_NestedMessage)
+	return fastReflection_TestAllTypes_NestedMessage{x: new(TestAllTypes_NestedMessage)}
 }
 func (x fastReflection_TestAllTypes_NestedMessage_messageType) Descriptor() protoreflect.MessageDescriptor {
 	return md_TestAllTypes_NestedMessage
@@ -10339,26 +10343,26 @@ func (x fastReflection_TestAllTypes_NestedMessage_messageType) Descriptor() prot
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_TestAllTypes_NestedMessage) Descriptor() protoreflect.MessageDescriptor {
+func (x fastReflection_TestAllTypes_NestedMessage) Descriptor() protoreflect.MessageDescriptor {
 	return md_TestAllTypes_NestedMessage
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_TestAllTypes_NestedMessage) Type() protoreflect.MessageType {
+func (x fastReflection_TestAllTypes_NestedMessage) Type() protoreflect.MessageType {
 	return _fastReflection_TestAllTypes_NestedMessage_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_TestAllTypes_NestedMessage) New() protoreflect.Message {
-	return new(fastReflection_TestAllTypes_NestedMessage)
+func (x fastReflection_TestAllTypes_NestedMessage) New() protoreflect.Message {
+	return fastReflection_TestAllTypes_NestedMessage{x: new(TestAllTypes_NestedMessage)}
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_TestAllTypes_NestedMessage) Interface() protoreflect.ProtoMessage {
-	return (*TestAllTypes_NestedMessage)(x)
+func (x fastReflection_TestAllTypes_NestedMessage) Interface() protoreflect.ProtoMessage {
+	return x.x
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -10366,15 +10370,15 @@ func (x *fastReflection_TestAllTypes_NestedMessage) Interface() protoreflect.Pro
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_TestAllTypes_NestedMessage) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.A != int32(0) {
-		value := protoreflect.ValueOfInt32(x.A)
+func (x fastReflection_TestAllTypes_NestedMessage) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.x.A != int32(0) {
+		value := protoreflect.ValueOfInt32(x.x.A)
 		if !f(fd_TestAllTypes_NestedMessage_a, value) {
 			return
 		}
 	}
-	if x.Corecursive != nil {
-		value := protoreflect.ValueOfMessage(x.Corecursive.ProtoReflect())
+	if x.x.Corecursive != nil {
+		value := protoreflect.ValueOfMessage(x.x.Corecursive.ProtoReflect())
 		if !f(fd_TestAllTypes_NestedMessage_corecursive, value) {
 			return
 		}
@@ -10392,12 +10396,12 @@ func (x *fastReflection_TestAllTypes_NestedMessage) Range(f func(protoreflect.Fi
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_TestAllTypes_NestedMessage) Has(fd protoreflect.FieldDescriptor) bool {
+func (x fastReflection_TestAllTypes_NestedMessage) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "goproto.proto.test3.TestAllTypes.NestedMessage.a":
-		return x.A != int32(0)
+		return x.x.A != int32(0)
 	case "goproto.proto.test3.TestAllTypes.NestedMessage.corecursive":
-		return x.Corecursive != nil
+		return x.x.Corecursive != nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goproto.proto.test3.TestAllTypes.NestedMessage"))
@@ -10412,12 +10416,12 @@ func (x *fastReflection_TestAllTypes_NestedMessage) Has(fd protoreflect.FieldDes
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_TestAllTypes_NestedMessage) Clear(fd protoreflect.FieldDescriptor) {
+func (x fastReflection_TestAllTypes_NestedMessage) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "goproto.proto.test3.TestAllTypes.NestedMessage.a":
-		x.A = int32(0)
+		x.x.A = int32(0)
 	case "goproto.proto.test3.TestAllTypes.NestedMessage.corecursive":
-		x.Corecursive = nil
+		x.x.Corecursive = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goproto.proto.test3.TestAllTypes.NestedMessage"))
@@ -10432,13 +10436,13 @@ func (x *fastReflection_TestAllTypes_NestedMessage) Clear(fd protoreflect.FieldD
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_TestAllTypes_NestedMessage) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_TestAllTypes_NestedMessage) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	case "goproto.proto.test3.TestAllTypes.NestedMessage.a":
-		value := x.A
+		value := x.x.A
 		return protoreflect.ValueOfInt32(value)
 	case "goproto.proto.test3.TestAllTypes.NestedMessage.corecursive":
-		value := x.Corecursive
+		value := x.x.Corecursive
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
@@ -10458,12 +10462,12 @@ func (x *fastReflection_TestAllTypes_NestedMessage) Get(descriptor protoreflect.
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_TestAllTypes_NestedMessage) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x fastReflection_TestAllTypes_NestedMessage) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	case "goproto.proto.test3.TestAllTypes.NestedMessage.a":
-		x.A = int32(value.Int())
+		x.x.A = int32(value.Int())
 	case "goproto.proto.test3.TestAllTypes.NestedMessage.corecursive":
-		x.Corecursive = value.Message().Interface().(*TestAllTypes)
+		x.x.Corecursive = value.Message().Interface().(*TestAllTypes)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goproto.proto.test3.TestAllTypes.NestedMessage"))
@@ -10482,13 +10486,13 @@ func (x *fastReflection_TestAllTypes_NestedMessage) Set(fd protoreflect.FieldDes
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_TestAllTypes_NestedMessage) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_TestAllTypes_NestedMessage) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "goproto.proto.test3.TestAllTypes.NestedMessage.corecursive":
-		if x.Corecursive == nil {
-			x.Corecursive = new(TestAllTypes)
+		if x.x.Corecursive == nil {
+			x.x.Corecursive = new(TestAllTypes)
 		}
-		return protoreflect.ValueOfMessage(x.Corecursive.ProtoReflect())
+		return protoreflect.ValueOfMessage(x.x.Corecursive.ProtoReflect())
 	case "goproto.proto.test3.TestAllTypes.NestedMessage.a":
 		panic(fmt.Errorf("field a of message goproto.proto.test3.TestAllTypes.NestedMessage is not mutable"))
 	default:
@@ -10502,7 +10506,7 @@ func (x *fastReflection_TestAllTypes_NestedMessage) Mutable(fd protoreflect.Fiel
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_TestAllTypes_NestedMessage) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_TestAllTypes_NestedMessage) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "goproto.proto.test3.TestAllTypes.NestedMessage.a":
 		return protoreflect.ValueOfInt32(int32(0))
@@ -10520,7 +10524,7 @@ func (x *fastReflection_TestAllTypes_NestedMessage) NewField(fd protoreflect.Fie
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_TestAllTypes_NestedMessage) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x fastReflection_TestAllTypes_NestedMessage) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
 		panic(fmt.Errorf("%s is not a oneof field in goproto.proto.test3.TestAllTypes.NestedMessage", d.FullName()))
@@ -10531,8 +10535,8 @@ func (x *fastReflection_TestAllTypes_NestedMessage) WhichOneof(d protoreflect.On
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_TestAllTypes_NestedMessage) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
+func (x fastReflection_TestAllTypes_NestedMessage) GetUnknown() protoreflect.RawFields {
+	return x.x.unknownFields
 }
 
 // SetUnknown stores an entire list of unknown fields.
@@ -10542,8 +10546,8 @@ func (x *fastReflection_TestAllTypes_NestedMessage) GetUnknown() protoreflect.Ra
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_TestAllTypes_NestedMessage) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
+func (x fastReflection_TestAllTypes_NestedMessage) SetUnknown(fields protoreflect.RawFields) {
+	x.x.unknownFields = fields
 }
 
 // IsValid reports whether the message is valid.
@@ -10554,8 +10558,8 @@ func (x *fastReflection_TestAllTypes_NestedMessage) SetUnknown(fields protorefle
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_TestAllTypes_NestedMessage) IsValid() bool {
-	return x != nil
+func (x fastReflection_TestAllTypes_NestedMessage) IsValid() bool {
+	return x.x != nil
 }
 
 // ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
@@ -10564,7 +10568,7 @@ func (x *fastReflection_TestAllTypes_NestedMessage) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (*fastReflection_TestAllTypes_NestedMessage) ProtoMethods() *protoiface.Methods {
+func (fastReflection_TestAllTypes_NestedMessage) ProtoMethods() *protoiface.Methods {
 	return fastReflection_TestAllTypes_NestedMessageProtoMethods
 }
 
@@ -10794,12 +10798,14 @@ func init() {
 	fd_ForeignMessage_d = md_ForeignMessage.Fields().ByName("d")
 }
 
-var _ protoreflect.Message = (*fastReflection_ForeignMessage)(nil)
+var _ protoreflect.Message = fastReflection_ForeignMessage{}
 
-type fastReflection_ForeignMessage ForeignMessage
+type fastReflection_ForeignMessage struct {
+	x *ForeignMessage
+}
 
 func (x *ForeignMessage) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_ForeignMessage)(x)
+	return fastReflection_ForeignMessage{x: x}
 }
 
 func (x *ForeignMessage) slowProtoReflect() protoreflect.Message {
@@ -10820,10 +10826,10 @@ var _ protoreflect.MessageType = fastReflection_ForeignMessage_messageType{}
 type fastReflection_ForeignMessage_messageType struct{}
 
 func (x fastReflection_ForeignMessage_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_ForeignMessage)(nil)
+	return fastReflection_ForeignMessage{x: nil}
 }
 func (x fastReflection_ForeignMessage_messageType) New() protoreflect.Message {
-	return new(fastReflection_ForeignMessage)
+	return fastReflection_ForeignMessage{x: new(ForeignMessage)}
 }
 func (x fastReflection_ForeignMessage_messageType) Descriptor() protoreflect.MessageDescriptor {
 	return md_ForeignMessage
@@ -10831,26 +10837,26 @@ func (x fastReflection_ForeignMessage_messageType) Descriptor() protoreflect.Mes
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_ForeignMessage) Descriptor() protoreflect.MessageDescriptor {
+func (x fastReflection_ForeignMessage) Descriptor() protoreflect.MessageDescriptor {
 	return md_ForeignMessage
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_ForeignMessage) Type() protoreflect.MessageType {
+func (x fastReflection_ForeignMessage) Type() protoreflect.MessageType {
 	return _fastReflection_ForeignMessage_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_ForeignMessage) New() protoreflect.Message {
-	return new(fastReflection_ForeignMessage)
+func (x fastReflection_ForeignMessage) New() protoreflect.Message {
+	return fastReflection_ForeignMessage{x: new(ForeignMessage)}
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_ForeignMessage) Interface() protoreflect.ProtoMessage {
-	return (*ForeignMessage)(x)
+func (x fastReflection_ForeignMessage) Interface() protoreflect.ProtoMessage {
+	return x.x
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -10858,15 +10864,15 @@ func (x *fastReflection_ForeignMessage) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_ForeignMessage) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.C != int32(0) {
-		value := protoreflect.ValueOfInt32(x.C)
+func (x fastReflection_ForeignMessage) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.x.C != int32(0) {
+		value := protoreflect.ValueOfInt32(x.x.C)
 		if !f(fd_ForeignMessage_c, value) {
 			return
 		}
 	}
-	if x.D != int32(0) {
-		value := protoreflect.ValueOfInt32(x.D)
+	if x.x.D != int32(0) {
+		value := protoreflect.ValueOfInt32(x.x.D)
 		if !f(fd_ForeignMessage_d, value) {
 			return
 		}
@@ -10884,12 +10890,12 @@ func (x *fastReflection_ForeignMessage) Range(f func(protoreflect.FieldDescripto
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_ForeignMessage) Has(fd protoreflect.FieldDescriptor) bool {
+func (x fastReflection_ForeignMessage) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "goproto.proto.test3.ForeignMessage.c":
-		return x.C != int32(0)
+		return x.x.C != int32(0)
 	case "goproto.proto.test3.ForeignMessage.d":
-		return x.D != int32(0)
+		return x.x.D != int32(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goproto.proto.test3.ForeignMessage"))
@@ -10904,12 +10910,12 @@ func (x *fastReflection_ForeignMessage) Has(fd protoreflect.FieldDescriptor) boo
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ForeignMessage) Clear(fd protoreflect.FieldDescriptor) {
+func (x fastReflection_ForeignMessage) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "goproto.proto.test3.ForeignMessage.c":
-		x.C = int32(0)
+		x.x.C = int32(0)
 	case "goproto.proto.test3.ForeignMessage.d":
-		x.D = int32(0)
+		x.x.D = int32(0)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goproto.proto.test3.ForeignMessage"))
@@ -10924,13 +10930,13 @@ func (x *fastReflection_ForeignMessage) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_ForeignMessage) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_ForeignMessage) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	case "goproto.proto.test3.ForeignMessage.c":
-		value := x.C
+		value := x.x.C
 		return protoreflect.ValueOfInt32(value)
 	case "goproto.proto.test3.ForeignMessage.d":
-		value := x.D
+		value := x.x.D
 		return protoreflect.ValueOfInt32(value)
 	default:
 		if descriptor.IsExtension() {
@@ -10950,12 +10956,12 @@ func (x *fastReflection_ForeignMessage) Get(descriptor protoreflect.FieldDescrip
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ForeignMessage) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x fastReflection_ForeignMessage) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	case "goproto.proto.test3.ForeignMessage.c":
-		x.C = int32(value.Int())
+		x.x.C = int32(value.Int())
 	case "goproto.proto.test3.ForeignMessage.d":
-		x.D = int32(value.Int())
+		x.x.D = int32(value.Int())
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goproto.proto.test3.ForeignMessage"))
@@ -10974,7 +10980,7 @@ func (x *fastReflection_ForeignMessage) Set(fd protoreflect.FieldDescriptor, val
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ForeignMessage) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_ForeignMessage) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "goproto.proto.test3.ForeignMessage.c":
 		panic(fmt.Errorf("field c of message goproto.proto.test3.ForeignMessage is not mutable"))
@@ -10991,7 +10997,7 @@ func (x *fastReflection_ForeignMessage) Mutable(fd protoreflect.FieldDescriptor)
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_ForeignMessage) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_ForeignMessage) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "goproto.proto.test3.ForeignMessage.c":
 		return protoreflect.ValueOfInt32(int32(0))
@@ -11008,7 +11014,7 @@ func (x *fastReflection_ForeignMessage) NewField(fd protoreflect.FieldDescriptor
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_ForeignMessage) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x fastReflection_ForeignMessage) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
 		panic(fmt.Errorf("%s is not a oneof field in goproto.proto.test3.ForeignMessage", d.FullName()))
@@ -11019,8 +11025,8 @@ func (x *fastReflection_ForeignMessage) WhichOneof(d protoreflect.OneofDescripto
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_ForeignMessage) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
+func (x fastReflection_ForeignMessage) GetUnknown() protoreflect.RawFields {
+	return x.x.unknownFields
 }
 
 // SetUnknown stores an entire list of unknown fields.
@@ -11030,8 +11036,8 @@ func (x *fastReflection_ForeignMessage) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ForeignMessage) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
+func (x fastReflection_ForeignMessage) SetUnknown(fields protoreflect.RawFields) {
+	x.x.unknownFields = fields
 }
 
 // IsValid reports whether the message is valid.
@@ -11042,8 +11048,8 @@ func (x *fastReflection_ForeignMessage) SetUnknown(fields protoreflect.RawFields
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_ForeignMessage) IsValid() bool {
-	return x != nil
+func (x fastReflection_ForeignMessage) IsValid() bool {
+	return x.x != nil
 }
 
 // ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
@@ -11052,7 +11058,7 @@ func (x *fastReflection_ForeignMessage) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (*fastReflection_ForeignMessage) ProtoMethods() *protoiface.Methods {
+func (fastReflection_ForeignMessage) ProtoMethods() *protoiface.Methods {
 	return fastReflection_ForeignMessageProtoMethods
 }
 

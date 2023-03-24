@@ -23,7 +23,7 @@ func (g *whichOneofGen) genComment() {
 }
 
 func (g *whichOneofGen) genFunc() {
-	g.P("func (x *", g.typeName, ") WhichOneof(d ", protoreflectPkg.Ident("OneofDescriptor"), ") ", protoreflectPkg.Ident("FieldDescriptor"), " {")
+	g.P("func (x ", g.typeName, ") WhichOneof(d ", protoreflectPkg.Ident("OneofDescriptor"), ") ", protoreflectPkg.Ident("FieldDescriptor"), " {")
 	g.P("switch d.FullName() {")
 	for _, oneof := range g.message.Oneofs {
 		g.P("case \"", oneof.Desc.FullName(), "\": ")
@@ -41,11 +41,11 @@ func (g *whichOneofGen) genFunc() {
 
 func (g *whichOneofGen) genOneof(oneof *protogen.Oneof) {
 	// if none is populated then return nil
-	g.P("if x.", oneof.GoName, " == nil {")
+	g.P("if x.x.", oneof.GoName, " == nil {")
 	g.P("return nil")
 	g.P("}")
 	// switch the type
-	g.P("switch x.", oneof.GoName, ".(type) {")
+	g.P("switch x.x.", oneof.GoName, ".(type) {")
 	for _, field := range oneof.Fields {
 		g.P("case *", g.QualifiedGoIdent(field.GoIdent), ":")
 		g.P("return x.Descriptor().Fields().ByName(\"", field.Desc.Name(), "\")")

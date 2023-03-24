@@ -108,13 +108,15 @@ func (g *fastGenerator) genMessageType() {
 
 func (g *fastGenerator) generateReflectionType() {
 	// gen interface assertion
-	g.P("var _ ", protoreflectPkg.Ident("Message"), " = (*", g.typeName, ")(nil)")
+	g.P("var _ ", protoreflectPkg.Ident("Message"), " = ", g.typeName, "{}")
 	g.P()
 	// gen type
-	g.P("type ", g.typeName, " ", g.message.GoIdent.GoName)
+	g.P("type ", g.typeName, " struct {")
+	g.P("x *", g.message.GoIdent.GoName)
+	g.P("}")
 	// gen msg implementation
 	g.P("func (x *", g.message.GoIdent.GoName, ") ProtoReflect() ", protoreflectPkg.Ident("Message"), "{")
-	g.P("return (*", g.typeName, ")(x)")
+	g.P("return ", g.typeName, "{x: x}")
 	g.P("}")
 	g.P()
 
@@ -154,7 +156,7 @@ func (g *fastGenerator) generateReflectionType() {
 func (g *fastGenerator) genDescriptor() {
 	g.P("// Descriptor returns message descriptor, which contains only the protobuf")
 	g.P("// type information for the message.")
-	g.P("func (x *", g.typeName, ") Descriptor() ", protoreflectPkg.Ident("MessageDescriptor"), " {")
+	g.P("func (x ", g.typeName, ") Descriptor() ", protoreflectPkg.Ident("MessageDescriptor"), " {")
 	g.P("return ", messageDescriptorName(g.message))
 	g.P("}")
 	g.P()
@@ -164,7 +166,7 @@ func (g *fastGenerator) genType() {
 	g.P("// Type returns the message type, which encapsulates both Go and protobuf")
 	g.P("// type information. If the Go type information is not needed,")
 	g.P("// it is recommended that the message descriptor be used instead.")
-	g.P("func (x *", g.typeName, ") Type() ", protoreflectPkg.Ident("MessageType"), " {")
+	g.P("func (x ", g.typeName, ") Type() ", protoreflectPkg.Ident("MessageType"), " {")
 	g.P("return ", messageTypeNameVar(g.message))
 	g.P("}")
 	g.P()
@@ -172,8 +174,8 @@ func (g *fastGenerator) genType() {
 
 func (g *fastGenerator) genNew() {
 	g.P("// New returns a newly allocated and mutable empty message.")
-	g.P("func (x *", g.typeName, ") New() ", protoreflectPkg.Ident("Message"), " {")
-	g.P("return new(", g.typeName, ")")
+	g.P("func (x ", g.typeName, ") New() ", protoreflectPkg.Ident("Message"), " {")
+	g.P("return ", g.typeName, "{x: new(", g.message.GoIdent, ")}")
 	g.P("}")
 	g.P()
 }
@@ -181,8 +183,8 @@ func (g *fastGenerator) genNew() {
 func (g *fastGenerator) genInterface() {
 	g.P("// Interface unwraps the message reflection interface and")
 	g.P("// returns the underlying ProtoMessage interface.")
-	g.P("func (x *", g.typeName, ") Interface() ", protoreflectPkg.Ident("ProtoMessage"), " {")
-	g.P("return (*", g.message.GoIdent, ")(x)")
+	g.P("func (x ", g.typeName, ") Interface() ", protoreflectPkg.Ident("ProtoMessage"), " {")
+	g.P("return x.x")
 	g.P("}")
 	g.P()
 }
@@ -251,8 +253,8 @@ func (g *fastGenerator) genGetUnknown() {
 	g.P("// GetUnknown retrieves the entire list of unknown fields.")
 	g.P("// The caller may only mutate the contents of the RawFields")
 	g.P("// if the mutated bytes are stored back into the message with SetUnknown.")
-	g.P("func (x *", g.typeName, ") GetUnknown() ", protoreflectPkg.Ident("RawFields"), " {")
-	g.P("return x.unknownFields")
+	g.P("func (x ", g.typeName, ") GetUnknown() ", protoreflectPkg.Ident("RawFields"), " {")
+	g.P("return x.x.unknownFields")
 	g.P("}")
 	g.P()
 }
@@ -265,8 +267,8 @@ func (g *fastGenerator) genSetUnknown() {
 	g.P("// An empty RawFields may be passed to clear the fields.")
 	g.P("//")
 	g.P("// SetUnknown is a mutating operation and unsafe for concurrent use.")
-	g.P("func (x *", g.typeName, ") SetUnknown(fields ", protoreflectPkg.Ident("RawFields"), ") {")
-	g.P("x.unknownFields = fields")
+	g.P("func (x ", g.typeName, ") SetUnknown(fields ", protoreflectPkg.Ident("RawFields"), ") {")
+	g.P("x.x.unknownFields = fields")
 	g.P("}")
 	g.P()
 }
@@ -281,8 +283,8 @@ func (g *fastGenerator) genIsValid() {
 	g.P("// Validity is not part of the protobuf data model, and may not")
 	g.P("// be preserved in marshaling or other operations.")
 
-	g.P("func (x *", g.typeName, ") IsValid() bool {")
-	g.P("return x != nil")
+	g.P("func (x ", g.typeName, ") IsValid() bool {")
+	g.P("return x.x != nil")
 	g.P("}")
 	g.P()
 }
@@ -296,7 +298,7 @@ func (g *fastGenerator) genProtoMethods() {
 	g.P("// The returned methods type is identical to")
 	g.P(`// "google.golang.org/protobuf/runtime/protoiface".Methods.`)
 	g.P("// Consult the protoiface package documentation for details.")
-	g.P("func (*", g.typeName, ") ProtoMethods() *", protoifacePkg.Ident("Methods"), " {")
+	g.P("func (", g.typeName, ") ProtoMethods() *", protoifacePkg.Ident("Methods"), " {")
 	g.P("return ", varName)
 	g.P("}")
 

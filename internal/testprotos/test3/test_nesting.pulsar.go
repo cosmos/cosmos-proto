@@ -23,12 +23,14 @@ func init() {
 	fd_MultiLayeredNesting_nested1 = md_MultiLayeredNesting.Fields().ByName("nested1")
 }
 
-var _ protoreflect.Message = (*fastReflection_MultiLayeredNesting)(nil)
+var _ protoreflect.Message = fastReflection_MultiLayeredNesting{}
 
-type fastReflection_MultiLayeredNesting MultiLayeredNesting
+type fastReflection_MultiLayeredNesting struct {
+	x *MultiLayeredNesting
+}
 
 func (x *MultiLayeredNesting) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MultiLayeredNesting)(x)
+	return fastReflection_MultiLayeredNesting{x: x}
 }
 
 func (x *MultiLayeredNesting) slowProtoReflect() protoreflect.Message {
@@ -49,10 +51,10 @@ var _ protoreflect.MessageType = fastReflection_MultiLayeredNesting_messageType{
 type fastReflection_MultiLayeredNesting_messageType struct{}
 
 func (x fastReflection_MultiLayeredNesting_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MultiLayeredNesting)(nil)
+	return fastReflection_MultiLayeredNesting{x: nil}
 }
 func (x fastReflection_MultiLayeredNesting_messageType) New() protoreflect.Message {
-	return new(fastReflection_MultiLayeredNesting)
+	return fastReflection_MultiLayeredNesting{x: new(MultiLayeredNesting)}
 }
 func (x fastReflection_MultiLayeredNesting_messageType) Descriptor() protoreflect.MessageDescriptor {
 	return md_MultiLayeredNesting
@@ -60,26 +62,26 @@ func (x fastReflection_MultiLayeredNesting_messageType) Descriptor() protoreflec
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MultiLayeredNesting) Descriptor() protoreflect.MessageDescriptor {
+func (x fastReflection_MultiLayeredNesting) Descriptor() protoreflect.MessageDescriptor {
 	return md_MultiLayeredNesting
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MultiLayeredNesting) Type() protoreflect.MessageType {
+func (x fastReflection_MultiLayeredNesting) Type() protoreflect.MessageType {
 	return _fastReflection_MultiLayeredNesting_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MultiLayeredNesting) New() protoreflect.Message {
-	return new(fastReflection_MultiLayeredNesting)
+func (x fastReflection_MultiLayeredNesting) New() protoreflect.Message {
+	return fastReflection_MultiLayeredNesting{x: new(MultiLayeredNesting)}
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MultiLayeredNesting) Interface() protoreflect.ProtoMessage {
-	return (*MultiLayeredNesting)(x)
+func (x fastReflection_MultiLayeredNesting) Interface() protoreflect.ProtoMessage {
+	return x.x
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -87,9 +89,9 @@ func (x *fastReflection_MultiLayeredNesting) Interface() protoreflect.ProtoMessa
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MultiLayeredNesting) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Nested1 != nil {
-		value := protoreflect.ValueOfMessage(x.Nested1.ProtoReflect())
+func (x fastReflection_MultiLayeredNesting) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.x.Nested1 != nil {
+		value := protoreflect.ValueOfMessage(x.x.Nested1.ProtoReflect())
 		if !f(fd_MultiLayeredNesting_nested1, value) {
 			return
 		}
@@ -107,10 +109,10 @@ func (x *fastReflection_MultiLayeredNesting) Range(f func(protoreflect.FieldDesc
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MultiLayeredNesting) Has(fd protoreflect.FieldDescriptor) bool {
+func (x fastReflection_MultiLayeredNesting) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.nested1":
-		return x.Nested1 != nil
+		return x.x.Nested1 != nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goproto.proto.test3.MultiLayeredNesting"))
@@ -125,10 +127,10 @@ func (x *fastReflection_MultiLayeredNesting) Has(fd protoreflect.FieldDescriptor
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MultiLayeredNesting) Clear(fd protoreflect.FieldDescriptor) {
+func (x fastReflection_MultiLayeredNesting) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.nested1":
-		x.Nested1 = nil
+		x.x.Nested1 = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goproto.proto.test3.MultiLayeredNesting"))
@@ -143,10 +145,10 @@ func (x *fastReflection_MultiLayeredNesting) Clear(fd protoreflect.FieldDescript
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MultiLayeredNesting) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_MultiLayeredNesting) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.nested1":
-		value := x.Nested1
+		value := x.x.Nested1
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
@@ -166,10 +168,10 @@ func (x *fastReflection_MultiLayeredNesting) Get(descriptor protoreflect.FieldDe
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MultiLayeredNesting) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x fastReflection_MultiLayeredNesting) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.nested1":
-		x.Nested1 = value.Message().Interface().(*MultiLayeredNesting_Nested1)
+		x.x.Nested1 = value.Message().Interface().(*MultiLayeredNesting_Nested1)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goproto.proto.test3.MultiLayeredNesting"))
@@ -188,13 +190,13 @@ func (x *fastReflection_MultiLayeredNesting) Set(fd protoreflect.FieldDescriptor
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MultiLayeredNesting) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_MultiLayeredNesting) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.nested1":
-		if x.Nested1 == nil {
-			x.Nested1 = new(MultiLayeredNesting_Nested1)
+		if x.x.Nested1 == nil {
+			x.x.Nested1 = new(MultiLayeredNesting_Nested1)
 		}
-		return protoreflect.ValueOfMessage(x.Nested1.ProtoReflect())
+		return protoreflect.ValueOfMessage(x.x.Nested1.ProtoReflect())
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goproto.proto.test3.MultiLayeredNesting"))
@@ -206,7 +208,7 @@ func (x *fastReflection_MultiLayeredNesting) Mutable(fd protoreflect.FieldDescri
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MultiLayeredNesting) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_MultiLayeredNesting) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.nested1":
 		m := new(MultiLayeredNesting_Nested1)
@@ -222,7 +224,7 @@ func (x *fastReflection_MultiLayeredNesting) NewField(fd protoreflect.FieldDescr
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MultiLayeredNesting) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x fastReflection_MultiLayeredNesting) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
 		panic(fmt.Errorf("%s is not a oneof field in goproto.proto.test3.MultiLayeredNesting", d.FullName()))
@@ -233,8 +235,8 @@ func (x *fastReflection_MultiLayeredNesting) WhichOneof(d protoreflect.OneofDesc
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MultiLayeredNesting) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
+func (x fastReflection_MultiLayeredNesting) GetUnknown() protoreflect.RawFields {
+	return x.x.unknownFields
 }
 
 // SetUnknown stores an entire list of unknown fields.
@@ -244,8 +246,8 @@ func (x *fastReflection_MultiLayeredNesting) GetUnknown() protoreflect.RawFields
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MultiLayeredNesting) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
+func (x fastReflection_MultiLayeredNesting) SetUnknown(fields protoreflect.RawFields) {
+	x.x.unknownFields = fields
 }
 
 // IsValid reports whether the message is valid.
@@ -256,8 +258,8 @@ func (x *fastReflection_MultiLayeredNesting) SetUnknown(fields protoreflect.RawF
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MultiLayeredNesting) IsValid() bool {
-	return x != nil
+func (x fastReflection_MultiLayeredNesting) IsValid() bool {
+	return x.x != nil
 }
 
 // ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
@@ -266,7 +268,7 @@ func (x *fastReflection_MultiLayeredNesting) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (*fastReflection_MultiLayeredNesting) ProtoMethods() *protoiface.Methods {
+func (fastReflection_MultiLayeredNesting) ProtoMethods() *protoiface.Methods {
 	return fastReflection_MultiLayeredNestingProtoMethods
 }
 
@@ -465,12 +467,14 @@ func init() {
 	md_MultiLayeredNesting_Nested1 = File_internal_testprotos_test3_test_nesting_proto.Messages().ByName("MultiLayeredNesting").Messages().ByName("Nested1")
 }
 
-var _ protoreflect.Message = (*fastReflection_MultiLayeredNesting_Nested1)(nil)
+var _ protoreflect.Message = fastReflection_MultiLayeredNesting_Nested1{}
 
-type fastReflection_MultiLayeredNesting_Nested1 MultiLayeredNesting_Nested1
+type fastReflection_MultiLayeredNesting_Nested1 struct {
+	x *MultiLayeredNesting_Nested1
+}
 
 func (x *MultiLayeredNesting_Nested1) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MultiLayeredNesting_Nested1)(x)
+	return fastReflection_MultiLayeredNesting_Nested1{x: x}
 }
 
 func (x *MultiLayeredNesting_Nested1) slowProtoReflect() protoreflect.Message {
@@ -491,10 +495,10 @@ var _ protoreflect.MessageType = fastReflection_MultiLayeredNesting_Nested1_mess
 type fastReflection_MultiLayeredNesting_Nested1_messageType struct{}
 
 func (x fastReflection_MultiLayeredNesting_Nested1_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MultiLayeredNesting_Nested1)(nil)
+	return fastReflection_MultiLayeredNesting_Nested1{x: nil}
 }
 func (x fastReflection_MultiLayeredNesting_Nested1_messageType) New() protoreflect.Message {
-	return new(fastReflection_MultiLayeredNesting_Nested1)
+	return fastReflection_MultiLayeredNesting_Nested1{x: new(MultiLayeredNesting_Nested1)}
 }
 func (x fastReflection_MultiLayeredNesting_Nested1_messageType) Descriptor() protoreflect.MessageDescriptor {
 	return md_MultiLayeredNesting_Nested1
@@ -502,26 +506,26 @@ func (x fastReflection_MultiLayeredNesting_Nested1_messageType) Descriptor() pro
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MultiLayeredNesting_Nested1) Descriptor() protoreflect.MessageDescriptor {
+func (x fastReflection_MultiLayeredNesting_Nested1) Descriptor() protoreflect.MessageDescriptor {
 	return md_MultiLayeredNesting_Nested1
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MultiLayeredNesting_Nested1) Type() protoreflect.MessageType {
+func (x fastReflection_MultiLayeredNesting_Nested1) Type() protoreflect.MessageType {
 	return _fastReflection_MultiLayeredNesting_Nested1_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MultiLayeredNesting_Nested1) New() protoreflect.Message {
-	return new(fastReflection_MultiLayeredNesting_Nested1)
+func (x fastReflection_MultiLayeredNesting_Nested1) New() protoreflect.Message {
+	return fastReflection_MultiLayeredNesting_Nested1{x: new(MultiLayeredNesting_Nested1)}
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MultiLayeredNesting_Nested1) Interface() protoreflect.ProtoMessage {
-	return (*MultiLayeredNesting_Nested1)(x)
+func (x fastReflection_MultiLayeredNesting_Nested1) Interface() protoreflect.ProtoMessage {
+	return x.x
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -529,7 +533,7 @@ func (x *fastReflection_MultiLayeredNesting_Nested1) Interface() protoreflect.Pr
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MultiLayeredNesting_Nested1) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x fastReflection_MultiLayeredNesting_Nested1) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -543,7 +547,7 @@ func (x *fastReflection_MultiLayeredNesting_Nested1) Range(f func(protoreflect.F
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MultiLayeredNesting_Nested1) Has(fd protoreflect.FieldDescriptor) bool {
+func (x fastReflection_MultiLayeredNesting_Nested1) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
@@ -559,7 +563,7 @@ func (x *fastReflection_MultiLayeredNesting_Nested1) Has(fd protoreflect.FieldDe
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MultiLayeredNesting_Nested1) Clear(fd protoreflect.FieldDescriptor) {
+func (x fastReflection_MultiLayeredNesting_Nested1) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
@@ -575,7 +579,7 @@ func (x *fastReflection_MultiLayeredNesting_Nested1) Clear(fd protoreflect.Field
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MultiLayeredNesting_Nested1) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_MultiLayeredNesting_Nested1) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
@@ -595,7 +599,7 @@ func (x *fastReflection_MultiLayeredNesting_Nested1) Get(descriptor protoreflect
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MultiLayeredNesting_Nested1) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x fastReflection_MultiLayeredNesting_Nested1) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
@@ -615,7 +619,7 @@ func (x *fastReflection_MultiLayeredNesting_Nested1) Set(fd protoreflect.FieldDe
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MultiLayeredNesting_Nested1) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_MultiLayeredNesting_Nested1) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
@@ -628,7 +632,7 @@ func (x *fastReflection_MultiLayeredNesting_Nested1) Mutable(fd protoreflect.Fie
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MultiLayeredNesting_Nested1) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_MultiLayeredNesting_Nested1) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
@@ -641,7 +645,7 @@ func (x *fastReflection_MultiLayeredNesting_Nested1) NewField(fd protoreflect.Fi
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MultiLayeredNesting_Nested1) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x fastReflection_MultiLayeredNesting_Nested1) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
 		panic(fmt.Errorf("%s is not a oneof field in goproto.proto.test3.MultiLayeredNesting.Nested1", d.FullName()))
@@ -652,8 +656,8 @@ func (x *fastReflection_MultiLayeredNesting_Nested1) WhichOneof(d protoreflect.O
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MultiLayeredNesting_Nested1) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
+func (x fastReflection_MultiLayeredNesting_Nested1) GetUnknown() protoreflect.RawFields {
+	return x.x.unknownFields
 }
 
 // SetUnknown stores an entire list of unknown fields.
@@ -663,8 +667,8 @@ func (x *fastReflection_MultiLayeredNesting_Nested1) GetUnknown() protoreflect.R
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MultiLayeredNesting_Nested1) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
+func (x fastReflection_MultiLayeredNesting_Nested1) SetUnknown(fields protoreflect.RawFields) {
+	x.x.unknownFields = fields
 }
 
 // IsValid reports whether the message is valid.
@@ -675,8 +679,8 @@ func (x *fastReflection_MultiLayeredNesting_Nested1) SetUnknown(fields protorefl
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MultiLayeredNesting_Nested1) IsValid() bool {
-	return x != nil
+func (x fastReflection_MultiLayeredNesting_Nested1) IsValid() bool {
+	return x.x != nil
 }
 
 // ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
@@ -685,7 +689,7 @@ func (x *fastReflection_MultiLayeredNesting_Nested1) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (*fastReflection_MultiLayeredNesting_Nested1) ProtoMethods() *protoiface.Methods {
+func (fastReflection_MultiLayeredNesting_Nested1) ProtoMethods() *protoiface.Methods {
 	return fastReflection_MultiLayeredNesting_Nested1ProtoMethods
 }
 
@@ -832,12 +836,14 @@ func init() {
 	fd_MultiLayeredNesting_Nested1_Nested2_nested_3 = md_MultiLayeredNesting_Nested1_Nested2.Fields().ByName("nested_3")
 }
 
-var _ protoreflect.Message = (*fastReflection_MultiLayeredNesting_Nested1_Nested2)(nil)
+var _ protoreflect.Message = fastReflection_MultiLayeredNesting_Nested1_Nested2{}
 
-type fastReflection_MultiLayeredNesting_Nested1_Nested2 MultiLayeredNesting_Nested1_Nested2
+type fastReflection_MultiLayeredNesting_Nested1_Nested2 struct {
+	x *MultiLayeredNesting_Nested1_Nested2
+}
 
 func (x *MultiLayeredNesting_Nested1_Nested2) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MultiLayeredNesting_Nested1_Nested2)(x)
+	return fastReflection_MultiLayeredNesting_Nested1_Nested2{x: x}
 }
 
 func (x *MultiLayeredNesting_Nested1_Nested2) slowProtoReflect() protoreflect.Message {
@@ -858,10 +864,10 @@ var _ protoreflect.MessageType = fastReflection_MultiLayeredNesting_Nested1_Nest
 type fastReflection_MultiLayeredNesting_Nested1_Nested2_messageType struct{}
 
 func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MultiLayeredNesting_Nested1_Nested2)(nil)
+	return fastReflection_MultiLayeredNesting_Nested1_Nested2{x: nil}
 }
 func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_messageType) New() protoreflect.Message {
-	return new(fastReflection_MultiLayeredNesting_Nested1_Nested2)
+	return fastReflection_MultiLayeredNesting_Nested1_Nested2{x: new(MultiLayeredNesting_Nested1_Nested2)}
 }
 func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_messageType) Descriptor() protoreflect.MessageDescriptor {
 	return md_MultiLayeredNesting_Nested1_Nested2
@@ -869,26 +875,26 @@ func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_messageType) Descript
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) Descriptor() protoreflect.MessageDescriptor {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2) Descriptor() protoreflect.MessageDescriptor {
 	return md_MultiLayeredNesting_Nested1_Nested2
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) Type() protoreflect.MessageType {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2) Type() protoreflect.MessageType {
 	return _fastReflection_MultiLayeredNesting_Nested1_Nested2_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) New() protoreflect.Message {
-	return new(fastReflection_MultiLayeredNesting_Nested1_Nested2)
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2) New() protoreflect.Message {
+	return fastReflection_MultiLayeredNesting_Nested1_Nested2{x: new(MultiLayeredNesting_Nested1_Nested2)}
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) Interface() protoreflect.ProtoMessage {
-	return (*MultiLayeredNesting_Nested1_Nested2)(x)
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2) Interface() protoreflect.ProtoMessage {
+	return x.x
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -896,9 +902,9 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) Interface() protore
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Nested_3 != nil {
-		value := protoreflect.ValueOfMessage(x.Nested_3.ProtoReflect())
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.x.Nested_3 != nil {
+		value := protoreflect.ValueOfMessage(x.x.Nested_3.ProtoReflect())
 		if !f(fd_MultiLayeredNesting_Nested1_Nested2_nested_3, value) {
 			return
 		}
@@ -916,10 +922,10 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) Range(f func(protor
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) Has(fd protoreflect.FieldDescriptor) bool {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.nested_3":
-		return x.Nested_3 != nil
+		return x.x.Nested_3 != nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2"))
@@ -934,10 +940,10 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) Has(fd protoreflect
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) Clear(fd protoreflect.FieldDescriptor) {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.nested_3":
-		x.Nested_3 = nil
+		x.x.Nested_3 = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2"))
@@ -952,10 +958,10 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) Clear(fd protorefle
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.nested_3":
-		value := x.Nested_3
+		value := x.x.Nested_3
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
@@ -975,10 +981,10 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) Get(descriptor prot
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.nested_3":
-		x.Nested_3 = value.Message().Interface().(*MultiLayeredNesting_Nested1_Nested2_Nested3)
+		x.x.Nested_3 = value.Message().Interface().(*MultiLayeredNesting_Nested1_Nested2_Nested3)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2"))
@@ -997,13 +1003,13 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) Set(fd protoreflect
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.nested_3":
-		if x.Nested_3 == nil {
-			x.Nested_3 = new(MultiLayeredNesting_Nested1_Nested2_Nested3)
+		if x.x.Nested_3 == nil {
+			x.x.Nested_3 = new(MultiLayeredNesting_Nested1_Nested2_Nested3)
 		}
-		return protoreflect.ValueOfMessage(x.Nested_3.ProtoReflect())
+		return protoreflect.ValueOfMessage(x.x.Nested_3.ProtoReflect())
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2"))
@@ -1015,7 +1021,7 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) Mutable(fd protoref
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.nested_3":
 		m := new(MultiLayeredNesting_Nested1_Nested2_Nested3)
@@ -1031,7 +1037,7 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) NewField(fd protore
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
 		panic(fmt.Errorf("%s is not a oneof field in goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2", d.FullName()))
@@ -1042,8 +1048,8 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) WhichOneof(d protor
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2) GetUnknown() protoreflect.RawFields {
+	return x.x.unknownFields
 }
 
 // SetUnknown stores an entire list of unknown fields.
@@ -1053,8 +1059,8 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) GetUnknown() protor
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2) SetUnknown(fields protoreflect.RawFields) {
+	x.x.unknownFields = fields
 }
 
 // IsValid reports whether the message is valid.
@@ -1065,8 +1071,8 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) SetUnknown(fields p
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) IsValid() bool {
-	return x != nil
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2) IsValid() bool {
+	return x.x != nil
 }
 
 // ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
@@ -1075,7 +1081,7 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (*fastReflection_MultiLayeredNesting_Nested1_Nested2) ProtoMethods() *protoiface.Methods {
+func (fastReflection_MultiLayeredNesting_Nested1_Nested2) ProtoMethods() *protoiface.Methods {
 	return fastReflection_MultiLayeredNesting_Nested1_Nested2ProtoMethods
 }
 
@@ -1278,12 +1284,14 @@ func init() {
 	fd_MultiLayeredNesting_Nested1_Nested2_Nested3_nested_3_int32 = md_MultiLayeredNesting_Nested1_Nested2_Nested3.Fields().ByName("nested_3_int32")
 }
 
-var _ protoreflect.Message = (*fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3)(nil)
+var _ protoreflect.Message = fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3{}
 
-type fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3 MultiLayeredNesting_Nested1_Nested2_Nested3
+type fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3 struct {
+	x *MultiLayeredNesting_Nested1_Nested2_Nested3
+}
 
 func (x *MultiLayeredNesting_Nested1_Nested2_Nested3) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3)(x)
+	return fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3{x: x}
 }
 
 func (x *MultiLayeredNesting_Nested1_Nested2_Nested3) slowProtoReflect() protoreflect.Message {
@@ -1304,10 +1312,10 @@ var _ protoreflect.MessageType = fastReflection_MultiLayeredNesting_Nested1_Nest
 type fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3_messageType struct{}
 
 func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3)(nil)
+	return fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3{x: nil}
 }
 func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3_messageType) New() protoreflect.Message {
-	return new(fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3)
+	return fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3{x: new(MultiLayeredNesting_Nested1_Nested2_Nested3)}
 }
 func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3_messageType) Descriptor() protoreflect.MessageDescriptor {
 	return md_MultiLayeredNesting_Nested1_Nested2_Nested3
@@ -1315,26 +1323,26 @@ func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3_messageType) 
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Descriptor() protoreflect.MessageDescriptor {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Descriptor() protoreflect.MessageDescriptor {
 	return md_MultiLayeredNesting_Nested1_Nested2_Nested3
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Type() protoreflect.MessageType {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Type() protoreflect.MessageType {
 	return _fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) New() protoreflect.Message {
-	return new(fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3)
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) New() protoreflect.Message {
+	return fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3{x: new(MultiLayeredNesting_Nested1_Nested2_Nested3)}
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Interface() protoreflect.ProtoMessage {
-	return (*MultiLayeredNesting_Nested1_Nested2_Nested3)(x)
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Interface() protoreflect.ProtoMessage {
+	return x.x
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1342,9 +1350,9 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Interface()
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Nested3Oneof != nil {
-		switch o := x.Nested3Oneof.(type) {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.x.Nested3Oneof != nil {
+		switch o := x.x.Nested3Oneof.(type) {
 		case *MultiLayeredNesting_Nested1_Nested2_Nested3_Nested_3String:
 			v := o.Nested_3String
 			value := protoreflect.ValueOfString(v)
@@ -1372,20 +1380,20 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Range(f fun
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Has(fd protoreflect.FieldDescriptor) bool {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.Nested3.nested_3_string":
-		if x.Nested3Oneof == nil {
+		if x.x.Nested3Oneof == nil {
 			return false
-		} else if _, ok := x.Nested3Oneof.(*MultiLayeredNesting_Nested1_Nested2_Nested3_Nested_3String); ok {
+		} else if _, ok := x.x.Nested3Oneof.(*MultiLayeredNesting_Nested1_Nested2_Nested3_Nested_3String); ok {
 			return true
 		} else {
 			return false
 		}
 	case "goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.Nested3.nested_3_int32":
-		if x.Nested3Oneof == nil {
+		if x.x.Nested3Oneof == nil {
 			return false
-		} else if _, ok := x.Nested3Oneof.(*MultiLayeredNesting_Nested1_Nested2_Nested3_Nested_3Int32); ok {
+		} else if _, ok := x.x.Nested3Oneof.(*MultiLayeredNesting_Nested1_Nested2_Nested3_Nested_3Int32); ok {
 			return true
 		} else {
 			return false
@@ -1404,12 +1412,12 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Has(fd prot
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Clear(fd protoreflect.FieldDescriptor) {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.Nested3.nested_3_string":
-		x.Nested3Oneof = nil
+		x.x.Nested3Oneof = nil
 	case "goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.Nested3.nested_3_int32":
-		x.Nested3Oneof = nil
+		x.x.Nested3Oneof = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.Nested3"))
@@ -1424,20 +1432,20 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Clear(fd pr
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.Nested3.nested_3_string":
-		if x.Nested3Oneof == nil {
+		if x.x.Nested3Oneof == nil {
 			return protoreflect.ValueOfString("")
-		} else if v, ok := x.Nested3Oneof.(*MultiLayeredNesting_Nested1_Nested2_Nested3_Nested_3String); ok {
+		} else if v, ok := x.x.Nested3Oneof.(*MultiLayeredNesting_Nested1_Nested2_Nested3_Nested_3String); ok {
 			return protoreflect.ValueOfString(v.Nested_3String)
 		} else {
 			return protoreflect.ValueOfString("")
 		}
 	case "goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.Nested3.nested_3_int32":
-		if x.Nested3Oneof == nil {
+		if x.x.Nested3Oneof == nil {
 			return protoreflect.ValueOfInt32(int32(0))
-		} else if v, ok := x.Nested3Oneof.(*MultiLayeredNesting_Nested1_Nested2_Nested3_Nested_3Int32); ok {
+		} else if v, ok := x.x.Nested3Oneof.(*MultiLayeredNesting_Nested1_Nested2_Nested3_Nested_3Int32); ok {
 			return protoreflect.ValueOfInt32(v.Nested_3Int32)
 		} else {
 			return protoreflect.ValueOfInt32(int32(0))
@@ -1460,14 +1468,14 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Get(descrip
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.Nested3.nested_3_string":
 		cv := value.Interface().(string)
-		x.Nested3Oneof = &MultiLayeredNesting_Nested1_Nested2_Nested3_Nested_3String{Nested_3String: cv}
+		x.x.Nested3Oneof = &MultiLayeredNesting_Nested1_Nested2_Nested3_Nested_3String{Nested_3String: cv}
 	case "goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.Nested3.nested_3_int32":
 		cv := int32(value.Int())
-		x.Nested3Oneof = &MultiLayeredNesting_Nested1_Nested2_Nested3_Nested_3Int32{Nested_3Int32: cv}
+		x.x.Nested3Oneof = &MultiLayeredNesting_Nested1_Nested2_Nested3_Nested_3Int32{Nested_3Int32: cv}
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.Nested3"))
@@ -1486,7 +1494,7 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Set(fd prot
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.Nested3.nested_3_string":
 		panic(fmt.Errorf("field nested_3_string of message goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.Nested3 is not mutable"))
@@ -1503,7 +1511,7 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) Mutable(fd 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.Nested3.nested_3_string":
 		return protoreflect.ValueOfString("")
@@ -1520,13 +1528,13 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) NewField(fd
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	case "goproto.proto.test3.MultiLayeredNesting.Nested1.Nested2.Nested3.nested3_oneof":
-		if x.Nested3Oneof == nil {
+		if x.x.Nested3Oneof == nil {
 			return nil
 		}
-		switch x.Nested3Oneof.(type) {
+		switch x.x.Nested3Oneof.(type) {
 		case *MultiLayeredNesting_Nested1_Nested2_Nested3_Nested_3String:
 			return x.Descriptor().Fields().ByName("nested_3_string")
 		case *MultiLayeredNesting_Nested1_Nested2_Nested3_Nested_3Int32:
@@ -1541,8 +1549,8 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) WhichOneof(
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) GetUnknown() protoreflect.RawFields {
+	return x.x.unknownFields
 }
 
 // SetUnknown stores an entire list of unknown fields.
@@ -1552,8 +1560,8 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) GetUnknown(
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) SetUnknown(fields protoreflect.RawFields) {
+	x.x.unknownFields = fields
 }
 
 // IsValid reports whether the message is valid.
@@ -1564,8 +1572,8 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) SetUnknown(
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) IsValid() bool {
-	return x != nil
+func (x fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) IsValid() bool {
+	return x.x != nil
 }
 
 // ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
@@ -1574,7 +1582,7 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) IsValid() b
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (*fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) ProtoMethods() *protoiface.Methods {
+func (fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) ProtoMethods() *protoiface.Methods {
 	return fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3ProtoMethods
 }
 

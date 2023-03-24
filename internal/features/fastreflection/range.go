@@ -18,7 +18,7 @@ func (g *rangeGen) generate() {
 	g.processedOneofs = map[string]struct{}{}
 
 	g.genComment()
-	g.P("func (x *", g.typeName, ") Range(f func(", protoreflectPkg.Ident("FieldDescriptor"), ", ", protoreflectPkg.Ident("Value"), ") bool) {")
+	g.P("func (x ", g.typeName, ") Range(f func(", protoreflectPkg.Ident("FieldDescriptor"), ", ", protoreflectPkg.Ident("Value"), ") bool) {")
 	for _, field := range g.message.Fields {
 		g.genField(field)
 	}
@@ -41,54 +41,54 @@ func (g *rangeGen) genField(field *protogen.Field) {
 
 	switch {
 	case field.Desc.IsMap():
-		g.P("if len(x.", field.GoName, ") != 0 {")
-		g.P("value := ", protoreflectPkg.Ident("ValueOfMap"), "(&", mapTypeName(field), "{m: &x.", field.GoName, "})")
+		g.P("if len(x.x.", field.GoName, ") != 0 {")
+		g.P("value := ", protoreflectPkg.Ident("ValueOfMap"), "(&", mapTypeName(field), "{m: &x.x.", field.GoName, "})")
 		g.P("if !f(", fieldDescriptorName(field), ", value) {")
 		g.P("return")
 		g.P("}")
 		g.P("}")
 	case field.Desc.IsList():
-		g.P("if len(x.", field.GoName, ") != 0 {")
-		g.P("value := ", protoreflectPkg.Ident("ValueOfList"), "(&", listTypeName(field), "{list: &x.", field.GoName, "})")
+		g.P("if len(x.x.", field.GoName, ") != 0 {")
+		g.P("value := ", protoreflectPkg.Ident("ValueOfList"), "(&", listTypeName(field), "{list: &x.x.", field.GoName, "})")
 		g.P("if !f(", fieldDescriptorName(field), ", value) {")
 		g.P("return")
 		g.P("}")
 		g.P("}")
 	case field.Desc.Kind() == protoreflect.MessageKind:
-		g.P("if x.", field.GoName, " != nil {")
-		g.P("value := ", protoreflectPkg.Ident("ValueOfMessage"), "(x.", field.GoName, ".ProtoReflect())")
+		g.P("if x.x.", field.GoName, " != nil {")
+		g.P("value := ", protoreflectPkg.Ident("ValueOfMessage"), "(x.x.", field.GoName, ".ProtoReflect())")
 		g.P("if !f(", fieldDescriptorName(field), ", value) {")
 		g.P("return")
 		g.P("}")
 		g.P("}")
 	case field.Desc.Kind() == protoreflect.BytesKind:
-		g.P("if len(x.", field.GoName, ") != 0 {")
-		g.P("value := ", protoreflectPkg.Ident("ValueOfBytes"), "(x.", field.GoName, ")")
+		g.P("if len(x.x.", field.GoName, ") != 0 {")
+		g.P("value := ", protoreflectPkg.Ident("ValueOfBytes"), "(x.x.", field.GoName, ")")
 		g.P("if !f(", fieldDescriptorName(field), ", value) {")
 		g.P("return")
 		g.P("}")
 		g.P("}")
 	case field.Desc.Kind() == protoreflect.DoubleKind:
-		g.P("if x.", field.GoName, " != ", zeroValueForField(g.GeneratedFile, field), " || ", mathPkg.Ident("Signbit"), "(x.", field.GoName, ")", "{")
-		g.P("value := ", kindToValueConstructor(field.Desc.Kind()), "(x.", field.GoName, ")")
+		g.P("if x.x.", field.GoName, " != ", zeroValueForField(g.GeneratedFile, field), " || ", mathPkg.Ident("Signbit"), "(x.x.", field.GoName, ")", "{")
+		g.P("value := ", kindToValueConstructor(field.Desc.Kind()), "(x.x.", field.GoName, ")")
 		g.P("if !f(", fieldDescriptorName(field), ", value) {")
 		g.P("return")
 		g.P("}")
 		g.P("}")
 	case field.Desc.Kind() == protoreflect.FloatKind:
-		g.P("if x.", field.GoName, " != ", zeroValueForField(g.GeneratedFile, field), " || ", mathPkg.Ident("Signbit"), "(float64(x.", field.GoName, "))", "{")
-		g.P("value := ", kindToValueConstructor(field.Desc.Kind()), "(x.", field.GoName, ")")
+		g.P("if x.x.", field.GoName, " != ", zeroValueForField(g.GeneratedFile, field), " || ", mathPkg.Ident("Signbit"), "(float64(x.x.", field.GoName, "))", "{")
+		g.P("value := ", kindToValueConstructor(field.Desc.Kind()), "(x.x.", field.GoName, ")")
 		g.P("if !f(", fieldDescriptorName(field), ", value) {")
 		g.P("return")
 		g.P("}")
 		g.P("}")
 	default:
-		g.P("if x.", field.GoName, " != ", zeroValueForField(g.GeneratedFile, field), "{")
+		g.P("if x.x.", field.GoName, " != ", zeroValueForField(g.GeneratedFile, field), "{")
 		switch {
 		case field.Desc.Kind() == protoreflect.EnumKind:
-			g.P("value := ", kindToValueConstructor(field.Desc.Kind()), "((", protoreflectPkg.Ident("EnumNumber"), ")(x.", field.GoName, ")) ")
+			g.P("value := ", kindToValueConstructor(field.Desc.Kind()), "((", protoreflectPkg.Ident("EnumNumber"), ")(x.x.", field.GoName, ")) ")
 		default:
-			g.P("value := ", kindToValueConstructor(field.Desc.Kind()), "(x.", field.GoName, ")")
+			g.P("value := ", kindToValueConstructor(field.Desc.Kind()), "(x.x.", field.GoName, ")")
 		}
 		g.P("if !f(", fieldDescriptorName(field), ", value) {")
 		g.P("return")
@@ -103,8 +103,8 @@ func (g *rangeGen) genOneof(field *protogen.Field) {
 		return
 	}
 	// we process it only if its != nil
-	g.P("if x.", field.Oneof.GoName, " != nil {")
-	g.P("switch o := x.", field.Oneof.GoName, ".(type) {")
+	g.P("if x.x.", field.Oneof.GoName, " != nil {")
+	g.P("switch o := x.x.", field.Oneof.GoName, ".(type) {")
 	for _, oneofField := range field.Oneof.Fields {
 		g.P("case *", g.QualifiedGoIdent(oneofField.GoIdent), ":")
 		g.P("v := ", "o.", oneofField.GoName)

@@ -14,7 +14,7 @@ type setGen struct {
 
 func (g *setGen) generate() {
 	g.genComment()
-	g.P("func (x *", g.typeName, ") Set(fd ", protoreflectPkg.Ident("FieldDescriptor"), ", value ", protoreflectPkg.Ident("Value"), ") {")
+	g.P("func (x ", g.typeName, ") Set(fd ", protoreflectPkg.Ident("FieldDescriptor"), ", value ", protoreflectPkg.Ident("Value"), ") {")
 	g.P("switch fd.FullName() {")
 	for _, field := range g.message.Fields {
 		g.P("case \"", field.Desc.FullName(), "\":")
@@ -55,7 +55,7 @@ func (g *setGen) genField(field *protogen.Field) {
 		return
 	}
 
-	fieldRef := "x." + field.GoName
+	fieldRef := "x.x." + field.GoName
 
 	switch field.Desc.Kind() {
 	case protoreflect.BoolKind:
@@ -94,7 +94,7 @@ func (g *setGen) genDefaultCase() {
 
 func (g *setGen) genOneof(field *protogen.Field) {
 	g.genOneofValueUnwrapper(field)
-	g.P("x.", field.Oneof.GoName, " = &", g.QualifiedGoIdent(field.GoIdent), "{", field.GoName, ": cv", "}")
+	g.P("x.x.", field.Oneof.GoName, " = &", g.QualifiedGoIdent(field.GoIdent), "{", field.GoName, ": cv", "}")
 }
 
 // genMap generates the implementation of set for map types.
@@ -102,7 +102,7 @@ func (g *setGen) genOneof(field *protogen.Field) {
 func (g *setGen) genMap(field *protogen.Field) {
 	g.P("mv := value.Map()")
 	g.P("cmv := mv.(*", mapTypeName(field), ")")
-	g.P("x.", field.GoName, " = *cmv.m")
+	g.P("x.x.", field.GoName, " = *cmv.m")
 }
 
 // genList generates the implementation of set for list types.
@@ -114,7 +114,7 @@ func (g *setGen) genMap(field *protogen.Field) {
 func (g *setGen) genList(field *protogen.Field) {
 	g.P("lv := value.List()")
 	g.P("clv := lv.(*", listTypeName(field), ")")
-	g.P("x.", field.GoName, " = *clv.list")
+	g.P("x.x.", field.GoName, " = *clv.list")
 }
 
 func (g *setGen) genOneofValueUnwrapper(field *protogen.Field) {

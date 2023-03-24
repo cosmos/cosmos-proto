@@ -33,11 +33,11 @@ func (g *messageTypeGen) generate() {
 	g.P("type ", g.messageTypeName, " struct {}")
 
 	g.P("func (x ", g.messageTypeName, ") Zero() ", protoreflectPkg.Ident("Message"), "{")
-	g.P("return (*", g.typeName, ")(nil)")
+	g.P("return ", g.typeName, "{x: nil}")
 	g.P("}")
 
 	g.P("func (x ", g.messageTypeName, ") New() ", protoreflectPkg.Ident("Message"), "{")
-	g.P("return new(", g.typeName, ")")
+	g.P("return ", g.typeName, "{x: new(", g.message.GoIdent, ")}")
 	g.P("}")
 
 	g.P("func (x ", g.messageTypeName, ") Descriptor() ", protoreflectPkg.Ident("MessageDescriptor"), " {")

@@ -259,12 +259,14 @@ func init() {
 	fd_A_type = md_A.Fields().ByName("type")
 }
 
-var _ protoreflect.Message = (*fastReflection_A)(nil)
+var _ protoreflect.Message = fastReflection_A{}
 
-type fastReflection_A A
+type fastReflection_A struct {
+	x *A
+}
 
 func (x *A) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_A)(x)
+	return fastReflection_A{x: x}
 }
 
 func (x *A) slowProtoReflect() protoreflect.Message {
@@ -285,10 +287,10 @@ var _ protoreflect.MessageType = fastReflection_A_messageType{}
 type fastReflection_A_messageType struct{}
 
 func (x fastReflection_A_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_A)(nil)
+	return fastReflection_A{x: nil}
 }
 func (x fastReflection_A_messageType) New() protoreflect.Message {
-	return new(fastReflection_A)
+	return fastReflection_A{x: new(A)}
 }
 func (x fastReflection_A_messageType) Descriptor() protoreflect.MessageDescriptor {
 	return md_A
@@ -296,26 +298,26 @@ func (x fastReflection_A_messageType) Descriptor() protoreflect.MessageDescripto
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_A) Descriptor() protoreflect.MessageDescriptor {
+func (x fastReflection_A) Descriptor() protoreflect.MessageDescriptor {
 	return md_A
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_A) Type() protoreflect.MessageType {
+func (x fastReflection_A) Type() protoreflect.MessageType {
 	return _fastReflection_A_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_A) New() protoreflect.Message {
-	return new(fastReflection_A)
+func (x fastReflection_A) New() protoreflect.Message {
+	return fastReflection_A{x: new(A)}
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_A) Interface() protoreflect.ProtoMessage {
-	return (*A)(x)
+func (x fastReflection_A) Interface() protoreflect.ProtoMessage {
+	return x.x
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -323,123 +325,123 @@ func (x *fastReflection_A) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_A) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Enum != 0 {
-		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.Enum))
+func (x fastReflection_A) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.x.Enum != 0 {
+		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.x.Enum))
 		if !f(fd_A_enum, value) {
 			return
 		}
 	}
-	if x.SomeBoolean != false {
-		value := protoreflect.ValueOfBool(x.SomeBoolean)
+	if x.x.SomeBoolean != false {
+		value := protoreflect.ValueOfBool(x.x.SomeBoolean)
 		if !f(fd_A_some_boolean, value) {
 			return
 		}
 	}
-	if x.INT32 != int32(0) {
-		value := protoreflect.ValueOfInt32(x.INT32)
+	if x.x.INT32 != int32(0) {
+		value := protoreflect.ValueOfInt32(x.x.INT32)
 		if !f(fd_A_INT32, value) {
 			return
 		}
 	}
-	if x.SINT32 != int32(0) {
-		value := protoreflect.ValueOfInt32(x.SINT32)
+	if x.x.SINT32 != int32(0) {
+		value := protoreflect.ValueOfInt32(x.x.SINT32)
 		if !f(fd_A_SINT32, value) {
 			return
 		}
 	}
-	if x.UINT32 != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.UINT32)
+	if x.x.UINT32 != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.x.UINT32)
 		if !f(fd_A_UINT32, value) {
 			return
 		}
 	}
-	if x.INT64 != int64(0) {
-		value := protoreflect.ValueOfInt64(x.INT64)
+	if x.x.INT64 != int64(0) {
+		value := protoreflect.ValueOfInt64(x.x.INT64)
 		if !f(fd_A_INT64, value) {
 			return
 		}
 	}
-	if x.SING64 != int64(0) {
-		value := protoreflect.ValueOfInt64(x.SING64)
+	if x.x.SING64 != int64(0) {
+		value := protoreflect.ValueOfInt64(x.x.SING64)
 		if !f(fd_A_SING64, value) {
 			return
 		}
 	}
-	if x.UINT64 != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.UINT64)
+	if x.x.UINT64 != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.x.UINT64)
 		if !f(fd_A_UINT64, value) {
 			return
 		}
 	}
-	if x.SFIXED32 != int32(0) {
-		value := protoreflect.ValueOfInt32(x.SFIXED32)
+	if x.x.SFIXED32 != int32(0) {
+		value := protoreflect.ValueOfInt32(x.x.SFIXED32)
 		if !f(fd_A_SFIXED32, value) {
 			return
 		}
 	}
-	if x.FIXED32 != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.FIXED32)
+	if x.x.FIXED32 != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.x.FIXED32)
 		if !f(fd_A_FIXED32, value) {
 			return
 		}
 	}
-	if x.FLOAT != float32(0) || math.Signbit(float64(x.FLOAT)) {
-		value := protoreflect.ValueOfFloat32(x.FLOAT)
+	if x.x.FLOAT != float32(0) || math.Signbit(float64(x.x.FLOAT)) {
+		value := protoreflect.ValueOfFloat32(x.x.FLOAT)
 		if !f(fd_A_FLOAT, value) {
 			return
 		}
 	}
-	if x.SFIXED64 != int64(0) {
-		value := protoreflect.ValueOfInt64(x.SFIXED64)
+	if x.x.SFIXED64 != int64(0) {
+		value := protoreflect.ValueOfInt64(x.x.SFIXED64)
 		if !f(fd_A_SFIXED64, value) {
 			return
 		}
 	}
-	if x.FIXED64 != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.FIXED64)
+	if x.x.FIXED64 != uint64(0) {
+		value := protoreflect.ValueOfUint64(x.x.FIXED64)
 		if !f(fd_A_FIXED64, value) {
 			return
 		}
 	}
-	if x.DOUBLE != float64(0) || math.Signbit(x.DOUBLE) {
-		value := protoreflect.ValueOfFloat64(x.DOUBLE)
+	if x.x.DOUBLE != float64(0) || math.Signbit(x.x.DOUBLE) {
+		value := protoreflect.ValueOfFloat64(x.x.DOUBLE)
 		if !f(fd_A_DOUBLE, value) {
 			return
 		}
 	}
-	if x.STRING != "" {
-		value := protoreflect.ValueOfString(x.STRING)
+	if x.x.STRING != "" {
+		value := protoreflect.ValueOfString(x.x.STRING)
 		if !f(fd_A_STRING, value) {
 			return
 		}
 	}
-	if len(x.BYTES) != 0 {
-		value := protoreflect.ValueOfBytes(x.BYTES)
+	if len(x.x.BYTES) != 0 {
+		value := protoreflect.ValueOfBytes(x.x.BYTES)
 		if !f(fd_A_BYTES, value) {
 			return
 		}
 	}
-	if x.MESSAGE != nil {
-		value := protoreflect.ValueOfMessage(x.MESSAGE.ProtoReflect())
+	if x.x.MESSAGE != nil {
+		value := protoreflect.ValueOfMessage(x.x.MESSAGE.ProtoReflect())
 		if !f(fd_A_MESSAGE, value) {
 			return
 		}
 	}
-	if len(x.MAP) != 0 {
-		value := protoreflect.ValueOfMap(&_A_18_map{m: &x.MAP})
+	if len(x.x.MAP) != 0 {
+		value := protoreflect.ValueOfMap(&_A_18_map{m: &x.x.MAP})
 		if !f(fd_A_MAP, value) {
 			return
 		}
 	}
-	if len(x.LIST) != 0 {
-		value := protoreflect.ValueOfList(&_A_19_list{list: &x.LIST})
+	if len(x.x.LIST) != 0 {
+		value := protoreflect.ValueOfList(&_A_19_list{list: &x.x.LIST})
 		if !f(fd_A_LIST, value) {
 			return
 		}
 	}
-	if x.ONEOF != nil {
-		switch o := x.ONEOF.(type) {
+	if x.x.ONEOF != nil {
+		switch o := x.x.ONEOF.(type) {
 		case *A_ONEOF_B:
 			v := o.ONEOF_B
 			value := protoreflect.ValueOfMessage(v.ProtoReflect())
@@ -454,20 +456,20 @@ func (x *fastReflection_A) Range(f func(protoreflect.FieldDescriptor, protorefle
 			}
 		}
 	}
-	if len(x.LIST_ENUM) != 0 {
-		value := protoreflect.ValueOfList(&_A_22_list{list: &x.LIST_ENUM})
+	if len(x.x.LIST_ENUM) != 0 {
+		value := protoreflect.ValueOfList(&_A_22_list{list: &x.x.LIST_ENUM})
 		if !f(fd_A_LIST_ENUM, value) {
 			return
 		}
 	}
-	if x.Imported != nil {
-		value := protoreflect.ValueOfMessage(x.Imported.ProtoReflect())
+	if x.x.Imported != nil {
+		value := protoreflect.ValueOfMessage(x.x.Imported.ProtoReflect())
 		if !f(fd_A_imported, value) {
 			return
 		}
 	}
-	if x.Type_ != "" {
-		value := protoreflect.ValueOfString(x.Type_)
+	if x.x.Type_ != "" {
+		value := protoreflect.ValueOfString(x.x.Type_)
 		if !f(fd_A_type, value) {
 			return
 		}
@@ -485,68 +487,68 @@ func (x *fastReflection_A) Range(f func(protoreflect.FieldDescriptor, protorefle
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_A) Has(fd protoreflect.FieldDescriptor) bool {
+func (x fastReflection_A) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "A.enum":
-		return x.Enum != 0
+		return x.x.Enum != 0
 	case "A.some_boolean":
-		return x.SomeBoolean != false
+		return x.x.SomeBoolean != false
 	case "A.INT32":
-		return x.INT32 != int32(0)
+		return x.x.INT32 != int32(0)
 	case "A.SINT32":
-		return x.SINT32 != int32(0)
+		return x.x.SINT32 != int32(0)
 	case "A.UINT32":
-		return x.UINT32 != uint32(0)
+		return x.x.UINT32 != uint32(0)
 	case "A.INT64":
-		return x.INT64 != int64(0)
+		return x.x.INT64 != int64(0)
 	case "A.SING64":
-		return x.SING64 != int64(0)
+		return x.x.SING64 != int64(0)
 	case "A.UINT64":
-		return x.UINT64 != uint64(0)
+		return x.x.UINT64 != uint64(0)
 	case "A.SFIXED32":
-		return x.SFIXED32 != int32(0)
+		return x.x.SFIXED32 != int32(0)
 	case "A.FIXED32":
-		return x.FIXED32 != uint32(0)
+		return x.x.FIXED32 != uint32(0)
 	case "A.FLOAT":
-		return x.FLOAT != float32(0) || math.Signbit(float64(x.FLOAT))
+		return x.x.FLOAT != float32(0) || math.Signbit(float64(x.x.FLOAT))
 	case "A.SFIXED64":
-		return x.SFIXED64 != int64(0)
+		return x.x.SFIXED64 != int64(0)
 	case "A.FIXED64":
-		return x.FIXED64 != uint64(0)
+		return x.x.FIXED64 != uint64(0)
 	case "A.DOUBLE":
-		return x.DOUBLE != float64(0) || math.Signbit(x.DOUBLE)
+		return x.x.DOUBLE != float64(0) || math.Signbit(x.x.DOUBLE)
 	case "A.STRING":
-		return x.STRING != ""
+		return x.x.STRING != ""
 	case "A.BYTES":
-		return len(x.BYTES) != 0
+		return len(x.x.BYTES) != 0
 	case "A.MESSAGE":
-		return x.MESSAGE != nil
+		return x.x.MESSAGE != nil
 	case "A.MAP":
-		return len(x.MAP) != 0
+		return len(x.x.MAP) != 0
 	case "A.LIST":
-		return len(x.LIST) != 0
+		return len(x.x.LIST) != 0
 	case "A.ONEOF_B":
-		if x.ONEOF == nil {
+		if x.x.ONEOF == nil {
 			return false
-		} else if _, ok := x.ONEOF.(*A_ONEOF_B); ok {
+		} else if _, ok := x.x.ONEOF.(*A_ONEOF_B); ok {
 			return true
 		} else {
 			return false
 		}
 	case "A.ONEOF_STRING":
-		if x.ONEOF == nil {
+		if x.x.ONEOF == nil {
 			return false
-		} else if _, ok := x.ONEOF.(*A_ONEOF_STRING); ok {
+		} else if _, ok := x.x.ONEOF.(*A_ONEOF_STRING); ok {
 			return true
 		} else {
 			return false
 		}
 	case "A.LIST_ENUM":
-		return len(x.LIST_ENUM) != 0
+		return len(x.x.LIST_ENUM) != 0
 	case "A.imported":
-		return x.Imported != nil
+		return x.x.Imported != nil
 	case "A.type":
-		return x.Type_ != ""
+		return x.x.Type_ != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -561,56 +563,56 @@ func (x *fastReflection_A) Has(fd protoreflect.FieldDescriptor) bool {
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_A) Clear(fd protoreflect.FieldDescriptor) {
+func (x fastReflection_A) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "A.enum":
-		x.Enum = 0
+		x.x.Enum = 0
 	case "A.some_boolean":
-		x.SomeBoolean = false
+		x.x.SomeBoolean = false
 	case "A.INT32":
-		x.INT32 = int32(0)
+		x.x.INT32 = int32(0)
 	case "A.SINT32":
-		x.SINT32 = int32(0)
+		x.x.SINT32 = int32(0)
 	case "A.UINT32":
-		x.UINT32 = uint32(0)
+		x.x.UINT32 = uint32(0)
 	case "A.INT64":
-		x.INT64 = int64(0)
+		x.x.INT64 = int64(0)
 	case "A.SING64":
-		x.SING64 = int64(0)
+		x.x.SING64 = int64(0)
 	case "A.UINT64":
-		x.UINT64 = uint64(0)
+		x.x.UINT64 = uint64(0)
 	case "A.SFIXED32":
-		x.SFIXED32 = int32(0)
+		x.x.SFIXED32 = int32(0)
 	case "A.FIXED32":
-		x.FIXED32 = uint32(0)
+		x.x.FIXED32 = uint32(0)
 	case "A.FLOAT":
-		x.FLOAT = float32(0)
+		x.x.FLOAT = float32(0)
 	case "A.SFIXED64":
-		x.SFIXED64 = int64(0)
+		x.x.SFIXED64 = int64(0)
 	case "A.FIXED64":
-		x.FIXED64 = uint64(0)
+		x.x.FIXED64 = uint64(0)
 	case "A.DOUBLE":
-		x.DOUBLE = float64(0)
+		x.x.DOUBLE = float64(0)
 	case "A.STRING":
-		x.STRING = ""
+		x.x.STRING = ""
 	case "A.BYTES":
-		x.BYTES = nil
+		x.x.BYTES = nil
 	case "A.MESSAGE":
-		x.MESSAGE = nil
+		x.x.MESSAGE = nil
 	case "A.MAP":
-		x.MAP = nil
+		x.x.MAP = nil
 	case "A.LIST":
-		x.LIST = nil
+		x.x.LIST = nil
 	case "A.ONEOF_B":
-		x.ONEOF = nil
+		x.x.ONEOF = nil
 	case "A.ONEOF_STRING":
-		x.ONEOF = nil
+		x.x.ONEOF = nil
 	case "A.LIST_ENUM":
-		x.LIST_ENUM = nil
+		x.x.LIST_ENUM = nil
 	case "A.imported":
-		x.Imported = nil
+		x.x.Imported = nil
 	case "A.type":
-		x.Type_ = ""
+		x.x.Type_ = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -625,98 +627,98 @@ func (x *fastReflection_A) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_A) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_A) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	case "A.enum":
-		value := x.Enum
+		value := x.x.Enum
 		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
 	case "A.some_boolean":
-		value := x.SomeBoolean
+		value := x.x.SomeBoolean
 		return protoreflect.ValueOfBool(value)
 	case "A.INT32":
-		value := x.INT32
+		value := x.x.INT32
 		return protoreflect.ValueOfInt32(value)
 	case "A.SINT32":
-		value := x.SINT32
+		value := x.x.SINT32
 		return protoreflect.ValueOfInt32(value)
 	case "A.UINT32":
-		value := x.UINT32
+		value := x.x.UINT32
 		return protoreflect.ValueOfUint32(value)
 	case "A.INT64":
-		value := x.INT64
+		value := x.x.INT64
 		return protoreflect.ValueOfInt64(value)
 	case "A.SING64":
-		value := x.SING64
+		value := x.x.SING64
 		return protoreflect.ValueOfInt64(value)
 	case "A.UINT64":
-		value := x.UINT64
+		value := x.x.UINT64
 		return protoreflect.ValueOfUint64(value)
 	case "A.SFIXED32":
-		value := x.SFIXED32
+		value := x.x.SFIXED32
 		return protoreflect.ValueOfInt32(value)
 	case "A.FIXED32":
-		value := x.FIXED32
+		value := x.x.FIXED32
 		return protoreflect.ValueOfUint32(value)
 	case "A.FLOAT":
-		value := x.FLOAT
+		value := x.x.FLOAT
 		return protoreflect.ValueOfFloat32(value)
 	case "A.SFIXED64":
-		value := x.SFIXED64
+		value := x.x.SFIXED64
 		return protoreflect.ValueOfInt64(value)
 	case "A.FIXED64":
-		value := x.FIXED64
+		value := x.x.FIXED64
 		return protoreflect.ValueOfUint64(value)
 	case "A.DOUBLE":
-		value := x.DOUBLE
+		value := x.x.DOUBLE
 		return protoreflect.ValueOfFloat64(value)
 	case "A.STRING":
-		value := x.STRING
+		value := x.x.STRING
 		return protoreflect.ValueOfString(value)
 	case "A.BYTES":
-		value := x.BYTES
+		value := x.x.BYTES
 		return protoreflect.ValueOfBytes(value)
 	case "A.MESSAGE":
-		value := x.MESSAGE
+		value := x.x.MESSAGE
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "A.MAP":
-		if len(x.MAP) == 0 {
+		if len(x.x.MAP) == 0 {
 			return protoreflect.ValueOfMap(&_A_18_map{})
 		}
-		mapValue := &_A_18_map{m: &x.MAP}
+		mapValue := &_A_18_map{m: &x.x.MAP}
 		return protoreflect.ValueOfMap(mapValue)
 	case "A.LIST":
-		if len(x.LIST) == 0 {
+		if len(x.x.LIST) == 0 {
 			return protoreflect.ValueOfList(&_A_19_list{})
 		}
-		listValue := &_A_19_list{list: &x.LIST}
+		listValue := &_A_19_list{list: &x.x.LIST}
 		return protoreflect.ValueOfList(listValue)
 	case "A.ONEOF_B":
-		if x.ONEOF == nil {
+		if x.x.ONEOF == nil {
 			return protoreflect.ValueOfMessage((*B)(nil).ProtoReflect())
-		} else if v, ok := x.ONEOF.(*A_ONEOF_B); ok {
+		} else if v, ok := x.x.ONEOF.(*A_ONEOF_B); ok {
 			return protoreflect.ValueOfMessage(v.ONEOF_B.ProtoReflect())
 		} else {
 			return protoreflect.ValueOfMessage((*B)(nil).ProtoReflect())
 		}
 	case "A.ONEOF_STRING":
-		if x.ONEOF == nil {
+		if x.x.ONEOF == nil {
 			return protoreflect.ValueOfString("")
-		} else if v, ok := x.ONEOF.(*A_ONEOF_STRING); ok {
+		} else if v, ok := x.x.ONEOF.(*A_ONEOF_STRING); ok {
 			return protoreflect.ValueOfString(v.ONEOF_STRING)
 		} else {
 			return protoreflect.ValueOfString("")
 		}
 	case "A.LIST_ENUM":
-		if len(x.LIST_ENUM) == 0 {
+		if len(x.x.LIST_ENUM) == 0 {
 			return protoreflect.ValueOfList(&_A_22_list{})
 		}
-		listValue := &_A_22_list{list: &x.LIST_ENUM}
+		listValue := &_A_22_list{list: &x.x.LIST_ENUM}
 		return protoreflect.ValueOfList(listValue)
 	case "A.imported":
-		value := x.Imported
+		value := x.x.Imported
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "A.type":
-		value := x.Type_
+		value := x.x.Type_
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
@@ -736,64 +738,64 @@ func (x *fastReflection_A) Get(descriptor protoreflect.FieldDescriptor) protoref
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_A) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x fastReflection_A) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	case "A.enum":
-		x.Enum = (Enumeration)(value.Enum())
+		x.x.Enum = (Enumeration)(value.Enum())
 	case "A.some_boolean":
-		x.SomeBoolean = value.Bool()
+		x.x.SomeBoolean = value.Bool()
 	case "A.INT32":
-		x.INT32 = int32(value.Int())
+		x.x.INT32 = int32(value.Int())
 	case "A.SINT32":
-		x.SINT32 = int32(value.Int())
+		x.x.SINT32 = int32(value.Int())
 	case "A.UINT32":
-		x.UINT32 = uint32(value.Uint())
+		x.x.UINT32 = uint32(value.Uint())
 	case "A.INT64":
-		x.INT64 = value.Int()
+		x.x.INT64 = value.Int()
 	case "A.SING64":
-		x.SING64 = value.Int()
+		x.x.SING64 = value.Int()
 	case "A.UINT64":
-		x.UINT64 = value.Uint()
+		x.x.UINT64 = value.Uint()
 	case "A.SFIXED32":
-		x.SFIXED32 = int32(value.Int())
+		x.x.SFIXED32 = int32(value.Int())
 	case "A.FIXED32":
-		x.FIXED32 = uint32(value.Uint())
+		x.x.FIXED32 = uint32(value.Uint())
 	case "A.FLOAT":
-		x.FLOAT = float32(value.Float())
+		x.x.FLOAT = float32(value.Float())
 	case "A.SFIXED64":
-		x.SFIXED64 = value.Int()
+		x.x.SFIXED64 = value.Int()
 	case "A.FIXED64":
-		x.FIXED64 = value.Uint()
+		x.x.FIXED64 = value.Uint()
 	case "A.DOUBLE":
-		x.DOUBLE = value.Float()
+		x.x.DOUBLE = value.Float()
 	case "A.STRING":
-		x.STRING = value.Interface().(string)
+		x.x.STRING = value.Interface().(string)
 	case "A.BYTES":
-		x.BYTES = value.Bytes()
+		x.x.BYTES = value.Bytes()
 	case "A.MESSAGE":
-		x.MESSAGE = value.Message().Interface().(*B)
+		x.x.MESSAGE = value.Message().Interface().(*B)
 	case "A.MAP":
 		mv := value.Map()
 		cmv := mv.(*_A_18_map)
-		x.MAP = *cmv.m
+		x.x.MAP = *cmv.m
 	case "A.LIST":
 		lv := value.List()
 		clv := lv.(*_A_19_list)
-		x.LIST = *clv.list
+		x.x.LIST = *clv.list
 	case "A.ONEOF_B":
 		cv := value.Message().Interface().(*B)
-		x.ONEOF = &A_ONEOF_B{ONEOF_B: cv}
+		x.x.ONEOF = &A_ONEOF_B{ONEOF_B: cv}
 	case "A.ONEOF_STRING":
 		cv := value.Interface().(string)
-		x.ONEOF = &A_ONEOF_STRING{ONEOF_STRING: cv}
+		x.x.ONEOF = &A_ONEOF_STRING{ONEOF_STRING: cv}
 	case "A.LIST_ENUM":
 		lv := value.List()
 		clv := lv.(*_A_22_list)
-		x.LIST_ENUM = *clv.list
+		x.x.LIST_ENUM = *clv.list
 	case "A.imported":
-		x.Imported = value.Message().Interface().(*ImportedMessage)
+		x.x.Imported = value.Message().Interface().(*ImportedMessage)
 	case "A.type":
-		x.Type_ = value.Interface().(string)
+		x.x.Type_ = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -812,52 +814,52 @@ func (x *fastReflection_A) Set(fd protoreflect.FieldDescriptor, value protorefle
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_A) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_A) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "A.MESSAGE":
-		if x.MESSAGE == nil {
-			x.MESSAGE = new(B)
+		if x.x.MESSAGE == nil {
+			x.x.MESSAGE = new(B)
 		}
-		return protoreflect.ValueOfMessage(x.MESSAGE.ProtoReflect())
+		return protoreflect.ValueOfMessage(x.x.MESSAGE.ProtoReflect())
 	case "A.MAP":
-		if x.MAP == nil {
-			x.MAP = make(map[string]*B)
+		if x.x.MAP == nil {
+			x.x.MAP = make(map[string]*B)
 		}
-		value := &_A_18_map{m: &x.MAP}
+		value := &_A_18_map{m: &x.x.MAP}
 		return protoreflect.ValueOfMap(value)
 	case "A.LIST":
-		if x.LIST == nil {
-			x.LIST = []*B{}
+		if x.x.LIST == nil {
+			x.x.LIST = []*B{}
 		}
-		value := &_A_19_list{list: &x.LIST}
+		value := &_A_19_list{list: &x.x.LIST}
 		return protoreflect.ValueOfList(value)
 	case "A.ONEOF_B":
-		if x.ONEOF == nil {
+		if x.x.ONEOF == nil {
 			value := &B{}
 			oneofValue := &A_ONEOF_B{ONEOF_B: value}
-			x.ONEOF = oneofValue
+			x.x.ONEOF = oneofValue
 			return protoreflect.ValueOfMessage(value.ProtoReflect())
 		}
-		switch m := x.ONEOF.(type) {
+		switch m := x.x.ONEOF.(type) {
 		case *A_ONEOF_B:
 			return protoreflect.ValueOfMessage(m.ONEOF_B.ProtoReflect())
 		default:
 			value := &B{}
 			oneofValue := &A_ONEOF_B{ONEOF_B: value}
-			x.ONEOF = oneofValue
+			x.x.ONEOF = oneofValue
 			return protoreflect.ValueOfMessage(value.ProtoReflect())
 		}
 	case "A.LIST_ENUM":
-		if x.LIST_ENUM == nil {
-			x.LIST_ENUM = []Enumeration{}
+		if x.x.LIST_ENUM == nil {
+			x.x.LIST_ENUM = []Enumeration{}
 		}
-		value := &_A_22_list{list: &x.LIST_ENUM}
+		value := &_A_22_list{list: &x.x.LIST_ENUM}
 		return protoreflect.ValueOfList(value)
 	case "A.imported":
-		if x.Imported == nil {
-			x.Imported = new(ImportedMessage)
+		if x.x.Imported == nil {
+			x.x.Imported = new(ImportedMessage)
 		}
-		return protoreflect.ValueOfMessage(x.Imported.ProtoReflect())
+		return protoreflect.ValueOfMessage(x.x.Imported.ProtoReflect())
 	case "A.enum":
 		panic(fmt.Errorf("field enum of message A is not mutable"))
 	case "A.some_boolean":
@@ -905,7 +907,7 @@ func (x *fastReflection_A) Mutable(fd protoreflect.FieldDescriptor) protoreflect
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_A) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_A) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "A.enum":
 		return protoreflect.ValueOfEnum(0)
@@ -972,13 +974,13 @@ func (x *fastReflection_A) NewField(fd protoreflect.FieldDescriptor) protoreflec
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_A) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x fastReflection_A) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	case "A.ONEOF":
-		if x.ONEOF == nil {
+		if x.x.ONEOF == nil {
 			return nil
 		}
-		switch x.ONEOF.(type) {
+		switch x.x.ONEOF.(type) {
 		case *A_ONEOF_B:
 			return x.Descriptor().Fields().ByName("ONEOF_B")
 		case *A_ONEOF_STRING:
@@ -993,8 +995,8 @@ func (x *fastReflection_A) WhichOneof(d protoreflect.OneofDescriptor) protorefle
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_A) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
+func (x fastReflection_A) GetUnknown() protoreflect.RawFields {
+	return x.x.unknownFields
 }
 
 // SetUnknown stores an entire list of unknown fields.
@@ -1004,8 +1006,8 @@ func (x *fastReflection_A) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_A) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
+func (x fastReflection_A) SetUnknown(fields protoreflect.RawFields) {
+	x.x.unknownFields = fields
 }
 
 // IsValid reports whether the message is valid.
@@ -1016,8 +1018,8 @@ func (x *fastReflection_A) SetUnknown(fields protoreflect.RawFields) {
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_A) IsValid() bool {
-	return x != nil
+func (x fastReflection_A) IsValid() bool {
+	return x.x != nil
 }
 
 // ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
@@ -1026,7 +1028,7 @@ func (x *fastReflection_A) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (*fastReflection_A) ProtoMethods() *protoiface.Methods {
+func (fastReflection_A) ProtoMethods() *protoiface.Methods {
 	return fastReflection_AProtoMethods
 }
 
@@ -2232,12 +2234,14 @@ func init() {
 	fd_B_x = md_B.Fields().ByName("x")
 }
 
-var _ protoreflect.Message = (*fastReflection_B)(nil)
+var _ protoreflect.Message = fastReflection_B{}
 
-type fastReflection_B B
+type fastReflection_B struct {
+	x *B
+}
 
 func (x *B) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_B)(x)
+	return fastReflection_B{x: x}
 }
 
 func (x *B) slowProtoReflect() protoreflect.Message {
@@ -2258,10 +2262,10 @@ var _ protoreflect.MessageType = fastReflection_B_messageType{}
 type fastReflection_B_messageType struct{}
 
 func (x fastReflection_B_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_B)(nil)
+	return fastReflection_B{x: nil}
 }
 func (x fastReflection_B_messageType) New() protoreflect.Message {
-	return new(fastReflection_B)
+	return fastReflection_B{x: new(B)}
 }
 func (x fastReflection_B_messageType) Descriptor() protoreflect.MessageDescriptor {
 	return md_B
@@ -2269,26 +2273,26 @@ func (x fastReflection_B_messageType) Descriptor() protoreflect.MessageDescripto
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_B) Descriptor() protoreflect.MessageDescriptor {
+func (x fastReflection_B) Descriptor() protoreflect.MessageDescriptor {
 	return md_B
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_B) Type() protoreflect.MessageType {
+func (x fastReflection_B) Type() protoreflect.MessageType {
 	return _fastReflection_B_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_B) New() protoreflect.Message {
-	return new(fastReflection_B)
+func (x fastReflection_B) New() protoreflect.Message {
+	return fastReflection_B{x: new(B)}
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_B) Interface() protoreflect.ProtoMessage {
-	return (*B)(x)
+func (x fastReflection_B) Interface() protoreflect.ProtoMessage {
+	return x.x
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -2296,9 +2300,9 @@ func (x *fastReflection_B) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_B) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.X != "" {
-		value := protoreflect.ValueOfString(x.X)
+func (x fastReflection_B) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.x.X != "" {
+		value := protoreflect.ValueOfString(x.x.X)
 		if !f(fd_B_x, value) {
 			return
 		}
@@ -2316,10 +2320,10 @@ func (x *fastReflection_B) Range(f func(protoreflect.FieldDescriptor, protorefle
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_B) Has(fd protoreflect.FieldDescriptor) bool {
+func (x fastReflection_B) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "B.x":
-		return x.X != ""
+		return x.x.X != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: B"))
@@ -2334,10 +2338,10 @@ func (x *fastReflection_B) Has(fd protoreflect.FieldDescriptor) bool {
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_B) Clear(fd protoreflect.FieldDescriptor) {
+func (x fastReflection_B) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "B.x":
-		x.X = ""
+		x.x.X = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: B"))
@@ -2352,10 +2356,10 @@ func (x *fastReflection_B) Clear(fd protoreflect.FieldDescriptor) {
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_B) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_B) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	case "B.x":
-		value := x.X
+		value := x.x.X
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
@@ -2375,10 +2379,10 @@ func (x *fastReflection_B) Get(descriptor protoreflect.FieldDescriptor) protoref
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_B) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x fastReflection_B) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	case "B.x":
-		x.X = value.Interface().(string)
+		x.x.X = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: B"))
@@ -2397,7 +2401,7 @@ func (x *fastReflection_B) Set(fd protoreflect.FieldDescriptor, value protorefle
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_B) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_B) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "B.x":
 		panic(fmt.Errorf("field x of message B is not mutable"))
@@ -2412,7 +2416,7 @@ func (x *fastReflection_B) Mutable(fd protoreflect.FieldDescriptor) protoreflect
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_B) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_B) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "B.x":
 		return protoreflect.ValueOfString("")
@@ -2427,7 +2431,7 @@ func (x *fastReflection_B) NewField(fd protoreflect.FieldDescriptor) protoreflec
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_B) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x fastReflection_B) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
 		panic(fmt.Errorf("%s is not a oneof field in B", d.FullName()))
@@ -2438,8 +2442,8 @@ func (x *fastReflection_B) WhichOneof(d protoreflect.OneofDescriptor) protorefle
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_B) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
+func (x fastReflection_B) GetUnknown() protoreflect.RawFields {
+	return x.x.unknownFields
 }
 
 // SetUnknown stores an entire list of unknown fields.
@@ -2449,8 +2453,8 @@ func (x *fastReflection_B) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_B) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
+func (x fastReflection_B) SetUnknown(fields protoreflect.RawFields) {
+	x.x.unknownFields = fields
 }
 
 // IsValid reports whether the message is valid.
@@ -2461,8 +2465,8 @@ func (x *fastReflection_B) SetUnknown(fields protoreflect.RawFields) {
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_B) IsValid() bool {
-	return x != nil
+func (x fastReflection_B) IsValid() bool {
+	return x.x != nil
 }
 
 // ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
@@ -2471,7 +2475,7 @@ func (x *fastReflection_B) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (*fastReflection_B) ProtoMethods() *protoiface.Methods {
+func (fastReflection_B) ProtoMethods() *protoiface.Methods {
 	return fastReflection_BProtoMethods
 }
 

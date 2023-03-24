@@ -14,7 +14,7 @@ type getGen struct {
 
 func (g *getGen) generate() {
 	g.genComment()
-	g.P("func (x *", g.typeName, ") Get(descriptor ", protoreflectPkg.Ident("FieldDescriptor"), ") ", protoreflectPkg.Ident("Value"), " {")
+	g.P("func (x ", g.typeName, ") Get(descriptor ", protoreflectPkg.Ident("FieldDescriptor"), ") ", protoreflectPkg.Ident("Value"), " {")
 	g.P("switch descriptor.FullName() {")
 	// implement the fastReflectionFeature Get function
 	for _, field := range g.message.Fields {
@@ -53,7 +53,7 @@ func (g *getGen) genFieldGetter(field *protogen.Field) {
 		return
 	}
 
-	fieldRef := "x." + field.GoName
+	fieldRef := "x.x." + field.GoName
 	g.P("value := ", fieldRef)
 	switch field.Desc.Kind() {
 	case protoreflect.BoolKind:
@@ -83,7 +83,7 @@ func (g *getGen) genFieldGetter(field *protogen.Field) {
 
 func (g *getGen) genOneofGetter(fd *protogen.Field) {
 	// handle the case in which the oneof field is not set
-	g.P("if x.", fd.Oneof.GoName, " == nil {")
+	g.P("if x.x.", fd.Oneof.GoName, " == nil {")
 	switch fd.Desc.Kind() {
 	case protoreflect.MessageKind:
 		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "((*", g.QualifiedGoIdent(fd.Message.GoIdent), ")(nil).ProtoReflect())")
@@ -91,7 +91,7 @@ func (g *getGen) genOneofGetter(fd *protogen.Field) {
 		g.P("return ", kindToValueConstructor(fd.Desc.Kind()), "(", zeroValueForField(g.GeneratedFile, fd), ")")
 	}
 	// handle the case in which oneof field is set and it matches our sub-onefield type
-	g.P("} else if v, ok := x.", fd.Oneof.GoName, ".(*", fd.GoIdent, "); ok {")
+	g.P("} else if v, ok := x.x.", fd.Oneof.GoName, ".(*", fd.GoIdent, "); ok {")
 	oneofTypeContainerFieldName := fd.GoName // field containing the oneof value
 	switch fd.Desc.Kind() {
 	case protoreflect.MessageKind: // it can be mutable
@@ -123,21 +123,21 @@ func (g *getGen) genDefaultCase() {
 // genMap generates the protoreflect.Message.Get for map types
 func (g *getGen) genMap(field *protogen.Field) {
 	// gen invalid case
-	g.P("if len(x.", field.GoName, ") == 0 {")
+	g.P("if len(x.x.", field.GoName, ") == 0 {")
 	g.P("return ", protoreflectPkg.Ident("ValueOfMap"), "(&", mapTypeName(field), "{})")
 	g.P("}")
 	// gen valid case
-	g.P("mapValue := &", mapTypeName(field), "{m: &x.", field.GoName, "}")
+	g.P("mapValue := &", mapTypeName(field), "{m: &x.x.", field.GoName, "}")
 	g.P("return ", protoreflectPkg.Ident("ValueOfMap"), "(mapValue)")
 }
 
 func (g *getGen) genList(field *protogen.Field) {
 	// gen invalid case
-	g.P("if len(x.", field.GoName, ") == 0 {")
+	g.P("if len(x.x.", field.GoName, ") == 0 {")
 	g.P("return ", protoreflectPkg.Ident("ValueOfList"), "(&", listTypeName(field), "{})")
 	g.P("}")
 	// gen valid case
-	g.P("listValue := &", listTypeName(field), "{list: &x.", field.GoName, "}")
+	g.P("listValue := &", listTypeName(field), "{list: &x.x.", field.GoName, "}")
 	g.P("return ", protoreflectPkg.Ident("ValueOfList"), "(listValue)")
 }
 

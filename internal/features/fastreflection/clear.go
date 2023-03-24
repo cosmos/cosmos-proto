@@ -30,7 +30,7 @@ func (g *clearGen) genComments() {
 
 func (g *clearGen) generate() {
 	g.genComments()
-	g.P("func (x *", g.typeName, ") Clear(fd ", protoreflectPkg.Ident("FieldDescriptor"), ") {")
+	g.P("func (x ", g.typeName, ") Clear(fd ", protoreflectPkg.Ident("FieldDescriptor"), ") {")
 	g.P("switch fd.FullName() {")
 	for _, field := range g.message.Fields {
 		g.genField(field)
@@ -51,17 +51,17 @@ func (g *clearGen) genField(field *protogen.Field) {
 		return
 	}
 
-	g.P("x.", field.GoName, " = ", zeroValueForField(nil, field))
+	g.P("x.x.", field.GoName, " = ", zeroValueForField(nil, field))
 }
 
 func (g *clearGen) genNullable(field *protogen.Field) {
 	switch {
 	case field.Desc.ContainingOneof() != nil:
-		g.P("x.", field.Oneof.GoName, " = nil")
+		g.P("x.x.", field.Oneof.GoName, " = nil")
 	case field.Desc.IsMap(), field.Desc.IsList(), field.Desc.Kind() == protoreflect.BytesKind:
-		g.P("x.", field.GoName, " = nil")
+		g.P("x.x.", field.GoName, " = nil")
 	case field.Desc.Kind() == protoreflect.MessageKind:
-		g.P(" x.", field.GoName, " = nil")
+		g.P("x.x.", field.GoName, " = nil")
 	default:
 		panic("unknown case")
 	}

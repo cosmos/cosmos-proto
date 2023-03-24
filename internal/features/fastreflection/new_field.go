@@ -14,7 +14,7 @@ type newFieldGen struct {
 
 func (g *newFieldGen) generate() {
 	g.genComment()
-	g.P("func (x *", g.typeName, ") NewField(fd ", protoreflectPkg.Ident("FieldDescriptor"), ") ", protoreflectPkg.Ident("Value"), " {")
+	g.P("func (x ", g.typeName, ") NewField(fd ", protoreflectPkg.Ident("FieldDescriptor"), ") ", protoreflectPkg.Ident("Value"), " {")
 	g.P("switch fd.FullName() {")
 	for _, field := range g.message.Fields {
 		g.P("case \"", field.Desc.FullName(), "\":")

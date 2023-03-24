@@ -14,7 +14,7 @@ type mutableGen struct {
 
 func (g *mutableGen) generate() {
 	g.genComment()
-	g.P("func (x *", g.typeName, ") Mutable(fd ", protoreflectPkg.Ident("FieldDescriptor"), ") ", protoreflectPkg.Ident("Value"), " {")
+	g.P("func (x ", g.typeName, ") Mutable(fd ", protoreflectPkg.Ident("FieldDescriptor"), ") ", protoreflectPkg.Ident("Value"), " {")
 	g.P("switch fd.FullName()  {")
 	// we first output all the fields that are mutable
 	for _, field := range g.message.Fields {
@@ -77,23 +77,23 @@ func (g *mutableGen) genField(field *protogen.Field) {
 	switch {
 	case field.Desc.IsMap():
 		// if map is invalid then we make it valid
-		g.P("if x.", field.GoName, " == nil {")
-		g.P("x.", field.GoName, " = make(map[", getGoType(g.GeneratedFile, field.Message.Fields[0]), "]", getGoType(g.GeneratedFile, field.Message.Fields[1]), ")")
+		g.P("if x.x.", field.GoName, " == nil {")
+		g.P("x.x.", field.GoName, " = make(map[", getGoType(g.GeneratedFile, field.Message.Fields[0]), "]", getGoType(g.GeneratedFile, field.Message.Fields[1]), ")")
 		g.P("}")
 		// return value of map
-		g.P("value := &", mapTypeName(field), "{m: &x.", field.GoName, "}")
+		g.P("value := &", mapTypeName(field), "{m: &x.x.", field.GoName, "}")
 		g.P("return ", protoreflectPkg.Ident("ValueOfMap"), "(value)")
 	case field.Desc.IsList():
-		g.P("if x.", field.GoName, " == nil {")
-		g.P("x.", field.GoName, " = []", getGoType(g.GeneratedFile, field), "{}")
+		g.P("if x.x.", field.GoName, " == nil {")
+		g.P("x.x.", field.GoName, " = []", getGoType(g.GeneratedFile, field), "{}")
 		g.P("}")
-		g.P("value := &", listTypeName(field), "{list: &x.", field.GoName, "}")
+		g.P("value := &", listTypeName(field), "{list: &x.x.", field.GoName, "}")
 		g.P("return ", protoreflectPkg.Ident("ValueOfList"), "(value)")
 	case field.Desc.Kind() == protoreflect.MessageKind:
-		g.P("if x.", field.GoName, " == nil {")
-		g.P("x.", field.GoName, " = new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
+		g.P("if x.x.", field.GoName, " == nil {")
+		g.P("x.x.", field.GoName, " = new(", g.QualifiedGoIdent(field.Message.GoIdent), ")")
 		g.P("}")
-		g.P("return ", protoreflectPkg.Ident("ValueOfMessage"), "(x.", field.GoName, ".ProtoReflect())")
+		g.P("return ", protoreflectPkg.Ident("ValueOfMessage"), "(x.x.", field.GoName, ".ProtoReflect())")
 	default:
 		panic("unreachable")
 	}
@@ -101,14 +101,14 @@ func (g *mutableGen) genField(field *protogen.Field) {
 
 func (g *mutableGen) genOneof(field *protogen.Field) {
 	// if the oneof is nil then we just create a new instance of the object and return it
-	g.P("if x.", field.Oneof.GoName, " == nil {")
+	g.P("if x.x.", field.Oneof.GoName, " == nil {")
 	g.P("value := &", g.QualifiedGoIdent(field.Message.GoIdent), "{}")
 	g.P("oneofValue := &", g.QualifiedGoIdent(field.GoIdent), "{", field.GoName, ": value}")
-	g.P("x.", field.Oneof.GoName, " = oneofValue")
+	g.P("x.x.", field.Oneof.GoName, " = oneofValue")
 	g.P("return ", protoreflectPkg.Ident("ValueOfMessage"), "(value.ProtoReflect())")
 	g.P("}")
 	// if the oneof is not nil,
-	g.P("switch m := x.", field.Oneof.GoName, ".(type) {")
+	g.P("switch m := x.x.", field.Oneof.GoName, ".(type) {")
 	// we check if the type matches the oneof type of the field
 	g.P("case *", g.QualifiedGoIdent(field.GoIdent), ":")
 	// if it does we return it
@@ -117,7 +117,7 @@ func (g *mutableGen) genOneof(field *protogen.Field) {
 	g.P("default:")
 	g.P("value := &", g.QualifiedGoIdent(field.Message.GoIdent), "{}")
 	g.P("oneofValue := &", g.QualifiedGoIdent(field.GoIdent), "{", field.GoName, ": value}")
-	g.P("x.", field.Oneof.GoName, " = oneofValue")
+	g.P("x.x.", field.Oneof.GoName, " = oneofValue")
 	g.P("return ", protoreflectPkg.Ident("ValueOfMessage"), "(value.ProtoReflect())")
 	g.P("}")
 

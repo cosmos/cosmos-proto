@@ -21,12 +21,14 @@ func init() {
 	md_ImportedMessage = File_internal_testpb_2_proto.Messages().ByName("ImportedMessage")
 }
 
-var _ protoreflect.Message = (*fastReflection_ImportedMessage)(nil)
+var _ protoreflect.Message = fastReflection_ImportedMessage{}
 
-type fastReflection_ImportedMessage ImportedMessage
+type fastReflection_ImportedMessage struct {
+	x *ImportedMessage
+}
 
 func (x *ImportedMessage) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_ImportedMessage)(x)
+	return fastReflection_ImportedMessage{x: x}
 }
 
 func (x *ImportedMessage) slowProtoReflect() protoreflect.Message {
@@ -47,10 +49,10 @@ var _ protoreflect.MessageType = fastReflection_ImportedMessage_messageType{}
 type fastReflection_ImportedMessage_messageType struct{}
 
 func (x fastReflection_ImportedMessage_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_ImportedMessage)(nil)
+	return fastReflection_ImportedMessage{x: nil}
 }
 func (x fastReflection_ImportedMessage_messageType) New() protoreflect.Message {
-	return new(fastReflection_ImportedMessage)
+	return fastReflection_ImportedMessage{x: new(ImportedMessage)}
 }
 func (x fastReflection_ImportedMessage_messageType) Descriptor() protoreflect.MessageDescriptor {
 	return md_ImportedMessage
@@ -58,26 +60,26 @@ func (x fastReflection_ImportedMessage_messageType) Descriptor() protoreflect.Me
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_ImportedMessage) Descriptor() protoreflect.MessageDescriptor {
+func (x fastReflection_ImportedMessage) Descriptor() protoreflect.MessageDescriptor {
 	return md_ImportedMessage
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_ImportedMessage) Type() protoreflect.MessageType {
+func (x fastReflection_ImportedMessage) Type() protoreflect.MessageType {
 	return _fastReflection_ImportedMessage_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_ImportedMessage) New() protoreflect.Message {
-	return new(fastReflection_ImportedMessage)
+func (x fastReflection_ImportedMessage) New() protoreflect.Message {
+	return fastReflection_ImportedMessage{x: new(ImportedMessage)}
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_ImportedMessage) Interface() protoreflect.ProtoMessage {
-	return (*ImportedMessage)(x)
+func (x fastReflection_ImportedMessage) Interface() protoreflect.ProtoMessage {
+	return x.x
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -85,7 +87,7 @@ func (x *fastReflection_ImportedMessage) Interface() protoreflect.ProtoMessage {
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_ImportedMessage) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x fastReflection_ImportedMessage) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -99,7 +101,7 @@ func (x *fastReflection_ImportedMessage) Range(f func(protoreflect.FieldDescript
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_ImportedMessage) Has(fd protoreflect.FieldDescriptor) bool {
+func (x fastReflection_ImportedMessage) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
@@ -115,7 +117,7 @@ func (x *fastReflection_ImportedMessage) Has(fd protoreflect.FieldDescriptor) bo
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ImportedMessage) Clear(fd protoreflect.FieldDescriptor) {
+func (x fastReflection_ImportedMessage) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
@@ -131,7 +133,7 @@ func (x *fastReflection_ImportedMessage) Clear(fd protoreflect.FieldDescriptor) 
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_ImportedMessage) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_ImportedMessage) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
@@ -151,7 +153,7 @@ func (x *fastReflection_ImportedMessage) Get(descriptor protoreflect.FieldDescri
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ImportedMessage) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x fastReflection_ImportedMessage) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
@@ -171,7 +173,7 @@ func (x *fastReflection_ImportedMessage) Set(fd protoreflect.FieldDescriptor, va
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ImportedMessage) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_ImportedMessage) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
@@ -184,7 +186,7 @@ func (x *fastReflection_ImportedMessage) Mutable(fd protoreflect.FieldDescriptor
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_ImportedMessage) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x fastReflection_ImportedMessage) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
@@ -197,7 +199,7 @@ func (x *fastReflection_ImportedMessage) NewField(fd protoreflect.FieldDescripto
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_ImportedMessage) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x fastReflection_ImportedMessage) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
 		panic(fmt.Errorf("%s is not a oneof field in ImportedMessage", d.FullName()))
@@ -208,8 +210,8 @@ func (x *fastReflection_ImportedMessage) WhichOneof(d protoreflect.OneofDescript
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_ImportedMessage) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
+func (x fastReflection_ImportedMessage) GetUnknown() protoreflect.RawFields {
+	return x.x.unknownFields
 }
 
 // SetUnknown stores an entire list of unknown fields.
@@ -219,8 +221,8 @@ func (x *fastReflection_ImportedMessage) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ImportedMessage) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
+func (x fastReflection_ImportedMessage) SetUnknown(fields protoreflect.RawFields) {
+	x.x.unknownFields = fields
 }
 
 // IsValid reports whether the message is valid.
@@ -231,8 +233,8 @@ func (x *fastReflection_ImportedMessage) SetUnknown(fields protoreflect.RawField
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_ImportedMessage) IsValid() bool {
-	return x != nil
+func (x fastReflection_ImportedMessage) IsValid() bool {
+	return x.x != nil
 }
 
 // ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
@@ -241,7 +243,7 @@ func (x *fastReflection_ImportedMessage) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (*fastReflection_ImportedMessage) ProtoMethods() *protoiface.Methods {
+func (fastReflection_ImportedMessage) ProtoMethods() *protoiface.Methods {
 	return fastReflection_ImportedMessageProtoMethods
 }
 

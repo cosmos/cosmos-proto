@@ -39,7 +39,7 @@ func (g *hasGen) genComments() {
 
 func (g *hasGen) generate() {
 	g.genComments()
-	g.P("func (x *", g.typeName, ") Has(fd ", protoreflectPkg.Ident("FieldDescriptor"), ") bool {")
+	g.P("func (x ", g.typeName, ") Has(fd ", protoreflectPkg.Ident("FieldDescriptor"), ") bool {")
 	g.P("switch fd.FullName() {")
 	for _, field := range g.message.Fields {
 		g.genField(field)
@@ -62,11 +62,11 @@ func (g *hasGen) genField(field *protogen.Field) {
 
 	switch field.Desc.Kind() {
 	case protoreflect.FloatKind:
-		g.P("return x.", field.GoName, " != ", zeroValueForField(nil, field), " || ", mathPkg.Ident("Signbit"), "(float64(x.", field.GoName, "))")
+		g.P("return x.x.", field.GoName, " != ", zeroValueForField(nil, field), " || ", mathPkg.Ident("Signbit"), "(float64(x.x.", field.GoName, "))")
 	case protoreflect.DoubleKind:
-		g.P("return x.", field.GoName, " != ", zeroValueForField(nil, field), " || ", mathPkg.Ident("Signbit"), "(x.", field.GoName, ")")
+		g.P("return x.x.", field.GoName, " != ", zeroValueForField(nil, field), " || ", mathPkg.Ident("Signbit"), "(x.x.", field.GoName, ")")
 	default:
-		g.P("return x.", field.GoName, " != ", zeroValueForField(nil, field))
+		g.P("return x.x.", field.GoName, " != ", zeroValueForField(nil, field))
 	}
 
 }
@@ -75,19 +75,19 @@ func (g *hasGen) genNullable(field *protogen.Field) {
 	switch {
 	case field.Desc.ContainingOneof() != nil:
 		// case oneof is nil
-		g.P("if x.", field.Oneof.GoName, " == nil {")
+		g.P("if x.x.", field.Oneof.GoName, " == nil {")
 		g.P("return false")
 		// if oneof is not nil we need to try cast it to the concrete type
 		// and if it succeeds then it means the message has the field
-		g.P("} else if _, ok := x.", field.Oneof.GoName, ".(*", field.GoIdent, "); ok {")
+		g.P("} else if _, ok := x.x.", field.Oneof.GoName, ".(*", field.GoIdent, "); ok {")
 		g.P("return true")
 		g.P("} else { ")
 		g.P("return false")
 		g.P("}")
 	case field.Desc.IsMap(), field.Desc.IsList(), field.Desc.Kind() == protoreflect.BytesKind:
-		g.P("return len(x.", field.GoName, ") != 0")
+		g.P("return len(x.x.", field.GoName, ") != 0")
 	case field.Desc.Kind() == protoreflect.MessageKind:
-		g.P("return x.", field.GoName, " != nil")
+		g.P("return x.x.", field.GoName, " != nil")
 	default:
 		panic("unknown case")
 	}
