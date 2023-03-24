@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"strings"
 
 	_ "github.com/cosmos/cosmos-proto/internal/features/fastreflection"
@@ -83,25 +82,6 @@ func generateAllFiles(plugin *protogen.Plugin, featureNames []string, poolable O
 	return nil
 }
 
-var reservedFieldNames = map[string]struct{}{
-	"Descriptor":   {},
-	"Type":         {},
-	"New":          {},
-	"Interface":    {},
-	"Range":        {},
-	"Has":          {},
-	"Clear":        {},
-	"Get":          {},
-	"Set":          {},
-	"Mutable":      {},
-	"NewField":     {},
-	"WhichOneof":   {},
-	"GetUnknown":   {},
-	"SetUnknown":   {},
-	"IsValid":      {},
-	"ProtoMethods": {},
-}
-
 func rewriteMessageField(message *protogen.Message, processed map[protoreflect.FullName]struct{}) {
 	// skip already processed messages, useful for recursive messages
 	if _, done := processed[message.Desc.FullName()]; done {
@@ -112,14 +92,6 @@ func rewriteMessageField(message *protogen.Message, processed map[protoreflect.F
 		return
 	}
 
-	for _, field := range message.Fields {
-		_, reserved := reservedFieldNames[field.GoName]
-		if !reserved {
-			continue
-		}
-		log.Printf("Message %s contains the reserved field name %s which conflicts with protoreflect.Message interface implementation.\nThis field will be suffixed with an underscore '_'.\nIf you can change the message field name, please do so.\nIn a future iteration of pulsar we may make a breaking change to this practice in order to be compliant with field naming of the original golang protobuf implementation.", message.Desc.FullName(), field.Desc.FullName())
-		field.GoName = field.GoName + "_"
-	}
 	processed[message.Desc.FullName()] = struct{}{}
 
 	for _, nestedMessage := range message.Messages {

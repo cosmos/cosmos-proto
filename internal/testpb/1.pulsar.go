@@ -468,8 +468,8 @@ func (x fastReflection_A) Range(f func(protoreflect.FieldDescriptor, protoreflec
 			return
 		}
 	}
-	if x.x.Type_ != "" {
-		value := protoreflect.ValueOfString(x.x.Type_)
+	if x.x.Type != "" {
+		value := protoreflect.ValueOfString(x.x.Type)
 		if !f(fd_A_type, value) {
 			return
 		}
@@ -548,7 +548,7 @@ func (x fastReflection_A) Has(fd protoreflect.FieldDescriptor) bool {
 	case "A.imported":
 		return x.x.Imported != nil
 	case "A.type":
-		return x.x.Type_ != ""
+		return x.x.Type != ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -612,7 +612,7 @@ func (x fastReflection_A) Clear(fd protoreflect.FieldDescriptor) {
 	case "A.imported":
 		x.x.Imported = nil
 	case "A.type":
-		x.x.Type_ = ""
+		x.x.Type = ""
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -718,7 +718,7 @@ func (x fastReflection_A) Get(descriptor protoreflect.FieldDescriptor) protorefl
 		value := x.x.Imported
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "A.type":
-		value := x.x.Type_
+		value := x.x.Type
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
@@ -795,7 +795,7 @@ func (x fastReflection_A) Set(fd protoreflect.FieldDescriptor, value protoreflec
 	case "A.imported":
 		x.x.Imported = value.Message().Interface().(*ImportedMessage)
 	case "A.type":
-		x.x.Type_ = value.Interface().(string)
+		x.x.Type = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -1159,7 +1159,7 @@ func init() {
 			l = options.Size(x.Imported)
 			n += 2 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.Type_)
+		l = len(x.Type)
 		if l > 0 {
 			n += 2 + l + runtime.Sov(uint64(l))
 		}
@@ -1217,10 +1217,10 @@ func init() {
 			i--
 			dAtA[i] = 0xaa
 		}
-		if len(x.Type_) > 0 {
-			i -= len(x.Type_)
-			copy(dAtA[i:], x.Type_)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Type_)))
+		if len(x.Type) > 0 {
+			i -= len(x.Type)
+			copy(dAtA[i:], x.Type)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Type)))
 			i--
 			dAtA[i] = 0x1
 			i--
@@ -2155,7 +2155,7 @@ func init() {
 				iNdEx = postIndex
 			case 24:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Type_", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -2183,7 +2183,7 @@ func init() {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Type_ = string(dAtA[iNdEx:postIndex])
+				x.Type = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -2743,7 +2743,7 @@ type A struct {
 	ONEOF     isA_ONEOF        `protobuf_oneof:"ONEOF"`
 	LIST_ENUM []Enumeration    `protobuf:"varint,22,rep,packed,name=LIST_ENUM,json=LISTENUM,proto3,enum=Enumeration" json:"LIST_ENUM,omitempty"`
 	Imported  *ImportedMessage `protobuf:"bytes,23,opt,name=imported,proto3" json:"imported,omitempty"`
-	Type_     string           `protobuf:"bytes,24,opt,name=type,proto3" json:"type,omitempty"`
+	Type      string           `protobuf:"bytes,24,opt,name=type,proto3" json:"type,omitempty"`
 }
 
 func (x *A) Reset() {
@@ -2934,9 +2934,9 @@ func (x *A) GetImported() *ImportedMessage {
 	return nil
 }
 
-func (x *A) GetType_() string {
+func (x *A) GetType() string {
 	if x != nil {
-		return x.Type_
+		return x.Type
 	}
 	return ""
 }
