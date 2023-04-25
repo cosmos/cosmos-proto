@@ -18,51 +18,51 @@ func (m *A) SomeBoolean() bool {
 }
 
 func (m *A) INT32() int32 {
-	return int32(m.ctx.ReadUint32(0))
+	return int32(m.ctx.ReadUint32(1))
 }
 
 func (m *A) SINT32() int32 {
-	return int32(m.ctx.ReadUint32(0))
+	return int32(m.ctx.ReadUint32(5))
 }
 
 func (m *A) UINT32() uint32 {
-	return m.ctx.ReadUint32(0)
+	return m.ctx.ReadUint32(9)
 }
 
 func (m *A) INT64() int64 {
-	return int64(m.ctx.ReadUint64(0))
+	return int64(m.ctx.ReadUint64(13))
 }
 
 func (m *A) SING64() int64 {
-	return int64(m.ctx.ReadUint64(0))
+	return int64(m.ctx.ReadUint64(21))
 }
 
 func (m *A) UINT64() uint64 {
-	return m.ctx.ReadUint64(0)
+	return m.ctx.ReadUint64(29)
 }
 
 func (m *A) SFIXED32() int32 {
-	return int32(m.ctx.ReadUint32(0))
+	return int32(m.ctx.ReadUint32(37))
 }
 
 func (m *A) FIXED32() uint32 {
-	return m.ctx.ReadUint32(0)
+	return m.ctx.ReadUint32(41)
 }
 
 func (m *A) FLOAT() float32 {
-	return float32(m.ctx.ReadUint32(0))
+	return float32(m.ctx.ReadUint32(45))
 }
 
 func (m *A) SFIXED64() int64 {
-	return int64(m.ctx.ReadUint64(0))
+	return int64(m.ctx.ReadUint64(49))
 }
 
 func (m *A) FIXED64() uint64 {
-	return m.ctx.ReadUint64(0)
+	return m.ctx.ReadUint64(57)
 }
 
 func (m *A) DOUBLE() float64 {
-	return float64(m.ctx.ReadUint64(0))
+	return float64(m.ctx.ReadUint64(65))
 }
 
 // TODO STRING string
@@ -194,227 +194,227 @@ type fd_A_Interface interface {
 
 type fd_Enum struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_Enum) has(msg *msg_A) bool                    { return false }
+func (fd *fd_Enum) has(msg *msg_A) bool {
+}
 func (fd *fd_Enum) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_Enum) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_Enum) clear(msg *msg_A)                       {}
-func (fd *fd_Enum) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_Enum) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_SomeBoolean struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_SomeBoolean) has(msg *msg_A) bool                    { return false }
+func (fd *fd_SomeBoolean) has(msg *msg_A) bool {
+}
 func (fd *fd_SomeBoolean) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_SomeBoolean) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_SomeBoolean) clear(msg *msg_A)                       {}
-func (fd *fd_SomeBoolean) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_SomeBoolean) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_INT32 struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_INT32) has(msg *msg_A) bool                    { return false }
+func (fd *fd_INT32) has(msg *msg_A) bool {
+}
 func (fd *fd_INT32) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_INT32) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_INT32) clear(msg *msg_A)                       {}
-func (fd *fd_INT32) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_INT32) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_SINT32 struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_SINT32) has(msg *msg_A) bool                    { return false }
+func (fd *fd_SINT32) has(msg *msg_A) bool {
+}
 func (fd *fd_SINT32) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_SINT32) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_SINT32) clear(msg *msg_A)                       {}
-func (fd *fd_SINT32) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_SINT32) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_UINT32 struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_UINT32) has(msg *msg_A) bool                    { return false }
+func (fd *fd_UINT32) has(msg *msg_A) bool {
+}
 func (fd *fd_UINT32) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_UINT32) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_UINT32) clear(msg *msg_A)                       {}
-func (fd *fd_UINT32) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_UINT32) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_INT64 struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_INT64) has(msg *msg_A) bool                    { return false }
+func (fd *fd_INT64) has(msg *msg_A) bool {
+}
 func (fd *fd_INT64) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_INT64) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_INT64) clear(msg *msg_A)                       {}
-func (fd *fd_INT64) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_INT64) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_SING64 struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_SING64) has(msg *msg_A) bool                    { return false }
+func (fd *fd_SING64) has(msg *msg_A) bool {
+}
 func (fd *fd_SING64) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_SING64) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_SING64) clear(msg *msg_A)                       {}
-func (fd *fd_SING64) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_SING64) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_UINT64 struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_UINT64) has(msg *msg_A) bool                    { return false }
+func (fd *fd_UINT64) has(msg *msg_A) bool {
+}
 func (fd *fd_UINT64) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_UINT64) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_UINT64) clear(msg *msg_A)                       {}
-func (fd *fd_UINT64) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_UINT64) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_SFIXED32 struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_SFIXED32) has(msg *msg_A) bool                    { return false }
+func (fd *fd_SFIXED32) has(msg *msg_A) bool {
+}
 func (fd *fd_SFIXED32) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_SFIXED32) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_SFIXED32) clear(msg *msg_A)                       {}
-func (fd *fd_SFIXED32) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_SFIXED32) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_FIXED32 struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_FIXED32) has(msg *msg_A) bool                    { return false }
+func (fd *fd_FIXED32) has(msg *msg_A) bool {
+}
 func (fd *fd_FIXED32) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_FIXED32) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_FIXED32) clear(msg *msg_A)                       {}
-func (fd *fd_FIXED32) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_FIXED32) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_FLOAT struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_FLOAT) has(msg *msg_A) bool                    { return false }
+func (fd *fd_FLOAT) has(msg *msg_A) bool {
+}
 func (fd *fd_FLOAT) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_FLOAT) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_FLOAT) clear(msg *msg_A)                       {}
-func (fd *fd_FLOAT) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_FLOAT) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_SFIXED64 struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_SFIXED64) has(msg *msg_A) bool                    { return false }
+func (fd *fd_SFIXED64) has(msg *msg_A) bool {
+}
 func (fd *fd_SFIXED64) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_SFIXED64) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_SFIXED64) clear(msg *msg_A)                       {}
-func (fd *fd_SFIXED64) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_SFIXED64) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_FIXED64 struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_FIXED64) has(msg *msg_A) bool                    { return false }
+func (fd *fd_FIXED64) has(msg *msg_A) bool {
+}
 func (fd *fd_FIXED64) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_FIXED64) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_FIXED64) clear(msg *msg_A)                       {}
-func (fd *fd_FIXED64) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_FIXED64) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_DOUBLE struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_DOUBLE) has(msg *msg_A) bool                    { return false }
+func (fd *fd_DOUBLE) has(msg *msg_A) bool {
+}
 func (fd *fd_DOUBLE) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_DOUBLE) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_DOUBLE) clear(msg *msg_A)                       {}
-func (fd *fd_DOUBLE) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_DOUBLE) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_STRING struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_STRING) has(msg *msg_A) bool                    { return false }
+func (fd *fd_STRING) has(msg *msg_A) bool {
+}
 func (fd *fd_STRING) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_STRING) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_STRING) clear(msg *msg_A)                       {}
-func (fd *fd_STRING) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_STRING) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_BYTES struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_BYTES) has(msg *msg_A) bool                    { return false }
+func (fd *fd_BYTES) has(msg *msg_A) bool {
+}
 func (fd *fd_BYTES) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_BYTES) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_BYTES) clear(msg *msg_A)                       {}
-func (fd *fd_BYTES) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_BYTES) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_MESSAGE struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_MESSAGE) has(msg *msg_A) bool                    { return false }
+func (fd *fd_MESSAGE) has(msg *msg_A) bool {
+}
 func (fd *fd_MESSAGE) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_MESSAGE) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_MESSAGE) clear(msg *msg_A)                       {}
-func (fd *fd_MESSAGE) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_MESSAGE) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_MAP struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_MAP) has(msg *msg_A) bool                    { return false }
+func (fd *fd_MAP) has(msg *msg_A) bool {
+}
 func (fd *fd_MAP) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_MAP) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_MAP) clear(msg *msg_A)                       {}
-func (fd *fd_MAP) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_MAP) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_LIST struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_LIST) has(msg *msg_A) bool                    { return false }
+func (fd *fd_LIST) has(msg *msg_A) bool {
+}
 func (fd *fd_LIST) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_LIST) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_LIST) clear(msg *msg_A)                       {}
-func (fd *fd_LIST) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_LIST) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_ONEOF_B struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_ONEOF_B) has(msg *msg_A) bool                    { return false }
+func (fd *fd_ONEOF_B) has(msg *msg_A) bool {
+}
 func (fd *fd_ONEOF_B) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_ONEOF_B) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_ONEOF_B) clear(msg *msg_A)                       {}
-func (fd *fd_ONEOF_B) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_ONEOF_B) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_ONEOF_STRING struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_ONEOF_STRING) has(msg *msg_A) bool                    { return false }
+func (fd *fd_ONEOF_STRING) has(msg *msg_A) bool {
+}
 func (fd *fd_ONEOF_STRING) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_ONEOF_STRING) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_ONEOF_STRING) clear(msg *msg_A)                       {}
-func (fd *fd_ONEOF_STRING) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_ONEOF_STRING) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_LIST_ENUM struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_LIST_ENUM) has(msg *msg_A) bool                    { return false }
+func (fd *fd_LIST_ENUM) has(msg *msg_A) bool {
+}
 func (fd *fd_LIST_ENUM) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_LIST_ENUM) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_LIST_ENUM) clear(msg *msg_A)                       {}
-func (fd *fd_LIST_ENUM) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_LIST_ENUM) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_Imported struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_Imported) has(msg *msg_A) bool                    { return false }
+func (fd *fd_Imported) has(msg *msg_A) bool {
+}
 func (fd *fd_Imported) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_Imported) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_Imported) clear(msg *msg_A)                       {}
-func (fd *fd_Imported) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_Imported) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_Type struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_Type) has(msg *msg_A) bool                    { return false }
+func (fd *fd_Type) has(msg *msg_A) bool {
+}
 func (fd *fd_Type) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_Type) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_Type) clear(msg *msg_A)                       {}
-func (fd *fd_Type) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_Type) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 type fd_Opt struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_Opt) has(msg *msg_A) bool                    { return false }
+func (fd *fd_Opt) has(msg *msg_A) bool {
+}
 func (fd *fd_Opt) get(msg *msg_A) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_Opt) set(msg *msg_A, v protoreflect.Value)   {}
 func (fd *fd_Opt) clear(msg *msg_A)                       {}
-func (fd *fd_Opt) mutable(msg *msg_A) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_Opt) newField(msg *msg_A) protoreflect.Value { return protoreflect.Value{} }
 
 var fds_A_Instance protoreflect.FieldDescriptors
@@ -546,11 +546,11 @@ type fd_B_Interface interface {
 
 type fd_X struct{ protoreflect.FieldDescriptor }
 
-func (fd *fd_X) has(msg *msg_B) bool                    { return false }
+func (fd *fd_X) has(msg *msg_B) bool {
+}
 func (fd *fd_X) get(msg *msg_B) protoreflect.Value      { return protoreflect.Value{} }
 func (fd *fd_X) set(msg *msg_B, v protoreflect.Value)   {}
 func (fd *fd_X) clear(msg *msg_B)                       {}
-func (fd *fd_X) mutable(msg *msg_B) protoreflect.Value  { return protoreflect.Value{} }
 func (fd *fd_X) newField(msg *msg_B) protoreflect.Value { return protoreflect.Value{} }
 
 var fds_B_Instance protoreflect.FieldDescriptors

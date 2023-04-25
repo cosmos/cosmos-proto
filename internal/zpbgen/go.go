@@ -59,12 +59,17 @@ func (g goGen) gen() error {
 }
 
 func (g goGen) genMessage(msg *protogen.Message) error {
+	md, err := newZeroCopyDescriptor(msg)
+	if err != nil {
+		return err
+	}
+
 	g.P("type ", msg.GoIdent.GoName, " struct {")
 	g.P("ctx *", zeropbImport.Ident("BufferContext"))
 	g.P("}")
 	g.P()
 
-	for _, field := range msg.Fields {
+	for _, field := range md.fields {
 		err := g.genField(field)
 		if err != nil {
 			return err
@@ -74,25 +79,15 @@ func (g goGen) genMessage(msg *protogen.Message) error {
 	return g.genProtoIface(msg)
 }
 
-func (g goGen) genField(field *protogen.Field) error {
+func (g goGen) genField(field *zeroCopyFieldDescriptor) error {
 	if scalarType := scalarGoType(field.Desc.Kind()); scalarType != "" {
 		g.P("func (m *", field.Parent.GoIdent.GoName, ") ", field.GoName, "() ", scalarType, " {")
-		offset := 0
 		switch field.Desc.Kind() {
-		case protoreflect.BoolKind:
-			g.P("return m.ctx.ReadBool(", offset, ")")
-		case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind:
-			g.P("return int32(m.ctx.ReadUint32(", offset, "))")
-		case protoreflect.Uint32Kind, protoreflect.Fixed32Kind:
-			g.P("return m.ctx.ReadUint32(", offset, ")")
-		case protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind:
-			g.P("return int64(m.ctx.ReadUint64(", offset, "))")
-		case protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
-			g.P("return m.ctx.ReadUint64(", offset, ")")
-		case protoreflect.FloatKind:
-			g.P("return float32(m.ctx.ReadUint32(", offset, "))")
-		case protoreflect.DoubleKind:
-			g.P("return float64(m.ctx.ReadUint64(", offset, "))")
+		case protoreflect.BoolKind, protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind,
+			protoreflect.Uint32Kind, protoreflect.Fixed32Kind, protoreflect.Int64Kind, protoreflect.Sint64Kind,
+			protoreflect.Sfixed64Kind, protoreflect.Uint64Kind, protoreflect.Fixed64Kind, protoreflect.FloatKind,
+			protoreflect.DoubleKind:
+			g.P("return ", g.getExpr(field))
 		}
 		g.P("}")
 		g.P()
