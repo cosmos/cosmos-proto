@@ -1,9 +1,10 @@
 package fastreflection
 
 import (
-	"github.com/cosmos/cosmos-proto/generator"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
+
+	"github.com/cosmos/cosmos-proto/generator"
 )
 
 type getGen struct {
@@ -51,6 +52,8 @@ func (g *getGen) genFieldGetter(field *protogen.Field) {
 	case field.Desc.IsList():
 		g.genList(field)
 		return
+	case field.Desc.HasOptionalKeyword():
+
 	}
 
 	fieldRef := "x." + field.GoName

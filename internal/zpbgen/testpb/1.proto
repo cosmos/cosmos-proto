@@ -1,8 +1,10 @@
 syntax="proto3";
 
+package testpb;
+
 import "testpb/2.proto";
 
-option go_package = "github.com/cosmos/cosmos-proto/testpb";
+option go_package = "github.com/cosmos/cosmos-proto/internal/zpbgen/testpb";
 
 enum Enumeration {
   One = 0;

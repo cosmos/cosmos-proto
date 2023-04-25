@@ -228,6 +228,7 @@ var (
 	fd_A_LIST_ENUM    protoreflect.FieldDescriptor
 	fd_A_imported     protoreflect.FieldDescriptor
 	fd_A_type         protoreflect.FieldDescriptor
+	fd_A_opt          protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -257,6 +258,7 @@ func init() {
 	fd_A_LIST_ENUM = md_A.Fields().ByName("LIST_ENUM")
 	fd_A_imported = md_A.Fields().ByName("imported")
 	fd_A_type = md_A.Fields().ByName("type")
+	fd_A_opt = md_A.Fields().ByName("opt")
 }
 
 var _ protoreflect.Message = (*fastReflection_A)(nil)
@@ -472,6 +474,16 @@ func (x *fastReflection_A) Range(f func(protoreflect.FieldDescriptor, protorefle
 			return
 		}
 	}
+	if x.XOpt != nil {
+		switch o := x.XOpt.(type) {
+		case *A_Opt:
+			v := o.Opt
+			value := protoreflect.ValueOfString(v)
+			if !f(fd_A_opt, value) {
+				return
+			}
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -547,6 +559,14 @@ func (x *fastReflection_A) Has(fd protoreflect.FieldDescriptor) bool {
 		return x.Imported != nil
 	case "A.type":
 		return x.Type_ != ""
+	case "A.opt":
+		if x.XOpt == nil {
+			return false
+		} else if _, ok := x.XOpt.(*A_Opt); ok {
+			return true
+		} else {
+			return false
+		}
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -611,6 +631,8 @@ func (x *fastReflection_A) Clear(fd protoreflect.FieldDescriptor) {
 		x.Imported = nil
 	case "A.type":
 		x.Type_ = ""
+	case "A.opt":
+		x.XOpt = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -718,6 +740,14 @@ func (x *fastReflection_A) Get(descriptor protoreflect.FieldDescriptor) protoref
 	case "A.type":
 		value := x.Type_
 		return protoreflect.ValueOfString(value)
+	case "A.opt":
+		if x.XOpt == nil {
+			return protoreflect.ValueOfString("")
+		} else if v, ok := x.XOpt.(*A_Opt); ok {
+			return protoreflect.ValueOfString(v.Opt)
+		} else {
+			return protoreflect.ValueOfString("")
+		}
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -794,6 +824,9 @@ func (x *fastReflection_A) Set(fd protoreflect.FieldDescriptor, value protorefle
 		x.Imported = value.Message().Interface().(*ImportedMessage)
 	case "A.type":
 		x.Type_ = value.Interface().(string)
+	case "A.opt":
+		cv := value.Interface().(string)
+		x.XOpt = &A_Opt{Opt: cv}
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -894,6 +927,8 @@ func (x *fastReflection_A) Mutable(fd protoreflect.FieldDescriptor) protoreflect
 		panic(fmt.Errorf("field ONEOF_STRING of message A is not mutable"))
 	case "A.type":
 		panic(fmt.Errorf("field type of message A is not mutable"))
+	case "A.opt":
+		panic(fmt.Errorf("field opt of message A is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -961,6 +996,8 @@ func (x *fastReflection_A) NewField(fd protoreflect.FieldDescriptor) protoreflec
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "A.type":
 		return protoreflect.ValueOfString("")
+	case "A.opt":
+		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: A"))
@@ -983,6 +1020,14 @@ func (x *fastReflection_A) WhichOneof(d protoreflect.OneofDescriptor) protorefle
 			return x.Descriptor().Fields().ByName("ONEOF_B")
 		case *A_ONEOF_STRING:
 			return x.Descriptor().Fields().ByName("ONEOF_STRING")
+		}
+	case "A._opt":
+		if x.XOpt == nil {
+			return nil
+		}
+		switch x.XOpt.(type) {
+		case *A_Opt:
+			return x.Descriptor().Fields().ByName("opt")
 		}
 	default:
 		panic(fmt.Errorf("%s is not a oneof field in A", d.FullName()))
@@ -1155,6 +1200,10 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 2 + l + runtime.Sov(uint64(l))
 		}
+		if x.Opt != nil {
+			l = len(*x.Opt)
+			n += 2 + l + runtime.Sov(uint64(l))
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -1184,6 +1233,16 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
+		switch x := x.XOpt.(type) {
+		case *A_Opt:
+			i -= len(*x.Opt)
+			copy(dAtA[i:], *x.Opt)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(*x.Opt)))
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xca
+		}
 		switch x := x.ONEOF.(type) {
 		case *A_ONEOF_B:
 			encoded, err := options.Marshal(x.ONEOF_B)
@@ -1208,6 +1267,15 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 			dAtA[i] = 0x1
 			i--
 			dAtA[i] = 0xaa
+		}
+		if x.Opt != nil {
+			i -= len(*x.Opt)
+			copy(dAtA[i:], *x.Opt)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(*x.Opt)))
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xca
 		}
 		if len(x.Type_) > 0 {
 			i -= len(x.Type_)
@@ -2177,6 +2245,39 @@ func (x *fastReflection_A) ProtoMethods() *protoiface.Methods {
 				}
 				x.Type_ = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
+			case 25:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Opt", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				s := string(dAtA[iNdEx:postIndex])
+				x.Opt = &s
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -2635,7 +2736,7 @@ func (x *fastReflection_B) ProtoMethods() *protoiface.Methods {
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
-// 	protoc        v3.18.1
+// 	protoc        v3.21.9
 // source: testpb/1.proto
 
 const (
@@ -2722,6 +2823,7 @@ type A struct {
 	LIST_ENUM []Enumeration    `protobuf:"varint,22,rep,packed,name=LIST_ENUM,json=LISTENUM,proto3,enum=Enumeration" json:"LIST_ENUM,omitempty"`
 	Imported  *ImportedMessage `protobuf:"bytes,23,opt,name=imported,proto3" json:"imported,omitempty"`
 	Type_     string           `protobuf:"bytes,24,opt,name=type,proto3" json:"type,omitempty"`
+	Opt       *string          `protobuf:"bytes,25,opt,name=opt,proto3,oneof" json:"opt,omitempty"`
 }
 
 func (x *A) Reset() {
@@ -2919,6 +3021,13 @@ func (x *A) GetType_() string {
 	return ""
 }
 
+func (x *A) GetOpt() string {
+	if x != nil && x.Opt != nil {
+		return *x.Opt
+	}
+	return ""
+}
+
 type isA_ONEOF interface {
 	isA_ONEOF()
 }
@@ -2975,7 +3084,7 @@ var File_testpb_1_proto protoreflect.FileDescriptor
 var file_testpb_1_proto_rawDesc = []byte{
 	0x0a, 0x0e, 0x74, 0x65, 0x73, 0x74, 0x70, 0x62, 0x2f, 0x31, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x1a, 0x0e, 0x74, 0x65, 0x73, 0x74, 0x70, 0x62, 0x2f, 0x32, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x22, 0xe7, 0x05, 0x0a, 0x01, 0x41, 0x12, 0x20, 0x0a, 0x04, 0x65, 0x6e, 0x75, 0x6d, 0x18, 0x01,
+	0x22, 0x86, 0x06, 0x0a, 0x01, 0x41, 0x12, 0x20, 0x0a, 0x04, 0x65, 0x6e, 0x75, 0x6d, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x0e, 0x32, 0x0c, 0x2e, 0x45, 0x6e, 0x75, 0x6d, 0x65, 0x72, 0x61, 0x74, 0x69,
 	0x6f, 0x6e, 0x52, 0x04, 0x65, 0x6e, 0x75, 0x6d, 0x12, 0x21, 0x0a, 0x0c, 0x73, 0x6f, 0x6d, 0x65,
 	0x5f, 0x62, 0x6f, 0x6f, 0x6c, 0x65, 0x61, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0b,
@@ -3017,17 +3126,19 @@ var file_testpb_1_proto_rawDesc = []byte{
 	0x17, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x49, 0x6d, 0x70, 0x6f, 0x72, 0x74, 0x65, 0x64,
 	0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x52, 0x08, 0x69, 0x6d, 0x70, 0x6f, 0x72, 0x74, 0x65,
 	0x64, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x18, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x04, 0x74, 0x79, 0x70, 0x65, 0x1a, 0x3a, 0x0a, 0x08, 0x4d, 0x41, 0x50, 0x45, 0x6e, 0x74, 0x72,
-	0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03,
-	0x6b, 0x65, 0x79, 0x12, 0x18, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x02, 0x2e, 0x42, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38,
-	0x01, 0x42, 0x07, 0x0a, 0x05, 0x4f, 0x4e, 0x45, 0x4f, 0x46, 0x22, 0x11, 0x0a, 0x01, 0x42, 0x12,
-	0x0c, 0x0a, 0x01, 0x78, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x01, 0x78, 0x2a, 0x1f, 0x0a,
-	0x0b, 0x45, 0x6e, 0x75, 0x6d, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x07, 0x0a, 0x03,
-	0x4f, 0x6e, 0x65, 0x10, 0x00, 0x12, 0x07, 0x0a, 0x03, 0x54, 0x77, 0x6f, 0x10, 0x01, 0x42, 0x27,
-	0x5a, 0x25, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73,
-	0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x2f, 0x74, 0x65, 0x73, 0x74, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x04, 0x74, 0x79, 0x70, 0x65, 0x12, 0x15, 0x0a, 0x03, 0x6f, 0x70, 0x74, 0x18, 0x19, 0x20, 0x01,
+	0x28, 0x09, 0x48, 0x01, 0x52, 0x03, 0x6f, 0x70, 0x74, 0x88, 0x01, 0x01, 0x1a, 0x3a, 0x0a, 0x08,
+	0x4d, 0x41, 0x50, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x18, 0x0a, 0x05, 0x76, 0x61,
+	0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x02, 0x2e, 0x42, 0x52, 0x05, 0x76,
+	0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x42, 0x07, 0x0a, 0x05, 0x4f, 0x4e, 0x45, 0x4f,
+	0x46, 0x42, 0x06, 0x0a, 0x04, 0x5f, 0x6f, 0x70, 0x74, 0x22, 0x11, 0x0a, 0x01, 0x42, 0x12, 0x0c,
+	0x0a, 0x01, 0x78, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x01, 0x78, 0x2a, 0x1f, 0x0a, 0x0b,
+	0x45, 0x6e, 0x75, 0x6d, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x07, 0x0a, 0x03, 0x4f,
+	0x6e, 0x65, 0x10, 0x00, 0x12, 0x07, 0x0a, 0x03, 0x54, 0x77, 0x6f, 0x10, 0x01, 0x42, 0x27, 0x5a,
+	0x25, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f,
+	0x74, 0x65, 0x73, 0x74, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (

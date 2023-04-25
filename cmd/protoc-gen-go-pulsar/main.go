@@ -6,10 +6,11 @@ import (
 	"log"
 	"strings"
 
+	"google.golang.org/protobuf/reflect/protoreflect"
+
 	_ "github.com/cosmos/cosmos-proto/features/fastreflection"
 	_ "github.com/cosmos/cosmos-proto/features/protoc"
 	"github.com/cosmos/cosmos-proto/generator"
-	"google.golang.org/protobuf/reflect/protoreflect"
 
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/types/pluginpb"
@@ -79,7 +80,7 @@ func generateAllFiles(plugin *protogen.Plugin, featureNames []string, poolable O
 		}
 	}
 
-	// plugin.SupportedFeatures = SupportedFeatures
+	plugin.SupportedFeatures = SupportedFeatures
 	return nil
 }
 
