@@ -8,6 +8,7 @@ import (
 	"google.golang.org/protobuf/types/pluginpb"
 
 	"github.com/cosmos/cosmos-proto/generator"
+	"github.com/cosmos/cosmos-proto/zeropb"
 )
 
 const (
@@ -59,7 +60,7 @@ func (g goGen) gen() error {
 }
 
 func (g goGen) genMessage(msg *protogen.Message) error {
-	md, err := newZeroCopyDescriptor(msg)
+	md, err := zeropb.NewMessageDescriptor(msg)
 	if err != nil {
 		return err
 	}
@@ -76,10 +77,10 @@ func (g goGen) genMessage(msg *protogen.Message) error {
 		}
 	}
 
-	return g.genProtoIface(msg)
+	return g.genProtoIface(md)
 }
 
-func (g goGen) genField(field *zeroCopyFieldDescriptor) error {
+func (g goGen) genField(field *zeropb.FieldDescriptor) error {
 	if scalarType := scalarGoType(field.Desc.Kind()); scalarType != "" {
 		g.P("func (m *", field.Parent.GoIdent.GoName, ") ", field.GoName, "() ", scalarType, " {")
 		switch field.Desc.Kind() {
@@ -87,7 +88,7 @@ func (g goGen) genField(field *zeroCopyFieldDescriptor) error {
 			protoreflect.Uint32Kind, protoreflect.Fixed32Kind, protoreflect.Int64Kind, protoreflect.Sint64Kind,
 			protoreflect.Sfixed64Kind, protoreflect.Uint64Kind, protoreflect.Fixed64Kind, protoreflect.FloatKind,
 			protoreflect.DoubleKind:
-			g.P("return ", g.getExpr(field))
+			g.P("return ", g.getExpr(field, "m"))
 		}
 		g.P("}")
 		g.P()
@@ -122,7 +123,7 @@ func scalarGoType(kind protoreflect.Kind) string {
 	}
 }
 
-func (g goGen) genProtoIface(msg *protogen.Message) error {
+func (g goGen) genProtoIface(msg *zeropb.MessageDescriptor) error {
 	err := g.genProtoReflect(msg)
 	if err != nil {
 		return err

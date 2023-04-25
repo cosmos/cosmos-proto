@@ -1,8 +1,8 @@
 package zpbgen
 
-import "google.golang.org/protobuf/compiler/protogen"
+import "github.com/cosmos/cosmos-proto/zeropb"
 
-func (g goGen) genProtoReflect(msg *protogen.Message) error {
+func (g goGen) genProtoReflect(msg *zeropb.MessageDescriptor) error {
 	msgStructName := "msg_" + msg.GoIdent.GoName
 	mdStructName := "md_" + msg.GoIdent.GoName
 	mdInstanceName := "md_" + msg.GoIdent.GoName + "_Instance"
@@ -144,7 +144,7 @@ func (g goGen) genProtoReflect(msg *protogen.Message) error {
 	g.P("}")
 	g.P()
 
-	for _, field := range msg.Fields {
+	for _, field := range msg.fields {
 		err := g.genFieldDescriptor(msgStructName, field)
 		if err != nil {
 			return err

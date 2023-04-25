@@ -3,8 +3,7 @@ package zeropb
 import (
 	"encoding/binary"
 	"fmt"
-
-	"google.golang.org/protobuf/reflect/protoreflect"
+	"math"
 )
 
 type Serializable[T any] interface {
@@ -56,6 +55,38 @@ func (c BufferContext) ReadBool(offset uint32) bool {
 	return c.buf[offset] != 0
 }
 
+func (c BufferContext) SetBool(offset uint32, value bool) {
+	if value {
+		c.buf[offset] = 1
+	} else {
+		c.buf[offset] = 0
+	}
+}
+
+func (c BufferContext) ReadUint8(offset uint32) uint8 {
+	return c.buf[offset]
+}
+
+func (c BufferContext) SetUint8(offset uint32, value uint8) {
+	c.buf[offset] = value
+}
+
+func (c BufferContext) ReadInt32(offset uint32) int32 {
+	return int32(c.ReadUint32(offset))
+}
+
+func (c BufferContext) SetInt32(offset uint32, value int32) {
+	c.SetUint32(offset, uint32(value))
+}
+
+func (c BufferContext) ReadUint16(offset uint32) uint16 {
+	return binary.LittleEndian.Uint16(c.buf[offset : offset+2])
+}
+
+func (c BufferContext) SetUint16(offset uint32, value uint16) {
+	binary.LittleEndian.PutUint16(c.buf[offset:offset+2], value)
+}
+
 func (c BufferContext) ReadUint32(offset uint32) uint32 {
 	return binary.LittleEndian.Uint32(c.buf[offset : offset+4])
 }
@@ -63,6 +94,14 @@ func (c BufferContext) ReadUint32(offset uint32) uint32 {
 func (c BufferContext) SetUint32(offset uint32, value uint32) {
 	fmt.Printf("set uint32 at offset %d to %d\n", offset+c.offset, value)
 	binary.LittleEndian.PutUint32(c.buf[offset:offset+4], value)
+}
+
+func (c BufferContext) ReadInt64(offset uint32) int64 {
+	return int64(c.ReadUint64(offset))
+}
+
+func (c BufferContext) SetInt64(offset uint32, value int64) {
+	c.SetUint64(offset, uint64(value))
 }
 
 func (c BufferContext) ReadUint64(offset uint32) uint64 {
@@ -74,30 +113,69 @@ func (c BufferContext) SetUint64(offset uint32, value uint64) {
 	binary.LittleEndian.PutUint64(c.buf[offset:offset+8], value)
 }
 
+func (c BufferContext) ReadFloat32(offset uint32) float32 {
+	return math.Float32frombits(c.ReadUint32(offset))
+}
+
+func (c BufferContext) SetFloat32(offset uint32, value float32) {
+	c.SetUint32(offset, math.Float32bits(value))
+}
+
+func (c BufferContext) ReadFloat64(offset uint32) float64 {
+	return math.Float64frombits(c.ReadUint64(offset))
+}
+
+func (c BufferContext) SetFloat64(offset uint32, value float64) {
+	c.SetUint64(offset, math.Float64bits(value))
+}
+
 func (c BufferContext) ResolvePointer(offset uint32) *BufferContext {
-	ptrOffset := c.ReadUint32(offset)
+	ptrOffset := c.ReadUint16(offset)
 	if ptrOffset == 0 {
 		return nil
 	}
-	return c.parent.Resolve(ptrOffset)
+	return c.parent.Resolve(uint32(ptrOffset))
 }
 
 func (c BufferContext) AllocPointer(offset uint32, size uint32) *BufferContext {
 	ptrOffset, ctx := c.parent.Alloc(size)
-	c.SetUint32(offset, ptrOffset)
+	c.SetUint16(offset, uint16(ptrOffset))
 	return ctx
 }
 
-func (c BufferContext) ReadString() string {
-	n := c.ReadUint32(0)
-	return string(c.buf[4 : 4+n])
+func (c BufferContext) ClearPointer(offset uint32) {
+	c.SetUint16(offset, 0)
+}
+
+func (c BufferContext) AsString() string {
+	return string(c.AsBytes())
+}
+
+func (c BufferContext) AsBytes() []byte {
+	n := c.ReadUint16(0)
+	return c.buf[4 : 4+n]
+}
+
+func (c BufferContext) ReadString(offset uint32) string {
+	return c.ResolvePointer(offset).AsString()
 }
 
 func (c BufferContext) SetString(offset uint32, x string) {
+	c.SetBytes(offset, []byte(x))
+}
+
+func (c BufferContext) ReadBytes(offset uint32) []byte {
+	return c.ResolvePointer(offset).AsBytes()
+}
+
+func (c BufferContext) SetBytes(offset uint32, x []byte) {
 	n := len(x)
+	if n > math.MaxUint16 {
+		panic("byte array too long")
+	}
 	ptrOffset, ctx := c.parent.Alloc(uint32(n) + 4)
-	c.SetUint32(offset, ptrOffset)
-	binary.LittleEndian.PutUint32(ctx.buf[0:4], uint32(n))
+	c.SetUint16(offset, uint16(ptrOffset))
+	binary.LittleEndian.PutUint16(ctx.buf[0:4], uint16(uint32(n)))
 	copy(ctx.buf[4:4+n], x)
 }
 
@@ -168,58 +246,3 @@ func (a Array[T]) Len() int {
 func (a Array[T]) Get(i int) T {
 	return a.array[i]
 }
-
-type FieldDescriptors struct {
-	protoreflect.FieldDescriptors
-	fds        []protoreflect.FieldDescriptor
-	byName     map[protoreflect.Name]protoreflect.FieldDescriptor
-	byJSONName map[string]protoreflect.FieldDescriptor
-	byTextName map[string]protoreflect.FieldDescriptor
-	byNumber   map[protoreflect.FieldNumber]protoreflect.FieldDescriptor
-}
-
-func NewFieldDescriptors(parent protoreflect.FieldDescriptors, overrides []protoreflect.FieldDescriptor) *FieldDescriptors {
-	fds := &FieldDescriptors{
-		FieldDescriptors: parent,
-		fds:              overrides,
-		byName:           map[protoreflect.Name]protoreflect.FieldDescriptor{},
-		byJSONName:       map[string]protoreflect.FieldDescriptor{},
-		byTextName:       map[string]protoreflect.FieldDescriptor{},
-		byNumber:         map[protoreflect.FieldNumber]protoreflect.FieldDescriptor{},
-	}
-
-	for _, fd := range overrides {
-		fds.byName[fd.Name()] = fd
-		fds.byJSONName[fd.JSONName()] = fd
-		fds.byTextName[fd.TextName()] = fd
-		fds.byNumber[fd.Number()] = fd
-	}
-
-	return fds
-}
-
-func (f FieldDescriptors) Len() int {
-	return len(f.fds)
-}
-
-func (f FieldDescriptors) Get(i int) protoreflect.FieldDescriptor {
-	return f.fds[i]
-}
-
-func (f FieldDescriptors) ByName(s protoreflect.Name) protoreflect.FieldDescriptor {
-	return f.byName[s]
-}
-
-func (f FieldDescriptors) ByJSONName(s string) protoreflect.FieldDescriptor {
-	return f.byJSONName[s]
-}
-
-func (f FieldDescriptors) ByTextName(s string) protoreflect.FieldDescriptor {
-	return f.byTextName[s]
-}
-
-func (f FieldDescriptors) ByNumber(n protoreflect.FieldNumber) protoreflect.FieldDescriptor {
-	return f.byNumber[n]
-}
-
-var _ protoreflect.FieldDescriptors = FieldDescriptors{}
