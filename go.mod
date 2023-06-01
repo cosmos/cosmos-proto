@@ -7,7 +7,7 @@ require (
 	github.com/stretchr/testify v1.8.4
 	google.golang.org/protobuf v1.28.1
 	gotest.tools/v3 v3.4.0
-	pgregory.net/rapid v0.6.0
+	pgregory.net/rapid v0.6.1
 )
 
 require (
