@@ -6,6 +6,7 @@ import (
 	errors "errors"
 	fmt "fmt"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
+	zeropb "github.com/cosmos/cosmos-proto/runtime/zeropb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -3131,221 +3132,145 @@ func (x *A) MarshalZeroPB(buf []byte) (n int, err error) {
 			err = errors.New("buffer overflow")
 		}
 	}()
-	binary.LittleEndian.PutUint32(buf[n:], uint32(x.Enum))
-	n += 4
+	b := zeropb.NewBuffer(buf)
+	x.marshalZeroPB(b, b.Alloc(116))
+	return int(b.Allocated()), nil
+}
+
+func (x *A) marshalZeroPB(b *zeropb.Buffer, buf zeropb.Allocation) {
+	binary.LittleEndian.PutUint32(buf.Buf[0:], uint32(x.Enum))
 	bool_1 := uint32(0)
 	if x.SomeBoolean {
 		bool_1 = 1
 	}
-	binary.LittleEndian.PutUint32(buf[n:], bool_1)
-	n += 4
-	binary.LittleEndian.PutUint32(buf[n:], uint32(x.INT32))
-	n += 4
-	binary.LittleEndian.PutUint32(buf[n:], uint32(x.SINT32))
-	n += 4
-	binary.LittleEndian.PutUint32(buf[n:], uint32(x.UINT32))
-	n += 4
-	binary.LittleEndian.PutUint64(buf[n:], uint64(x.INT64))
-	n += 8
-	binary.LittleEndian.PutUint64(buf[n:], uint64(x.SING64))
-	n += 8
-	binary.LittleEndian.PutUint64(buf[n:], uint64(x.UINT64))
-	n += 8
-	binary.LittleEndian.PutUint32(buf[n:], uint32(x.SFIXED32))
-	n += 4
-	binary.LittleEndian.PutUint32(buf[n:], uint32(x.FIXED32))
-	n += 4
-	binary.LittleEndian.PutUint32(buf[n:], math.Float32bits(x.FLOAT))
-	n += 4
-	binary.LittleEndian.PutUint64(buf[n:], uint64(x.SFIXED64))
-	n += 8
-	binary.LittleEndian.PutUint64(buf[n:], uint64(x.FIXED64))
-	n += 8
-	binary.LittleEndian.PutUint64(buf[n:], math.Float64bits(x.DOUBLE))
-	n += 8
-	len_14 := uint16(len(x.STRING))
-	if len(x.STRING) != int(len_14) {
-		return n, errors.New("field x.STRING is too long")
-	}
-	binary.LittleEndian.PutUint16(buf[n:], len_14)
-	n += 2
-	copy(buf[n:n+len(x.STRING)], x.STRING)
-	n += len(x.STRING)
-	len_15 := uint16(len(x.BYTES))
-	if len(x.BYTES) != int(len_15) {
-		return n, errors.New("field x.BYTES is too long")
-	}
-	binary.LittleEndian.PutUint16(buf[n:], len_15)
-	n += 2
-	copy(buf[n:n+len(x.BYTES)], x.BYTES)
-	n += len(x.BYTES)
-	n_16, err := x.MESSAGE.MarshalZeroPB(buf[n:])
-	n += n_16
-	if err != nil {
-		return n, err
-	}
-	len_17 := uint16(len(x.MAP))
-	if len(x.MAP) != int(len_17) {
-		return n, errors.New("field MAP is too long")
-	}
-	binary.LittleEndian.PutUint16(buf[n:], len_17)
-	n += 2
-	for k, v := range x.MAP {
-		len_0 := uint16(len(k))
-		if len(k) != int(len_0) {
-			return n, errors.New("field k is too long")
-		}
-		binary.LittleEndian.PutUint16(buf[n:], len_0)
-		n += 2
-		copy(buf[n:n+len(k)], k)
-		n += len(k)
-		n_1, err := v.MarshalZeroPB(buf[n:])
-		n += n_1
-		if err != nil {
-			return n, err
+	binary.LittleEndian.PutUint32(buf.Buf[4:], bool_1)
+	binary.LittleEndian.PutUint32(buf.Buf[8:], uint32(x.INT32))
+	binary.LittleEndian.PutUint32(buf.Buf[12:], uint32(x.SINT32))
+	binary.LittleEndian.PutUint32(buf.Buf[16:], uint32(x.UINT32))
+	binary.LittleEndian.PutUint64(buf.Buf[20:], uint64(x.INT64))
+	binary.LittleEndian.PutUint64(buf.Buf[28:], uint64(x.SING64))
+	binary.LittleEndian.PutUint64(buf.Buf[36:], uint64(x.UINT64))
+	binary.LittleEndian.PutUint32(buf.Buf[44:], uint32(x.SFIXED32))
+	binary.LittleEndian.PutUint32(buf.Buf[48:], uint32(x.FIXED32))
+	binary.LittleEndian.PutUint32(buf.Buf[52:], math.Float32bits(x.FLOAT))
+	binary.LittleEndian.PutUint64(buf.Buf[56:], uint64(x.SFIXED64))
+	binary.LittleEndian.PutUint64(buf.Buf[64:], uint64(x.FIXED64))
+	binary.LittleEndian.PutUint64(buf.Buf[72:], math.Float64bits(x.DOUBLE))
+	buf_14 := b.AllocRel(len(x.STRING), buf, 80, uint16(len(x.STRING)))
+	copy(buf_14.Buf, x.STRING)
+	buf_15 := b.AllocRel(len(x.BYTES), buf, 84, uint16(len(x.BYTES)))
+	copy(buf_15.Buf, x.BYTES)
+	x.MESSAGE.marshalZeroPB(b, buf.Slice(88))
+	buf_17 := b.AllocRel(len(x.MAP)*8, buf, 92, uint16(len(x.MAP)))
+	{
+		var n uint16
+		buf := buf_17
+		for k, v := range x.MAP {
+			buf_0 := b.AllocRel(len(k), buf, n, uint16(len(k)))
+			copy(buf_0.Buf, k)
+			n += 4
+			v.marshalZeroPB(b, buf.Slice(n))
+			n += 4
 		}
 	}
-	len_18 := uint16(len(x.LIST))
-	if len(x.LIST) != int(len_18) {
-		return n, errors.New("field LIST is too long")
-	}
-	binary.LittleEndian.PutUint16(buf[n:], len_18)
-	n += 2
-	for _, e := range x.LIST {
-		n_18, err := e.MarshalZeroPB(buf[n:])
-		n += n_18
-		if err != nil {
-			return n, err
+	buf_18 := b.AllocRel(len(x.LIST)*4+4, buf, 96, uint16(len(x.LIST)))
+	{
+		buf := buf_18
+		buf.Buf[0] = byte(len(x.LIST))
+		buf.Buf[1] = byte(len(x.LIST))
+		binary.LittleEndian.PutUint16(buf.Buf[2:], 0)
+		for i, e := range x.LIST {
+			e.marshalZeroPB(b, buf.Slice(uint16(i)*4+4))
 		}
 	}
 	// TODO: field ONEOF_B
 	// TODO: field ONEOF_STRING
-	len_21 := uint16(len(x.LIST_ENUM))
-	if len(x.LIST_ENUM) != int(len_21) {
-		return n, errors.New("field LIST_ENUM is too long")
+	buf_21 := b.AllocRel(len(x.LIST_ENUM)*4+4, buf, 108, uint16(len(x.LIST_ENUM)))
+	{
+		buf := buf_21
+		buf.Buf[0] = byte(len(x.LIST_ENUM))
+		buf.Buf[1] = byte(len(x.LIST_ENUM))
+		binary.LittleEndian.PutUint16(buf.Buf[2:], 0)
+		for i, e := range x.LIST_ENUM {
+			binary.LittleEndian.PutUint32(buf.Buf[uint16(i)*4+4:], uint32(e))
+		}
 	}
-	binary.LittleEndian.PutUint16(buf[n:], len_21)
-	n += 2
-	for _, e := range x.LIST_ENUM {
-		binary.LittleEndian.PutUint32(buf[n:], uint32(e))
-		n += 4
-	}
-	n_22, err := x.Imported.MarshalZeroPB(buf[n:])
-	n += n_22
-	if err != nil {
-		return n, err
-	}
-	len_23 := uint16(len(x.Type_))
-	if len(x.Type_) != int(len_23) {
-		return n, errors.New("field x.Type_ is too long")
-	}
-	binary.LittleEndian.PutUint16(buf[n:], len_23)
-	n += 2
-	copy(buf[n:n+len(x.Type_)], x.Type_)
-	n += len(x.Type_)
-	return n, nil
+	x.Imported.marshalZeroPB(b, buf.Slice(112))
+	buf_23 := b.AllocRel(len(x.Type_), buf, 112, uint16(len(x.Type_)))
+	copy(buf_23.Buf, x.Type_)
 }
-func (x *A) UnmarshalZeroPB(buf []byte) (n int, err error) {
+func (x *A) UnmarshalZeroPB(buf []byte) (err error) {
 	defer func() {
 		if e := recover(); e != nil {
 			err = errors.New("buffer underflow")
 		}
 	}()
-	x.Enum = Enumeration(binary.LittleEndian.Uint32(buf[n:]))
-	n += 4
-	bool_1 := binary.LittleEndian.Uint32(buf[n:])
+	x.unmarshalZeroPB(buf, 0)
+	return nil
+}
+
+func (x *A) unmarshalZeroPB(buf []byte, n uint16) {
+	x.Enum = Enumeration(binary.LittleEndian.Uint32(buf[n+0:]))
+	bool_1 := binary.LittleEndian.Uint32(buf[n+4:])
 	x.SomeBoolean = false
 	if bool_1 != 0 {
 		x.SomeBoolean = true
 	}
-	n += 4
-	x.INT32 = int32(binary.LittleEndian.Uint32(buf[n:]))
-	n += 4
-	x.SINT32 = int32(binary.LittleEndian.Uint32(buf[n:]))
-	n += 4
-	x.UINT32 = binary.LittleEndian.Uint32(buf[n:])
-	n += 4
-	x.INT64 = int64(binary.LittleEndian.Uint64(buf[n:]))
-	n += 8
-	x.SING64 = int64(binary.LittleEndian.Uint64(buf[n:]))
-	n += 8
-	x.UINT64 = binary.LittleEndian.Uint64(buf[n:])
-	n += 8
-	x.SFIXED32 = int32(binary.LittleEndian.Uint32(buf[n:]))
-	n += 4
-	x.FIXED32 = binary.LittleEndian.Uint32(buf[n:])
-	n += 4
-	x.FLOAT = float32(math.Float32frombits(binary.LittleEndian.Uint32(buf[n:])))
-	n += 4
-	x.SFIXED64 = int64(binary.LittleEndian.Uint64(buf[n:]))
-	n += 8
-	x.FIXED64 = binary.LittleEndian.Uint64(buf[n:])
-	n += 8
-	x.DOUBLE = float64(math.Float64frombits(binary.LittleEndian.Uint64(buf[n:])))
-	n += 8
-	len_14 := int(binary.LittleEndian.Uint16(buf[n:]))
-	n += 2
-	x.STRING = string(buf[n : n+len_14])
-	n += len_14
-	len_15 := int(binary.LittleEndian.Uint16(buf[n:]))
-	n += 2
-	x.BYTES = append([]byte{}, buf[n:n+len_15]...)
-	n += len_15
+	x.INT32 = int32(binary.LittleEndian.Uint32(buf[n+8:]))
+	x.SINT32 = int32(binary.LittleEndian.Uint32(buf[n+12:]))
+	x.UINT32 = binary.LittleEndian.Uint32(buf[n+16:])
+	x.INT64 = int64(binary.LittleEndian.Uint64(buf[n+20:]))
+	x.SING64 = int64(binary.LittleEndian.Uint64(buf[n+28:]))
+	x.UINT64 = binary.LittleEndian.Uint64(buf[n+36:])
+	x.SFIXED32 = int32(binary.LittleEndian.Uint32(buf[n+44:]))
+	x.FIXED32 = binary.LittleEndian.Uint32(buf[n+48:])
+	x.FLOAT = float32(math.Float32frombits(binary.LittleEndian.Uint32(buf[n+52:])))
+	x.SFIXED64 = int64(binary.LittleEndian.Uint64(buf[n+56:]))
+	x.FIXED64 = binary.LittleEndian.Uint64(buf[n+64:])
+	x.DOUBLE = float64(math.Float64frombits(binary.LittleEndian.Uint64(buf[n+72:])))
+	n_14, len_14 := zeropb.ReadSlice(buf, n+80)
+	x.STRING = string(buf[n_14 : n_14+len_14])
+	n_15, len_15 := zeropb.ReadSlice(buf, n+84)
+	x.BYTES = append([]byte{}, buf[n_15:n_15+len_15]...)
 	x.MESSAGE = new(B)
-	n_16, err := x.MESSAGE.UnmarshalZeroPB(buf[n:])
-	n += n_16
-	if err != nil {
-		return n, err
-	}
-	len_17 := int(binary.LittleEndian.Uint16(buf[n:]))
-	n += 2
+	x.MESSAGE.unmarshalZeroPB(buf, n+88)
+	n_17, len_17 := zeropb.ReadSlice(buf, n+92)
 	x.MAP = make(map[string]*B, len_17)
-	for i := 0; i < len_17; i++ {
-		var k string
-		var v *B
-		len_0 := int(binary.LittleEndian.Uint16(buf[n:]))
-		n += 2
-		k = string(buf[n : n+len_0])
-		n += len_0
-		v = new(B)
-		n_1, err := v.UnmarshalZeroPB(buf[n:])
-		n += n_1
-		if err != nil {
-			return n, err
+	{
+		n := n_17
+		for i := uint16(0); i < len_17; i++ {
+			var k string
+			var v *B
+			n_0, len_0 := zeropb.ReadSlice(buf, n)
+			k = string(buf[n_0 : n_0+len_0])
+			n += 4
+			v = new(B)
+			v.unmarshalZeroPB(buf, n)
+			n += 4
+			x.MAP[k] = v
 		}
-		x.MAP[k] = v
 	}
-	len_18 := int(binary.LittleEndian.Uint16(buf[n:]))
-	n += 2
+	n_18, len_18 := zeropb.ReadSlice(buf, n+96)
 	x.LIST = make([]*B, len_18)
-	for i := range x.LIST {
-		x.LIST[i] = new(B)
-		n_18, err := x.LIST[i].UnmarshalZeroPB(buf[n:])
-		n += n_18
-		if err != nil {
-			return n, err
+	{
+		for i := range x.LIST {
+			x.LIST[i] = new(B)
+			x.LIST[i].unmarshalZeroPB(buf, n_18+4+uint16(i)*4)
 		}
 	}
 	// TODO: field ONEOF_B
 	// TODO: field ONEOF_STRING
-	len_21 := int(binary.LittleEndian.Uint16(buf[n:]))
-	n += 2
+	n_21, len_21 := zeropb.ReadSlice(buf, n+108)
 	x.LIST_ENUM = make([]Enumeration, len_21)
-	for i := range x.LIST_ENUM {
-		x.LIST_ENUM[i] = Enumeration(binary.LittleEndian.Uint32(buf[n:]))
-		n += 4
+	{
+		for i := range x.LIST_ENUM {
+			x.LIST_ENUM[i] = Enumeration(binary.LittleEndian.Uint32(buf[n_21+4+uint16(i)*4:]))
+		}
 	}
 	x.Imported = new(ImportedMessage)
-	n_22, err := x.Imported.UnmarshalZeroPB(buf[n:])
-	n += n_22
-	if err != nil {
-		return n, err
-	}
-	len_23 := int(binary.LittleEndian.Uint16(buf[n:]))
-	n += 2
-	x.Type_ = string(buf[n : n+len_23])
-	n += len_23
-	return n, nil
+	x.Imported.unmarshalZeroPB(buf, n+112)
+	n_23, len_23 := zeropb.ReadSlice(buf, n+112)
+	x.Type_ = string(buf[n_23 : n_23+len_23])
 }
 func (x *B) MarshalZeroPB(buf []byte) (n int, err error) {
 	defer func() {
@@ -3353,25 +3278,26 @@ func (x *B) MarshalZeroPB(buf []byte) (n int, err error) {
 			err = errors.New("buffer overflow")
 		}
 	}()
-	len_0 := uint16(len(x.X))
-	if len(x.X) != int(len_0) {
-		return n, errors.New("field x.X is too long")
-	}
-	binary.LittleEndian.PutUint16(buf[n:], len_0)
-	n += 2
-	copy(buf[n:n+len(x.X)], x.X)
-	n += len(x.X)
-	return n, nil
+	b := zeropb.NewBuffer(buf)
+	x.marshalZeroPB(b, b.Alloc(4))
+	return int(b.Allocated()), nil
 }
-func (x *B) UnmarshalZeroPB(buf []byte) (n int, err error) {
+
+func (x *B) marshalZeroPB(b *zeropb.Buffer, buf zeropb.Allocation) {
+	buf_0 := b.AllocRel(len(x.X), buf, 0, uint16(len(x.X)))
+	copy(buf_0.Buf, x.X)
+}
+func (x *B) UnmarshalZeroPB(buf []byte) (err error) {
 	defer func() {
 		if e := recover(); e != nil {
 			err = errors.New("buffer underflow")
 		}
 	}()
-	len_0 := int(binary.LittleEndian.Uint16(buf[n:]))
-	n += 2
-	x.X = string(buf[n : n+len_0])
-	n += len_0
-	return n, nil
+	x.unmarshalZeroPB(buf, 0)
+	return nil
+}
+
+func (x *B) unmarshalZeroPB(buf []byte, n uint16) {
+	n_0, len_0 := zeropb.ReadSlice(buf, n+0)
+	x.X = string(buf[n_0 : n_0+len_0])
 }

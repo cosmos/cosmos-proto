@@ -5,6 +5,7 @@ import (
 	errors "errors"
 	fmt "fmt"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
+	zeropb "github.com/cosmos/cosmos-proto/runtime/zeropb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -487,13 +488,22 @@ func (x *ImportedMessage) MarshalZeroPB(buf []byte) (n int, err error) {
 			err = errors.New("buffer overflow")
 		}
 	}()
-	return n, nil
+	b := zeropb.NewBuffer(buf)
+	x.marshalZeroPB(b, b.Alloc(0))
+	return int(b.Allocated()), nil
 }
-func (x *ImportedMessage) UnmarshalZeroPB(buf []byte) (n int, err error) {
+
+func (x *ImportedMessage) marshalZeroPB(b *zeropb.Buffer, buf zeropb.Allocation) {
+}
+func (x *ImportedMessage) UnmarshalZeroPB(buf []byte) (err error) {
 	defer func() {
 		if e := recover(); e != nil {
 			err = errors.New("buffer underflow")
 		}
 	}()
-	return n, nil
+	x.unmarshalZeroPB(buf, 0)
+	return nil
+}
+
+func (x *ImportedMessage) unmarshalZeroPB(buf []byte, n uint16) {
 }

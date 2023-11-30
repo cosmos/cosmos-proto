@@ -72,9 +72,8 @@ func TestMarshal(t *testing.T) {
 	n, err := testA.MarshalZeroPB(zpbBuf)
 	require.NoError(t, err)
 	var msg2 A
-	n2, err := msg2.UnmarshalZeroPB(zpbBuf[:n])
+	err = msg2.UnmarshalZeroPB(zpbBuf[:n])
 	require.NoError(t, err)
-	require.Equal(t, n, n2)
 	zpbGot, err := proto.MarshalOptions{Deterministic: true}.Marshal(&msg2)
 	require.NoError(t, err)
 	require.Equal(t, expected, zpbGot)
