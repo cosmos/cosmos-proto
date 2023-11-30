@@ -481,10 +481,6 @@ func file_testpb_2_proto_init() {
 	file_testpb_2_proto_goTypes = nil
 	file_testpb_2_proto_depIdxs = nil
 }
-
-type _ImportedMessage_zeropb struct {
-}
-
 func (x *ImportedMessage) MarshalZeroPB(buf []byte) (n int, err error) {
 	defer func() {
 		if e := recover(); e != nil {
