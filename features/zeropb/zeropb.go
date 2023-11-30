@@ -54,9 +54,9 @@ func (g zeropbFeature) generateFieldDef(f *protogen.Field) {
 	d := f.Desc
 	switch {
 	case d.IsList():
-		g.gen.P(f.GoName, " ", runtimePackage.Ident("List"))
+		g.gen.P(f.GoName, " ", runtimePackage.Ident("Slice"), "[any]")
 	case d.IsMap():
-		g.gen.P("// TODO: field ", f.GoName)
+		g.gen.P(f.GoName, " ", runtimePackage.Ident("Slice"), "[any]")
 	case d.ContainingOneof() != nil:
 		g.gen.P("// TODO: field ", f.GoName)
 	default:
@@ -75,10 +75,8 @@ func (g zeropbFeature) generateFieldDef(f *protogen.Field) {
 			g.gen.P(f.GoName, " uint64")
 		case protoreflect.EnumKind, protoreflect.BoolKind:
 			g.gen.P(f.GoName, " uint32")
-		case protoreflect.StringKind:
-			g.gen.P(f.GoName, " ", runtimePackage.Ident("String"))
-		case protoreflect.BytesKind:
-			g.gen.P(f.GoName, " ", runtimePackage.Ident("Bytes"))
+		case protoreflect.StringKind, protoreflect.BytesKind:
+			g.gen.P(f.GoName, " ", runtimePackage.Ident("Slice"), "[byte]")
 		case protoreflect.MessageKind:
 			typ := g.gen.QualifiedGoIdent(f.Message.GoIdent)
 			g.gen.P(f.GoName, " ", typ)

@@ -3142,16 +3142,16 @@ type _A_zeropb struct {
 	SFIXED64    int64
 	FIXED64     uint64
 	DOUBLE      float64
-	STRING      zeropb.String
-	BYTES       zeropb.Bytes
+	STRING      zeropb.Slice[byte]
+	BYTES       zeropb.Slice[byte]
 	MESSAGE     B
-	// TODO: field MAP
-	LIST zeropb.List
+	MAP         zeropb.Slice[any]
+	LIST        zeropb.Slice[any]
 	// TODO: field ONEOF_B
 	// TODO: field ONEOF_STRING
-	LIST_ENUM zeropb.List
+	LIST_ENUM zeropb.Slice[any]
 	Imported  ImportedMessage
-	Type_     zeropb.String
+	Type_     zeropb.Slice[byte]
 }
 
 func (x *A) MarshalZeroPB(buf []byte) (n int, err error) {
@@ -3378,7 +3378,7 @@ func (x *A) UnmarshalZeroPB(buf []byte) (n int, err error) {
 }
 
 type _B_zeropb struct {
-	X zeropb.String
+	X zeropb.Slice[byte]
 }
 
 func (x *B) MarshalZeroPB(buf []byte) (n int, err error) {
