@@ -6,6 +6,7 @@ import (
 	errors "errors"
 	fmt "fmt"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
+	zeropb "github.com/cosmos/cosmos-proto/runtime/zeropb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -3125,6 +3126,34 @@ func file_testpb_1_proto_init() {
 	file_testpb_1_proto_goTypes = nil
 	file_testpb_1_proto_depIdxs = nil
 }
+
+type _A_zeropb struct {
+	Enum        uint32
+	SomeBoolean uint32
+	INT32       int32
+	SINT32      int32
+	UINT32      uint32
+	INT64       int64
+	SING64      int64
+	UINT64      uint64
+	SFIXED32    int32
+	FIXED32     uint32
+	FLOAT       float32
+	SFIXED64    int64
+	FIXED64     uint64
+	DOUBLE      float64
+	STRING      zeropb.String
+	BYTES       zeropb.Bytes
+	MESSAGE     B
+	// TODO: field MAP
+	LIST zeropb.List
+	// TODO: field ONEOF_B
+	// TODO: field ONEOF_STRING
+	LIST_ENUM zeropb.List
+	Imported  ImportedMessage
+	Type_     zeropb.String
+}
+
 func (x *A) MarshalZeroPB(buf []byte) (n int, err error) {
 	defer func() {
 		if e := recover(); e != nil {
@@ -3347,6 +3376,11 @@ func (x *A) UnmarshalZeroPB(buf []byte) (n int, err error) {
 	n += len_23
 	return n, nil
 }
+
+type _B_zeropb struct {
+	X zeropb.String
+}
+
 func (x *B) MarshalZeroPB(buf []byte) (n int, err error) {
 	defer func() {
 		if e := recover(); e != nil {

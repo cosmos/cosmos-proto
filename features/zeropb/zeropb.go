@@ -11,6 +11,8 @@ const (
 	errorsPackage = protogen.GoImportPath("errors")
 	mathPackage   = protogen.GoImportPath("math")
 	binaryPackage = protogen.GoImportPath("encoding/binary")
+
+	runtimePackage = protogen.GoImportPath("github.com/cosmos/cosmos-proto/runtime/zeropb")
 )
 
 func init() {
@@ -35,11 +37,58 @@ func (g zeropbFeature) GenerateFile(file *protogen.File, _ *protogen.Plugin) boo
 func (g zeropbFeature) GenerateHelpers() {}
 
 func (g zeropbFeature) generateMessage(f *protogen.File, m *protogen.Message) {
-	g.generateMarshal(f, m)
-	g.generateUnmarshal(f, m)
+	g.generateType(m)
+	g.generateMarshal(m)
+	g.generateUnmarshal(m)
 }
 
-func (g zeropbFeature) generateMarshal(f *protogen.File, m *protogen.Message) {
+func (g zeropbFeature) generateType(m *protogen.Message) {
+	g.gen.P("type _", m.GoIdent, "_zeropb struct {")
+	for _, f := range m.Fields {
+		g.generateFieldDef(f)
+	}
+	g.gen.P("}")
+}
+
+func (g zeropbFeature) generateFieldDef(f *protogen.Field) {
+	d := f.Desc
+	switch {
+	case d.IsList():
+		g.gen.P(f.GoName, " ", runtimePackage.Ident("List"))
+	case d.IsMap():
+		g.gen.P("// TODO: field ", f.GoName)
+	case d.ContainingOneof() != nil:
+		g.gen.P("// TODO: field ", f.GoName)
+	default:
+		switch d.Kind() {
+		case protoreflect.FloatKind:
+			g.gen.P(f.GoName, " float32")
+		case protoreflect.DoubleKind:
+			g.gen.P(f.GoName, " float64")
+		case protoreflect.Sfixed32Kind, protoreflect.Int32Kind, protoreflect.Sint32Kind:
+			g.gen.P(f.GoName, " int32")
+		case protoreflect.Fixed32Kind, protoreflect.Uint32Kind:
+			g.gen.P(f.GoName, " uint32")
+		case protoreflect.Sfixed64Kind, protoreflect.Int64Kind, protoreflect.Sint64Kind:
+			g.gen.P(f.GoName, " int64")
+		case protoreflect.Fixed64Kind, protoreflect.Uint64Kind:
+			g.gen.P(f.GoName, " uint64")
+		case protoreflect.EnumKind, protoreflect.BoolKind:
+			g.gen.P(f.GoName, " uint32")
+		case protoreflect.StringKind:
+			g.gen.P(f.GoName, " ", runtimePackage.Ident("String"))
+		case protoreflect.BytesKind:
+			g.gen.P(f.GoName, " ", runtimePackage.Ident("Bytes"))
+		case protoreflect.MessageKind:
+			typ := g.gen.QualifiedGoIdent(f.Message.GoIdent)
+			g.gen.P(f.GoName, " ", typ)
+		default:
+			g.gen.P("// TODO: field ", f.GoName)
+		}
+	}
+}
+
+func (g zeropbFeature) generateMarshal(m *protogen.Message) {
 	g.gen.P("func (x *", m.GoIdent, ") MarshalZeroPB(buf []byte) (n int, err error) {")
 	g.gen.P("defer func() {")
 	g.gen.P("    if e := recover(); e != nil {")
@@ -128,7 +177,7 @@ func (g zeropbFeature) generateMarshalPrimitive(d protoreflect.FieldDescriptor, 
 	}
 }
 
-func (g zeropbFeature) generateUnmarshal(f *protogen.File, m *protogen.Message) {
+func (g zeropbFeature) generateUnmarshal(m *protogen.Message) {
 	g.gen.P("func (x *", m.GoIdent, ") UnmarshalZeroPB(buf []byte) (n int, err error) {")
 	g.gen.P("defer func() {")
 	g.gen.P("    if e := recover(); e != nil {")
