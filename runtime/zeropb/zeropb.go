@@ -2,7 +2,6 @@ package zeropb
 
 import (
 	"encoding/binary"
-	"fmt"
 	"math"
 )
 
@@ -26,14 +25,12 @@ func NewBuffer(b []byte) *Buffer {
 }
 
 func (b *Buffer) Alloc(n int) Allocation {
-	n16 := uint16(n)
-	if int(n16) != n {
-		panic(fmt.Errorf("allocation %d too large", n))
-	}
 	a := Allocation{
-		Buf:    b.buf[:n16],
+		Buf:    b.buf[:n],
 		offset: b.allocated,
 	}
+	// The slice above would have paniced if n would not fit a uint16.
+	n16 := uint16(n)
 	b.buf = b.buf[n16:]
 	b.allocated += n16
 	return a

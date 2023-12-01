@@ -1683,6 +1683,23 @@ func genMessageSetterMethods(g *generator.GeneratedFile, f *fileInfo, m *message
 //
 // If it returns pointer=true, the struct field is a pointer to the type.
 func FieldGoType(g *generator.GeneratedFile, field *protogen.Field) (goType string, pointer bool) {
+	switch {
+	case field.Desc.IsList():
+		typ, _ := FieldGoElemType(g, field)
+		return "[]" + typ, false
+	case field.Desc.IsMap():
+		keyType, _ := FieldGoType(g, field.Message.Fields[0])
+		valType, _ := FieldGoType(g, field.Message.Fields[1])
+		return fmt.Sprintf("map[%v]%v", keyType, valType), false
+	}
+	return FieldGoElemType(g, field)
+}
+
+// FieldElemGoType returns the Go element type used for a field. It is not valid for
+// map fields.
+//
+// If it returns pointer=true, the struct field is a pointer to the type.
+func FieldGoElemType(g *generator.GeneratedFile, field *protogen.Field) (goType string, pointer bool) {
 	if field.Desc.IsWeak() {
 		return "struct{}", false
 	}
@@ -1713,14 +1730,6 @@ func FieldGoType(g *generator.GeneratedFile, field *protogen.Field) (goType stri
 	case protoreflect.MessageKind, protoreflect.GroupKind:
 		goType = "*" + g.QualifiedGoIdent(field.Message.GoIdent)
 		pointer = false // pointer captured as part of the type
-	}
-	switch {
-	case field.Desc.IsList():
-		return "[]" + goType, false
-	case field.Desc.IsMap():
-		keyType, _ := FieldGoType(g, field.Message.Fields[0])
-		valType, _ := FieldGoType(g, field.Message.Fields[1])
-		return fmt.Sprintf("map[%v]%v", keyType, valType), false
 	}
 	return goType, pointer
 }

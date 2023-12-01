@@ -14,6 +14,7 @@ const (
 	errorsPackage = protogen.GoImportPath("errors")
 	mathPackage   = protogen.GoImportPath("math")
 	binaryPackage = protogen.GoImportPath("encoding/binary")
+	unsafePackage = protogen.GoImportPath("unsafe")
 
 	runtimePackage = protogen.GoImportPath("github.com/cosmos/cosmos-proto/runtime/zeropb")
 )
@@ -178,6 +179,8 @@ func (g zeropbFeature) generateMarshalPrimitive(f *protogen.Field, name, offset 
 	}
 }
 
+const unsafeOptimizations = true
+
 func (g zeropbFeature) generateUnmarshal(m *protogen.Message) {
 	g.gen.P("func (x *", m.GoIdent, ") UnmarshalZeroPB(buf []byte) (err error) {")
 	g.gen.P("    defer func() {")
@@ -185,11 +188,15 @@ func (g zeropbFeature) generateUnmarshal(m *protogen.Message) {
 	g.gen.P("            err = ", errorsPackage.Ident("New"), `("buffer underflow")`)
 	g.gen.P("        }")
 	g.gen.P("    }()")
-	g.gen.P("    x.unmarshalZeroPB(buf, 0)")
+	g.gen.P("    var mem []byte")
+	if unsafeOptimizations {
+		g.gen.P("mem = make([]byte, 251)")
+	}
+	g.gen.P("    x.unmarshalZeroPB(buf, 0, ", runtimePackage.Ident("NewBuffer"), "(mem))")
 	g.gen.P("    return nil")
 	g.gen.P("}")
 	g.gen.P()
-	g.gen.P("func (x *", m.GoIdent, ") unmarshalZeroPB(buf []byte, n uint16) {")
+	g.gen.P("func (x *", m.GoIdent, ") unmarshalZeroPB(buf []byte, n uint16, mem *", runtimePackage.Ident("Buffer"), ") {")
 	offset := 0
 	for _, f := range m.Fields {
 		g.generateUnmarshalField(f, offset)
@@ -203,11 +210,13 @@ func (g zeropbFeature) generateUnmarshalField(f *protogen.Field, offset int) {
 	switch {
 	case d.IsList():
 		g.gen.P("n_", d.Index(), ", len_", d.Index(), " := ", runtimePackage.Ident("ReadSlice"), "(buf, n+", offset, ")")
-		typ, pointer := protoc.FieldGoType(g.gen, f)
-		if pointer {
-			typ = "*" + typ
+		typ, _ := protoc.FieldGoElemType(g.gen, f)
+		if unsafeOptimizations {
+			g.gen.P("mem_", d.Index(), " := mem.Alloc(int(len_", d.Index(), ")*int(", unsafePackage.Ident("Sizeof"), "(x.", f.GoName, "[0])))")
+			g.gen.P("x.", f.GoName, " = ", unsafePackage.Ident("Slice"), "((*", typ, ")(", unsafePackage.Ident("Pointer"), "(", unsafePackage.Ident("SliceData"), "(mem_", d.Index(), ".Buf))), len_", d.Index(), ")")
+		} else {
+			g.gen.P("x.", f.GoName, " = make([]", typ, ", len_", d.Index(), ")")
 		}
-		g.gen.P("x.", f.GoName, " = make(", typ, ", len_", d.Index(), ")")
 		g.gen.P("{")
 		g.gen.P("    for i := range x.", f.GoName, "{")
 		// Skip segment header.
@@ -262,16 +271,33 @@ func (g zeropbFeature) generateUnmarshalPrimitive(f *protogen.Field, name, offse
 		g.gen.P("if bool_", d.Index(), " != 0 {")
 		g.gen.P("    ", name, " = true")
 		g.gen.P("}")
-	case protoreflect.StringKind:
+	case protoreflect.StringKind, protoreflect.BytesKind:
 		g.gen.P("n_", d.Index(), ", len_", d.Index(), " := ", runtimePackage.Ident("ReadSlice"), "(buf, ", offset, ")")
-		g.gen.P(name, " = string(buf[n_", d.Index(), ":n_", d.Index(), "+len_", d.Index(), "])")
-	case protoreflect.BytesKind:
-		g.gen.P("n_", d.Index(), ", len_", d.Index(), " := ", runtimePackage.Ident("ReadSlice"), "(buf, ", offset, ")")
-		g.gen.P(name, " = append([]byte{}, buf[n_", d.Index(), ":n_", d.Index(), "+len_", d.Index(), "]...)")
+		g.gen.P("buf_", d.Index(), " := buf[n_", d.Index(), ":n_", d.Index(), "+len_", d.Index(), "]")
+		if unsafeOptimizations {
+			g.gen.P("mem_", d.Index(), " := mem.Alloc(int(len_", d.Index(), ")*int(", unsafePackage.Ident("Sizeof"), "(", name, "[0])))")
+			g.gen.P("copy(mem_", d.Index(), ".Buf, buf_", d.Index(), ")")
+			if d.Kind() == protoreflect.BytesKind {
+				g.gen.P(name, " = mem_", d.Index(), ".Buf")
+			} else {
+				g.gen.P(name, " = ", unsafePackage.Ident("String"), "(unsafe.SliceData(mem_", d.Index(), ".Buf), len(mem_", d.Index(), ".Buf))")
+			}
+		} else {
+			if d.Kind() == protoreflect.BytesKind {
+				g.gen.P(name, " = append([]byte{}, buf_", d.Index(), "...)")
+			} else {
+				g.gen.P(name, " = string(buf_", d.Index(), ")")
+			}
+		}
 	case protoreflect.MessageKind:
 		typ := g.gen.QualifiedGoIdent(f.Message.GoIdent)
-		g.gen.P(name, " = new(", typ, ")")
-		g.gen.P(name, ".unmarshalZeroPB(buf, ", offset, ")")
+		if unsafeOptimizations {
+			g.gen.P("mem_", d.Index(), " := mem.Alloc(int(", unsafePackage.Ident("Sizeof"), "(*", name, ")))")
+			g.gen.P(name, " = (*", typ, ")(", unsafePackage.Ident("Pointer"), "(", unsafePackage.Ident("SliceData"), "(mem_", d.Index(), ".Buf)))")
+		} else {
+			g.gen.P(name, " = new(", typ, ")")
+		}
+		g.gen.P(name, ".unmarshalZeroPB(buf, ", offset, ", mem)")
 	default:
 		g.gen.P("// TODO: field ", name)
 	}

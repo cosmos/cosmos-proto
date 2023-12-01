@@ -501,9 +501,11 @@ func (x *ImportedMessage) UnmarshalZeroPB(buf []byte) (err error) {
 			err = errors.New("buffer underflow")
 		}
 	}()
-	x.unmarshalZeroPB(buf, 0)
+	var mem []byte
+	mem = make([]byte, 251)
+	x.unmarshalZeroPB(buf, 0, zeropb.NewBuffer(mem))
 	return nil
 }
 
-func (x *ImportedMessage) unmarshalZeroPB(buf []byte, n uint16) {
+func (x *ImportedMessage) unmarshalZeroPB(buf []byte, n uint16, mem *zeropb.Buffer) {
 }

@@ -15,6 +15,7 @@ import (
 	reflect "reflect"
 	sort "sort"
 	sync "sync"
+	unsafe "unsafe"
 )
 
 var _ protoreflect.Map = (*_A_18_map)(nil)
@@ -3205,11 +3206,13 @@ func (x *A) UnmarshalZeroPB(buf []byte) (err error) {
 			err = errors.New("buffer underflow")
 		}
 	}()
-	x.unmarshalZeroPB(buf, 0)
+	var mem []byte
+	mem = make([]byte, 251)
+	x.unmarshalZeroPB(buf, 0, zeropb.NewBuffer(mem))
 	return nil
 }
 
-func (x *A) unmarshalZeroPB(buf []byte, n uint16) {
+func (x *A) unmarshalZeroPB(buf []byte, n uint16, mem *zeropb.Buffer) {
 	x.Enum = Enumeration(binary.LittleEndian.Uint32(buf[n+0:]))
 	bool_1 := binary.LittleEndian.Uint32(buf[n+4:])
 	x.SomeBoolean = false
@@ -3229,11 +3232,18 @@ func (x *A) unmarshalZeroPB(buf []byte, n uint16) {
 	x.FIXED64 = binary.LittleEndian.Uint64(buf[n+64:])
 	x.DOUBLE = float64(math.Float64frombits(binary.LittleEndian.Uint64(buf[n+72:])))
 	n_14, len_14 := zeropb.ReadSlice(buf, n+80)
-	x.STRING = string(buf[n_14 : n_14+len_14])
+	buf_14 := buf[n_14 : n_14+len_14]
+	mem_14 := mem.Alloc(int(len_14) * int(unsafe.Sizeof(x.STRING[0])))
+	copy(mem_14.Buf, buf_14)
+	x.STRING = unsafe.String(unsafe.SliceData(mem_14.Buf), len(mem_14.Buf))
 	n_15, len_15 := zeropb.ReadSlice(buf, n+84)
-	x.BYTES = append([]byte{}, buf[n_15:n_15+len_15]...)
-	x.MESSAGE = new(B)
-	x.MESSAGE.unmarshalZeroPB(buf, n+88)
+	buf_15 := buf[n_15 : n_15+len_15]
+	mem_15 := mem.Alloc(int(len_15) * int(unsafe.Sizeof(x.BYTES[0])))
+	copy(mem_15.Buf, buf_15)
+	x.BYTES = mem_15.Buf
+	mem_16 := mem.Alloc(int(unsafe.Sizeof(*x.MESSAGE)))
+	x.MESSAGE = (*B)(unsafe.Pointer(unsafe.SliceData(mem_16.Buf)))
+	x.MESSAGE.unmarshalZeroPB(buf, n+88, mem)
 	n_17, len_17 := zeropb.ReadSlice(buf, n+92)
 	x.MAP = make(map[string]*B, len_17)
 	{
@@ -3242,35 +3252,46 @@ func (x *A) unmarshalZeroPB(buf []byte, n uint16) {
 			var k string
 			var v *B
 			n_0, len_0 := zeropb.ReadSlice(buf, n)
-			k = string(buf[n_0 : n_0+len_0])
+			buf_0 := buf[n_0 : n_0+len_0]
+			mem_0 := mem.Alloc(int(len_0) * int(unsafe.Sizeof(k[0])))
+			copy(mem_0.Buf, buf_0)
+			k = unsafe.String(unsafe.SliceData(mem_0.Buf), len(mem_0.Buf))
 			n += 4
-			v = new(B)
-			v.unmarshalZeroPB(buf, n)
+			mem_1 := mem.Alloc(int(unsafe.Sizeof(*v)))
+			v = (*B)(unsafe.Pointer(unsafe.SliceData(mem_1.Buf)))
+			v.unmarshalZeroPB(buf, n, mem)
 			n += 4
 			x.MAP[k] = v
 		}
 	}
 	n_18, len_18 := zeropb.ReadSlice(buf, n+96)
-	x.LIST = make([]*B, len_18)
+	mem_18 := mem.Alloc(int(len_18) * int(unsafe.Sizeof(x.LIST[0])))
+	x.LIST = unsafe.Slice((**B)(unsafe.Pointer(unsafe.SliceData(mem_18.Buf))), len_18)
 	{
 		for i := range x.LIST {
-			x.LIST[i] = new(B)
-			x.LIST[i].unmarshalZeroPB(buf, n_18+4+uint16(i)*4)
+			mem_18 := mem.Alloc(int(unsafe.Sizeof(*x.LIST[i])))
+			x.LIST[i] = (*B)(unsafe.Pointer(unsafe.SliceData(mem_18.Buf)))
+			x.LIST[i].unmarshalZeroPB(buf, n_18+4+uint16(i)*4, mem)
 		}
 	}
 	// TODO: field ONEOF_B
 	// TODO: field ONEOF_STRING
 	n_21, len_21 := zeropb.ReadSlice(buf, n+108)
-	x.LIST_ENUM = make([]Enumeration, len_21)
+	mem_21 := mem.Alloc(int(len_21) * int(unsafe.Sizeof(x.LIST_ENUM[0])))
+	x.LIST_ENUM = unsafe.Slice((*Enumeration)(unsafe.Pointer(unsafe.SliceData(mem_21.Buf))), len_21)
 	{
 		for i := range x.LIST_ENUM {
 			x.LIST_ENUM[i] = Enumeration(binary.LittleEndian.Uint32(buf[n_21+4+uint16(i)*4:]))
 		}
 	}
-	x.Imported = new(ImportedMessage)
-	x.Imported.unmarshalZeroPB(buf, n+112)
+	mem_22 := mem.Alloc(int(unsafe.Sizeof(*x.Imported)))
+	x.Imported = (*ImportedMessage)(unsafe.Pointer(unsafe.SliceData(mem_22.Buf)))
+	x.Imported.unmarshalZeroPB(buf, n+112, mem)
 	n_23, len_23 := zeropb.ReadSlice(buf, n+112)
-	x.Type_ = string(buf[n_23 : n_23+len_23])
+	buf_23 := buf[n_23 : n_23+len_23]
+	mem_23 := mem.Alloc(int(len_23) * int(unsafe.Sizeof(x.Type_[0])))
+	copy(mem_23.Buf, buf_23)
+	x.Type_ = unsafe.String(unsafe.SliceData(mem_23.Buf), len(mem_23.Buf))
 }
 func (x *B) MarshalZeroPB(buf []byte) (n int, err error) {
 	defer func() {
@@ -3293,11 +3314,16 @@ func (x *B) UnmarshalZeroPB(buf []byte) (err error) {
 			err = errors.New("buffer underflow")
 		}
 	}()
-	x.unmarshalZeroPB(buf, 0)
+	var mem []byte
+	mem = make([]byte, 251)
+	x.unmarshalZeroPB(buf, 0, zeropb.NewBuffer(mem))
 	return nil
 }
 
-func (x *B) unmarshalZeroPB(buf []byte, n uint16) {
+func (x *B) unmarshalZeroPB(buf []byte, n uint16, mem *zeropb.Buffer) {
 	n_0, len_0 := zeropb.ReadSlice(buf, n+0)
-	x.X = string(buf[n_0 : n_0+len_0])
+	buf_0 := buf[n_0 : n_0+len_0]
+	mem_0 := mem.Alloc(int(len_0) * int(unsafe.Sizeof(x.X[0])))
+	copy(mem_0.Buf, buf_0)
+	x.X = unsafe.String(unsafe.SliceData(mem_0.Buf), len(mem_0.Buf))
 }
