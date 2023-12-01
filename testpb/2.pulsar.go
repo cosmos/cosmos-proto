@@ -502,10 +502,14 @@ func (x *ImportedMessage) UnmarshalZeroPB(buf []byte) (err error) {
 		}
 	}()
 	var mem []byte
-	mem = make([]byte, 251)
+	memSize := _ImportedMessageUnmarshalZeroPBSize(buf, 0)
+	mem = make([]byte, memSize)
 	x.unmarshalZeroPB(buf, 0, zeropb.NewBuffer(mem))
 	return nil
 }
 
+func _ImportedMessageUnmarshalZeroPBSize(buf []byte, n uint16) (size uint16) {
+	return
+}
 func (x *ImportedMessage) unmarshalZeroPB(buf []byte, n uint16, mem *zeropb.Buffer) {
 }

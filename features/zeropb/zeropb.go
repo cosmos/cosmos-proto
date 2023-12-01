@@ -19,6 +19,8 @@ const (
 	runtimePackage = protogen.GoImportPath("github.com/cosmos/cosmos-proto/runtime/zeropb")
 )
 
+const unsafeOptimizations = true
+
 func init() {
 	generator.RegisterFeature("zeropb", func(gen *generator.GeneratedFile, _ *protogen.Plugin) generator.FeatureGenerator {
 		return zeropbFeature{
@@ -179,8 +181,6 @@ func (g zeropbFeature) generateMarshalPrimitive(f *protogen.Field, name, offset 
 	}
 }
 
-const unsafeOptimizations = true
-
 func (g zeropbFeature) generateUnmarshal(m *protogen.Message) {
 	g.gen.P("func (x *", m.GoIdent, ") UnmarshalZeroPB(buf []byte) (err error) {")
 	g.gen.P("    defer func() {")
@@ -190,19 +190,69 @@ func (g zeropbFeature) generateUnmarshal(m *protogen.Message) {
 	g.gen.P("    }()")
 	g.gen.P("    var mem []byte")
 	if unsafeOptimizations {
-		g.gen.P("mem = make([]byte, 251)")
+		g.gen.P("memSize := _", m.GoIdent, "UnmarshalZeroPBSize(buf, 0)")
+		g.gen.P("mem = make([]byte, memSize)")
 	}
 	g.gen.P("    x.unmarshalZeroPB(buf, 0, ", runtimePackage.Ident("NewBuffer"), "(mem))")
 	g.gen.P("    return nil")
 	g.gen.P("}")
 	g.gen.P()
-	g.gen.P("func (x *", m.GoIdent, ") unmarshalZeroPB(buf []byte, n uint16, mem *", runtimePackage.Ident("Buffer"), ") {")
+	g.gen.P("func _", m.GoIdent, "UnmarshalZeroPBSize(buf []byte, n uint16) (size uint16) {")
 	offset := 0
+	for _, f := range m.Fields {
+		g.generateUnmarshalFieldSize(f, m.GoIdent, offset)
+		offset += fieldSize(f)
+	}
+	g.gen.P("    return")
+	g.gen.P("}")
+	g.gen.P("func (x *", m.GoIdent, ") unmarshalZeroPB(buf []byte, n uint16, mem *", runtimePackage.Ident("Buffer"), ") {")
+	offset = 0
 	for _, f := range m.Fields {
 		g.generateUnmarshalField(f, offset)
 		offset += fieldSize(f)
 	}
 	g.gen.P("}")
+}
+
+func (g zeropbFeature) generateUnmarshalFieldSize(f *protogen.Field, typ protogen.GoIdent, offset int) {
+	d := f.Desc
+	switch {
+	case d.IsList():
+		g.gen.P("n_", d.Index(), ", len_", d.Index(), " := ", runtimePackage.Ident("ReadSlice"), "(buf, n+", offset, ")")
+		g.gen.P("_ = n_", d.Index())
+		g.gen.P("size += len_", d.Index(), "*uint16(", unsafePackage.Ident("Sizeof"), "((", typ, "{}).", f.GoName, "[0]))")
+		g.gen.P("for i := uint16(0); i < len_", d.Index(), "; i++ {")
+		// Skip segment header.
+		g.generateUnmarshalPrimitiveSize(f, fmt.Sprintf("n_%d+%d+uint16(i)*%d", d.Index(), segmentHeaderSize, fieldElemSize(f)))
+		g.gen.P("}")
+	case d.IsMap():
+		g.gen.P("n_", d.Index(), ", len_", d.Index(), " := ", runtimePackage.Ident("ReadSlice"), "(buf, n+", offset, ")")
+		g.gen.P("{")
+		g.gen.P("    n := n_", d.Index(), "; _ = n")
+		g.gen.P("    for i := uint16(0); i < len_", d.Index(), "; i++ {")
+		g.generateUnmarshalPrimitiveSize(f.Message.Fields[0], "n")
+		g.gen.P("        n += ", fieldSize(f.Message.Fields[0]))
+		g.generateUnmarshalPrimitiveSize(f.Message.Fields[1], "n")
+		g.gen.P("        n += ", fieldSize(f.Message.Fields[1]))
+		g.gen.P("    }")
+		g.gen.P("}")
+	case d.ContainingOneof() != nil:
+		g.gen.P("// TODO: field ", f.GoName)
+	default:
+		g.generateUnmarshalPrimitiveSize(f, fmt.Sprintf("n+%d", offset))
+	}
+}
+
+func (g zeropbFeature) generateUnmarshalPrimitiveSize(f *protogen.Field, offset string) {
+	switch d := f.Desc; d.Kind() {
+	case protoreflect.StringKind, protoreflect.BytesKind:
+		g.gen.P("_, len_", d.Index(), " := ", runtimePackage.Ident("ReadSlice"), "(buf, ", offset, ")")
+		g.gen.P("size += len_", d.Index(), "*uint16(", unsafePackage.Ident("Sizeof"), "(byte(0)))")
+	case protoreflect.MessageKind:
+		g.gen.P("size += uint16(", unsafePackage.Ident("Sizeof"), "(", f.Message.GoIdent, "{}))")
+		g.gen.P("size += _", f.Message.GoIdent, "UnmarshalZeroPBSize(buf, ", offset, ")")
+	default:
+	}
 }
 
 func (g zeropbFeature) generateUnmarshalField(f *protogen.Field, offset int) {
@@ -217,11 +267,8 @@ func (g zeropbFeature) generateUnmarshalField(f *protogen.Field, offset int) {
 		} else {
 			g.gen.P("x.", f.GoName, " = make([]", typ, ", len_", d.Index(), ")")
 		}
-		g.gen.P("{")
-		g.gen.P("    for i := range x.", f.GoName, "{")
-		// Skip segment header.
-		g.generateUnmarshalPrimitive(f, "x."+f.GoName+"[i]", fmt.Sprintf("n_%d+4+uint16(i)*%d", d.Index(), fieldElemSize(f)))
-		g.gen.P("    }")
+		g.gen.P("for i := range x.", f.GoName, "{")
+		g.generateUnmarshalPrimitive(f, "x."+f.GoName+"[i]", fmt.Sprintf("n_%d+%d+uint16(i)*%d", d.Index(), segmentHeaderSize, fieldElemSize(f)))
 		g.gen.P("}")
 	case d.IsMap():
 		g.gen.P("n_", d.Index(), ", len_", d.Index(), " := ", runtimePackage.Ident("ReadSlice"), "(buf, n+", offset, ")")
@@ -280,7 +327,7 @@ func (g zeropbFeature) generateUnmarshalPrimitive(f *protogen.Field, name, offse
 			if d.Kind() == protoreflect.BytesKind {
 				g.gen.P(name, " = mem_", d.Index(), ".Buf")
 			} else {
-				g.gen.P(name, " = ", unsafePackage.Ident("String"), "(unsafe.SliceData(mem_", d.Index(), ".Buf), len(mem_", d.Index(), ".Buf))")
+				g.gen.P(name, " = ", unsafePackage.Ident("String"), "(", unsafePackage.Ident("SliceData"), "(mem_", d.Index(), ".Buf), len(mem_", d.Index(), ".Buf))")
 			}
 		} else {
 			if d.Kind() == protoreflect.BytesKind {
