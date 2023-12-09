@@ -494,6 +494,9 @@ func (x *ImportedMessage) MarshalZeroPB(buf []byte) (n int, err error) {
 }
 
 func (x *ImportedMessage) marshalZeroPB(b *zeropb.Buffer, buf zeropb.Allocation) {
+	if x == nil {
+		return
+	}
 }
 func (x *ImportedMessage) UnmarshalZeroPB(buf []byte) (err error) {
 	defer func() {

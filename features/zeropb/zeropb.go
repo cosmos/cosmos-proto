@@ -60,6 +60,9 @@ func (g zeropbFeature) generateMarshal(m *protogen.Message) {
 	g.gen.P("}")
 	g.gen.P()
 	g.gen.P("func (x *", m.GoIdent, ") marshalZeroPB(b *", runtimePackage.Ident("Buffer"), ", buf ", runtimePackage.Ident("Allocation"), ") {")
+	g.gen.P("    if x == nil {")
+	g.gen.P("        return")
+	g.gen.P("    }")
 	offset := 0
 	for _, f := range m.Fields {
 		g.generateMarshalField(f, offset)

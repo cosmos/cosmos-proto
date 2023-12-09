@@ -3139,6 +3139,9 @@ func (x *A) MarshalZeroPB(buf []byte) (n int, err error) {
 }
 
 func (x *A) marshalZeroPB(b *zeropb.Buffer, buf zeropb.Allocation) {
+	if x == nil {
+		return
+	}
 	binary.LittleEndian.PutUint32(buf.Buf[0:], uint32(x.Enum))
 	bool_1 := uint32(0)
 	if x.SomeBoolean {
@@ -3342,6 +3345,9 @@ func (x *B) MarshalZeroPB(buf []byte) (n int, err error) {
 }
 
 func (x *B) marshalZeroPB(b *zeropb.Buffer, buf zeropb.Allocation) {
+	if x == nil {
+		return
+	}
 	buf_0 := b.AllocRel(len(x.X), buf, 0, uint16(len(x.X)))
 	copy(buf_0.Buf, x.X)
 }

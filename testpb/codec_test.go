@@ -1,6 +1,7 @@
 package testpb
 
 import (
+	fmt "fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -77,6 +78,22 @@ func TestMarshal(t *testing.T) {
 	zpbGot, err := proto.MarshalOptions{Deterministic: true}.Marshal(&msg2)
 	require.NoError(t, err)
 	require.Equal(t, expected, zpbGot)
+}
+
+func TestZeroPBSegments(t *testing.T) {
+	var longList A
+	for i := 0; i < 256; i++ {
+		longList.LIST = append(longList.LIST, &B{
+			X: fmt.Sprintf("list%d", i),
+		})
+	}
+	buf := make([]byte, 64*1024)
+	n, err := longList.MarshalZeroPB(buf)
+	require.NoError(t, err)
+	var got A
+	err = got.UnmarshalZeroPB(buf[:n])
+	require.NoError(t, err)
+	require.Equal(t, longList.LIST, got.LIST)
 }
 
 func BenchmarkMarshalA(b *testing.B) {
