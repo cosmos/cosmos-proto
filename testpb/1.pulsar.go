@@ -3177,26 +3177,56 @@ func (x *A) marshalZeroPB(b *zeropb.Buffer, buf zeropb.Allocation) {
 			n += 4
 		}
 	}
-	buf_18 := b.AllocRel(len(x.LIST)*4+4, buf, 96, uint16(len(x.LIST)))
-	{
-		buf := buf_18
-		buf.Buf[0] = byte(len(x.LIST))
-		buf.Buf[1] = byte(len(x.LIST))
-		binary.LittleEndian.PutUint16(buf.Buf[2:], 0)
-		for i, e := range x.LIST {
-			e.marshalZeroPB(b, buf.Slice(uint16(i)*4+4))
+	rem_18 := x.LIST
+	var link_18 zeropb.Allocation
+	for len(rem_18) > 0 {
+		seg := rem_18
+		if len(seg) > 255 {
+			seg = seg[:255]
+		}
+		rem_18 = rem_18[len(seg):]
+		buf_18 := b.Alloc(len(seg)*4 + 4)
+		if link_18.Buf == nil {
+			binary.LittleEndian.PutUint16(buf.Buf[96:], buf_18.Offset-buf.Offset-96)
+			binary.LittleEndian.PutUint16(buf.Buf[96+2:], uint16(len(x.LIST)))
+		} else {
+			binary.LittleEndian.PutUint16(link_18.Buf[2:], buf_18.Offset-link_18.Offset-2)
+		}
+		{
+			buf := buf_18
+			buf.Buf[0] = byte(len(seg))
+			buf.Buf[1] = byte(len(seg))
+			link_18 = buf
+			for i, e := range seg {
+				e.marshalZeroPB(b, buf.Slice(uint16(i)*4+4))
+			}
 		}
 	}
 	// TODO: field ONEOF_B
 	// TODO: field ONEOF_STRING
-	buf_21 := b.AllocRel(len(x.LIST_ENUM)*4+4, buf, 108, uint16(len(x.LIST_ENUM)))
-	{
-		buf := buf_21
-		buf.Buf[0] = byte(len(x.LIST_ENUM))
-		buf.Buf[1] = byte(len(x.LIST_ENUM))
-		binary.LittleEndian.PutUint16(buf.Buf[2:], 0)
-		for i, e := range x.LIST_ENUM {
-			binary.LittleEndian.PutUint32(buf.Buf[uint16(i)*4+4:], uint32(e))
+	rem_21 := x.LIST_ENUM
+	var link_21 zeropb.Allocation
+	for len(rem_21) > 0 {
+		seg := rem_21
+		if len(seg) > 255 {
+			seg = seg[:255]
+		}
+		rem_21 = rem_21[len(seg):]
+		buf_21 := b.Alloc(len(seg)*4 + 4)
+		if link_21.Buf == nil {
+			binary.LittleEndian.PutUint16(buf.Buf[108:], buf_21.Offset-buf.Offset-108)
+			binary.LittleEndian.PutUint16(buf.Buf[108+2:], uint16(len(x.LIST_ENUM)))
+		} else {
+			binary.LittleEndian.PutUint16(link_21.Buf[2:], buf_21.Offset-link_21.Offset-2)
+		}
+		{
+			buf := buf_21
+			buf.Buf[0] = byte(len(seg))
+			buf.Buf[1] = byte(len(seg))
+			link_21 = buf
+			for i, e := range seg {
+				binary.LittleEndian.PutUint32(buf.Buf[uint16(i)*4+4:], uint32(e))
+			}
 		}
 	}
 	x.Imported.marshalZeroPB(b, buf.Slice(112))
@@ -3237,18 +3267,38 @@ func _AUnmarshalZeroPBSize(buf []byte, n uint16) (size uint16) {
 		}
 	}
 	n_18, len_18 := zeropb.ReadSlice(buf, n+96)
-	_ = n_18
-	size += len_18 * uint16(unsafe.Sizeof((A{}).LIST[0]))
-	for i := uint16(0); i < len_18; i++ {
-		size += uint16(unsafe.Sizeof(B{}))
-		size += _BUnmarshalZeroPBSize(buf, n_18+4+uint16(i)*4)
+	{
+		n, len := n_18, len_18
+		size += len * uint16(unsafe.Sizeof((A{}).LIST[0]))
+		i8 := byte(0)
+		segLen := buf[n]
+		for i := uint16(0); i < len; i++ {
+			if i8 == segLen {
+				i8 = 0
+				n = zeropb.ReadOffset(buf, n+2)
+				segLen = buf[n]
+			}
+			size += uint16(unsafe.Sizeof(B{}))
+			size += _BUnmarshalZeroPBSize(buf, n+4+uint16(i8)*4)
+			i8++
+		}
 	}
 	// TODO: field ONEOF_B
 	// TODO: field ONEOF_STRING
 	n_21, len_21 := zeropb.ReadSlice(buf, n+108)
-	_ = n_21
-	size += len_21 * uint16(unsafe.Sizeof((A{}).LIST_ENUM[0]))
-	for i := uint16(0); i < len_21; i++ {
+	{
+		n, len := n_21, len_21
+		size += len * uint16(unsafe.Sizeof((A{}).LIST_ENUM[0]))
+		i8 := byte(0)
+		segLen := buf[n]
+		for i := uint16(0); i < len; i++ {
+			if i8 == segLen {
+				i8 = 0
+				n = zeropb.ReadOffset(buf, n+2)
+				segLen = buf[n]
+			}
+			i8++
+		}
 	}
 	size += uint16(unsafe.Sizeof(ImportedMessage{}))
 	size += _ImportedMessageUnmarshalZeroPBSize(buf, n+112)
@@ -3311,18 +3361,42 @@ func (x *A) unmarshalZeroPB(buf []byte, n uint16, mem *zeropb.Buffer) {
 	n_18, len_18 := zeropb.ReadSlice(buf, n+96)
 	mem_18 := mem.Alloc(int(len_18) * int(unsafe.Sizeof(x.LIST[0])))
 	x.LIST = unsafe.Slice((**B)(unsafe.Pointer(unsafe.SliceData(mem_18.Buf))), len_18)
-	for i := range x.LIST {
-		mem_18 := mem.Alloc(int(unsafe.Sizeof(*x.LIST[i])))
-		x.LIST[i] = (*B)(unsafe.Pointer(unsafe.SliceData(mem_18.Buf)))
-		x.LIST[i].unmarshalZeroPB(buf, n_18+4+uint16(i)*4, mem)
+	{
+		n, len := n_18, len_18
+		_ = len
+		i8 := byte(0)
+		segLen := buf[n]
+		for i := range x.LIST {
+			if i8 == segLen {
+				i8 = 0
+				n = zeropb.ReadOffset(buf, n+2)
+				segLen = buf[n]
+			}
+			mem_18 := mem.Alloc(int(unsafe.Sizeof(*x.LIST[i])))
+			x.LIST[i] = (*B)(unsafe.Pointer(unsafe.SliceData(mem_18.Buf)))
+			x.LIST[i].unmarshalZeroPB(buf, n+4+uint16(i8)*4, mem)
+			i8++
+		}
 	}
 	// TODO: field ONEOF_B
 	// TODO: field ONEOF_STRING
 	n_21, len_21 := zeropb.ReadSlice(buf, n+108)
 	mem_21 := mem.Alloc(int(len_21) * int(unsafe.Sizeof(x.LIST_ENUM[0])))
 	x.LIST_ENUM = unsafe.Slice((*Enumeration)(unsafe.Pointer(unsafe.SliceData(mem_21.Buf))), len_21)
-	for i := range x.LIST_ENUM {
-		x.LIST_ENUM[i] = Enumeration(binary.LittleEndian.Uint32(buf[n_21+4+uint16(i)*4:]))
+	{
+		n, len := n_21, len_21
+		_ = len
+		i8 := byte(0)
+		segLen := buf[n]
+		for i := range x.LIST_ENUM {
+			if i8 == segLen {
+				i8 = 0
+				n = zeropb.ReadOffset(buf, n+2)
+				segLen = buf[n]
+			}
+			x.LIST_ENUM[i] = Enumeration(binary.LittleEndian.Uint32(buf[n+4+uint16(i8)*4:]))
+			i8++
+		}
 	}
 	mem_22 := mem.Alloc(int(unsafe.Sizeof(*x.Imported)))
 	x.Imported = (*ImportedMessage)(unsafe.Pointer(unsafe.SliceData(mem_22.Buf)))

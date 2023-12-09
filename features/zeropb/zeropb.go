@@ -124,15 +124,32 @@ func (g zeropbFeature) generateMarshalField(f *protogen.Field, offset int) {
 	d := f.Desc
 	switch {
 	case d.IsList():
-		g.gen.P("buf_", d.Index(), " := b.AllocRel(len(x.", f.GoName, ")*", fieldElemSize(f), " + ", segmentHeaderSize, ", buf, ", offset, ", uint16(len(x.", f.GoName, ")))")
-		g.gen.P("{")
-		g.gen.P("    buf := buf_", d.Index())
+		g.gen.P("rem_", d.Index(), " := x.", f.GoName)
+		g.gen.P("var link_", d.Index(), " zeropb.Allocation")
+		g.gen.P("for len(rem_", d.Index(), ") > 0 {")
+		g.gen.P("    seg := rem_", d.Index())
+		g.gen.P("    if len(seg) > 255 {")
+		g.gen.P("        seg = seg[:255]")
+		g.gen.P("    }")
+		g.gen.P("    rem_", d.Index(), " = rem_", d.Index(), "[len(seg):]")
+		g.gen.P("    buf_", d.Index(), " := b.Alloc(len(seg)*", fieldElemSize(f), "+", segmentHeaderSize, ")")
+		g.gen.P("    if link_", d.Index(), ".Buf == nil {")
+		// Write relative offset and len.
+		g.gen.P(binaryPackage.Ident("LittleEndian"), ".PutUint16(buf.Buf[", offset, ":], buf_", d.Index(), ".Offset-buf.Offset-", offset, ")")
+		g.gen.P(binaryPackage.Ident("LittleEndian"), ".PutUint16(buf.Buf[", offset, "+2:], uint16(len(x.", f.GoName, ")))")
+		g.gen.P("    } else {")
+		// Write segment link offset.
+		g.gen.P(binaryPackage.Ident("LittleEndian"), ".PutUint16(link_", d.Index(), ".Buf[2:], buf_", d.Index(), ".Offset-link_", d.Index(), ".Offset-2)")
+		g.gen.P("    }")
+		g.gen.P("    {")
+		g.gen.P("        buf := buf_", d.Index())
 		// Write a segment header.
-		g.gen.P("    buf.Buf[0] = byte(len(x.", f.GoName, "))")
-		g.gen.P("    buf.Buf[1] = byte(len(x.", f.GoName, "))")
-		g.gen.P(binaryPackage.Ident("LittleEndian"), ".PutUint16(buf.Buf[2:], 0)")
-		g.gen.P("    for i, e := range x.", f.GoName, " {")
+		g.gen.P("        buf.Buf[0] = byte(len(seg))")
+		g.gen.P("        buf.Buf[1] = byte(len(seg))")
+		g.gen.P("        link_", d.Index(), " = buf")
+		g.gen.P("        for i, e := range seg {")
 		g.generateMarshalPrimitive(f, "e", fmt.Sprintf("uint16(i)*%d+4", fieldElemSize(f)))
+		g.gen.P("        }")
 		g.gen.P("    }")
 		g.gen.P("}")
 	case d.IsMap():
@@ -222,11 +239,21 @@ func (g zeropbFeature) generateUnmarshalFieldSize(f *protogen.Field, typ protoge
 	switch {
 	case d.IsList():
 		g.gen.P("n_", d.Index(), ", len_", d.Index(), " := ", runtimePackage.Ident("ReadSlice"), "(buf, n+", offset, ")")
-		g.gen.P("_ = n_", d.Index())
-		g.gen.P("size += len_", d.Index(), "*uint16(", unsafePackage.Ident("Sizeof"), "((", typ, "{}).", f.GoName, "[0]))")
-		g.gen.P("for i := uint16(0); i < len_", d.Index(), "; i++ {")
-		// Skip segment header.
-		g.generateUnmarshalPrimitiveSize(f, fmt.Sprintf("n_%d+%d+uint16(i)*%d", d.Index(), segmentHeaderSize, fieldElemSize(f)))
+		g.gen.P("{")
+		g.gen.P("    n, len := n_", d.Index(), ", len_", d.Index())
+		g.gen.P("    size += len*uint16(", unsafePackage.Ident("Sizeof"), "((", typ, "{}).", f.GoName, "[0]))")
+		g.gen.P("    i8 := byte(0)")
+		g.gen.P("    segLen := buf[n]")
+		g.gen.P("    for i := uint16(0); i < len; i++ {")
+		g.gen.P("        if i8 == segLen {")
+		g.gen.P("            i8 = 0")
+		// Read continuation link.
+		g.gen.P("            n = ", runtimePackage.Ident("ReadOffset"), "(buf, n+2)")
+		g.gen.P("            segLen = buf[n]")
+		g.gen.P("        }")
+		g.generateUnmarshalPrimitiveSize(f, fmt.Sprintf("n+%d+uint16(i8)*%d", segmentHeaderSize, fieldElemSize(f)))
+		g.gen.P("        i8++")
+		g.gen.P("    }")
 		g.gen.P("}")
 	case d.IsMap():
 		g.gen.P("n_", d.Index(), ", len_", d.Index(), " := ", runtimePackage.Ident("ReadSlice"), "(buf, n+", offset, ")")
@@ -270,8 +297,20 @@ func (g zeropbFeature) generateUnmarshalField(f *protogen.Field, offset int) {
 		} else {
 			g.gen.P("x.", f.GoName, " = make([]", typ, ", len_", d.Index(), ")")
 		}
-		g.gen.P("for i := range x.", f.GoName, "{")
-		g.generateUnmarshalPrimitive(f, "x."+f.GoName+"[i]", fmt.Sprintf("n_%d+%d+uint16(i)*%d", d.Index(), segmentHeaderSize, fieldElemSize(f)))
+		g.gen.P("{")
+		g.gen.P("    n, len := n_", d.Index(), ", len_", d.Index(), "; _ = len")
+		g.gen.P("    i8 := byte(0)")
+		g.gen.P("    segLen := buf[n]")
+		g.gen.P("    for i := range x.", f.GoName, "{")
+		g.gen.P("        if i8 == segLen {")
+		g.gen.P("            i8 = 0")
+		// Read continuation link.
+		g.gen.P("            n = ", runtimePackage.Ident("ReadOffset"), "(buf, n+2)")
+		g.gen.P("            segLen = buf[n]")
+		g.gen.P("        }")
+		g.generateUnmarshalPrimitive(f, "x."+f.GoName+"[i]", fmt.Sprintf("n+%d+uint16(i8)*%d", segmentHeaderSize, fieldElemSize(f)))
+		g.gen.P("        i8++")
+		g.gen.P("    }")
 		g.gen.P("}")
 	case d.IsMap():
 		g.gen.P("n_", d.Index(), ", len_", d.Index(), " := ", runtimePackage.Ident("ReadSlice"), "(buf, n+", offset, ")")
