@@ -7,18 +7,19 @@ package protoc
 
 import (
 	"fmt"
-	"github.com/cosmos/cosmos-proto/features/protoc/genid"
-	"github.com/cosmos/cosmos-proto/generator"
 	"go/ast"
 	"go/parser"
 	"go/token"
-	"google.golang.org/protobuf/encoding/protowire"
-	"google.golang.org/protobuf/proto"
 	"math"
 	"strconv"
 	"strings"
 	"unicode"
 	"unicode/utf8"
+
+	"github.com/cosmos/cosmos-proto/features/protoc/genid"
+	"github.com/cosmos/cosmos-proto/generator"
+	"google.golang.org/protobuf/encoding/protowire"
+	"google.golang.org/protobuf/proto"
 
 	pref "google.golang.org/protobuf/reflect/protoreflect"
 
@@ -130,7 +131,8 @@ func initFuncName(f *protogen.File) string {
 
 func genFileDescriptor(gen *protogen.Plugin, g *generator.GeneratedFile, f *fileInfo) {
 	descProto := proto.Clone(f.Proto).(*descriptorpb.FileDescriptorProto)
-	descProto.SourceCodeInfo = nil // drop source code information
+	// We do not want to drop the source code info because the comments are important for cosmos-sdk client/v2
+	// descProto.SourceCodeInfo = nil // drop source code information
 
 	b, err := proto.MarshalOptions{AllowPartial: true, Deterministic: true}.Marshal(descProto)
 	if err != nil {

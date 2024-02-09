@@ -1,6 +1,6 @@
-FROM golang:1.18-alpine
+FROM golang:1.22-alpine
 
-ENV GOLANG_PROTOBUF_VERSION=1.28.1
+ENV GOLANG_PROTOBUF_VERSION=1.32.0
 
 ARG PROTOC_VERSION="3.20.0"
 # add dependency
