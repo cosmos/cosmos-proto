@@ -21,8 +21,6 @@ import (
 	"google.golang.org/protobuf/encoding/protowire"
 	"google.golang.org/protobuf/proto"
 
-	pref "google.golang.org/protobuf/reflect/protoreflect"
-
 	"github.com/cosmos/cosmos-proto/features/protoc/version"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
@@ -132,6 +130,7 @@ func initFuncName(f *protogen.File) string {
 func genFileDescriptor(gen *protogen.Plugin, g *generator.GeneratedFile, f *fileInfo) {
 	descProto := proto.Clone(f.Proto).(*descriptorpb.FileDescriptorProto)
 	// We do not want to drop the source code info because the comments are important for cosmos-sdk client/v2
+	// ref: https://github.com/golang/protobuf/issues/1134, https://go-review.googlesource.com/c/protobuf/+/235099
 	// descProto.SourceCodeInfo = nil // drop source code information
 
 	b, err := proto.MarshalOptions{AllowPartial: true, Deterministic: true}.Marshal(descProto)
@@ -1946,38 +1945,38 @@ func (c trailingComment) String() string {
 // Depending on the context on how Marshal is called, there are different ways
 // through which that information is determined. As such it is the caller's
 // responsibility to provide a function to obtain that information.
-func TagMarshal(fd pref.FieldDescriptor, enumName string) string {
+func TagMarshal(fd protoreflect.FieldDescriptor, enumName string) string {
 	var tag []string
 	switch fd.Kind() {
-	case pref.BoolKind, pref.EnumKind, pref.Int32Kind, pref.Uint32Kind, pref.Int64Kind, pref.Uint64Kind:
+	case protoreflect.BoolKind, protoreflect.EnumKind, protoreflect.Int32Kind, protoreflect.Uint32Kind, protoreflect.Int64Kind, protoreflect.Uint64Kind:
 		tag = append(tag, "varint")
-	case pref.Sint32Kind:
+	case protoreflect.Sint32Kind:
 		tag = append(tag, "zigzag32")
-	case pref.Sint64Kind:
+	case protoreflect.Sint64Kind:
 		tag = append(tag, "zigzag64")
-	case pref.Sfixed32Kind, pref.Fixed32Kind, pref.FloatKind:
+	case protoreflect.Sfixed32Kind, protoreflect.Fixed32Kind, protoreflect.FloatKind:
 		tag = append(tag, "fixed32")
-	case pref.Sfixed64Kind, pref.Fixed64Kind, pref.DoubleKind:
+	case protoreflect.Sfixed64Kind, protoreflect.Fixed64Kind, protoreflect.DoubleKind:
 		tag = append(tag, "fixed64")
-	case pref.StringKind, pref.BytesKind, pref.MessageKind:
+	case protoreflect.StringKind, protoreflect.BytesKind, protoreflect.MessageKind:
 		tag = append(tag, "bytes")
-	case pref.GroupKind:
+	case protoreflect.GroupKind:
 		tag = append(tag, "group")
 	}
 	tag = append(tag, strconv.Itoa(int(fd.Number())))
 	switch fd.Cardinality() {
-	case pref.Optional:
+	case protoreflect.Optional:
 		tag = append(tag, "opt")
-	case pref.Required:
+	case protoreflect.Required:
 		tag = append(tag, "req")
-	case pref.Repeated:
+	case protoreflect.Repeated:
 		tag = append(tag, "rep")
 	}
 	if fd.IsPacked() {
 		tag = append(tag, "packed")
 	}
 	name := string(fd.Name())
-	if fd.Kind() == pref.GroupKind {
+	if fd.Kind() == protoreflect.GroupKind {
 		// The name of the FieldDescriptor for a group field is
 		// lowercased. To find the original capitalization, we
 		// look in the field's MessageType.
@@ -1995,10 +1994,10 @@ func TagMarshal(fd pref.FieldDescriptor, enumName string) string {
 	// The previous implementation does not tag extension fields as proto3,
 	// even when the field is defined in a proto3 file. Match that behavior
 	// for consistency.
-	if fd.Syntax() == pref.Proto3 && !fd.IsExtension() {
+	if fd.Syntax() == protoreflect.Proto3 && !fd.IsExtension() {
 		tag = append(tag, "proto3")
 	}
-	if fd.Kind() == pref.EnumKind && enumName != "" {
+	if fd.Kind() == protoreflect.EnumKind && enumName != "" {
 		tag = append(tag, "enum="+enumName)
 	}
 	if fd.ContainingOneof() != nil {
@@ -2036,9 +2035,9 @@ func genMessageReflectMethods(g *generator.GeneratedFile, f *fileInfo, m *messag
 // DefValMarshal serializes v as the default string according to the given kind k.
 // When specifying the Descriptor format for an enum kind, the associated
 // enum value descriptor must be provided.
-func DefValMarshal(v pref.Value, ev pref.EnumValueDescriptor, k pref.Kind, f Format) (string, error) {
+func DefValMarshal(v protoreflect.Value, ev protoreflect.EnumValueDescriptor, k protoreflect.Kind, f Format) (string, error) {
 	switch k {
-	case pref.BoolKind:
+	case protoreflect.BoolKind:
 		if f == GoTag {
 			if v.Bool() {
 				return "1", nil
@@ -2052,17 +2051,17 @@ func DefValMarshal(v pref.Value, ev pref.EnumValueDescriptor, k pref.Kind, f For
 				return "false", nil
 			}
 		}
-	case pref.EnumKind:
+	case protoreflect.EnumKind:
 		if f == GoTag {
 			return strconv.FormatInt(int64(v.Enum()), 10), nil
 		} else {
 			return string(ev.Name()), nil
 		}
-	case pref.Int32Kind, pref.Sint32Kind, pref.Sfixed32Kind, pref.Int64Kind, pref.Sint64Kind, pref.Sfixed64Kind:
+	case protoreflect.Int32Kind, protoreflect.Sint32Kind, protoreflect.Sfixed32Kind, protoreflect.Int64Kind, protoreflect.Sint64Kind, protoreflect.Sfixed64Kind:
 		return strconv.FormatInt(v.Int(), 10), nil
-	case pref.Uint32Kind, pref.Fixed32Kind, pref.Uint64Kind, pref.Fixed64Kind:
+	case protoreflect.Uint32Kind, protoreflect.Fixed32Kind, protoreflect.Uint64Kind, protoreflect.Fixed64Kind:
 		return strconv.FormatUint(v.Uint(), 10), nil
-	case pref.FloatKind, pref.DoubleKind:
+	case protoreflect.FloatKind, protoreflect.DoubleKind:
 		f := v.Float()
 		switch {
 		case math.IsInf(f, -1):
@@ -2072,16 +2071,16 @@ func DefValMarshal(v pref.Value, ev pref.EnumValueDescriptor, k pref.Kind, f For
 		case math.IsNaN(f):
 			return "nan", nil
 		default:
-			if k == pref.FloatKind {
+			if k == protoreflect.FloatKind {
 				return strconv.FormatFloat(f, 'g', -1, 32), nil
 			} else {
 				return strconv.FormatFloat(f, 'g', -1, 64), nil
 			}
 		}
-	case pref.StringKind:
+	case protoreflect.StringKind:
 		// String values are serialized as is without any escaping.
 		return v.String(), nil
-	case pref.BytesKind:
+	case protoreflect.BytesKind:
 		if s, ok := marshalBytes(v.Bytes()); ok {
 			return s, nil
 		}
