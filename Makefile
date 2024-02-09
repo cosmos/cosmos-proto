@@ -8,4 +8,7 @@ proto-gen:
 	(cd proto; buf generate)
 	mv proto/cosmos_proto/cosmos.pb.go .
 
+install:
+	go install ./cmd/protoc-gen-go-pulsar
+
 .PHONY: proto_gen pulsar
