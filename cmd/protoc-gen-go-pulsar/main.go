@@ -8,6 +8,7 @@ import (
 
 	_ "github.com/cosmos/cosmos-proto/features/fastreflection"
 	_ "github.com/cosmos/cosmos-proto/features/protoc"
+	_ "github.com/cosmos/cosmos-proto/features/zeropb"
 	"github.com/cosmos/cosmos-proto/generator"
 	"google.golang.org/protobuf/reflect/protoreflect"
 
