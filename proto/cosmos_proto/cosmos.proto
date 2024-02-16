@@ -5,6 +5,12 @@ import "google/protobuf/descriptor.proto";
 
 option go_package = "github.com/cosmos/cosmos-proto;cosmos_proto";
 
+extend google.protobuf.ServiceOptions {    
+    
+    // since is used to indicate the version at which a service,message,field was added.
+    string since = 93001;
+}
+
 extend google.protobuf.MessageOptions {
 
     // implements_interface is used to indicate the type name of the interface
@@ -94,4 +100,12 @@ enum ScalarType {
     SCALAR_TYPE_UNSPECIFIED = 0;
     SCALAR_TYPE_STRING = 1;
     SCALAR_TYPE_BYTES = 2;
+}
+
+// SinceDescriptor describes the version at which a service, message or field was added.
+// Scalars extend simple protobuf built-in types with additional
+// syntax and semantics, for instance to represent versions.
+message SinceDescriptor {
+    // version is the version at which the field was added.
+    string version = 1;
 }
