@@ -15,6 +15,10 @@ func TestSourceCodeInfo(t *testing.T) {
 	descriptor := (&ForeignMessage{}).ProtoReflect().Descriptor()
 	sourceInfos := descriptor.ParentFile().SourceLocations()
 
+	if sourceInfos.Len() == 0 {
+		t.Errorf("No source location found")
+	}
+
 	if !strings.Contains(sourceInfos.ByDescriptor(descriptor).LeadingComments, "This comment is for testing source code info comments") {
 		t.Errorf("LeadingComments not found in source info")
 	}
