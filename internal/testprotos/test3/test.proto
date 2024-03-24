@@ -127,6 +127,7 @@ message TestAllTypes {
   }
 }
 
+// This comment is for testing source code info comments.
 message ForeignMessage {
   int32 c = 1;
   int32 d = 2;
