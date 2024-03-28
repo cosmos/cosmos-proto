@@ -288,26 +288,34 @@ func (g *fastGenerator) genIsValid() {
 }
 
 func (g *fastGenerator) genProtoMethods() {
+	varName := g.typeName + "ProtoMethods"
+
 	g.P("// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.")
 	g.P("// This method may return nil.")
 	g.P("//")
 	g.P("// The returned methods type is identical to")
 	g.P(`// "google.golang.org/protobuf/runtime/protoiface".Methods.`)
 	g.P("// Consult the protoiface package documentation for details.")
-	g.P("func (x *", g.typeName, ") ProtoMethods() *", protoifacePkg.Ident("Methods"), " {")
+	g.P("func (*", g.typeName, ") ProtoMethods() *", protoifacePkg.Ident("Methods"), " {")
+	g.P("return ", varName)
+	g.P("}")
 
+	g.P("var ", varName, " *", protoifacePkg.Ident("Methods"))
+
+	g.P("func init() {")
 	g.genSizeMethod()
 	g.genMarshalMethod()
 	g.genUnmarshalMethod()
+	g.genCheckInitializedMethod()
 
-	g.P("return &", protoifacePkg.Ident("Methods"), "{ ")
+	g.P(varName, " = &", protoifacePkg.Ident("Methods"), "{ ")
 	g.P("NoUnkeyedLiterals: struct{}{},")
 	g.P("Flags: ", protoifacePkg.Ident("SupportMarshalDeterministic"), "|", protoifacePkg.Ident("SupportUnmarshalDiscardUnknown"), ",")
 	g.P("Size: size,")
 	g.P("Marshal: marshal,")
 	g.P("Unmarshal: unmarshal,")
+	g.P("CheckInitialized: checkInitialized,")
 	g.P("Merge: nil,")
-	g.P("CheckInitialized: nil,")
 	g.P("}")
 	g.P("}")
 }

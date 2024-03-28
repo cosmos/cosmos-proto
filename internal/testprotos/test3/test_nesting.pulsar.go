@@ -266,7 +266,13 @@ func (x *fastReflection_MultiLayeredNesting) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MultiLayeredNesting) ProtoMethods() *protoiface.Methods {
+func (*fastReflection_MultiLayeredNesting) ProtoMethods() *protoiface.Methods {
+	return fastReflection_MultiLayeredNestingProtoMethods
+}
+
+var fastReflection_MultiLayeredNestingProtoMethods *protoiface.Methods
+
+func init() {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
 		x := input.Message.Interface().(*MultiLayeredNesting)
 		if x == nil {
@@ -436,14 +442,17 @@ func (x *fastReflection_MultiLayeredNesting) ProtoMethods() *protoiface.Methods 
 		}
 		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
 	}
-	return &protoiface.Methods{
+	checkInitialized := func(input protoiface.CheckInitializedInput) (protoiface.CheckInitializedOutput, error) {
+		return protoiface.CheckInitializedOutput{}, nil
+	}
+	fastReflection_MultiLayeredNestingProtoMethods = &protoiface.Methods{
 		NoUnkeyedLiterals: struct{}{},
 		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
 		Size:              size,
 		Marshal:           marshal,
 		Unmarshal:         unmarshal,
+		CheckInitialized:  checkInitialized,
 		Merge:             nil,
-		CheckInitialized:  nil,
 	}
 }
 
@@ -676,7 +685,13 @@ func (x *fastReflection_MultiLayeredNesting_Nested1) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MultiLayeredNesting_Nested1) ProtoMethods() *protoiface.Methods {
+func (*fastReflection_MultiLayeredNesting_Nested1) ProtoMethods() *protoiface.Methods {
+	return fastReflection_MultiLayeredNesting_Nested1ProtoMethods
+}
+
+var fastReflection_MultiLayeredNesting_Nested1ProtoMethods *protoiface.Methods
+
+func init() {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
 		x := input.Message.Interface().(*MultiLayeredNesting_Nested1)
 		if x == nil {
@@ -792,14 +807,17 @@ func (x *fastReflection_MultiLayeredNesting_Nested1) ProtoMethods() *protoiface.
 		}
 		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
 	}
-	return &protoiface.Methods{
+	checkInitialized := func(input protoiface.CheckInitializedInput) (protoiface.CheckInitializedOutput, error) {
+		return protoiface.CheckInitializedOutput{}, nil
+	}
+	fastReflection_MultiLayeredNesting_Nested1ProtoMethods = &protoiface.Methods{
 		NoUnkeyedLiterals: struct{}{},
 		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
 		Size:              size,
 		Marshal:           marshal,
 		Unmarshal:         unmarshal,
+		CheckInitialized:  checkInitialized,
 		Merge:             nil,
-		CheckInitialized:  nil,
 	}
 }
 
@@ -1057,7 +1075,13 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) ProtoMethods() *protoiface.Methods {
+func (*fastReflection_MultiLayeredNesting_Nested1_Nested2) ProtoMethods() *protoiface.Methods {
+	return fastReflection_MultiLayeredNesting_Nested1_Nested2ProtoMethods
+}
+
+var fastReflection_MultiLayeredNesting_Nested1_Nested2ProtoMethods *protoiface.Methods
+
+func init() {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
 		x := input.Message.Interface().(*MultiLayeredNesting_Nested1_Nested2)
 		if x == nil {
@@ -1227,14 +1251,17 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2) ProtoMethods() *pro
 		}
 		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
 	}
-	return &protoiface.Methods{
+	checkInitialized := func(input protoiface.CheckInitializedInput) (protoiface.CheckInitializedOutput, error) {
+		return protoiface.CheckInitializedOutput{}, nil
+	}
+	fastReflection_MultiLayeredNesting_Nested1_Nested2ProtoMethods = &protoiface.Methods{
 		NoUnkeyedLiterals: struct{}{},
 		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
 		Size:              size,
 		Marshal:           marshal,
 		Unmarshal:         unmarshal,
+		CheckInitialized:  checkInitialized,
 		Merge:             nil,
-		CheckInitialized:  nil,
 	}
 }
 
@@ -1547,7 +1574,13 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) IsValid() b
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) ProtoMethods() *protoiface.Methods {
+func (*fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) ProtoMethods() *protoiface.Methods {
+	return fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3ProtoMethods
+}
+
+var fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3ProtoMethods *protoiface.Methods
+
+func init() {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
 		x := input.Message.Interface().(*MultiLayeredNesting_Nested1_Nested2_Nested3)
 		if x == nil {
@@ -1740,21 +1773,24 @@ func (x *fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3) ProtoMethod
 		}
 		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
 	}
-	return &protoiface.Methods{
+	checkInitialized := func(input protoiface.CheckInitializedInput) (protoiface.CheckInitializedOutput, error) {
+		return protoiface.CheckInitializedOutput{}, nil
+	}
+	fastReflection_MultiLayeredNesting_Nested1_Nested2_Nested3ProtoMethods = &protoiface.Methods{
 		NoUnkeyedLiterals: struct{}{},
 		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
 		Size:              size,
 		Marshal:           marshal,
 		Unmarshal:         unmarshal,
+		CheckInitialized:  checkInitialized,
 		Merge:             nil,
-		CheckInitialized:  nil,
 	}
 }
 
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
-// 	protoc        v3.18.1
+// 	protoc        v3.21.9
 // source: internal/testprotos/test3/test_nesting.proto
 
 const (

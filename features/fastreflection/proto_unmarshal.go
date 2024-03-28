@@ -126,6 +126,13 @@ func (g *fastGenerator) genUnmarshalMethod() {
 	g.P(`}`)
 }
 
+func (g *fastGenerator) genCheckInitializedMethod() {
+	// checkInitialized method.
+	g.P(`checkInitialized := func(input `, protoifacePkg.Ident("CheckInitializedInput"), `) (`, protoifacePkg.Ident("CheckInitializedOutput"), `, error) {`)
+	g.P(`return `, protoifacePkg.Ident("CheckInitializedOutput"), `{}, nil`)
+	g.P(`}`)
+}
+
 func (g *fastGenerator) decodeVarint(varName string, typName string) {
 	g.P(`for shift := uint(0); ; shift += 7 {`)
 	g.P(`if shift >= 64 {`)
