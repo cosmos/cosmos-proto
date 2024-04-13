@@ -1,6 +1,5 @@
 syntax="proto3";
 
-import "google/api/annotations.proto";
 import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/cosmos/cosmos-proto/testpb";
@@ -9,7 +8,6 @@ option go_package = "github.com/cosmos/cosmos-proto/testpb";
 service Query {
   // CounterQuery queries a counter.
   rpc CounterQuery(QueryCounter) returns (CounterQueryResponse) {
-    option (google.api.http).get               = "/counter";
     option (cosmos_proto.method_added_since) = "v1.0.1";
   }
 }
