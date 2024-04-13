@@ -1,0 +1,23 @@
+syntax="proto3";
+
+import "google/api/annotations.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/cosmos/cosmos-proto/testpb";
+
+// Query defines the gRPC querier service.
+service Query {
+  // CounterQuery queries a counter.
+  rpc CounterQuery(QueryCounter) returns (CounterQueryResponse) {
+    option (google.api.http).get               = "/counter";
+    option (cosmos_proto.method_added_since) = "v1.0.1";
+  }
+}
+
+// QueryCounter defines the request type used to query the counter.
+message QueryCounter {}
+
+// CounterQueryResponse defines the response type for querying the counter.
+message CounterQueryResponse {
+   uint64 counter = 1 [(cosmos_proto.field_added_since) = "v1.0.1"];
+}
