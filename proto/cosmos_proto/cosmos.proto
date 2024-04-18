@@ -7,8 +7,8 @@ option go_package = "github.com/cosmos/cosmos-proto;cosmos_proto";
 
 extend google.protobuf.MethodOptions {    
     
-    // method_added_since is used to indicate the version at which a method was added.
-    string method_added_since = 93001;
+    // method_added_in is used to indicate from which version the method was added.
+    string method_added_in = 93001;
 }
 
 extend google.protobuf.MessageOptions {
@@ -20,8 +20,8 @@ extend google.protobuf.MessageOptions {
     // file option.
     repeated string implements_interface = 93001;
 
-    // message_added_since is used to indicate the version at which a message was added.
-    string message_added_since = 93002;
+    // message_added_in is used to indicate from which version the message was added.
+    string message_added_in = 93002;
 }
 
 extend google.protobuf.FieldOptions {
@@ -37,8 +37,8 @@ extend google.protobuf.FieldOptions {
     // language-specific type representing the scalar.
     string scalar = 93002;
 
-    // field_added_since is used to indicate the version at which a field was added.
-    string field_added_since = 93003;
+    // field_added_in is used to indicate from which version the field was added.
+    string field_added_in = 93003;
 }
 
 extend google.protobuf.FileOptions {
@@ -59,8 +59,8 @@ extend google.protobuf.FileOptions {
     // a/b/scalars.proto in the file descriptor set.
     repeated ScalarDescriptor declare_scalar = 793022;
 
-    // file_added_since is used to indicate the version at which a file was added.
-    string file_added_since = 793023;
+    // file_added_in is used to indicate from which the version the file was added.
+    string file_added_in = 793023;
 }
 
 // InterfaceDescriptor describes an interface type to be used with
