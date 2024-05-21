@@ -1,6 +1,6 @@
 syntax="proto3";
 
-import "testpb/2.proto";
+import "2.proto";
 
 option go_package = "github.com/cosmos/cosmos-proto/testpb";
 
