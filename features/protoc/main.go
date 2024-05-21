@@ -366,11 +366,7 @@ func genReflectFileDescriptor(gen *protogen.Plugin, g *generator.GeneratedFile, 
 		}
 	}
 
-	isInternal := false
-	pathParts := strings.Split(f.GoImportPath.String(), "/")
-	if slices.Contains(pathParts, "internal") {
-		isInternal = true
-	}
+	isInternal := isInternalPackage(f.GoImportPath.String())
 
 	g.P("type x struct{}")
 	g.P("out := ", protoimplPackage.Ident("TypeBuilder"), "{")
@@ -2304,4 +2300,10 @@ func newFileInfo(file *protogen.File) *fileInfo {
 	}
 
 	return f
+}
+
+// checks whether the package path is an internal package
+func isInternalPackage(pkg string) bool {
+	pathParts := strings.Split(pkg, "/")
+	return slices.Contains(pathParts, "internal")
 }
