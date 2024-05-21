@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestInternalPackage(t *testing.T) {
+func TestIsInternalPackage(t *testing.T) {
 	require.True(t, isInternalPackage("internal"))
 	require.True(t, isInternalPackage("example/internal"))
 	require.True(t, isInternalPackage("example.com/internal"))
