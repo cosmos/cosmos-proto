@@ -7,25 +7,30 @@ package protoc
 
 import (
 	"fmt"
-	"github.com/cosmos/cosmos-proto/features/protoc/genid"
-	"github.com/cosmos/cosmos-proto/generator"
 	"go/ast"
 	"go/parser"
 	"go/token"
-	"google.golang.org/protobuf/encoding/protowire"
-	"google.golang.org/protobuf/proto"
 	"math"
 	"strconv"
 	"strings"
 	"unicode"
 	"unicode/utf8"
 
+	"golang.org/x/exp/slices"
+
+	"google.golang.org/protobuf/encoding/protowire"
+	"google.golang.org/protobuf/proto"
+
+	"github.com/cosmos/cosmos-proto/features/protoc/genid"
+	"github.com/cosmos/cosmos-proto/generator"
+
 	pref "google.golang.org/protobuf/reflect/protoreflect"
 
-	"github.com/cosmos/cosmos-proto/features/protoc/version"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/runtime/protoimpl"
+
+	"github.com/cosmos/cosmos-proto/features/protoc/version"
 
 	"google.golang.org/protobuf/types/descriptorpb"
 	"google.golang.org/protobuf/types/pluginpb"
@@ -60,6 +65,7 @@ var (
 	protojsonPackage     goImportPath = protogen.GoImportPath("google.golang.org/protobuf/encoding/protojson")
 	protoreflectPackage  goImportPath = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoreflect")
 	protoregistryPackage goImportPath = protogen.GoImportPath("google.golang.org/protobuf/reflect/protoregistry")
+	runtimePackage                    = protogen.GoImportPath("github.com/cosmos/cosmos-proto/runtime")
 )
 
 // GenerateFile generates the contents of a .pb.go file.
@@ -360,6 +366,8 @@ func genReflectFileDescriptor(gen *protogen.Plugin, g *generator.GeneratedFile, 
 		}
 	}
 
+	isInternal := isInternalPackage(f.GoImportPath.String())
+
 	g.P("type x struct{}")
 	g.P("out := ", protoimplPackage.Ident("TypeBuilder"), "{")
 	g.P("File: ", protoimplPackage.Ident("DescBuilder"), "{")
@@ -369,6 +377,9 @@ func genReflectFileDescriptor(gen *protogen.Plugin, g *generator.GeneratedFile, 
 	g.P("NumMessages: ", len(f.allMessages), ",")
 	g.P("NumExtensions: ", len(f.allExtensions), ",")
 	g.P("NumServices: ", len(f.Services), ",")
+	if isInternal {
+		g.P("FileRegistry: ", runtimePackage.Ident("NullRegistry"), "{},")
+	}
 	g.P("},")
 	g.P("GoTypes: ", goTypesVarName(f), ",")
 	g.P("DependencyIndexes: ", depIdxsVarName(f), ",")
@@ -380,6 +391,9 @@ func genReflectFileDescriptor(gen *protogen.Plugin, g *generator.GeneratedFile, 
 	}
 	if len(f.allExtensions) > 0 {
 		g.P("ExtensionInfos: ", extensionTypesVarName(f), ",")
+	}
+	if isInternal {
+		g.P("TypeRegistry: ", runtimePackage.Ident("NullRegistry"), "{},")
 	}
 	g.P("}.Build()")
 	g.P(f.GoDescriptorIdent, " = out.File")
@@ -2286,4 +2300,10 @@ func newFileInfo(file *protogen.File) *fileInfo {
 	}
 
 	return f
+}
+
+// checks whether the package path is an internal package
+func isInternalPackage(pkg string) bool {
+	pathParts := strings.Split(pkg, "/")
+	return slices.Contains(pathParts, "internal")
 }
